@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.service.PolicyService;
 
@@ -16,6 +17,10 @@ public class PolicyController {
 
 	private final PolicyService service;
 	
+	@RequestMapping("/")
+	public String main() {
+		return "test";
+	}
 	
 	
 }
