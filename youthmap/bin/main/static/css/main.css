@@ -1,0 +1,268 @@
+/* main.css (드롭다운 위치 정확하게 수정: 헤더 아래 + 좌우 꽉 차게) */
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fff;
+    color: #000;
+}
+
+.wrapper {
+    margin: 0 auto;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 헤더 */
+.sticky-header {
+    position: sticky;
+    top: 0;
+    background-color: #DAFBFF;
+    z-index: 1000;
+    width: 100%;
+    padding: 0 120px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.header-container {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    max-width: 1440px;
+}
+.logo img {
+    height: 40px;
+    transform: scale(1.8);
+    transform-origin: left center;
+}
+.main-nav {
+    display: flex;
+    gap: 200px;
+    font-weight: bold;
+    font-size: 25px;
+    flex-grow: 1;
+    justify-content: center;
+    position: relative;
+}
+.nav-item {
+    position: relative;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.nav-item:hover {
+    color: #0099cc;
+}
+
+/* 통합 드롭다운 */
+.main-nav:hover .dropdown-full {
+    display: flex;
+}
+.dropdown-full {
+    display: none;
+    position: fixed;
+    top: 84px; /* 헤더 높이에 딱 맞춰서 위치 고정 */
+    left: 0;
+    width: 100vw;
+    background-color: rgba(218, 251, 255, 0.8);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    padding: 30px 150px;
+    box-sizing: border-box;
+    justify-content: center;
+    gap: 120px;
+    z-index: 999;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ddd;
+}
+.dropdown-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 150px;
+}
+.dropdown-column strong {
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+}
+.dropdown-column a {
+    font-size: 14px;
+    color: #444;
+    padding: 2px 0;
+    transition: all 0.2s ease-in-out;
+}
+.dropdown-column a:hover {
+    color: #0077aa;
+    text-decoration: underline;
+    padding-left: 5px;
+}
+
+.user-menu {
+    text-align: right;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: nowrap;
+}
+
+/* 슬라이더 + 로그인 한 줄 배치 */
+.slider-login-row {
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 40px;
+    margin: 40px auto;
+}
+.slider-section {
+    background-color: #E9FEFF;
+    flex: 2;
+    padding: 40px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: bold;
+    height: 280px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.login-box {
+    background-color: #F3FF9A;
+    flex: 1;
+    padding: 40px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+.login-box img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.login-button {
+    background-color: #333;
+    color: #fff;
+    padding: 12px 30px;
+    font-size: 16px;
+    display: inline-block;
+    margin-top: 10px;
+    border-radius: 6px;
+}
+.login-links {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #0077aa;
+}
+.login-links a {
+    margin: 0 6px;
+    color: #0077aa;
+}
+
+/* 이하 동일 유지 */
+
+
+/* 카테고리 배너 */
+.category-banner {
+    background-color: #FFD5AF;
+    padding: 30px 40px;
+    margin: 40px auto 0;
+    max-width: 1125px;
+}
+.category-tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.tab {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: #eee;
+    font-weight: bold;
+    font-size: 15px;
+}
+.policy { background-color: #FFD5AF; }
+.culture { background-color: #E0FFDE; }
+.food { background-color: #FFECA2; }
+.board { background-color: #ADE9FF; }
+.subcategories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 10px 0;
+}
+.subcategory {
+    padding: 10px 16px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* 공지사항 */
+.notice-board {
+    background-color: #FFBEBE;
+    padding: 40px;
+    text-align: left;
+    margin: 40px auto 0;
+    max-width: 1125px;
+    border-radius: 10px;
+}
+.notice-board h2 {
+    margin-top: 0;
+    font-size: 22px;
+}
+.notice-list li {
+    padding: 8px 0;
+    list-style: none;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+}
+
+/* 조원 소개 */
+.team-section {
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    margin-top: 40px;
+}
+.team-member {
+    text-align: center;
+}
+.team-member img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.team-member p {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* 푸터 */
+footer {
+    background-color: #DAFBFF;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+    margin-top: 40px;
+    border-top: 1px solid #ccc;
+}
