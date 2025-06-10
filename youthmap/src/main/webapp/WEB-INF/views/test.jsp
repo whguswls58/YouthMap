@@ -7,6 +7,9 @@
 <title>테스트용 페이지</title>
 </head>
 <body>
-시험용 페이지
+시험용 페이지<br>
+
+<input type=button value="데이터 업데이트" onclick="location.href='ttt'"> 
+
 </body>
 </html>
