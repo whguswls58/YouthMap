@@ -88,6 +88,7 @@ CREATE TABLE "Member" (
     "mem_gen"       CHAR(1)          NULL,
     "mem_mail"      VARCHAR2(100)    NULL,
     "mem_address"   VARCHAR2(200)    NULL,
+    "mem_addDetail" VARCHAR2(200)    NULL,
     "mem_date"      DATE             DEFAULT SYSDATE NOT NULL,
     CONSTRAINT "PK_MEMBER" PRIMARY KEY ("mem_no"),
     CONSTRAINT "UK_MEMBER_ID" UNIQUE ("mem_id")
