@@ -75,7 +75,7 @@ public class PolicyController {
         
         List<PolicyModel> pm = new ArrayList<PolicyModel>();
         
-        for(int pageNum=1 ; pageNum < 11 ; pageNum++) {
+        for(int pageNum=1 ; pageNum < pageCount + 1 ; pageNum++) {
         	System.out.println("=====================================================");
         	System.out.println("page 번호 : " + pageNum);
         	
