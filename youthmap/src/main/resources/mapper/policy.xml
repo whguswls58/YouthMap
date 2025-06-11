@@ -4,6 +4,50 @@
 
 <mapper namespace="com.example.demo.dao.PolicyDao">
 
+<!-- DB에 저장된 전체 데이터 갯수 -->
+<select id="cntData" resultType="int">
+	SELECT COUNT(*) FROM plcy
+</select>
+
+<!-- 마지막 업데이트일 -->
+<select id="lastUpdate" resultType="java.util.Date">
+	SELECT MAX(reg_date) FROM plcy	
+</select>
+
+<!-- 현재 DB에 저장된 plcy_no 컬럼 list -->
+<select id="plcyNoList" resultType="policy">
+	SELECT plcy_no FROM plcy
+</select>
+
+<!-- 데이터 insert -->
+<insert id="insertPolicy" parameterType="policy">
+	INSERT INTO plcy (
+        PLCY_NO, PLCY_NM, PLCY_EXPLN_CN, PLCY_KYWD_NM, LCLSF_NM, MCLSF_NM,
+        PLCY_SPRT_CN, BIZ_PRD_BGNG_YMD, BIZ_PRD_END_YMD, PLCY_APLY_MTHD_CN,
+        SRNG_MTHD_CN, APLY_URL_ADDR, SBMSN_DCMNT_CN, ETC_MTTR_CN, REF_URL_ADDR1,
+        REF_URL_ADDR2, SPRT_SCL_LMT_YN, SPRT_SCL_CNT, SPRT_TRGT_AGE_LMT_YN,
+        SPRT_TRGT_MIN_AGE, SPRT_TRGT_MAX_AGE, RGTR_HGHRK_INST_CD_NM,
+        RGTR_UP_INST_CD_NM, RGTR_INST_CD_NM, MRG_STTS_CD, EARN_CND_SE_CD,
+        EARN_MIN_AMT, EARN_MAX_AMT, EARN_ETC_CN, ADD_APLY_QLFC_CND_CN,
+        INQ_CNT, APLY_YMD_STRT, APLY_YMD_END, FRST_REG_DT, LAST_MDFCN_DT,
+        REG_DATE
+    ) VALUES (
+        #{plcy_no}, #{plcy_nm}, #{plcy_expln_cn}, #{plcy_kywd_nm}, #{lclsf_nm}, #{mclsf_nm},
+        #{plcy_sprt_cn}, #{biz_prd_bgng_ymd}, #{biz_prd_end_ymd}, #{plcy_aply_mthd_cn},
+        #{srng_mthd_cn}, #{aply_url_addr}, #{sbmsn_dcmnt_cn}, #{etc_mttr_cn}, #{ref_url_addr1},
+        #{ref_url_addr2}, #{sprt_scl_lmt_yn}, #{sprt_scl_cnt}, #{sprt_trgt_age_lmt_yn},
+        #{sprt_trgt_min_age}, #{sprt_trgt_max_age}, #{rgtr_hghrk_inst_cd_nm},
+        #{rgtr_up_inst_cd_nm}, #{rgtr_inst_cd_nm}, #{mrg_stts_cd}, #{earn_cnd_se_cd},
+        #{earn_min_amt}, #{earn_max_amt}, #{earn_etc_cn}, #{add_aply_qlfc_cnd_cn},
+        #{inq_cnt}, #{aply_ymd_strt, jdbcType=VARCHAR}, #{aply_ymd_end, jdbcType=VARCHAR}, #{frst_reg_dt}, #{last_mdfcn_dt},
+        sysdate
+    )
+</insert>
+
+<!-- 전체 데이터 검색 -->
+<select id="plcyList" resultType="policy">
+	select * from plcy
+</select>
 
 </mapper>
 

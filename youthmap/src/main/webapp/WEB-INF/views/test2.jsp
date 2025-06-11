@@ -28,7 +28,7 @@
 	<c:if test="${not empty pm}">
 	
 		<c:forEach var="p" items="${pm }" varStatus="status">
-			<c:if test="${status.index < 10}">
+			<c:if test="${status.index < 30}">
 				<tr>
 					<td>
 						<a href="#">${p.plcy_nm}</a>
@@ -43,6 +43,6 @@
 		</c:forEach>
 	</c:if>
 </table>
-
+<input type=button value="첫 화면" onclick="location.href='/'"> 
 </body>
 </html>
