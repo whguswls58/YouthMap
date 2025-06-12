@@ -66,80 +66,39 @@ a {
 a:hover {
 	text-decoration: underline;
 }
+
+.policy-item {
+  margin: 10px 0;
+  font-size: 1.2em;
+  border: 1px solid black;
+}
+
+.keyword {
+  font-size: 0.9em;
+  color: #555;
+  margin: 4px 0 0 10px;
+}
+
+body {
+  background: white !important;
+}
+
+
+button, strong {
+  color: black !important;
+  font-size: 14px !important;
+  font-family: sans-serif !important;
+  background: white !important;
+  border: 1px solid #aaa !important;
+  padding: 4px 8px !important;
+  margin: 2px !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
 </style>
 
-<script>
-	function loadPage(page) {
-	  fetch(`/policyListJson?page=${page}`)  // ✅ 백틱(`) 사용!
-	    .then(response => response.json())
-	    .then(data => {
-	      const container = document.getElementById("policy-container");
-	      container.innerHTML = "";
 
-	      if (!data.pm || data.pm.length === 0) {
-	        container.innerHTML = "<p>데이터가 없습니다.</p>";
-	        return;
-	      } else{
-	    	  
-		      data.pm.forEach(p => {
-		        const div = document.createElement("div");
-		        div.className = "policy-item";
-		        div.innerHTML = `<a href="/policyContent?plcy_no=${p.plcy_no}">${p.plcy_nm}</a>`;
-		        container.appendChild(div);
-	    	  
-	      	}
-
-	      });
-	      
-	   	  // 페이지네이션 렌더링 호출
-	      renderPagination(data.page, data.pagecount, data.startpage, data.endpage);
-
-	      // (선택) 검색 결과 개수 갱신
-// 	      const resultText = document.getElementById("result-count");
-// 	      if (resultText) {
-// 	        resultText.innerText = `검색된 결과 : ${data.pm.length}개`;
-// 	      }
-	      
-	    })
-	    .catch(error => console.error("오류 발생:", error));
-	}
-	
-	function renderPagination(current, total, start, end) {
-		const pagination = document.getElementById("pagination");
-		pagination.innerHTML = "";
-
-	    // 처음 페이지
-	    pagination.innerHTML += `<button onclick="loadPage(1)">&lt;</button> `;
-
-	    // 이전 블록
-	    if (start > 6) {
-	      pagination.innerHTML += `<button onclick="loadPage(${start - 6})">[이전]</button> `;
-	    } 	//end if
-
-	    // 페이지 번호들
-	    for (let i = start; i <= end; i++) {
-	      if (i === current) {
-	        pagination.innerHTML += `<strong>[${i}]</strong> `;
-	      } else {
-	        pagination.innerHTML += `<button onclick="loadPage(${i})">${i}</button> `;
-	      }	// end if
-	    }	// end for
-
-	    // 다음 블록
-	    if (end < total) {
-	      pagination.innerHTML += `<button onclick="loadPage(${start + 6})">[다음]</button> `;
-	    }	// end if
-
-	    // 마지막 페이지
-	    pagination.innerHTML += `<button onclick="loadPage(${total})">&gt;</button>`;
-	  }		// end function
-
-	  // 초기 로딩
-	 window.addEventListener("DOMContentLoaded", () => {
-		 loadPage(1);// 처음 페이지 비동기로 불러오기
-    });		// end window
-	
-</script>
 
 </head>
 <body>
@@ -170,55 +129,98 @@ a:hover {
 
 	검색 된 결과 : ${listcount }개
 
-	<!-- 테스트용 데이터 -->
-<!-- 	<div id="policy-container"> -->
-		<%-- 초기 목록을 서버에서 출력 (동기 방식) --%>
-<%-- 		<c:if test="${not empty pm}"> --%>
-<%-- 			<c:forEach var="p" items="${pm}"> --%>
-<!-- 				<div class="policy-item"> -->
-<%-- 					<a href="/policyContent?plcy_no=${p.plcy_no}">${p.plcy_nm}</a> --%>
-<!-- 				</div> -->
-<%-- 			</c:forEach> --%>
-<%-- 		</c:if> --%>
-<%-- 		<c:if test="${empty pm}"> --%>
-<!-- 			<p>데이터가 없습니다.</p> -->
-<%-- 		</c:if> --%>
-<!-- 	</div> -->
-
-<!-- 	<div id="pagination" style="text-align: center;"> -->
-		<!-- 처음 페이지 -->
-<!-- 		<button onclick="loadPage(1)">&lt;</button> -->
-
-		<!-- 이전 페이지 -->
-<%-- 		<c:if test="${startpage > 6}"> --%>
-<%-- 			<button onclick="loadPage(${startpage - 6})">[이전]</button> --%>
-<%-- 		</c:if> --%>
-
-		<!-- 페이지 번호 -->
-<%-- 		<c:forEach var="i" begin="${startpage}" end="${endpage}"> --%>
-<%-- 			<c:choose> --%>
-<%-- 				<c:when test="${i == page}"> --%>
-<%-- 					<strong>[${i}]</strong> --%>
-<%-- 				</c:when> --%>
-<%-- 				<c:otherwise> --%>
-<%-- 					<button onclick="loadPage(${i})">${i}</button> --%>
-<%-- 				</c:otherwise> --%>
-<%-- 			</c:choose> --%>
-<%-- 		</c:forEach> --%>
-
-		<!-- 다음 페이지 -->
-<%-- 		<c:if test="${endpage < pagecount}"> --%>
-<%-- 			<button onclick="loadPage(${startpage + 6})">[다음]</button> --%>
-<%-- 		</c:if> --%>
-
-		<!-- 마지막 페이지 -->
-<%-- 		<button onclick="loadPage(${pagecount})">&gt;</button> --%>
-<!-- 	</div> -->
-
 <div id="policy-container"></div>
 
 <div id="pagination" style="text-align:center; margin-top: 20px;"></div>
 
+<script>
+		window.loadPage = function(page) {
+		console.log("loadPage 호출됨. page = ", page);
+		
+	  fetch(`/policyListJson?page=\${page}`)  // ✅ 백틱(`) 사용!
+	    .then(response =>  	response.json())
+	    .then(data => {
+	   	  console.log("data:", data);
+	      const container = document.getElementById("policy-container");
+	      container.innerHTML = "";
+
+	      if (!data.pm || data.pm.length === 0) {
+	        container.innerHTML = "<p>데이터가 없습니다.</p>";
+	        return;
+	      } 
+	    	  
+	      console.log("data.pm 출력 확인:", data.pm);
+		  data.pm.forEach(p => {
+			console.log("각 항목 확인:", p);
+		    const div = document.createElement("div");
+		    div.className = "policy-item";
+		    
+		    const a = document.createElement("a");
+		    a.href = `/policyContent?plcy_no=\${p.plcy_no}`;
+		    a.textContent = p.plcy_nm;
+		    div.appendChild(a);
+		    
+			// 정책 키워드 출력
+		    const keyword = document.createElement("p");
+		    keyword.className = "keyword";
+		    keyword.textContent = `키워드: \${p.plcy_kywd_nm}`;
+		    div.appendChild(keyword);
+		    
+		    container.appendChild(div);    	  
+	      });
+	      
+	   	  // 페이지네이션 렌더링 호출
+	      renderPagination(data.page, data.pagecount, data.startpage, data.endpage);
+
+	      // (선택) 검색 결과 개수 갱신
+// 	      const resultText = document.getElementById("result-count");
+// 	      if (resultText) {
+// 	        resultText.innerText = `검색된 결과 : ${data.pm.length}개`;
+// 	      }
+	      
+	    })
+	    .catch(error => console.error("오류 발생:", error));
+	}
+	
+	function renderPagination(current, total, start, end) {
+
+		const pagination = document.getElementById("pagination");
+		pagination.innerHTML = "";
+
+	    // 처음 페이지
+	    pagination.innerHTML += `<button onclick="loadPage(1)">&lt;</button> `;
+
+	    // 이전 블록
+	    if (start > 6) {
+	      pagination.innerHTML += `<button onclick="loadPage(\${start - 6})">[이전]</button> `;
+	    } 	//end if
+
+	    // 페이지 번호들
+	    for (let i = start; i <= end; i++) {
+	      if (i === current) {
+	        pagination.innerHTML += `<strong>[\${i}]</strong>`;
+	      } else {
+	        pagination.innerHTML += `<button onclick="loadPage(\${i})">\${i}</button> `;
+	      }	// end if
+	    }	// end for
+
+	    // 다음 블록
+	    if (end < total) {
+	      pagination.innerHTML += `<button onclick="loadPage(\${start + 6})">[다음]</button> `;
+	    }	// end if
+
+	    // 마지막 페이지
+	    pagination.innerHTML += `<button onclick="loadPage(\${total})">&gt;</button>`;
+	  }		// end function
+
+	  // 초기 로딩
+	 window.addEventListener("DOMContentLoaded", () => {
+		 loadPage(1);// 처음 페이지 비동기로 불러오기
+    });		// end window
+	
+   
+    
+</script>
 
 </body>
 </html>

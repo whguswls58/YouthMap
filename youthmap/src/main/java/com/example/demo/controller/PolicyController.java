@@ -383,7 +383,7 @@ public class PolicyController {
 	// 비동기용 json 반환
 	@GetMapping("/policyListJson")
 	@ResponseBody
-	public Map<String, Object> getPolicyListJson(@RequestParam(name = "page", defaultValue = "1") int page) {
+	public Map<String, Object> getPolicyListJson(@RequestParam(name = "page") int page) {
 
 		System.out.println("현재 페이지 : " + page);
 
@@ -400,7 +400,7 @@ public class PolicyController {
 		int pagecount = listcount / limit + ((listcount % limit == 0) ? 0 : 1);
 		int startpage = ((page - 1) / 6) * limit + 1;
 		int endpage = Math.min(startpage + 6 - 1, pagecount);
-
+		
 		Map<String, Object> map = new HashMap<>();
 		map.put("pm", pm);
 		map.put("page", page);
