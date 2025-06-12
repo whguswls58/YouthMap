@@ -9,8 +9,8 @@
 <body>
 시험용 페이지<br>
 
-<input type=button value="데이터 업데이트" onclick="location.href='ttt'"> 
-<input type=button value="정책 리스트" onclick="location.href='test2'"> 
+<input type=button value="데이터 업데이트" onclick="location.href='policyUpdate'"> 
+<input type=button value="정책 리스트" onclick="location.href='policyList'"> 
 
 </body>
 </html>

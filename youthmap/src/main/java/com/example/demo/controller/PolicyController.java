@@ -36,11 +36,11 @@ public class PolicyController {
 	
 	@RequestMapping("/")
 	public String tt() {	
-		return "test";
+		return "policy/test";
 	}
 	
-	@RequestMapping("/ttt")
-	public String test(Model model) throws Exception{
+	@RequestMapping("/policyUpdate")
+	public String policyUpdate(Model model) throws Exception{
         
 		// 총 정책수   
 		String jsonData = service.getYouthPolicies(1, 1);		// service 클래스에 정책 정보 요청 
@@ -267,16 +267,16 @@ public class PolicyController {
         
         model.addAttribute("result", result);
         
-		return "test3";
+		return "policy/test3";
 	}
 	
-	@RequestMapping("test2")
-	public String test2(Model model) {
+	@RequestMapping("policyList")
+	public String policyList(Model model) {
 		
 		List<PolicyModel> pm = service.plcyList();
 		
 		model.addAttribute("pm", pm);
-		return "test2";
+		return "policy/test2";
 	}
 	
 }
