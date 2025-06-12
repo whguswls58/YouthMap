@@ -73,7 +73,7 @@ public class PolicyService {
 		return dao.plcyNoList();
 	}
 
-	// 정책 정보 insert 수행
+	// 정책 정보 insert
 	public int insertPolicy(PolicyModel pm) {
 		return dao.insertPolicy(pm);
 	}
@@ -81,6 +81,11 @@ public class PolicyService {
 	// 정책 리스트 검색
 	public List<PolicyModel> plcyList() {
 		return dao.plcyList();
+	}
+
+	// 정책 정보 update
+	public int updatePolicy(PolicyModel pm) {
+		return dao.updatePolicy(pm);
 	}
 
 }

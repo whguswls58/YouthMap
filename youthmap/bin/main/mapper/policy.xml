@@ -15,7 +15,7 @@
 </select>
 
 <!-- 현재 DB에 저장된 plcy_no 컬럼 list -->
-<select id="plcyNoList" resultType="policy">
+<select id="plcyNoList" resultType="java.lang.String">
 	SELECT plcy_no FROM plcy
 </select>
 
@@ -39,8 +39,8 @@
         #{sprt_trgt_min_age}, #{sprt_trgt_max_age}, #{rgtr_hghrk_inst_cd_nm},
         #{rgtr_up_inst_cd_nm}, #{rgtr_inst_cd_nm}, #{mrg_stts_cd}, #{earn_cnd_se_cd},
         #{earn_min_amt}, #{earn_max_amt}, #{earn_etc_cn}, #{add_aply_qlfc_cnd_cn},
-        #{inq_cnt}, #{aply_ymd_strt, jdbcType=VARCHAR}, #{aply_ymd_end, jdbcType=VARCHAR}, #{frst_reg_dt}, #{last_mdfcn_dt},
-        sysdate
+        #{inq_cnt}, #{aply_ymd_strt, jdbcType=VARCHAR}, #{aply_ymd_end, jdbcType=VARCHAR},
+        #{frst_reg_dt}, #{last_mdfcn_dt}, sysdate
     )
 </insert>
 
@@ -48,6 +48,30 @@
 <select id="plcyList" resultType="policy">
 	select * from plcy
 </select>
+
+<!-- 데이터 업데이트 -->
+<update id="updatePolicy" parameterType="policy">
+	UPDATE plcy SET 
+		PLCY_NM = #{plcy_nm}, PLCY_EXPLN_CN = #{plcy_expln_cn},
+		PLCY_KYWD_NM = #{plcy_kywd_nm}, LCLSF_NM = #{lclsf_nm}, MCLSF_NM = #{mclsf_nm},
+	    PLCY_SPRT_CN = #{plcy_sprt_cn}, BIZ_PRD_BGNG_YMD = #{biz_prd_bgng_ymd},
+        BIZ_PRD_END_YMD = #{biz_prd_end_ymd}, PLCY_APLY_MTHD_CN = #{plcy_aply_mthd_cn},
+        SRNG_MTHD_CN = #{srng_mthd_cn}, APLY_URL_ADDR =  #{aply_url_addr},
+        SBMSN_DCMNT_CN = #{sbmsn_dcmnt_cn}, ETC_MTTR_CN = #{etc_mttr_cn},
+	    REF_URL_ADDR1 = #{ref_url_addr1}, REF_URL_ADDR2 = #{ref_url_addr2},
+	    SPRT_SCL_LMT_YN = #{sprt_scl_lmt_yn}, SPRT_SCL_CNT = #{sprt_scl_cnt},
+        SPRT_TRGT_AGE_LMT_YN = #{sprt_trgt_age_lmt_yn}, 
+        SPRT_TRGT_MIN_AGE = #{sprt_trgt_min_age}, SPRT_TRGT_MAX_AGE = #{sprt_trgt_max_age},
+        RGTR_HGHRK_INST_CD_NM = #{rgtr_hghrk_inst_cd_nm},
+        RGTR_UP_INST_CD_NM = #{rgtr_up_inst_cd_nm}, RGTR_INST_CD_NM = #{rgtr_inst_cd_nm},
+        MRG_STTS_CD = #{mrg_stts_cd}, EARN_CND_SE_CD = #{earn_cnd_se_cd},
+        EARN_MIN_AMT =  #{earn_min_amt}, EARN_MAX_AMT = #{earn_max_amt},
+        EARN_ETC_CN = #{earn_etc_cn}, ADD_APLY_QLFC_CND_CN = #{add_aply_qlfc_cnd_cn},
+        INQ_CNT = #{inq_cnt}, APLY_YMD_STRT = #{aply_ymd_strt, jdbcType=VARCHAR},
+        APLY_YMD_END = #{aply_ymd_end, jdbcType=VARCHAR}, 
+        FRST_REG_DT = #{frst_reg_dt}, LAST_MDFCN_DT = #{last_mdfcn_dt}, REG_DATE = sysdate
+	WHERE plcy_no = #{plcy_no}			
+</update>
 
 </mapper>
 

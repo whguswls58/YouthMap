@@ -20,4 +20,6 @@ public interface PolicyDao {
 
 	List<PolicyModel> plcyList();
 
+	int updatePolicy(PolicyModel pm);
+
 }

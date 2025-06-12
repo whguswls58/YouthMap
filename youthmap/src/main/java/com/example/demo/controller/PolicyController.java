@@ -7,7 +7,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -65,17 +67,20 @@ public class PolicyController {
         int totDB = service.cntData();
         System.out.println("서버에 저장된 총 정책 갯수 : " + totDB);
         
-        Date lastUpdateDate = service.lastUpdate();
+//        Date lastUpdateDate = service.lastUpdate();
         String dateTimeStr = null;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date inputDate = null;
+
+        String dd = "2025-01-01 13:31:16";
+        Date lastUpdateDate = sdf.parse(dd);
         
         int pageSize = 20;
         int pageCount = totCount / pageSize + ((totCount % pageSize == 0) ? 0 : 1);
         
         List<PolicyModel> pm = new ArrayList<PolicyModel>();
         
-        for(int pageNum=1 ; pageNum < pageCount + 1 ; pageNum++) {
+        for(int pageNum=1 ; pageNum < 3 ; pageNum++) {
         	System.out.println("=====================================================");
         	System.out.println("page 번호 : " + pageNum);
         	
@@ -165,6 +170,8 @@ public class PolicyController {
         				pm.add(plcyMd);
 
         			}else {			// DB에 데이터가 있는 경우
+        				System.out.println("DB 마지막 수정일 : " + lastUpdateDate);
+        				System.out.println("정책 데이터 수정일 : " + inputDate);
         				if(inputDate.compareTo(lastUpdateDate) > 0) {	// DB에 업데이트된 이후에 추가 및 수정된 게시글
         					plcyMd.setPlcy_no((String)policy.get("plcyNo"));
             				plcyMd.setPlcy_nm((String)policy.get("plcyNm"));
@@ -225,58 +232,101 @@ public class PolicyController {
         
         System.out.println("업데이트할 데이터 수 : " + pm.size());                
         
-        int result = 0;
         
         if(totDB == 0 ) {		// db 데이터 수 : 0개 -> pm 전체 insert문 수행
+        	int result = 0;
         	
         	for(PolicyModel p : pm) {
-        		result = service.insertPolicy(p);        	
+        		result = service.insertPolicy(p);  
+        		
+        		if(result != 1) {
+        			System.out.println("insert 실패");
+        		}
+        		
         	}
-        	
-        	if(result == 1) {
-        		System.out.println("insert 성공");
-        	}else {
-        		System.out.println("insert 실패");
-        	}
+      
         	
         }else {					// DB에 기존 데이터가 존재하는 경우
+        	
+        	int resultUpdate = 0;
+        	int resultInsert = 0;
+        	
         	// pm 리스트에 추가된 모든 plcy_no 값 리스트
         	List<String> plcyNoListPM = pm.stream()
         			.map(PolicyModel::getPlcy_no)
         			.collect(Collectors.toList());
         	
+        	System.out.println(plcyNoListPM);
+        	
         	// db에 저장된 plcy_no 값 리스트
         	List<String> plcyNoListDB = service.plcyNoList();
+        	System.out.println(plcyNoListDB);
+        	
+        	Set<String> plcyNoSetDB = plcyNoListDB.stream()
+        	        .filter(Objects::nonNull)
+        	        .map(String::trim)
+        	        .collect(Collectors.toSet());
         	
         	// pm과 db 리스트의 교집합 - update 할 정책 번호 리스트
         	List<String> common = plcyNoListPM.stream()
-        			.filter(plcyNoListDB::contains)
-        			.collect(Collectors.toList());        
+        	        .filter(plcyNoSetDB::contains)
+        	        .collect(Collectors.toList());       
+        	
+        	System.out.println(common);
+        	
+        	// updatePMList : 기존에 저장된 정책 데이터 중 수정할 데이터
+        	Set<String> commonSet = new HashSet<>(common);
+        	List<PolicyModel> updatePMList = pm.stream()
+        		.filter(p -> p.getPlcy_no() != null && 
+        				commonSet.contains(p.getPlcy_no().trim()))
+        	    .collect(Collectors.toList());
         	
         	// pm - db 리스트의 차집합 - insert 할 정책 번호 리스트
         	List<String> onlyInPM = plcyNoListPM.stream()
         			.filter(e -> !plcyNoListDB.contains(e))
         			.collect(Collectors.toList());
         	
+        	// insertPMList : 신규 데이터 삽입할 데이터
+        	Set<String> onlyInPMSet = new HashSet<>(onlyInPM);
+        	List<PolicyModel> insertPMList = pm.stream()
+        		.filter(p -> p.getPlcy_no() != null &&
+        				onlyInPMSet.contains(p.getPlcy_no().trim()))
+        	    .collect(Collectors.toList());
+        	
         	System.out.println("신규 데이터 수 : " + plcyNoListPM.size());
         	System.out.println("기존 데이터 수 : " + plcyNoListDB.size());
         	System.out.println("Update 할 데이터 수 : " + common.size());
         	System.out.println("Insert 할 데이터 수 : " + onlyInPM.size());   	
         	
+        	// 기존 데이터 update 수행    	
+       		for(PolicyModel u : updatePMList) {
+       			resultUpdate = service.updatePolicy(u);        	
+        		
+        		if(resultUpdate != 1) {
+        			System.out.println("update 실패");
+        		}      		
+        	}
+       		
+        	// 신규 데이터 insert 수행      		
+       		for(PolicyModel i : insertPMList) {
+       			resultInsert = service.insertPolicy(i);        	
+        		
+        		if(resultInsert != 1) {
+        			System.out.println("insert 실패");
+        		}
+        	}
         }
-        
-        model.addAttribute("result", result);
-        
 		return "policy/test3";
 	}
 	
-	@RequestMapping("policyList")
-	public String policyList(Model model) {
+	// 정책 목록 리스트
+	@RequestMapping("policyMain")
+	public String policyMain(Model model) {
 		
 		List<PolicyModel> pm = service.plcyList();
 		
 		model.addAttribute("pm", pm);
-		return "policy/test2";
+		return "policy/policyMain";
 	}
 	
 }

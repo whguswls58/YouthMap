@@ -10,7 +10,7 @@
 시험용 페이지<br>
 
 <input type=button value="데이터 업데이트" onclick="location.href='policyUpdate'"> 
-<input type=button value="정책 리스트" onclick="location.href='policyList'"> 
+<input type=button value="정책 리스트" onclick="location.href='policyMain'"> 
 
 </body>
 </html>
