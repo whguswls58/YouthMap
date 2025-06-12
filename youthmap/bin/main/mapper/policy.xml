@@ -20,7 +20,7 @@
 </select>
 
 <!-- 데이터 insert -->
-<insert id="insertPolicy" parameterType="policy">
+<insert id="plcyInsert" parameterType="policy">
 	INSERT INTO plcy (
         PLCY_NO, PLCY_NM, PLCY_EXPLN_CN, PLCY_KYWD_NM, LCLSF_NM, MCLSF_NM,
         PLCY_SPRT_CN, BIZ_PRD_BGNG_YMD, BIZ_PRD_END_YMD, PLCY_APLY_MTHD_CN,
@@ -50,7 +50,7 @@
 </select>
 
 <!-- 데이터 업데이트 -->
-<update id="updatePolicy" parameterType="policy">
+<update id="plcyUpdate" parameterType="policy">
 	UPDATE plcy SET 
 		PLCY_NM = #{plcy_nm}, PLCY_EXPLN_CN = #{plcy_expln_cn},
 		PLCY_KYWD_NM = #{plcy_kywd_nm}, LCLSF_NM = #{lclsf_nm}, MCLSF_NM = #{mclsf_nm},
@@ -72,6 +72,23 @@
         FRST_REG_DT = #{frst_reg_dt}, LAST_MDFCN_DT = #{last_mdfcn_dt}, REG_DATE = sysdate
 	WHERE plcy_no = #{plcy_no}			
 </update>
+
+<!-- 정책 상세 데이터 검색 -->
+<select id="plcyContent" parameterType="java.lang.String" resultType="policy">
+	SELECT * FROM plcy WHERE plcy_no = #{plcy_no}
+</select>
+
+<select id="plcyListByPage" parameterType="map" resultType="policy">
+    SELECT *
+    FROM (
+        SELECT ROWNUM rn, a.*
+        FROM (
+            SELECT * FROM plcy ORDER BY last_mdfcn_dt DESC
+        ) a
+    )
+    WHERE rn BETWEEN #{startRow} and #{endRow}
+</select>
+
 
 </mapper>
 

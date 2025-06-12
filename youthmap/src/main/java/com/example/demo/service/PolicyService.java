@@ -8,6 +8,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -74,8 +75,8 @@ public class PolicyService {
 	}
 
 	// 정책 정보 insert
-	public int insertPolicy(PolicyModel pm) {
-		return dao.insertPolicy(pm);
+	public int plcyInsert(PolicyModel pm) {
+		return dao.plcyInsert(pm);
 	}
 
 	// 정책 리스트 검색
@@ -84,8 +85,17 @@ public class PolicyService {
 	}
 
 	// 정책 정보 update
-	public int updatePolicy(PolicyModel pm) {
-		return dao.updatePolicy(pm);
+	public int plcyUpdate(PolicyModel pm) {
+		return dao.plcyUpdate(pm);
+	}
+
+	// 상세 정보 검색
+	public PolicyModel plcyContent(String plcy_no) {
+		return dao.plcyContent(plcy_no);
+	}
+
+	public List<PolicyModel> plcyListByPage(Map<String, Integer> params) {
+		return dao.plcyListByPage(params);
 	}
 
 }
