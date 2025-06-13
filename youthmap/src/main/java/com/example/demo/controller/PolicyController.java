@@ -47,6 +47,7 @@ public class PolicyController {
 		return "policy/test";
 	}
 
+	// 정책 데이터 수동 업데이트
 	@RequestMapping("/policyUpdate")
 	public String policyUpdate() throws Exception {
 		service.executePolicyUpdate();
