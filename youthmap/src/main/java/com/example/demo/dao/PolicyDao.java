@@ -11,7 +11,7 @@ import com.example.demo.model.PolicyModel;
 @Mapper
 public interface PolicyDao {
 
-	int cntData();
+	int cntData(PolicyModel pm);
 
 	Date lastUpdate();
 

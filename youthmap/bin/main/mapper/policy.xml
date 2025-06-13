@@ -4,11 +4,17 @@
 
 <mapper namespace="com.example.demo.dao.PolicyDao">
 
-<!-- DB에 저장된 전체 데이터 갯수 -->
-<select id="cntData" resultType="int">
-	SELECT COUNT(*) FROM plcy
+<!-- 데이터 갯수 -->
+<select id="cntData" parameterType="policy" resultType="int">
+	select count(*) from plcy
+	<where>
+		<!-- 검색어가 있고, 검색항목이 제목+내용이 아닌 경우 -->
+		<if test="searchInput != null">
+			plcy_nm like '%'||#{searchInput}||'%' or
+			plcy_expln_cn like '%'||#{searchInput}||'%' 			
+		</if>
+	</where>
 </select>
-
 <!-- 마지막 업데이트일 -->
 <select id="lastUpdate" resultType="java.util.Date">
 	SELECT MAX(reg_date) FROM plcy	

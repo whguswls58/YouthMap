@@ -106,11 +106,11 @@ button, strong {
 	<br>
 
 	<div class="search-container">
-		<form action="${pageContext.request.contextPath}/search" method="get"
-			class="search-form">
+		<form onsubmit="return submitSearchForm(event);" class="search-form">
 			<div class="search-box">
 				<!-- 카테고리 선택 -->
-				<input type="hidden" name="mainCategory" value="youthPolicy" /> <select
+				<input type="hidden" name="mainCategory" value="youthPolicy" />
+				<select
 					name="mainCategory" class="category-select" disabled>
 					<option value="youthPolicy" selected>청년정책</option>
 					<option value="culture">문화생활</option>
@@ -118,65 +118,77 @@ button, strong {
 				</select>
 
 				<!-- 검색어 입력 -->
-				<input type="text" name="q" class="search-input"
+				<input type="text" name="searchInput" class="search-input"
 					placeholder="검색어를 입력하세요" />
-
+				<input type="hidden" name="page" value="${page }"/>
 				<!-- 검색 버튼 -->
 				<button type="submit" class="search-button">검색</button>
 			</div>
 		</form>
 	</div>
 
-	검색 된 결과 : ${listcount }개
+<div id="policy-search-count"></div>
 
 <div id="policy-container"></div>
 
 <div id="pagination" style="text-align:center; margin-top: 20px;"></div>
 
 <script>
-		window.loadPage = function(page) {
-		console.log("loadPage 호출됨. page = ", page);
+	window.loadPage = function(page) {
+	console.log("loadPage 호출됨. page = ", page);
 		
-	  fetch(`/policyListJson?page=\${page}`)  // ✅ 백틱(`) 사용!
-	    .then(response =>  	response.json())
+	fetch(`/policyListJson?page=\${page}&
+			searchInput=\${encodeURIComponent(currentSearchInput)}&
+			mainCategory=\${encodeURIComponent(currentMainCategory)}`)  // ✅ 백틱(`) 사용!
+	 	.then(response =>  	response.json())
 	    .then(data => {
-	   	  console.log("data:", data);
-	      const container = document.getElementById("policy-container");
-	      container.innerHTML = "";
+		console.log("data:", data);
+	 	const container = document.getElementById("policy-container");
+	    container.innerHTML = "";
 
-	      if (!data.pm || data.pm.length === 0) {
-	        container.innerHTML = "<p>데이터가 없습니다.</p>";
-	        return;
-	      } 
+	    if (!data.pmList || data.pmList.length === 0) {
+		    container.innerHTML = "<p>데이터가 없습니다.</p>";
+		    return;
+	    } 
 	    	  
-	      console.log("data.pm 출력 확인:", data.pm);
-		  data.pm.forEach(p => {
-			console.log("각 항목 확인:", p);
-		    const div = document.createElement("div");
-		    div.className = "policy-item";
+	    console.log("data.pmList 출력 확인:", data.pmList);
+		data.pmList.forEach(p => {
+		console.log("각 항목 확인:", p);
+		const div = document.createElement("div");
+		div.className = "policy-item";
 		    
-		    const a = document.createElement("a");
-		    a.href = `/policyContent?plcy_no=\${p.plcy_no}`;
-		    a.textContent = p.plcy_nm;
-		    div.appendChild(a);
+		const a = document.createElement("a");
+		a.href = `/policyContent?plcy_no=\${p.plcy_no}`;
+		a.textContent = p.plcy_nm;
+		div.appendChild(a);
+		
+		
+		// 정책 키워드 출력
+		const keyword = document.createElement("p");
+		keyword.className = "keyword";
+		keyword.textContent = `키워드: \${p.plcy_kywd_nm ? p.plcy_kywd_nm : '없음'}`;
+		div.appendChild(keyword);
 		    
-			// 정책 키워드 출력
-		    const keyword = document.createElement("p");
-		    keyword.className = "keyword";
-		    keyword.textContent = `키워드: \${p.plcy_kywd_nm}`;
-		    div.appendChild(keyword);
-		    
-		    container.appendChild(div);    	  
-	      });
+		container.appendChild(div);
+		
+		// 검색 결과 갯수 출력
+		const plcy_cnt = document.createElement("div");
+		plcy_cnt.className = "policy-search-count";
+		
+		console.log(`listcount : \${data.listcount}`);
+		const search_result = document.createElement("p");
+		search_result.textContent = `검색 된 결과 : \${data.listcount}개`;
+		plcy_cnt.appendChild(search_result);
+		
+		const container_search = document.getElementById("policy-search-count");
+	    container_search.innerHTML = "";
+		
+		container_search.appendChild(plcy_cnt);
+		
+	    });
 	      
-	   	  // 페이지네이션 렌더링 호출
-	      renderPagination(data.page, data.pagecount, data.startpage, data.endpage);
-
-	      // (선택) 검색 결과 개수 갱신
-// 	      const resultText = document.getElementById("result-count");
-// 	      if (resultText) {
-// 	        resultText.innerText = `검색된 결과 : ${data.pm.length}개`;
-// 	      }
+	   	// 페이지네이션 렌더링 호출
+	    renderPagination(data.page, data.pagecount, data.startpage, data.endpage);
 	      
 	    })
 	    .catch(error => console.error("오류 발생:", error));
@@ -215,10 +227,23 @@ button, strong {
 
 	  // 초기 로딩
 	 window.addEventListener("DOMContentLoaded", () => {
+		 currentSearchInput = "";  // 초기화
+		 currentMainCategory = "youthPolicy";
 		 loadPage(1);// 처음 페이지 비동기로 불러오기
     });		// end window
 	
-   
+    // 검색어 및 카테고리 상태 저장
+    function submitSearchForm(event) {
+    	  event.preventDefault();
+
+    	  // 현재 검색어 상태 저장
+    	  currentSearchInput = document.querySelector('input[name="searchInput"]').value;
+    	  currentMainCategory = document.querySelector('input[name="mainCategory"]').value;
+
+    	  // 첫 페이지로 검색
+    	  loadPage(1);
+    	  return false;
+   	}
     
 </script>
 

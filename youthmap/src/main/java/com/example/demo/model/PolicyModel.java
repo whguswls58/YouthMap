@@ -49,4 +49,10 @@ public class PolicyModel {
 	
     private Date reg_date;						// 마지막 insert 수행한 시간
     
+    
+    // 검색어 및 카테고리
+    private String searchInput;
+    private String mainCategory;
+    
+    
 }
