@@ -383,6 +383,7 @@ public class PolicyService {
 		return dao.plcyContent(plcy_no);
 	}
 
+	// 메인 페이지 리스트
 	public List<PolicyModel> plcyListByPage(Map<String, Integer> params) {
 		return dao.plcyListByPage(params);
 	}
