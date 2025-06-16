@@ -15,7 +15,7 @@ public class PolicyModel {
 	private String plcy_nm;						// 정책명
 	private String plcy_expln_cn;				// 정책 설명
 	private String plcy_kywd_nm;				// 정책 키워드명
-	private String lclsf_nm;					// 소분류명
+	private String lclsf_nm;					// 대분류명
 	private String mclsf_nm;					// 중분류명
 	private String plcy_sprt_cn;				// 정책 지원 내용	
 	private String biz_prd_bgng_ymd;			// 사업 시작일

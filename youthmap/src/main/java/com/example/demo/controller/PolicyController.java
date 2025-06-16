@@ -158,9 +158,9 @@ public class PolicyController {
 	// 비동기용 json 반환
 	@GetMapping("/policyListJson")
 	@ResponseBody
-	public Map<String, Object> getPolicyListJson(@RequestParam(name = "page") int page,
+	public Map<String, Object> getPolicyListJson(@RequestParam("page") int page,
 												 @ModelAttribute PolicyModel pm,
-												 @RequestParam(name = "selectedCategories") List<String> categories) {
+												 @RequestParam("selectedCategories") List<String> categories) {
 
 		System.out.println("현재 페이지 : " + page);
 		System.out.println("현재 검색어 : " + pm.getSearchInput());
@@ -182,8 +182,6 @@ public class PolicyController {
 		int pagecount = listcount / limit + ((listcount % limit == 0) ? 0 : 1);
 		int startpage = ((page - 1) / 6) * limit + 1;
 		int endpage = Math.min(startpage + 6 - 1, pagecount);
-		
-		
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("pmList", pmList);
@@ -198,12 +196,19 @@ public class PolicyController {
 
 	// 정책 상세 페이지
 	@RequestMapping("policyContent")
-	public String policyContent(@RequestParam("plcy_no") String plcy_no, Model model) {
+	public String policyContent(@RequestParam("plcy_no") String plcy_no, 
+								@RequestParam("page") int page,
+								Model model) {
 
 		// 상세 데이터 검색
 		PolicyModel plcy = service.plcyContent(plcy_no);
-
+		String[] plcy_kywd_nm_list  = plcy.getPlcy_kywd_nm().split(",");
+		System.out.println(plcy_kywd_nm_list);
+		
 		model.addAttribute("plcy", plcy);
+		model.addAttribute("plcy_kywd_nm_list", plcy_kywd_nm_list);
+		model.addAttribute("page", page);
+		
 		return "policy/contentTest";
 //		return "policy/policyContent";
 	}

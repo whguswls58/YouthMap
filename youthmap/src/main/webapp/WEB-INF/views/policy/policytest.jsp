@@ -370,10 +370,8 @@ a:hover {
 		    card.appendChild(labels);
 			
 		 	const aContent = document.createElement("a");
-		 	aContent.href= `/policyContent?plcy_no=${p.plcy_no}`;
-// 		 	aContent.style.textDecoration = "none";
-// 		 	aContent.style.color = "inherit";  // 링크 색상 제거
-		 	
+		 	aContent.href= `/policyContent?page=${page}&plcy_no=\${p.plcy_no}`;
+ 	
 		    // 제목
 		    const title = document.createElement("div");
 		    title.className = "policy-title";
@@ -402,7 +400,7 @@ a:hover {
 		    
 		 	// 자세히 보기 버튼
 		    const detailBtn = document.createElement("a");
-		    detailBtn.href = `/policyContent?plcy_no=${p.plcy_no}`;
+		    detailBtn.href = `/policyContent?page=${page}&plcy_no=\${p.plcy_no}`;
 		    detailBtn.className = "detail-btn";
 		    detailBtn.textContent = "자세히보기";
 		    card.appendChild(detailBtn);
