@@ -25,6 +25,6 @@ public interface PolicyDao {
 
 	PolicyModel plcyContent(String plcy_no);
 
-	List<PolicyModel> plcyListByPage(Map<String, Integer> params);
+	List<PolicyModel> plcyListByPage(PolicyModel pm);
 
 }

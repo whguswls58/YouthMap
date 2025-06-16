@@ -8,10 +8,30 @@
 <select id="cntData" parameterType="policy" resultType="int">
 	select count(*) from plcy
 	<where>
-		<!-- 검색어가 있고, 검색항목이 제목+내용이 아닌 경우 -->
-		<if test="searchInput != null">
+		<!-- 상시 혹은 정책 신청기간이 남은 경우 -->
+		aply_ymd_end IS NULL
+	    OR (
+	      aply_ymd_end IS NOT NULL
+	      AND REGEXP_LIKE(aply_ymd_end, '^[0-9]{8}$')
+	      AND TO_DATE(aply_ymd_end, 'YYYYMMDD') > TRUNC(SYSDATE)
+	    )
+	
+		<!-- 검색어가 있는 경우 -->
+		<if test="searchInput != null and searchInput != ''">
 			plcy_nm like '%'||#{searchInput}||'%' or
 			plcy_expln_cn like '%'||#{searchInput}||'%' 			
+		</if>
+		
+		<!-- 카테고리 선택했을 경우 -->
+		<if test="categories != null and categories.size() > 0">
+			<if test="searchInput != null and searchInput != ''">
+	        	and
+	      	</if>
+			(
+			<foreach collection="categories" item="category" separator="OR">
+	        	mclsf_nm LIKE '%' || #{category} || '%'
+	        </foreach>
+			)
 		</if>
 	</where>
 </select>
@@ -84,12 +104,41 @@
 	SELECT * FROM plcy WHERE plcy_no = #{plcy_no}
 </select>
 
-<select id="plcyListByPage" parameterType="map" resultType="policy">
+<!-- 데이터 검색 -->
+<select id="plcyListByPage" parameterType="policy" resultType="policy">
     SELECT *
     FROM (
         SELECT ROWNUM rn, a.*
         FROM (
-            SELECT * FROM plcy ORDER BY last_mdfcn_dt DESC
+            SELECT * FROM plcy 
+            <where>
+	            <!-- 상시 혹은 정책 신청기간이 남은 경우 -->
+				aply_ymd_end IS NULL
+			    OR (
+			      aply_ymd_end IS NOT NULL
+			      AND REGEXP_LIKE(aply_ymd_end, '^[0-9]{8}$')
+			      AND TO_DATE(aply_ymd_end, 'YYYYMMDD') > TRUNC(SYSDATE)
+			    )
+				<!-- 검색어가 있는 경우 -->
+				<if test="searchInput != null and searchInput != ''">
+					plcy_nm like '%'||#{searchInput}||'%' or
+					plcy_expln_cn like '%'||#{searchInput}||'%' 			
+				</if>
+				
+				<!-- 카테고리 선택했을 경우 -->
+				<if test="categories != null and categories.size() > 0">
+					<if test="searchInput != null and searchInput != ''">
+			        	and
+			      	</if>
+					(
+					<foreach collection="categories" item="category" separator="OR">
+			        	mclsf_nm LIKE '%' || #{category} || '%'
+			        </foreach>
+					)
+				</if>
+				
+			</where>
+            ORDER BY last_mdfcn_dt DESC
         ) a
     )
     WHERE rn BETWEEN #{startRow} and #{endRow}

@@ -384,8 +384,8 @@ public class PolicyService {
 	}
 
 	// 메인 페이지 리스트
-	public List<PolicyModel> plcyListByPage(Map<String, Integer> params) {
-		return dao.plcyListByPage(params);
+	public List<PolicyModel> plcyListByPage(PolicyModel pm) {
+		return dao.plcyListByPage(pm);
 	}
 
 }

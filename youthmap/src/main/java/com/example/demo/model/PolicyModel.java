@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.ibatis.type.Alias;
 
@@ -54,5 +55,9 @@ public class PolicyModel {
     private String searchInput;
     private String mainCategory;
     
+    private int startRow;
+    private int endRow;
+    
+    private List<String> categories;
     
 }
