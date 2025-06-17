@@ -40,8 +40,6 @@ public class CommentRestController {
 
         // 🔍 댓글 정보 조회
         Comment comment = commentService.getCommentByNo(commNo);
-        System.out.println("💬 삭제 요청 댓글 번호: " + commNo);
-        System.out.println("🔍 조회된 댓글 정보: " + comment);
 
         if (comment == null) {
             System.out.println("❌ 댓글 조회 실패 (null 반환)");

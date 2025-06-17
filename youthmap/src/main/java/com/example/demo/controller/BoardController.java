@@ -92,8 +92,6 @@ public class BoardController {
                         @RequestParam("uploadFile") MultipartFile uploadFile,
                         HttpSession session) throws Exception {
 
-        System.out.println("✅ 글쓰기 컨트롤러 도착");
-
         String memId = (String) session.getAttribute("loginId");
         Integer memNo = (Integer) session.getAttribute("loginNo");
         String loginRole = (String) session.getAttribute("loginRole");
