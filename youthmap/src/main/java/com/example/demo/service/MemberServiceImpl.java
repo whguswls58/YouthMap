@@ -1,5 +1,8 @@
 package com.example.demo.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.MemberMapper;
@@ -12,10 +15,20 @@ import lombok.RequiredArgsConstructor;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberMapper memberMapper;
+    
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Override
     public void register(MemberModel member) {
-        // 비밀번호 암호화 없이 저장
+        // 비밀번호 암호화
+        PasswordEncoder passwordEncoder = applicationContext.getBean(PasswordEncoder.class);
+        String encodedPassword = passwordEncoder.encode(member.getMemPass());
+        member.setMemPass(encodedPassword);
+        
+        System.out.println("회원가입 - 원본 비밀번호 길이: " + member.getMemPass().length());
+        System.out.println("회원가입 - 암호화된 비밀번호 길이: " + encodedPassword.length());
+        
         memberMapper.insertMember(member);
     }
 

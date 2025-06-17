@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.example.demo.model.MemberModel;
@@ -20,6 +21,12 @@ public class SecurityConfig {
     private final CustomOAuth2UserService  oauth2UserService;
     private final CustomUserDetailsService userDetailsService;
     private final MemberService memberService;
+
+    // BCrypt 암호화를 위한 PasswordEncoder Bean
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -76,7 +83,32 @@ public class SecurityConfig {
         // 5) 평문 비밀번호 비교용 Provider
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        authProvider.setPasswordEncoder(new PasswordEncoder() {
+            @Override
+            public String encode(CharSequence rawPassword) {
+                return passwordEncoder().encode(rawPassword);
+            }
+
+            @Override
+            public boolean matches(CharSequence rawPassword, String encodedPassword) {
+                System.out.println("=== PasswordEncoder.matches ===");
+                System.out.println("입력된 비밀번호: " + rawPassword);
+                System.out.println("저장된 비밀번호 길이: " + encodedPassword.length());
+                
+                // 평문 비밀번호인지 확인 (길이가 60자 미만이면 평문으로 간주)
+                if (encodedPassword.length() < 60) {
+                    System.out.println("평문 비밀번호 비교");
+                    boolean result = rawPassword.toString().equals(encodedPassword);
+                    System.out.println("평문 비교 결과: " + result);
+                    return result;
+                } else {
+                    System.out.println("암호화된 비밀번호 BCrypt 비교");
+                    boolean result = passwordEncoder().matches(rawPassword, encodedPassword);
+                    System.out.println("BCrypt 비교 결과: " + result);
+                    return result;
+                }
+            }
+        });
         http.authenticationProvider(authProvider);
 
         // CSRF는 필요시 켜 주세요
