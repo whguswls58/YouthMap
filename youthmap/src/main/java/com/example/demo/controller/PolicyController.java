@@ -29,7 +29,7 @@ public class PolicyController {
 
 	private final PolicyService service;
 	
-	@RequestMapping("/")
+	@RequestMapping("/asdfasdfs")
 	public String test() throws Exception{
 		
 		// JSON 파일 경로 설정
