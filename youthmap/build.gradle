@@ -24,16 +24,16 @@ repositories {
 }
 
 dependencies {
-   // jsp
-   implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
-   // jakarta jstl
-   implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.0'
-   // fileupload
-   implementation 'commons-fileupload:commons-fileupload:1.5'
-   // jackson
-   implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-   // json-simple
-   implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+	// jsp
+	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	// jakarta jstl
+	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.0'
+	// fileupload
+	implementation 'commons-fileupload:commons-fileupload:1.5'
+	// jackson
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+	// json-simple
+	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
    implementation 'org.springframework.boot:spring-boot-starter-security'
    implementation 'org.springframework.boot:spring-boot-starter-web'
