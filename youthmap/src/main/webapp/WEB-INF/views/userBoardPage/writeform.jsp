@@ -20,7 +20,7 @@
                 <td>
                     <select name="boardCategory" required>
                         <option value="">선택</option>
-                        <c:if test="${sessionScope.loginRole eq 'ADMIN'}">
+                        <c:if test="${sessionScope.memRole eq 'ADMIN'}">
                 		<option value="공지사항">공지사항</option>
             			</c:if>
                         <option value="정책">정책</option>
@@ -33,7 +33,7 @@
             <tr>
                 <th>작성자</th>
                 <td>
-                    <input type="text" name="memId" value="${sessionScope.loginId}" readonly />
+                    <input type="text" name="memId" value="${sessionScope.memId}" readonly />
                 </td>
             </tr>
             <tr>
