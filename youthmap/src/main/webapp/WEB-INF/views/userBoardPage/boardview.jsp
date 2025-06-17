@@ -102,7 +102,7 @@
     </c:if>
 </div>
     
-    <script src="/js/comment.js"></script>
+    <script src="/js/JYjs/comment.js"></script>
     
     <script>
     const loginUserId = '${sessionScope.loginId}';

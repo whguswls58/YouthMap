@@ -16,12 +16,12 @@ public class MainController {
 	@Autowired
     private BoardService boardService;
 
-	@GetMapping("/")
+	@GetMapping("/main")
 	public String mainPage(Model model) {
         // 공지사항 3개 가져오기
         List<Board> noticeList = boardService.getTopNotices(); // 이미 있는 메서드 사용
         model.addAttribute("noticeList", noticeList);
 
-        return "mainPage/main";
+        return "main";
 	}
 }
