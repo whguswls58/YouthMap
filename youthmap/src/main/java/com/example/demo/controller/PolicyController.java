@@ -178,8 +178,7 @@ public class PolicyController {
 		plcy.setPlcy_major_cd(service.convertCodes(plcy.getPlcy_major_cd(), service.plcy_major_map));
 		plcy.setSchool_cd(service.convertCodes(plcy.getSchool_cd(), service.school_map));
 		plcy.setJob_cd(service.convertCodes(plcy.getJob_cd(), service.job_map));
-		
-
+		plcy.setS_biz_cd(service.convertCodes(plcy.getS_biz_cd(), service.sbiz_map));		
 	    
 		// \n -> <br> 치환
 		String htmlText = null;

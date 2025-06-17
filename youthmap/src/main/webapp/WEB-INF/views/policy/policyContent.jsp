@@ -200,7 +200,7 @@ footer {
 					</tr>
 					<tr>
 						<th>지원 규모(명)</th>
-						<td>${plcy.sprt_scl_cnt}</td>
+						<td>${plcy.sprt_scl_cnt} 명</td>
 					</tr>
 				</table>
 				<br><br>
@@ -289,7 +289,7 @@ footer {
 					</tr>
 					<tr>
 						<th>특화분야</th>
-						<td>${plcy.sprt_scl_cnt}</td>
+						<td>${plcy.s_biz_cd}</td>
 					</tr>
 					<tr>
 						<th>추가사항</th>
@@ -301,6 +301,28 @@ footer {
 					</tr>
 				</table>
 				
+				<br>
+					
+				<div class="title">신청방법</div>
+				<table class="policy-table policy-application">
+					<tr>
+						<th>신청절차</th>
+						<td>${plcy.plcy_aply_mthd_cn}</td>
+					</tr>
+					<tr>
+						<th>심사 및 발표</th>
+						<td>${plcy.srng_mthd_cn}</td>
+					</tr>
+					<tr>
+						<th>신청 사이트</th>
+						<td>${plcy.aply_url_addr}</td>
+					</tr>
+					<tr>
+						<th>제출 서류</th>
+						<td>${plcy.sbmsn_dcmnt_cn}</td>
+					</tr>
+				</table>
+				<br><br>
 			</div>
 			
 			

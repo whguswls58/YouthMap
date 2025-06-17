@@ -82,23 +82,29 @@ public class PolicyService {
 	);
 	
 	public Map<String, String> sbiz_map = Map.ofEntries(
-		    Map.entry("0014001", "중소기업"),
-		    Map.entry("0014002", "여성"),
-		    Map.entry("0014003", "기초생활수급자"),
-		    Map.entry("0014004", "한부모가정"),
-		    Map.entry("0014005", "장애인"),
-		    Map.entry("0014006", "농업인"),
-		    Map.entry("0014007", "군인"),
-		    Map.entry("0014008", "지역인재"),
-		    Map.entry("0014009", "기타"),
-		    Map.entry("0014010", "제한없음")
-		);
+	    Map.entry("0014001", "중소기업"),
+	    Map.entry("0014002", "여성"),
+	    Map.entry("0014003", "기초생활수급자"),
+	    Map.entry("0014004", "한부모가정"),
+	    Map.entry("0014005", "장애인"),
+	    Map.entry("0014006", "농업인"),
+	    Map.entry("0014007", "군인"),
+	    Map.entry("0014008", "지역인재"),
+	    Map.entry("0014009", "기타"),
+	    Map.entry("0014010", "제한없음")
+	);
 	
+	// code 값을 map에 저장된 값과 매핑하여 치환
 	public String convertCodes(String codes, Map<String, String> codeMap) {
-	    if (codes == null || codes.isBlank()) return "";
+	    if (codes == null || codes.isBlank()) return "-";
 	    return Arrays.stream(codes.split(","))
 	                 .map(code -> codeMap.getOrDefault(code.trim(), code)) // 코드에 해당하는 명칭 또는 코드 그대로
 	                 .collect(Collectors.joining(", "));
+	}
+	
+	// "\n" -> "<br>"로 치환
+	public String convertNewlines(String text) {
+	    return (text != null) ? text.replace("\n", "<br>") : null;
 	}
 	
 	// api에 요청하여 json 데이터 받아옴
