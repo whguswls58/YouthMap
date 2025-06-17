@@ -60,6 +60,7 @@
 		RGTR_UP_INST_CD_NM, RGTR_INST_CD_NM, MRG_STTS_CD, EARN_CND_SE_CD,
 		EARN_MIN_AMT, EARN_MAX_AMT, EARN_ETC_CN, ADD_APLY_QLFC_CND_CN,
 		INQ_CNT, APLY_YMD_STRT, APLY_YMD_END, FRST_REG_DT, LAST_MDFCN_DT,
+		PTCP_PRP_TRGT_CN, SCHOOL_CD, PLCY_MAJOR_CD, JOB_CD, S_BIZ_CD,
 		REG_DATE
 		) VALUES (
 		#{plcy_no}, #{plcy_nm}, #{plcy_expln_cn}, #{plcy_kywd_nm}, #{lclsf_nm},
@@ -73,8 +74,9 @@
 		#{earn_cnd_se_cd},
 		#{earn_min_amt}, #{earn_max_amt}, #{earn_etc_cn}, #{add_aply_qlfc_cnd_cn},
 		#{inq_cnt}, #{aply_ymd_strt, jdbcType=VARCHAR}, #{aply_ymd_end,
-		jdbcType=VARCHAR},
-		#{frst_reg_dt}, #{last_mdfcn_dt}, sysdate
+		jdbcType=VARCHAR}, #{frst_reg_dt}, #{last_mdfcn_dt}, 
+		#{ptcp_prp_trgt_cn}, #{school_cd}, #{plcy_major_cd}, #{job_cd}, #{s_biz_cd},
+		sysdate
 		)
 	</insert>
 
@@ -106,8 +108,10 @@
 		#{add_aply_qlfc_cnd_cn},
 		INQ_CNT = #{inq_cnt}, APLY_YMD_STRT = #{aply_ymd_strt, jdbcType=VARCHAR},
 		APLY_YMD_END = #{aply_ymd_end, jdbcType=VARCHAR},
-		FRST_REG_DT = #{frst_reg_dt}, LAST_MDFCN_DT = #{last_mdfcn_dt}, REG_DATE =
-		sysdate
+		FRST_REG_DT = #{frst_reg_dt}, LAST_MDFCN_DT = #{last_mdfcn_dt}, 
+		PTCP_PRP_TRGT_CN = #{ptcp_prp_trgt_cn}, SCHOOL_CD = #{school_cd},
+		PLCY_MAJOR_CD = #{plcy_major_cd}, JOB_CD = #{job_cd}, S_BIZ_CD = #{s_biz_cd},
+		REG_DATE = sysdate
 		WHERE plcy_no = #{plcy_no}
 	</update>
 

@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -42,6 +43,64 @@ public class PolicyService {
 	@Autowired
 	private SqlSessionFactory sqlSessionFactory;
 
+	public Map<String, String> plcy_major_map = Map.ofEntries(
+		Map.entry("0011001", "인문계열"),
+		Map.entry("0011002", "사회계열"),
+	    Map.entry("0011003", "상경계열"),
+	    Map.entry("0011004", "이학계열"),
+	    Map.entry("0011005", "공학계열"),
+	    Map.entry("0011006", "예체능계열"),
+	    Map.entry("0011007", "농산업계열"),
+	    Map.entry("0011008", "재직자"),
+	    Map.entry("0011009", "제한없음")
+	);
+
+	public Map<String, String> school_map = Map.ofEntries(
+	    Map.entry("0049001", "고졸 미만"),
+	    Map.entry("0049002", "고졸 재학"),
+	    Map.entry("0049003", "고졸 예정"),
+	    Map.entry("0049004", "고졸 졸업"),
+	    Map.entry("0049005", "대학 재학"),
+	    Map.entry("0049006", "대졸 예정"),
+	    Map.entry("0049007", "대학 졸업"),
+	    Map.entry("0049008", "석·박사"),
+	    Map.entry("0049009", "기타"),
+	    Map.entry("0049010", "제한없음")
+	);
+
+	public Map<String, String> job_map = Map.ofEntries(
+	    Map.entry("0013001", "재직자"),
+	    Map.entry("0013002", "자영업자"),
+	    Map.entry("0013003", "미취업자"),
+	    Map.entry("0013004", "프리랜서"),
+	    Map.entry("0013005", "일용근로자"),
+	    Map.entry("0013006", "(예비)창업자"),
+	    Map.entry("0013007", "단기근로자"),
+	    Map.entry("0013008", "영농종사자"),
+	    Map.entry("0013009", "기타"),
+	    Map.entry("0013010", "제한없음")
+	);
+	
+	public Map<String, String> sbiz_map = Map.ofEntries(
+		    Map.entry("0014001", "중소기업"),
+		    Map.entry("0014002", "여성"),
+		    Map.entry("0014003", "기초생활수급자"),
+		    Map.entry("0014004", "한부모가정"),
+		    Map.entry("0014005", "장애인"),
+		    Map.entry("0014006", "농업인"),
+		    Map.entry("0014007", "군인"),
+		    Map.entry("0014008", "지역인재"),
+		    Map.entry("0014009", "기타"),
+		    Map.entry("0014010", "제한없음")
+		);
+	
+	public String convertCodes(String codes, Map<String, String> codeMap) {
+	    if (codes == null || codes.isBlank()) return "";
+	    return Arrays.stream(codes.split(","))
+	                 .map(code -> codeMap.getOrDefault(code.trim(), code)) // 코드에 해당하는 명칭 또는 코드 그대로
+	                 .collect(Collectors.joining(", "));
+	}
+	
 	// api에 요청하여 json 데이터 받아옴
 	public String getYouthPolicies(@RequestParam("pageNum") int pageNum, @RequestParam("size") int pageSize) {
 
@@ -190,7 +249,13 @@ public class PolicyService {
 						plcyMd.setEarn_etc_cn((String) policy.get("earnEtcCn"));
 						plcyMd.setAdd_aply_qlfc_cnd_cn((String) policy.get("addAplyQlfcCndCn"));
 						plcyMd.setInq_cnt(Integer.parseInt((String) policy.get("inqCnt")));
-
+						plcyMd.setPtcp_prp_trgt_cn((String) policy.get("ptcpPrpTrgtCn"));
+						plcyMd.setSchool_cd((String) policy.get("schoolCd"));
+						plcyMd.setPlcy_major_cd((String) policy.get("plcyMajorCd"));
+						plcyMd.setJob_cd((String) policy.get("jobCd"));
+						plcyMd.setS_biz_cd((String) policy.get("sbizCd"));
+						
+						
 						String dateRange = (String) policy.get("aplyYmd");
 
 						// "~" 기준으로 분할하고 trim
@@ -245,7 +310,12 @@ public class PolicyService {
 							plcyMd.setEarn_etc_cn((String) policy.get("earnEtcCn"));
 							plcyMd.setAdd_aply_qlfc_cnd_cn((String) policy.get("addAplyQlfcCndCn"));
 							plcyMd.setInq_cnt(Integer.parseInt((String) policy.get("inqCnt")));
-
+							plcyMd.setPtcp_prp_trgt_cn((String) policy.get("ptcpPrpTrgtCn"));
+							plcyMd.setSchool_cd((String) policy.get("schoolCd"));
+							plcyMd.setPlcy_major_cd((String) policy.get("plcyMajorCd"));
+							plcyMd.setJob_cd((String) policy.get("jobCd"));
+							plcyMd.setS_biz_cd((String) policy.get("sbizCd"));
+							
 							String dateRange = (String) policy.get("aplyYmd");
 
 							// "~" 기준으로 분할하고 trim

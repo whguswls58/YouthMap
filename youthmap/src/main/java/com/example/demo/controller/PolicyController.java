@@ -53,43 +53,9 @@ public class PolicyController {
 		service.executePolicyUpdate();
 		return "policy/test3";
 	}
-
+	
 	// 정책 메인 페이지
-	@RequestMapping("policyMain")
-	public String policyMain(@RequestParam(value = "page", defaultValue = "1") int page,
-							 @ModelAttribute PolicyModel pm,
-							 Model model) {
-
-		int limit = 6; // 한 페이지에 출력할 데이터 갯수
-		int listcount = service.cntData(pm); // 총 데이터 갯수
-		System.out.println("listcount : " + listcount);
-
-		int startRow = (page - 1) * limit + 1; // 시작번호
-		int endRow = page * limit; // 끝번호
-
-		pm.setStartRow(startRow);
-		pm.setEndRow(endRow);
-		List<PolicyModel> pmList = service.plcyListByPage(pm); // 페이징 적용된 리스트
-
-		// 총 페이지수
-		int pagecount = listcount / limit + ((listcount % limit == 0) ? 0 : 1);
-		int startpage = ((page - 1) / 6) * limit + 1;
-		int endpage = startpage + 6 - 1;
-
-		if (endpage > pagecount)
-			endpage = pagecount;
-
-		model.addAttribute("page", page);
-		model.addAttribute("pmList", pmList);
-		model.addAttribute("listcount", listcount);
-		model.addAttribute("pagecount", pagecount);
-		model.addAttribute("startpage", startpage);
-		model.addAttribute("endpage", endpage);
-		return "policy/policyMain";
-	}
-
-	// 정책 메인 페이지 비동기 테스트용
-	@RequestMapping("policytest")
+	@RequestMapping("/policyMain")
 	public String policyTest(@RequestParam(value = "page", defaultValue = "1") int page,
 							@ModelAttribute PolicyModel pm,
 							Model model) {
@@ -152,7 +118,7 @@ public class PolicyController {
 		model.addAttribute("startpage", startpage);
 		model.addAttribute("endpage", endpage);
 		model.addAttribute("categoryList", categoryList);
-		return "policy/policytest";
+		return "policy/policyMain";
 	}
 
 	// 비동기용 json 반환
@@ -195,22 +161,52 @@ public class PolicyController {
 	}
 
 	// 정책 상세 페이지
-	@RequestMapping("policyContent")
+	@RequestMapping("/policyContent")
 	public String policyContent(@RequestParam("plcy_no") String plcy_no, 
 								@RequestParam("page") int page,
 								Model model) {
 
 		// 상세 데이터 검색
 		PolicyModel plcy = service.plcyContent(plcy_no);
-		String[] plcy_kywd_nm_list  = plcy.getPlcy_kywd_nm().split(",");
-		System.out.println(plcy_kywd_nm_list);
+		String[] keywords  = {};
+		if (plcy.getPlcy_kywd_nm() != null && !plcy.getPlcy_kywd_nm().isBlank()) {
+		    keywords = plcy.getPlcy_kywd_nm().split(",");
+		}
 		
+		System.out.println(keywords);
+		
+		plcy.setPlcy_major_cd(service.convertCodes(plcy.getPlcy_major_cd(), service.plcy_major_map));
+		plcy.setSchool_cd(service.convertCodes(plcy.getSchool_cd(), service.school_map));
+		plcy.setJob_cd(service.convertCodes(plcy.getJob_cd(), service.job_map));
+		
+
+	    
+		// \n -> <br> 치환
+		String htmlText = null;
+		if(plcy.getPlcy_sprt_cn() != null) {
+			htmlText = plcy.getPlcy_sprt_cn().replace("\n", "<br>");
+			plcy.setPlcy_sprt_cn(htmlText);			
+		}
+		
+		if(plcy.getEarn_cnd_se_cd() != null) {
+			htmlText = plcy.getEarn_cnd_se_cd().replace("\n", "<br>");
+			plcy.setEarn_cnd_se_cd(htmlText);			
+		}
+		
+		if(plcy.getPtcp_prp_trgt_cn() != null) {
+			htmlText = plcy.getPtcp_prp_trgt_cn().replace("\n", "<br>");
+			plcy.setPtcp_prp_trgt_cn(htmlText);
+		}
+		
+		if(plcy.getAdd_aply_qlfc_cnd_cn() != null) {
+			htmlText = plcy.getAdd_aply_qlfc_cnd_cn().replace("\n", "<br>");
+			plcy.setAdd_aply_qlfc_cnd_cn(htmlText);
+		}
 		model.addAttribute("plcy", plcy);
-		model.addAttribute("plcy_kywd_nm_list", plcy_kywd_nm_list);
+		model.addAttribute("keywords", keywords);
 		model.addAttribute("page", page);
 		
-		return "policy/contentTest";
-//		return "policy/policyContent";
+		return "policy/policyContent";
 	}
 
 }

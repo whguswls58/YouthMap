@@ -50,6 +50,11 @@ public class PolicyModel {
 	
     private Date reg_date;						// 마지막 insert 수행한 시간
     
+    private String ptcp_prp_trgt_cn;			// 참여제한대상내용
+    private String school_cd;					// 학력코드
+    private String plcy_major_cd;				// 전공코드
+    private String job_cd;						// 취업상태코드
+    private String s_biz_cd;					// 특화분야코드
     
     // 검색어 및 카테고리
     private String searchInput;

@@ -162,7 +162,7 @@ footer {
 					</tr>
 					<tr>
 						<td>
-							<c:forEach var="keyword" items="${plcy_kywd_nm_list}">
+							<c:forEach var="keyword" items="${keywords}">
 							    <span class="policy-tag">${keyword}</span>
 							</c:forEach>
 						</td>
@@ -244,6 +244,10 @@ footer {
 						<th>소득</th>
 						<td>
 						<c:choose>
+							<c:when test="${plcy.earn_cnd_se_cd == '0043003' and not empty plcy.earn_max_amt}">
+								${plcy.earn_etc_cn }
+							</c:when>
+						
 				            <%-- 둘 다 null 또는 0인 경우 --%>
 				            <c:when test="${empty plcy.earn_min_amt and empty plcy.earn_max_amt 
 				                          or (plcy.earn_min_amt == 0 and plcy.earn_max_amt == 0)}">
@@ -271,15 +275,17 @@ footer {
 					</tr>
 					<tr>
 						<th>학력</th>
-						<td>${plcy.biz_prd_bgng_ymd}~ ${plcy.biz_prd_end_ymd}</td>
+						<td>
+							${plcy.school_cd }
+						</td>
 					</tr>
 					<tr>
 						<th>전공</th>
-						<td>${plcy.aply_ymd_strt}~ ${plcy.aply_ymd_end}</td>
+						<td>${plcy.plcy_major_cd}</td>
 					</tr>
 					<tr>
 						<th>취업상태</th>
-						<td>${plcy.sprt_scl_cnt}</td>
+						<td>${plcy.job_cd}</td>
 					</tr>
 					<tr>
 						<th>특화분야</th>
@@ -287,11 +293,11 @@ footer {
 					</tr>
 					<tr>
 						<th>추가사항</th>
-						<td>${plcy.sprt_scl_cnt}</td>
+						<td>${plcy.add_aply_qlfc_cnd_cn}</td>
 					</tr>
 					<tr>
 						<th>참여제한 대상</th>
-						<td>${plcy.sprt_scl_cnt}</td>
+						<td>${plcy.ptcp_prp_trgt_cn}</td>
 					</tr>
 				</table>
 				
