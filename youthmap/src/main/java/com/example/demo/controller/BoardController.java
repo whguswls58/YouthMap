@@ -92,16 +92,16 @@ public class BoardController {
                         @RequestParam("uploadFile") MultipartFile uploadFile,
                         HttpSession session) throws Exception {
 
-        String memId = (String) session.getAttribute("loginId");
-        Integer memNo = (Integer) session.getAttribute("loginNo");
-        String loginRole = (String) session.getAttribute("loginRole");
+        String memId = (String) session.getAttribute("memId");
+        Integer memNo = (Integer) session.getAttribute("memNo");
+        String memRole = (String) session.getAttribute("memRole");
 
         if (memId == null || memNo == null) {
             return "redirect:/temp-login";
         }
         
      // ✅ 공지사항 작성 권한 검사
-        if ("공지사항".equals(board.getBoardCategory()) && !"ADMIN".equals(loginRole)) {
+        if ("공지사항".equals(board.getBoardCategory()) && !"ADMIN".equals(memRole)) {
             System.out.println("⛔ 일반 사용자가 공지사항 작성 시도");
             return "redirect:/boardlist"; // or 경고 페이지
         }
@@ -244,11 +244,11 @@ public class BoardController {
     @GetMapping("/boarddelete")
     public String delete(@RequestParam("no") int no, HttpSession session) {
         // 세션 정보 확인
-        String loginId = (String) session.getAttribute("loginId");
-        String loginRole = (String) session.getAttribute("loginRole");
+        String memId = (String) session.getAttribute("memId");
+        String memRole = (String) session.getAttribute("memRole");
 
         // 로그인 여부 확인
-        if (loginId == null) {
+        if (memId == null) {
             return "redirect:/login";
         }
 
@@ -259,7 +259,7 @@ public class BoardController {
         }
 
         // 권한 체크: 작성자 본인 또는 관리자
-        if (!loginId.equals(board.getMemId()) && !"ADMIN".equals(loginRole)) {
+        if (!memId.equals(board.getMemId()) && !"ADMIN".equals(memRole)) {
             return "redirect:/boardlist"; // 권한 없음
         }
 

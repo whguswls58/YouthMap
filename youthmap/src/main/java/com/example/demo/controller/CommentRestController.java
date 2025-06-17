@@ -33,10 +33,10 @@ public class CommentRestController {
     // ✅ 3. 댓글 삭제
     @DeleteMapping("/{commNo}")
     public String deleteComment(@PathVariable("commNo") int commNo, HttpSession session) {
-        String loginId = (String) session.getAttribute("loginId");
-        String loginRole = (String) session.getAttribute("loginRole");
+        String memId = (String) session.getAttribute("memId");
+        String memRole = (String) session.getAttribute("memRole");
 
-        if (loginId == null) return "fail"; // 로그인 안 됨
+        if (memId == null) return "fail"; // 로그인 안 됨
 
         // 🔍 댓글 정보 조회
         Comment comment = commentService.getCommentByNo(commNo);
@@ -47,7 +47,7 @@ public class CommentRestController {
         }
 
         // 🔐 본인이거나 관리자면 삭제 허용
-        if (!loginId.equals(comment.getMemId()) && !"ADMIN".equals(loginRole)) {
+        if (!memId.equals(comment.getMemId()) && !"ADMIN".equals(memRole)) {
             return "fail";
         }
 

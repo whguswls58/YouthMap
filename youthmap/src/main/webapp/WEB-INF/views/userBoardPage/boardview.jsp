@@ -73,7 +73,7 @@
     
    <!-- 세션값 가져오기 -->
 <input type="hidden" id="boardNo" value="${board.boardNo}" />
-<input type="hidden" id="memId" value="${sessionScope.loginId}" />
+<input type="hidden" id="memId" value="${sessionScope.memId}" />
 
 <h3>댓글</h3>
 <div id="commentBox">
@@ -81,7 +81,7 @@
 
     <form id="commentForm">
         <c:choose>
-    <c:when test="${not empty sessionScope.loginId}">
+    <c:when test="${not empty sessionScope.memId}">
         <textarea id="commentInput" rows="3" cols="60" placeholder="댓글을 입력하세요."></textarea><br/>
         <button type="submit">등록</button>
     </c:when>
@@ -96,7 +96,7 @@
     <div style="text-align: center; margin-top: 20px;">
     <a href="/boardlist?page=${page}">목록으로</a>
 
-    <c:if test="${sessionScope.loginId == board.memId or sessionScope.loginRole == 'ADMIN'}">
+    <c:if test="${sessionScope.memId == board.memId or sessionScope.memRole == 'ADMIN'}">
         <a href="/boardupdateform?no=${board.boardNo}">수정</a>
         <a href="javascript:void(0);" onclick="confirmDelete(${board.boardNo})">삭제</a>
     </c:if>
@@ -105,8 +105,8 @@
     <script src="/js/JYjs/comment.js"></script>
     
     <script>
-    const loginUserId = '${sessionScope.loginId}';
-    const loginUserRole = '${sessionScope.loginRole}'; // 관리자 여부 확인용
+    const loginUserId = '${sessionScope.memId}';
+    const loginUserRole = '${sessionScope.memRole}'; // 관리자 여부 확인용
 </script>
     
     <script>
