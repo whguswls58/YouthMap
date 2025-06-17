@@ -1,4 +1,4 @@
-package com.example.demo.mapper;
+package com.example.demo.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import com.example.demo.model.MemberModel;
 
 @Mapper
-public interface MemberMapper {
+public interface MemberDao {
 
     // 회원가입
     void insertMember(MemberModel member);
