@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dao.MemberMapper;
+import com.example.demo.dao.MemberDao;
 import com.example.demo.model.MemberModel;
 
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-    private final MemberMapper memberMapper;
+    private final MemberDao memberMapper;
     
     @Autowired
     private ApplicationContext applicationContext;

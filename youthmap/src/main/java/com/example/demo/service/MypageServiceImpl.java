@@ -3,14 +3,14 @@
 	import org.springframework.beans.factory.annotation.Autowired;
 	import org.springframework.stereotype.Service;
 
-	import com.example.demo.dao.MemberMapper;
-	import com.example.demo.model.MemberModel;
+import com.example.demo.dao.MemberDao;
+import com.example.demo.model.MemberModel;
 	
 	@Service
 	public class MypageServiceImpl implements MypageService {
 		
 		@Autowired
-		private MemberMapper memberMapper;
+		private MemberDao memberMapper;
 		
 		
 		// 회원의 이름, 메일, 주소,가입일등 조
