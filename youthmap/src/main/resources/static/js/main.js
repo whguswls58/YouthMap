@@ -39,12 +39,19 @@ $(document).ready(function() {
         });
         $('.subcategories').html(html);
     });
+	
+	$(document).ready(function () {
+	  const $header = $('.main-header');
+	  const $dropdown = $('.mega-dropdown');
 
-    // 드롭다운 전체 연동
-    $('.dropdown').hover(function() {
-        $('.dropdown-content').hide();
-        $(this).find('.dropdown-content').show();
-    }, function() {
-        $('.dropdown-content').hide();
-    });
+	  $header.hover(
+	    function () {
+	      $dropdown.stop(true, true).slideDown(200);
+	    },
+	    function () {
+	      $dropdown.stop(true, true).slideUp(200);
+	    }
+	  );
+	});
+	
 });

@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page session="true"%>
 
 <!-- main.jsp -->
 <!DOCTYPE html>
@@ -12,50 +14,63 @@
 </head>
 <body>
 	<div class="wrapper">
-		<header class="sticky-header">
-			<div class="header-container">
+		<!-- 헤더 전체 시작 -->
+		<header class="main-header">
+			<div class="header-top">
 				<div class="logo">
-					<a href="/"> <img src="/img/YouthMap_logo.png" alt="로고" />
-					</a>
+					<a href="/"><img src="../img/YouthMap_logo.png"
+						alt="YouthMap 로고" /></a>
 				</div>
 				<nav class="main-nav">
-					<div class="nav-item">정책</div>
-					<div class="nav-item">문화</div>
-					<div class="nav-item">맛집</div>
-					<div class="nav-item">
-						<a href="/board">유저 게시판</a>
-					</div>
-
-					<div class="dropdown-full">
-						<div class="dropdown-column">
-							<strong>정책</strong> <a href="/policy/support">지원</a> <a
-								href="/policy/housing">주거</a> <a href="/policy/benefit">혜택</a>
-						</div>
-						<div class="dropdown-column">
-							<strong>문화</strong> <a href="/culture/theater">뮤지컬/연극</a> <a
-								href="/culture/exhibit">전시회/미술관</a> <a href="/culture/festival">대회/축제</a>
-						</div>
-						<div class="dropdown-column">
-							<strong>맛집</strong> <a href="/food/gangnam">강남구</a> <a
-								href="/food/gangseo">강서구</a>
-						</div>
-					</div>
+					<ul>
+						<li><a href="/policy">정책</a></li>
+						<li><a href="/culture">문화</a></li>
+						<li><a href="/food">맛집</a></li>
+						<li><a href="/board">유저게시판</a></li>
+					</ul>
 				</nav>
-				<div class="user-menu">
+				<div class="auth-box">
 					<c:choose>
-						<c:when test="${empty sessionScope.loginUser}">
-							<a href="/login">로그인</a>
-						</c:when>
-						<c:otherwise>
-							<div>${sessionScope.loginUser.nickname}님환영합니다.</div>
-							<div>
+						<c:when test="${not empty sessionScope.mem_id}">
+							<div class="welcome-msg">${sessionScope.mem_id}님환영합니다.</div>
+							<div class="auth-links">
 								<a href="/mypage">마이페이지</a> | <a href="/logout">로그아웃</a>
 							</div>
+						</c:when>
+						<c:otherwise>
+							<a href="/login" class="login-btn">로그인</a>
 						</c:otherwise>
 					</c:choose>
 				</div>
 			</div>
+
+			<!-- 드롭다운 영역 -->
+			<div class="mega-dropdown">
+				<div class="mega-dropdown-inner">
+					<div class="dropdown-column">
+						<h4>정책</h4>
+						<a href="/policy/support">지원</a> <a href="/policy/housing">주거</a>
+						<a href="/policy/benefit">혜택</a>
+					</div>
+					<div class="dropdown-column">
+						<h4>문화</h4>
+						<a href="/culture/theater">뮤지컬/연극</a> <a href="/culture/exhibit">전시회/미술관</a>
+						<a href="/culture/festival">대회/축제</a>
+					</div>
+					<div class="dropdown-column">
+						<h4>맛집</h4>
+						<a href="/food/gangnam">강남구</a> <a href="/food/gangbuk">강북구</a> <a
+							href="/food/gangseo">강서구</a> <a href="/food/gangdong">강동구</a>
+					</div>
+					<div class="dropdown-column">
+						<h4>유저 게시판</h4>
+						<a href="/board">유저 게시판</a>
+					</div>
+				</div>
+			</div>
 		</header>
+
+		<!-- 헤더 전체 끝 -->
 
 		<div class="slider-login-row">
 			<section class="slider-section">
@@ -96,16 +111,20 @@
 		</section>
 
 		<section class="notice-board">
-			<h2>공지사항</h2>
-			<ul class="notice-list">
-				<c:forEach var="notice" items="${noticeList}">
-					<li>■ / ${notice.writer} / <a
-						href="/board/detail?id=${notice.post_id}">${notice.title}</a> /
-						${notice.date} / ${notice.views}
-					</li>
-				</c:forEach>
-			</ul>
-		</section>
+    <h2>공지사항</h2>
+    <ul class="notice-list">
+        <c:forEach var="notice" items="${noticeList}">
+            <li>
+                ■ / ${notice.memId} /
+                <a href="/boardview?no=${notice.boardNo}">
+                    ${notice.boardSubject}
+                </a> /
+                <fmt:formatDate value="${notice.boardDate}" pattern="yyyy.MM.dd a hh:mm" /> /
+                ${notice.boardReadcount}
+            </li>
+        </c:forEach>
+    </ul>
+</section>
 
 		<section class="team-section">
 			<div class="team-member">

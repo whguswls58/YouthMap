@@ -1,113 +1,116 @@
-/* main.css (드롭다운 위치 정확하게 수정: 헤더 아래 + 좌우 꽉 차게) */
+/* 전체 드롭다운 헤더 - 일체형 구성 */
 
 body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #fff;
-    color: #000;
+  background-color: white;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.wrapper {
-    margin: 0 auto;
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 a {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: black;
 }
 
-/* 헤더 */
-.sticky-header {
-    position: sticky;
-    top: 0;
-    background-color: #DAFBFF;
-    z-index: 1000;
-    width: 100%;
-    padding: 0 120px;
-    box-sizing: border-box;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.main-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: linear-gradient(45deg, #FFFFFF, #E0FFDB, #FFFFFF);
+
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-.header-container {
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    max-width: 1440px;
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 80px; /* ⬅️ 로고, 로그인 안쪽으로 */
+  height: 70px;
 }
+
 .logo img {
-    height: 40px;
-    transform: scale(1.8);
-    transform-origin: left center;
-}
-.main-nav {
-    display: flex;
-    gap: 200px;
-    font-weight: bold;
-    font-size: 25px;
-    flex-grow: 1;
-    justify-content: center;
-    position: relative;
-}
-.nav-item {
-    position: relative;
-    cursor: pointer;
-    transition: color 0.2s;
-}
-.nav-item:hover {
-    color: #0099cc;
+  height: 55px; /* ⬆️ 로고 크기 확대 */
 }
 
-/* 통합 드롭다운 */
-.main-nav:hover .dropdown-full {
-    display: flex;
+.main-nav ul {
+  display: flex;
+  gap: 250px; /* ⬆️ 대표 키워드 간 간격 넓힘 */
 }
-.dropdown-full {
-    display: none;
-    position: fixed;
-    top: 84px; /* 헤더 높이에 딱 맞춰서 위치 고정 */
-    left: 0;
-    width: 100vw;
-    background-color: rgba(218, 251, 255, 0.8);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    padding: 30px 150px;
-    box-sizing: border-box;
-    justify-content: center;
-    gap: 120px;
-    z-index: 999;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ddd;
+
+.main-nav ul li a {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  transition: color 0.2s ease;
 }
+
+.auth-box {
+  text-align: right;
+  font-size: 14px;
+}
+
+.login-btn {
+  background-color: #0077aa;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+/* ✅ 대형 드롭다운 */
+.mega-dropdown {
+  display: none;
+  background-color: white;
+  padding: 30px 0; /* 상하만 여백, 좌우 여백 제거 */
+  display: flex;
+  justify-content: center; /* ✅ 중앙 정렬 */
+  position: absolute;
+  top: 90px; /* ⬇️ 펼쳐지는 위치 조금 아래로 */
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  padding-left: 25px;
+}
+
+.mega-dropdown-inner {
+  display: flex;
+  justify-content: center;
+  gap: 150px; /* ✅ 각 카테고리 컬럼 간 간격 적당히 */
+  max-width: 1200px; /* ✅ 중앙 박스 크기 제한 */
+  width: 100%;
+}
+
 .dropdown-column {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    min-width: 150px;
-}
-.dropdown-column strong {
-    font-weight: bold;
-    margin-bottom: 10px;
-    font-size: 16px;
-    color: #333;
-}
-.dropdown-column a {
-    font-size: 14px;
-    color: #444;
-    padding: 2px 0;
-    transition: all 0.2s ease-in-out;
-}
-.dropdown-column a:hover {
-    color: #0077aa;
-    text-decoration: underline;
-    padding-left: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 140px; /* ✅ 너무 넓지 않게 */
 }
 
-.user-menu {
-    text-align: right;
-    font-size: 14px;
-    line-height: 1.6;
-    white-space: nowrap;
+.dropdown-column h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #409296;
 }
+
+.dropdown-column a {
+  color: #333;
+  font-size: 14px;
+  padding: 4px 0;
+}
+
+.dropdown-column a:hover {
+  color: #0077aa;
+  text-decoration: underline;
+}
+
 
 /* 슬라이더 + 로그인 한 줄 배치 */
 .slider-login-row {
@@ -117,6 +120,7 @@ a {
     align-items: stretch;
     gap: 40px;
     margin: 40px auto;
+    margin-top: 120px;
 }
 .slider-section {
     background-color: #E9FEFF;
