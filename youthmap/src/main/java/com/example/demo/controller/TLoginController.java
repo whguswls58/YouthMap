@@ -26,10 +26,10 @@ public class TLoginController {
 	    return "redirect:/boardlist"; // 메인페이지나 원하는 위치로 이동
 	}
 
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate(); // 세션 초기화
-        return "redirect:/boardlist";
-    }
+//    @GetMapping("/logout")
+//    public String logout(HttpSession session) {
+//        session.invalidate(); // 세션 초기화
+//        return "redirect:/boardlist";
+//    }
 
 }
