@@ -50,4 +50,13 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+	
+	// JSP 작동을 위한 설정
+/*sourceSets {
+	main {
+		resources {
+			srcDirs = ['src/main/resources']
+		}
+	}
+}*/
 }
