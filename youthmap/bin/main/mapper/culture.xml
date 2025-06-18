@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.CultureDao">
+
+  <!-- 0) 글 작성 -->
+  <insert id="culinsert" parameterType="culture">
+    INSERT INTO culture (
+      con_id,
+      category_name,
+      con_title,
+      con_img,
+      con_location,
+      con_lat,
+      con_lot,
+      con_start_date,
+      con_end_date,
+      con_time,
+      con_age,
+      con_cost,
+      con_link,
+      con_regdate
+    ) VALUES (
+      culture_seq.nextval,
+      #{category_name,jdbcType=VARCHAR},
+      #{con_title,jdbcType=VARCHAR},
+      #{con_img,jdbcType=VARCHAR},
+      #{con_location,jdbcType=VARCHAR},
+      #{con_lat,jdbcType=VARCHAR},
+      #{con_lot,jdbcType=VARCHAR},
+      #{con_start_date,jdbcType=VARCHAR},
+      #{con_end_date,jdbcType=VARCHAR},
+      #{con_time,jdbcType=VARCHAR},
+      #{con_age,jdbcType=VARCHAR},
+      #{con_cost,jdbcType=VARCHAR},
+      #{con_link,jdbcType=VARCHAR},
+      SYSDATE
+    )
+  </insert>
+
+  <!-- 1) “메인” 전시/미술 5건 (검색 없음) -->
+  <select id="getexhibhition" resultType="culture">
+    SELECT *
+    FROM (
+      SELECT *
+      FROM culture
+      WHERE category_name = '전시/미술'
+        AND con_age = '누구나'
+        AND (
+          (TO_DATE(con_start_date,'yyyy-MM-dd') &lt;= SYSDATE
+           AND TO_DATE(con_end_date,'yyyy-MM-dd') &gt;= SYSDATE)
+          OR
+          (TO_DATE(con_start_date,'yyyy-MM-dd') &gt;= SYSDATE
+           AND TO_DATE(con_end_date,'yyyy-MM-dd') &gt;= SYSDATE)
+        )
+      ORDER BY con_start_date ASC
+    )
+    WHERE ROWNUM &lt;= 5
+  </select>
+
+  <!-- 2) “메인” 공연 5건 (검색 없음) -->
+  <select id="getperformance" resultType="culture">
+    SELECT *
+    FROM (
+      SELECT *
+      FROM culture
+      WHERE category_name IN ('콘서트','연극','뮤지컬/오페라')
+        AND con_age = '누구나'
+        AND (
+          (TO_DATE(con_start_date,'yyyy-MM-dd') &lt;= SYSDATE
+           AND TO_DATE(con_end_date,'yyyy-MM-dd') &gt;= SYSDATE)
+          OR
+          (TO_DATE(con_start_date,'yyyy-MM-dd') &gt;= SYSDATE
+           AND TO_DATE(con_end_date,'yyyy-MM-dd') &gt;= SYSDATE)
+        )
+      ORDER BY con_start_date ASC
+    )
+    WHERE ROWNUM &lt;= 5
+  </select>
+
+  <!-- 3) “메인” 축제/행사 5건 (검색 없음) -->
+  <select id="getevent" resultType="culture">
+    SELECT *
+    FROM (
+      SELECT *
+      FROM culture
+      WHERE category_name IN (
+        '축제-기타','축제-시민화합','축제-자연/경관','축제-문화/예술'
+      )
+        AND con_age = '누구나'
+        AND (
+          (TO_DATE(con_start_date,'yyyy-MM-dd') &lt;= SYSDATE
+           AND TO_DATE(con_end_date,'yyyy-MM-dd') &gt;= SYSDATE)
+          OR
+          (TO_DATE(con_start_date,'yyyy-MM-dd') &gt;= SYSDATE
+           AND TO_DATE(con_end_date,'yyyy-MM-dd') &gt;= SYSDATE)
+        )
+      ORDER BY con_start_date ASC
+    )
+    WHERE ROWNUM &lt;= 5
+  </select>
+
+
+<!-- 전체 검색 갯수 countall -->
+<select id="countall" parameterType="culture" resultType="int">
+  SELECT COUNT(*) FROM culture
+  <where>
+    category_name IN (
+      '전시/미술','콘서트','연극','뮤지컬/오페라',
+      '축제-기타','축제-시민화합','축제-자연/경관','축제-문화/예술'
+    )
+    AND con_age = '누구나'
+    AND con_end_date >= TRUNC(SYSDATE)
+
+    <!-- 키워드가 있을 때만 -->
+    <if test="keyword != null">
+      <choose>
+        <when test="search == 'con_title'">
+          AND con_title    LIKE '%'||#{keyword}||'%'
+        </when>
+        <when test="search == 'con_location'">
+          AND con_location LIKE '%'||#{keyword}||'%'
+        </when>
+      </choose>
+    </if>
+  </where>
+</select>
+
+<!-- 전체 리스트 getallList -->
+<select id="getallList" parameterType="culture" resultType="culture">
+  SELECT * FROM (
+    SELECT a.*, ROWNUM rnum FROM (
+      SELECT
+        category_name,
+        con_id,
+        con_img,
+        con_title,
+        con_start_date,
+        con_end_date,
+        con_location
+      FROM culture
+      <where>
+        category_name IN (
+          '전시/미술','콘서트','연극','뮤지컬/오페라',
+          '축제-기타','축제-시민화합','축제-자연/경관','축제-문화/예술'
+        )
+        AND con_age = '누구나'
+        AND con_end_date >= TRUNC(SYSDATE)
+
+        <!-- 키워드 검색 -->
+        <if test="keyword != null">
+          <choose>
+            <when test="search == 'con_title'">
+              AND con_title    LIKE '%'||#{keyword}||'%'
+            </when>
+            <when test="search == 'con_location'">
+              AND con_location LIKE '%'||#{keyword}||'%'
+            </when>
+          </choose>
+        </if>
+      </where>
+      ORDER BY con_start_date ASC
+    ) a
+    WHERE ROWNUM &lt;= #{endRow}
+  )
+  WHERE rnum >= #{startRow}
+</select>
+
+
+
+<!--		 카테고리 개별 count , get(카테고리명)list , get(카테고리)cont		 -->
+
+  <!-- 4) 전시/미술 전체 갯수!!!!!! 행 수 (페이징용 + 검색) -->
+  <select id="count" parameterType="culture" resultType="int">
+    SELECT COUNT(*) FROM culture
+    <where>
+      category_name = '전시/미술'
+      AND con_age = '누구나'
+      AND con_end_date &gt;= TRUNC(SYSDATE)
+
+      <!-- 검색어가 있을 때만 -->
+      <if test="keyword != null and keyword.trim() != ''">
+        <choose>
+          <when test="search == 'con_title'">
+            AND con_title    LIKE '%'||#{keyword}||'%'
+          </when>
+          <when test="search == 'con_location'">
+            AND con_location LIKE '%'||#{keyword}||'%'
+          </when>
+         <!--  <otherwise>
+            AND (
+              con_title    LIKE '%'||#{keyword}||'%'
+              OR con_location LIKE '%'||#{keyword}||'%'
+            )
+          </otherwise> -->
+        </choose>
+      </if>
+    </where>
+  </select>
+
+  <!-- 5) 전시/미술 페이징 리스트!!!!! (startRow~endRow + 검색) -->
+  <select id="getexhibitionlist" parameterType="culture" resultType="culture">
+    SELECT * FROM (
+      SELECT a.*, ROWNUM rnum FROM (
+        SELECT
+         category_name,
+          con_id,
+          con_img,
+          con_title,
+          con_start_date,
+         con_end_date,
+          con_location
+        FROM culture
+        <where>
+          category_name = '전시/미술'
+          AND con_age = '누구나'
+          AND con_end_date &gt;= TRUNC(SYSDATE)
+
+          <if test="keyword != null and keyword.trim() != ''">
+            <choose>
+              <when test="search == 'con_title'">
+                AND con_title    LIKE '%'||#{keyword}||'%'
+              </when>
+              <when test="search == 'con_location'">
+                AND con_location LIKE '%'||#{keyword}||'%'
+              </when>
+              <!-- <otherwise>
+                AND (
+                  con_title    LIKE '%'||#{keyword}||'%'
+                  OR con_location LIKE '%'||#{keyword}||'%'
+                )
+              </otherwise> -->
+            </choose>
+          </if>
+        </where>
+        ORDER BY con_start_date ASC
+      ) a
+      WHERE ROWNUM &lt;= #{endRow}
+    )
+    WHERE rnum &gt;= #{startRow}
+  </select>
+
+  <!-- 6) 전시/미술 상세 컨텐츠 조회 -->
+  <select id="getexhibhitioncont" parameterType="culture" resultType="culture">
+    SELECT
+      con_id,
+      category_name,
+      con_title,
+      con_img,
+      con_location,
+      con_lat,
+      con_lot,
+      con_start_date,
+      con_end_date,
+      con_time,
+      con_age,
+      con_cost,
+      con_link
+    FROM culture
+    WHERE con_id = #{con_id}
+  </select>
+
+  <!-- 7) 공연 전체 갯수!!!!!!! 행 수 (페이징용 + 검색) -->
+  <select id="count2" parameterType="culture" resultType="int">
+    SELECT COUNT(*) FROM culture
+    <where>
+      category_name IN ('콘서트','연극','뮤지컬/오페라')
+      AND con_age = '누구나'
+      AND con_end_date &gt;= TRUNC(SYSDATE)
+
+      <if test="keyword != null and keyword.trim() != ''">
+        <choose>
+          <when test="search == 'con_title'">
+            AND con_title    LIKE '%'||#{keyword}||'%'
+          </when>
+          <when test="search == 'con_location'">
+            AND con_location LIKE '%'||#{keyword}||'%'
+          </when>
+          <!-- <otherwise>
+            AND (
+              con_title    LIKE '%'||#{keyword}||'%'
+              OR con_location LIKE '%'||#{keyword}||'%'
+            )
+          </otherwise> -->
+        </choose>
+      </if>
+    </where>
+  </select>
+
+  <!-- 8) 공연 페이징 리스트!!!!!!! (startRow~endRow + 검색) -->
+  <select id="getperformancelist" parameterType="culture" resultType="culture">
+    SELECT * FROM (
+      SELECT a.*, ROWNUM rnum FROM (
+        SELECT
+          category_name,
+          con_id,
+          con_img,
+          con_title,
+       	  con_start_date,
+          con_end_date,
+          con_location
+        FROM culture
+        <where>
+          category_name IN ('콘서트','연극','뮤지컬/오페라')
+          AND con_age = '누구나'
+          AND con_end_date &gt;= TRUNC(SYSDATE)
+
+          <if test="keyword != null and keyword.trim() != ''">
+            <choose>
+              <when test="search == 'con_title'">
+                AND con_title    LIKE '%'||#{keyword}||'%'
+              </when>
+              <when test="search == 'con_location'">
+                AND con_location LIKE '%'||#{keyword}||'%'
+              </when>
+            <!--   <otherwise>
+                AND (
+                  con_title    LIKE '%'||#{keyword}||'%'
+                  OR con_location LIKE '%'||#{keyword}||'%'
+                )
+              </otherwise> -->
+            </choose>
+          </if>
+        </where>
+        ORDER BY con_start_date ASC
+      ) a
+      WHERE ROWNUM &lt;= #{endRow}
+    )
+    WHERE rnum &gt;= #{startRow}
+  </select>
+
+  <!-- 9) 공연 상세 컨텐츠 조회 -->
+  <select id="getperformancecont" parameterType="culture" resultType="culture">
+    SELECT
+      con_id,
+      category_name,
+      con_title,
+      con_img,
+      con_location,
+      con_lat,
+      con_lot,
+      con_start_date,
+      con_end_date,
+      con_time,
+      con_age,
+      con_cost,
+      con_link
+    FROM culture
+    WHERE con_id = #{con_id}
+  </select>
+
+  <!-- 10) 축제/행사 전체 갯수!!!!!!! 행 수 (페이징용 + 검색) -->
+  <select id="count3" parameterType="culture" resultType="int">
+    SELECT COUNT(*) FROM culture
+    <where>
+      category_name IN (
+        '축제-기타','축제-시민화합','축제-자연/경관','축제-문화/예술'
+      )
+      AND con_age = '누구나'
+      AND con_end_date &gt;= TRUNC(SYSDATE)
+
+      <if test="keyword != null and keyword.trim() != ''">
+        <choose>
+          <when test="search == 'con_title'">
+            AND con_title    LIKE '%'||#{keyword}||'%'
+          </when>
+          <when test="search == 'con_location'">
+            AND con_location LIKE '%'||#{keyword}||'%'
+          </when>
+         <!--  <otherwise>
+            AND (
+              con_title    LIKE '%'||#{keyword}||'%'
+              OR con_location LIKE '%'||#{keyword}||'%'
+            )
+          </otherwise> -->
+        </choose>
+      </if>
+    </where>
+  </select>
+
+  <!-- 11) 축제/행사 페이징 리스트!!!!!!!!!!!! (startRow~endRow + 검색) -->
+  <select id="geteventlist" parameterType="culture" resultType="culture">
+    SELECT * FROM (
+      SELECT a.*, ROWNUM rnum FROM (
+        SELECT
+          category_name,
+          con_id,
+          con_img,
+          con_title,
+          con_start_date,
+          con_end_date,
+          con_location
+        FROM culture
+        <where>
+          category_name IN (
+            '축제-기타','축제-시민화합','축제-자연/경관','축제-문화/예술'
+          )
+          AND con_age = '누구나'
+          AND con_end_date &gt;= TRUNC(SYSDATE)
+
+          <if test="keyword != null and keyword.trim() != ''">
+            <choose>
+              <when test="search == 'con_title'">
+                AND con_title    LIKE '%'||#{keyword}||'%'
+              </when>
+              <when test="search == 'con_location'">
+                AND con_location LIKE '%'||#{keyword}||'%'
+              </when>
+              <!-- <otherwise>
+                AND (
+                  con_title    LIKE '%'||#{keyword}||'%'
+                  OR con_location LIKE '%'||#{keyword}||'%'
+                )
+              </otherwise> -->
+            </choose>
+          </if>
+        </where>
+        ORDER BY con_start_date ASC
+      ) a
+      WHERE ROWNUM &lt;= #{endRow}
+    )
+    WHERE rnum &gt;= #{startRow}
+  </select>
+
+  <!-- 12) 축제/행사 상세 컨텐츠  조회 -->
+  <select id="geteventcont" parameterType="culture" resultType="culture">
+    SELECT
+      con_id,
+      category_name,
+      con_title,
+      con_img,
+      con_location,
+      con_lat,
+      con_lot,
+      con_start_date,
+      con_end_date,
+      con_time,
+      con_age,
+      con_cost,
+      con_link
+    FROM culture
+    WHERE con_id = #{con_id}
+  </select>
+
+
+
+
+
+
+</mapper>

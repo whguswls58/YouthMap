@@ -29,7 +29,7 @@ public class RestaurantService {
             System.out.println("저장됨!");
             return true;
         } else {
-            System.out.println("이미 존재 - 저장 안함");
+            System.out.println("이미 존재 - 저장 안함");   
             return false;
         }
     }
