@@ -22,7 +22,7 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final MemberService memberService;
 
-    // BCrypt 암호화를 위한 PasswordEncoder Bean
+    // 평문 비밀번호를 위한 PasswordEncoder Bean
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
@@ -38,8 +38,16 @@ public class SecurityConfig {
                 "/login", "/login?error=true", "/login?logout",
                 "/register", "/register-success",
                 "/check-id",
-                "/css/**", "/js/**", "/images/**"
+                "/css/**", "/js/**", "/images/**", "/img/**",
+                // 게시판 조회 관련 - 인증 없이 접근 가능
+                "/board", "/boardlist", "/boardview",
+                // 댓글 목록 조회 - 인증 없이 접근 가능
+                "/api/comments/*",
+                // 정책, 문화, 맛집 관련 - 인증 없이 접근 가능
+                "/policy/**", "/culture/**", "/food/**"
             ).permitAll()
+            // 글쓰기, 수정, 삭제, 댓글 등록/삭제 관련 - 인증 필요
+            .requestMatchers("/boardwrite", "/boardupdateform", "/boardupdate", "/boarddelete", "/boarddeleteform", "/api/comments").authenticated()
             .anyRequest().authenticated()
         );
 
@@ -49,23 +57,43 @@ public class SecurityConfig {
             .loginProcessingUrl("/login")
             .usernameParameter("memId")
             .passwordParameter("memPass")
-            .permitAll()    // ← 이 한 줄이 핵심입니다
+            .permitAll()
             .successHandler((req, res, auth) -> {
                 // 로그인 성공 처리
                 String memId = auth.getName();
                 MemberModel member = memberService.findByMemId(memId);
                 
                 // 디버깅: 로그인 성공 후 memType 확인
+                System.out.println("=== 로그인 성공 핸들러 ===");
                 System.out.println("로그인 성공 - memId: " + memId + ", memType: " + member.getMemType());
+                System.out.println("세션 ID: " + req.getSession().getId());
                 
                 req.getSession().setAttribute("loginMember", member);
                 req.getSession().setAttribute("memberNo", member.getMemNo());
-                res.sendRedirect("/home");
+                
+                System.out.println("세션에 저장된 loginMember: " + req.getSession().getAttribute("loginMember"));
+                System.out.println("세션에 저장된 memberNo: " + req.getSession().getAttribute("memberNo"));
+                System.out.println("=== 로그인 성공 핸들러 완료 ===");
+                
+                // 이전 페이지로 리다이렉트 (기본값은 /home)
+                String targetUrl = req.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST") != null ? 
+                    "/boardlist" : "/home";
+                res.sendRedirect(targetUrl);
             })
             .failureUrl("/login?error=true")
         );
 
-        // 3) OAuth2 로그인
+        // 3) 인증 실패 시 처리
+        http.exceptionHandling(ex -> ex
+            .authenticationEntryPoint((request, response, authException) -> {
+                System.out.println("=== 인증 실패 ===");
+                System.out.println("요청 URL: " + request.getRequestURI());
+                System.out.println("인증 예외: " + authException.getMessage());
+                response.sendRedirect("/login?error=unauthorized");
+            })
+        );
+
+        // 4) OAuth2 로그인
         http.oauth2Login(oauth2 -> oauth2
             .loginPage("/login")
             .userInfoEndpoint(u -> u.userService(oauth2UserService))
@@ -73,42 +101,23 @@ public class SecurityConfig {
             .failureUrl("/login?error=true")
         );
 
-        // 4) 로그아웃
+        // 5) 로그아웃
         http.logout(logout -> logout
             .logoutUrl("/logout")
             .logoutSuccessUrl("/login?logout")
             .permitAll()
         );
 
-        // 5) 평문 비밀번호 비교용 Provider
+        // 6) 세션 관리 설정
+        http.sessionManagement(session -> session
+            .maximumSessions(1)  // 동일 사용자의 최대 세션 수
+            .maxSessionsPreventsLogin(false)  // 기존 세션 무효화
+        );
+
+        // 7) 평문 비밀번호 비교용 Provider
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(new PasswordEncoder() {
-            @Override
-            public String encode(CharSequence rawPassword) {
-                return passwordEncoder().encode(rawPassword);
-            }
-
-            @Override
-            public boolean matches(CharSequence rawPassword, String encodedPassword) {
-                System.out.println("=== PasswordEncoder.matches ===");
-                System.out.println("입력된 비밀번호: " + rawPassword);
-                System.out.println("저장된 비밀번호 길이: " + encodedPassword.length());
-                
-                // 평문 비밀번호인지 확인 (길이가 60자 미만이면 평문으로 간주)
-                if (encodedPassword.length() < 60) {
-                    System.out.println("평문 비밀번호 비교");
-                    boolean result = rawPassword.toString().equals(encodedPassword);
-                    System.out.println("평문 비교 결과: " + result);
-                    return result;
-                } else {
-                    System.out.println("암호화된 비밀번호 BCrypt 비교");
-                    boolean result = passwordEncoder().matches(rawPassword, encodedPassword);
-                    System.out.println("BCrypt 비교 결과: " + result);
-                    return result;
-                }
-            }
-        });
+        authProvider.setPasswordEncoder(passwordEncoder());
         http.authenticationProvider(authProvider);
 
         // CSRF는 필요시 켜 주세요

@@ -12,16 +12,16 @@
 <body>
 
 <!-- 로그인 정보 표시 -->
-<c:if test="${not empty sessionScope.memId}">
-    <p>어서오세요, ${sessionScope.memId}님!</p>
-    <c:if test="${sessionScope.memRole == 'ADMIN'}">
+<c:if test="${not empty sessionScope.loginMember}">
+    <p>어서오세요, ${sessionScope.loginMember.memName}님!</p>
+    <c:if test="${sessionScope.loginMember.memType == 'ADMIN'}">
     <p style="color:red;">[관리자 로그인 중]</p>
 </c:if>
 </c:if>
 
     <!-- 글작성 버튼 -->
 <c:choose>
-    <c:when test="${empty sessionScope.memId}">
+    <c:when test="${empty sessionScope.loginMember}">
         <button type="button" onclick="alert('로그인이 필요합니다.'); location.href='/login';">글작성</button><br>
     </c:when>
     <c:otherwise>

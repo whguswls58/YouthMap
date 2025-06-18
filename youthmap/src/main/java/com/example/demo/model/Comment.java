@@ -15,4 +15,5 @@ public class Comment {
     private String commContent;  // 댓글 내용
     private Date commDate;       // 작성 날짜
     private Date commUpdate;     // 수정 날짜 (수정 시 사용)
+    private int memNo;
 }
