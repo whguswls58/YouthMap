@@ -1,15 +1,15 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-  <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
+<%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>${exhibitioncont.con_title} 상세</title>
+  <title>${performancecont.con_title} 상세</title>
 
   <!-- ① 카카오 JS SDK: YOUR_APP_KEY 부분에 자바스크립트 키를 넣으세요 -->
-<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=3fa085ef56e30c7b2feb212f289ba605"></script>
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=3fa085ef56e30c7b2feb212f289ba605&autoload=false"></script>
  
   <style>
     body { font-family:sans-serif; margin:0; padding:0 }
@@ -86,6 +86,8 @@
 
 
 
+<c:set var="ctx" value="${pageContext.request.contextPath }"/>
+
   <!-- ② 모델로 넘어온 단일 객체를 cul 변수로 셋업 -->
   <c:set var="cul" value="${performancecont}" />
 
@@ -123,14 +125,14 @@
     </div>
 
     <!-- ② 지도 표시 영역 -->
-    <div id="map"></div>
+    <div id="map" style="width:100%;height:400px;"></div>
 
     <!-- ③ SDK 로드 후 안전하게 호출 -->
     <script>
       kakao.maps.load(function() {
         // EL 값은 문자열로 감싸서 parseFloat
-        var lat = parseFloat("${cul.con_lat}"),
-            lng = parseFloat("${cul.con_lot}");
+        var lng = parseFloat("${cul.con_lat}");
+        var lat = parseFloat("${cul.con_lot}");
 
         var map = new kakao.maps.Map(
           document.getElementById('map'),
@@ -145,7 +147,6 @@
         });
       });
     </script>
-
 <!-- 				여기서부터 리뷰 기능 추가한 코드 				-->  
   
  <!-- 리뷰작성 버튼 -->
@@ -345,17 +346,15 @@
         document.getElementById('reviewFormWrap').style.display = 'none';
         document.getElementById('reviewWriteBtn').style.display = 'inline-block';
     }
-</script>
-
-<!-- 리뷰 끝 -->
+</script>			<!-- 리뷰댓글 끝 -->
 
 
     <!-- 뒤로가기 -->
-    <div class="back-container">
+       <div class="back-container">
       <a class="back-link" href="${ctx }performancelist?page=${page}">
         ← 목록으로 돌아가기
       </a>
     </div>
-  </div>
+   </div>
 </body>
 </html>

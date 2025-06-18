@@ -171,9 +171,9 @@ public class CultureController {
 //		return "redirect:main";
 		return "dpdp";
 	}
-
+ 
 	// 메인 페이지
-	@GetMapping("/main")
+	@GetMapping("/culturemain")
 	public String mainPage(CultureModel culture, Model model) {
 
 		List<CultureModel> exhibition = service.getexhibition(culture);
@@ -187,7 +187,7 @@ public class CultureController {
 		model.addAttribute("performance", performance);
 		model.addAttribute("event", event);
 
-		return "culture/main";
+		return "culture/culturemain";
 	}
 
 

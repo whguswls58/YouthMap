@@ -117,6 +117,11 @@
   </h2>
 
 <div class="cards">
+  <c:if test="${empty allList }">
+  		검색 결과가 없습니다.
+  </c:if>
+  
+  <c:if test="${!empty allList }">
   <c:forEach var="item" items="${allList}">
     <div class="card">
       <!-- 전시/미술 뱃지 (해당하면) -->
@@ -138,30 +143,17 @@
   <div class="badge badge-event">축제/행사</div>
 </c:if>
 
-      <!-- 이미지 & 링크 -->
-     <!--  <a class="card-link" -->
-      <a 
-         href="${pageContext.request.contextPath}/<c:if test="${item.category_name=='전시/미술'}">exhibitioncont</c:if>?con_id=${item.con_id}&page=${page}">
-                <%-- <c:choose>
-                  <c:when test="${item.category_name == '전시/미술'}">exhibitioncont</c:when>
-                  <c:when test="${item.category_name == '콘서트' or
-                      			  item.category_name == '연극' or
-                      			  item.category_name == '뮤지컬/오페라'}">performancecont                   
-                  </c:when>
-                  <c:otherwise>eventcont</c:otherwise>
-                </c:choose> --%>
-                
-                  
-        <img src="${item.con_img}" alt="${item.con_title}" />
-      </a>
-                  <%-- <c:if test="${item.category_name == '콘서트' or
-                      			  item.category_name == '연극' or
-                      			  item.category_name == '뮤지컬/오페라'}">performancecont</c:if>                   
-                  <c:if test="${item.category_name == '축제-기타' or
-                      			  item.category_name == '축제-시민화합' or
-                      			  item.category_name == '축제-문화/예술' or
-                      			  item.category_name == '축제-자연/경관'}">eventcont</c:if>  --%>
-                      			  <!-- '축제-기타','축제-시민화합','축제-자연/경관','축제-문화/예술'  -->
+    <!-- 이미지 & 링크 -->    
+    <c:set var="detailPage"
+       value="${(item.category_name=='전시/미술')?'exhibitioncont'
+                :(item.category_name=='콘서트'||item.category_name=='연극'||item.category_name=='뮤지컬/오페라')?'performancecont'
+                :(item.category_name=='축제-기타'||item.category_name=='축제-시민화합'||item.category_name=='축제-자연/경관'||item.category_name=='축제-문화/예술')?'eventcont'
+                :'defaultcont'}"/>
+
+	<a class="card-link"
+  	   href="${pageContext.request.contextPath}/${detailPage}?con_id=${item.con_id}&page=${page}">
+  	   <img src="${item.con_img}" title="${item.con_title}"/>
+	</a>
 
       <!-- 제목·기간·위치 -->
       <div class="card-info">
@@ -173,8 +165,8 @@
       </div>
     </div>
     
-    
   </c:forEach>
+  </c:if>
 </div>
 
   <!-- 페이징 UI -->
