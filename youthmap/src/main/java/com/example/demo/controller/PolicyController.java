@@ -181,26 +181,15 @@ public class PolicyController {
 		plcy.setS_biz_cd(service.convertCodes(plcy.getS_biz_cd(), service.sbiz_map));		
 	    
 		// \n -> <br> 치환
-		String htmlText = null;
-		if(plcy.getPlcy_sprt_cn() != null) {
-			htmlText = plcy.getPlcy_sprt_cn().replace("\n", "<br>");
-			plcy.setPlcy_sprt_cn(htmlText);			
-		}
+		plcy.setPlcy_sprt_cn(service.convertNewlines(plcy.getPlcy_sprt_cn()));			
+		plcy.setEarn_cnd_se_cd(service.convertNewlines(plcy.getEarn_cnd_se_cd()));
+		plcy.setPtcp_prp_trgt_cn(service.convertNewlines(plcy.getPtcp_prp_trgt_cn()));
+		plcy.setAdd_aply_qlfc_cnd_cn(service.convertNewlines(plcy.getAdd_aply_qlfc_cnd_cn()));
+		plcy.setPlcy_aply_mthd_cn(service.convertNewlines(plcy.getPlcy_aply_mthd_cn()));
+		plcy.setSrng_mthd_cn(service.convertNewlines(plcy.getSrng_mthd_cn()));
+		plcy.setEtc_mttr_cn(service.convertNewlines(plcy.getEtc_mttr_cn()));
 		
-		if(plcy.getEarn_cnd_se_cd() != null) {
-			htmlText = plcy.getEarn_cnd_se_cd().replace("\n", "<br>");
-			plcy.setEarn_cnd_se_cd(htmlText);			
-		}
-		
-		if(plcy.getPtcp_prp_trgt_cn() != null) {
-			htmlText = plcy.getPtcp_prp_trgt_cn().replace("\n", "<br>");
-			plcy.setPtcp_prp_trgt_cn(htmlText);
-		}
-		
-		if(plcy.getAdd_aply_qlfc_cnd_cn() != null) {
-			htmlText = plcy.getAdd_aply_qlfc_cnd_cn().replace("\n", "<br>");
-			plcy.setAdd_aply_qlfc_cnd_cn(htmlText);
-		}
+
 		model.addAttribute("plcy", plcy);
 		model.addAttribute("keywords", keywords);
 		model.addAttribute("page", page);

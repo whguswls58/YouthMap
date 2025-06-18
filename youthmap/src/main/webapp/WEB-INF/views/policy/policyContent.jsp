@@ -134,7 +134,7 @@ footer {
 			</div>
 			
 			<div class="col-sm-8 text-left">
-				<input type=button value="목록" onclick="location.href='policytest'">
+				<input type=button value="목록" onclick="location.href='policyMain'">
 
 				<table class="policy-table policy-nm">
 					<tr>
@@ -175,7 +175,7 @@ footer {
 				</p>
 				<br>
 				
-				<div class="title">한 눈에 보는 정책 요약</div>
+				<div id="summary" class="title">한 눈에 보는 정책 요약</div>
 
 				<table class="policy-table policy-summary">
 					<tr>
@@ -204,7 +204,7 @@ footer {
 					</tr>
 				</table>
 				<br><br>
-				<div class="title">신청 자격</div>
+				<div id="qualification" class="title">신청 자격</div>
 				
 				<table class="policy-table policy-qualification">
 					<tr>
@@ -303,8 +303,8 @@ footer {
 				
 				<br>
 					
-				<div class="title">신청방법</div>
-				<table class="policy-table policy-application">
+				<div id="method" class="title">신청방법</div>
+				<table class="policy-table policy-method">
 					<tr>
 						<th>신청절차</th>
 						<td>${plcy.plcy_aply_mthd_cn}</td>
@@ -315,11 +315,28 @@ footer {
 					</tr>
 					<tr>
 						<th>신청 사이트</th>
-						<td>${plcy.aply_url_addr}</td>
+						<td><a href='${plcy.aply_url_addr}'>${plcy.aply_url_addr}</a></td>
 					</tr>
 					<tr>
 						<th>제출 서류</th>
 						<td>${plcy.sbmsn_dcmnt_cn}</td>
+					</tr>
+				</table>
+				<br><br>
+
+				<div id="etc" class="title">기타</div>
+				<table class="policy-table policy-etc">
+					<tr>
+						<th>기타 정보</th>
+						<td>${plcy.etc_mttr_cn}</td>
+					</tr>
+					<tr>
+						<th>참고 사이트 1</th>
+						<td><a href='${plcy.ref_url_addr1}'>${plcy.ref_url_addr1}</a></td>
+					</tr>
+					<tr>
+						<th>참고 사이트 2</th>
+						<td><a href='${plcy.ref_url_addr2}'>${plcy.ref_url_addr2}</a></td>
 					</tr>
 				</table>
 				<br><br>
