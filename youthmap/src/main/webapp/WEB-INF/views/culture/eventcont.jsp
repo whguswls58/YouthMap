@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="com.example.demo.util.KakaoKeyUtil" %>
+
 <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
 
 <!DOCTYPE html>
@@ -9,7 +11,7 @@
   <title>${eventcont.con_title} 상세</title>
 
   <!-- ① 카카오 JS SDK: YOUR_APP_KEY 부분에 자바스크립트 키를 넣으세요 -->
-<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=3fa085ef56e30c7b2feb212f289ba605&autoload=false"></script>
+<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= KakaoKeyUtil.getApiKey() %>&libraries=services"></script>
  
   <style>
     body { font-family:sans-serif; margin:0; padding:0 }

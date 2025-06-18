@@ -152,7 +152,8 @@
           <td align="center" width="170" style="padding:8px;">
             <img src="${cul.con_img}" width="170" height="170" /><br>
             <div style="height:40px; overflow:hidden; text-align:center; line-height:20px;">
-              ${cul.con_title}
+              ${cul.con_title}<br>
+              ${cul.con_start_date } ~ ${cul.con_end_date }
             </div>
           </td>
         </c:forEach>

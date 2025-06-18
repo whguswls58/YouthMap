@@ -29,8 +29,7 @@ public class CultureService {
         
 		System.out.println("apiKey:"+ apiKey);
 		
-		String apiKey = "786549546a616e6d3838774f786443";								// 인증키
-		String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/json/culturalEventInfo/1/1000";	//여기까지함				// api url
+		String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/json/culturalEventInfo/1/1000";					// api url
 	//	String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/json/culturalEventInfo/1001/2000";					// api url
 //여기까지만	String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/json/culturalEventInfo/2001/3000";					// api url
 	
