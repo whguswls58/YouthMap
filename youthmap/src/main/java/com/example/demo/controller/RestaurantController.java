@@ -293,7 +293,7 @@ public class RestaurantController {
 //        model.addAttribute("restaurants", restaurants);
 //        return "main";
 //    }
-    @GetMapping("/main")
+    @GetMapping("/res_main")
     public String mainPage(@RequestParam(value="res_gu", required=false) String resGu,
     					   @RequestParam(value="page", defaultValue="1") int page,	
     					   @RequestParam(value = "searchType", required = false, defaultValue = "res_subject") String searchType,
@@ -337,7 +337,7 @@ public class RestaurantController {
         model.addAttribute("mapRestaurants", mapRestaurants);     // 지도: 전체
         model.addAttribute("searchType", searchType);
 
-        return "main"; // /WEB-INF/views/main.jsp
+        return "res_main"; // /WEB-INF/views/main.jsp
     }
     
     
@@ -401,7 +401,7 @@ public class RestaurantController {
         model.addAttribute("res_gu", resGu);
         model.addAttribute("keyword", keyword);
 
-        return "list"; // /WEB-INF/views/list.jsp
+        return "res_list"; // /WEB-INF/views/list.jsp
     }	
     
     //상세페이지
@@ -544,7 +544,7 @@ public class RestaurantController {
         return "redirect:restaurantDetail?res_id=" + resId;
     }
 
-    //여분사진들저장
+    //여분사진들저
     @GetMapping("/updateAllPhotosResult")
     public String updateAllPhotos(Model model) throws Exception {
         List<Restaurant> allRestaurants = service.maplist(); // DB의 모든 맛집
