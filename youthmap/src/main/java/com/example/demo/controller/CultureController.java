@@ -117,7 +117,8 @@ public class CultureController {
  
 	// 메인 페이지
 	@GetMapping("/culturemain")
-	public String mainPage(CultureModel culture, Model model) {
+	public String mainPage(
+							CultureModel culture, Model model) {
 
 		List<CultureModel> exhibition = service.getexhibition(culture);
 //		System.out.println("exhibition :" + exhibition);
@@ -129,6 +130,9 @@ public class CultureController {
 		model.addAttribute("exhibition", exhibition);
 		model.addAttribute("performance", performance);
 		model.addAttribute("event", event);
+//		model.addAttribute("con_start_date", con_start_date);
+//		model.addAttribute("con_end_date", con_end_date);
+		
 
 		return "culture/culturemain";
 	}

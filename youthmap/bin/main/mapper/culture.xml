@@ -39,66 +39,66 @@
     )
   </insert>
 
-  <!-- 1) “메인” 전시/미술 5건 (검색 없음) -->
-  <select id="getexhibhition" resultType="culture">
-    SELECT *
+  <!-- 1) “메인” 전시/미술 5건 (랜덤 출력) -->
+<select id="getexhibhition" resultType="culture">
+  SELECT *
     FROM (
       SELECT *
-      FROM culture
-      WHERE category_name = '전시/미술'
-        AND con_age = '누구나'
-        AND (
-          (TO_DATE(con_start_date,'yyyy-MM-dd') &lt;= SYSDATE
-           AND TO_DATE(con_end_date,'yyyy-MM-dd') &gt;= SYSDATE)
-          OR
-          (TO_DATE(con_start_date,'yyyy-MM-dd') &gt;= SYSDATE
-           AND TO_DATE(con_end_date,'yyyy-MM-dd') &gt;= SYSDATE)
-        )
-      ORDER BY con_start_date ASC
+        FROM culture
+       WHERE category_name = '전시/미술'
+         AND con_age in ('누구나','성인')
+         AND (
+           (TO_DATE(con_start_date,'yyyy-MM-dd') &lt;= SYSDATE
+            AND TO_DATE(con_end_date,'yyyy-MM-dd') >= SYSDATE)
+           OR
+           (TO_DATE(con_start_date,'yyyy-MM-dd') >= SYSDATE
+            AND TO_DATE(con_end_date,'yyyy-MM-dd') >= SYSDATE)
+         )
+       ORDER BY DBMS_RANDOM.VALUE
     )
-    WHERE ROWNUM &lt;= 5
-  </select>
+   WHERE ROWNUM &lt;= 5
+</select>
 
-  <!-- 2) “메인” 공연 5건 (검색 없음) -->
-  <select id="getperformance" resultType="culture">
-    SELECT *
+  <!-- 2) “메인” 공연 5건 (랜덤 출력) -->
+<select id="getperformance" resultType="culture">
+  SELECT *
     FROM (
       SELECT *
-      FROM culture
-      WHERE category_name IN ('콘서트','연극','뮤지컬/오페라')
-        AND con_age = '누구나'
-        AND (
-          (TO_DATE(con_start_date,'yyyy-MM-dd') &lt;= SYSDATE
-           AND TO_DATE(con_end_date,'yyyy-MM-dd') &gt;= SYSDATE)
-          OR
-          (TO_DATE(con_start_date,'yyyy-MM-dd') &gt;= SYSDATE
-           AND TO_DATE(con_end_date,'yyyy-MM-dd') &gt;= SYSDATE)
-        )
-      ORDER BY con_start_date ASC
+        FROM culture
+       WHERE category_name IN ('콘서트','연극','뮤지컬/오페라')
+         AND con_age in ('누구나','성인')
+         AND (
+           (TO_DATE(con_start_date,'yyyy-MM-dd') &lt;= SYSDATE
+            AND TO_DATE(con_end_date,'yyyy-MM-dd') >= SYSDATE)
+           OR
+           (TO_DATE(con_start_date,'yyyy-MM-dd') >= SYSDATE
+            AND TO_DATE(con_end_date,'yyyy-MM-dd') >= SYSDATE)
+         )
+       ORDER BY DBMS_RANDOM.VALUE
     )
-    WHERE ROWNUM &lt;= 5
-  </select>
+   WHERE ROWNUM &lt;= 5
+</select>
+  
 
   <!-- 3) “메인” 축제/행사 5건 (검색 없음) -->
   <select id="getevent" resultType="culture">
-    SELECT *
+  
+  SELECT *
     FROM (
       SELECT *
-      FROM culture
-      WHERE category_name IN (
-        '축제-기타','축제-시민화합','축제-자연/경관','축제-문화/예술'
-      )
-        AND con_age = '누구나'
-        AND (
-          (TO_DATE(con_start_date,'yyyy-MM-dd') &lt;= SYSDATE
-           AND TO_DATE(con_end_date,'yyyy-MM-dd') &gt;= SYSDATE)
-          OR
-          (TO_DATE(con_start_date,'yyyy-MM-dd') &gt;= SYSDATE
-           AND TO_DATE(con_end_date,'yyyy-MM-dd') &gt;= SYSDATE)
-        )
-      ORDER BY con_start_date ASC
+        FROM culture
+       WHERE category_name IN ('축제-기타','축제-시민화합','축제-자연/경관','축제-문화/예술')
+         AND con_age in ('누구나','성인')
+         AND (
+           (TO_DATE(con_start_date,'yyyy-MM-dd') &lt;= SYSDATE
+            AND TO_DATE(con_end_date,'yyyy-MM-dd') >= SYSDATE)
+           OR
+           (TO_DATE(con_start_date,'yyyy-MM-dd') >= SYSDATE
+            AND TO_DATE(con_end_date,'yyyy-MM-dd') >= SYSDATE)
+         )
+       ORDER BY DBMS_RANDOM.VALUE
     )
-    WHERE ROWNUM &lt;= 5
+   WHERE ROWNUM &lt;= 5
   </select>
 
 
