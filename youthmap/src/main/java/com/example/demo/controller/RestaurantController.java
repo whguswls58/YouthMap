@@ -53,6 +53,7 @@ public class RestaurantController {
             "서울 관악구", "서울 서초구", "서울 강남구", "서울 송파구", "서울 강동구"
     };
 
+    // api로 검
     @GetMapping("/search")
     public String search(@RequestParam(value = "regions", required = false) List<String> regions,
                          Model model) throws Exception {
@@ -249,50 +250,10 @@ public class RestaurantController {
             }
         }
         model.addAttribute("totalSaved", totalSaved);
-        return "collectResult"; // 성공 결과 페이지(jsp)로 이동 (ex: "총 저장: ${totalSaved}")
+        return "restaurant/collectResult"; // 성공 결과 페이지(jsp)로 이동 (ex: "총 저장: ${totalSaved}")
     }
 
-//    public String mainPage(Model model) throws Exception {
-//        String keyword = "서울 맛집";
-//        List<String> placeIds = new ArrayList<>();
-//        String nextPageToken = null;
-//        int page = 0;
-//
-//        while (page < 3) {
-//            String currentUrl = (page == 0)
-//                    ? "https://maps.googleapis.com/maps/api/place/textsearch/json"
-//                        + "?query=" + URLEncoder.encode(keyword, StandardCharsets.UTF_8)
-//                        + "&language=ko&key=" + GOOGLE_API_KEY
-//                    : "https://maps.googleapis.com/maps/api/place/textsearch/json"
-//                        + "?pagetoken=" + nextPageToken
-//                        + "&language=ko&key=" + GOOGLE_API_KEY;
-//
-//            if (page > 0) Thread.sleep(2000);
-//            Request req = new Request.Builder().url(currentUrl).build();
-//            Response resp = client.newCall(req).execute();
-//            JSONObject jsonob = (JSONObject) parser.parse(resp.body().string());
-//            JSONArray results = (JSONArray) jsonob.get("results");
-//
-//            for (Object obj : results) {
-//                String placeId = (String) ((JSONObject) obj).get("place_id");
-//                if (!placeIds.contains(placeId)) placeIds.add(placeId);
-//            }
-//            nextPageToken = jsonob.get("next_page_token") != null ? jsonob.get("next_page_token").toString() : null;
-//            page++;
-//        }
-//
-//        List<Restaurant> restaurants = placeIds.stream()
-//                .map(id -> {
-//                    try { return fetchDetail(id); } catch (Exception e) { return null; }
-//                })
-//                .filter(Objects::nonNull)
-//                .sorted(Comparator.comparingDouble(Restaurant::getRes_score).reversed())
-//                .limit(4)
-//                .collect(Collectors.toList());
-//
-//        model.addAttribute("restaurants", restaurants);
-//        return "main";
-//    }
+    // 메인 페이
     @GetMapping("/res_main")
     public String mainPage(@RequestParam(value="res_gu", required=false) String resGu,
     					   @RequestParam(value="page", defaultValue="1") int page,	
@@ -337,7 +298,7 @@ public class RestaurantController {
         model.addAttribute("mapRestaurants", mapRestaurants);     // 지도: 전체
         model.addAttribute("searchType", searchType);
 
-        return "res_main"; // /WEB-INF/views/main.jsp
+        return "restaurant/res_main"; // /WEB-INF/views/main.jsp
     }
     
     
@@ -401,7 +362,7 @@ public class RestaurantController {
         model.addAttribute("res_gu", resGu);
         model.addAttribute("keyword", keyword);
 
-        return "res_list"; // /WEB-INF/views/list.jsp
+        return "restaurant/res_list"; // /WEB-INF/views/list.jsp
     }	
     
     //상세페이지
@@ -424,15 +385,8 @@ public class RestaurantController {
     	            if (!url.isEmpty()) extraPhotoUrls.add(url);
     	        }
     	    }
-    	    // 여분 사진 리스트 API로 받아오기
-    	    // 아래 fetchDetail은 반드시 Google API에서 photos 필드 포함되게 해야함
-//    	    Restaurant fullDetail = fetchDetail(resId);
-//    	    List<String> extraPhotoUrls = new ArrayList<>();
-//    	 // fullDetail이 null인지 먼저 체크!
-//    	    if (fullDetail != null && fullDetail.getRes_photoUrls() != null) {
-//    	        extraPhotoUrls = fullDetail.getRes_photoUrls();
-//    	    }
-    	    // 리뷰 페이지리
+
+    	    // 리뷰 페이지
     	    int pageSize = 10; // 한 페이지에 몇 개씩
     	    int totalCount = reviewservice.countreview(resId);
     	    int totalpage = (int) Math.ceil((double) totalCount / pageSize);
@@ -451,7 +405,7 @@ public class RestaurantController {
     	    model.addAttribute("reviewlist", reviewlist); 
     	    model.addAttribute("restaurant", restaurant);
     	    model.addAttribute("extraPhotoUrls", extraPhotoUrls); // 여분사진
-    	    return "restaurantDetail";
+    	    return "restaurant/restaurantDetail";
     }
     
     // 리뷰 작성
@@ -493,7 +447,7 @@ public class RestaurantController {
         
         reviewservice.insertreview(review);
         // 작성 후 상세페이지로 리다이렉트
-        return "redirect:restaurantDetail?res_id=" + review.getRes_id();
+        return "redirect:restaurant/restaurantDetail?res_id=" + review.getRes_id();
     }
     
    
@@ -525,7 +479,7 @@ public class RestaurantController {
         System.out.println("MyBatis update result: " + result);
 
         // 식당 상세페이지로 리다이렉트
-        return "redirect:restaurantDetail?res_id=" + review.getRes_id();
+        return "redirect:restaurant/restaurantDetail?res_id=" + review.getRes_id();
     }
     // 리뷰 삭제
     @GetMapping("/reviewdelete")
@@ -541,25 +495,6 @@ public class RestaurantController {
             if (file.exists()) file.delete();
         }
         int result=reviewservice.deletereview(review_id1);
-        return "redirect:restaurantDetail?res_id=" + resId;
-    }
-
-    //여분사진들저
-    @GetMapping("/updateAllPhotosResult")
-    public String updateAllPhotos(Model model) throws Exception {
-        List<Restaurant> allRestaurants = service.maplist(); // DB의 모든 맛집
-
-        int updateCount = 0;
-        for (Restaurant res : allRestaurants) {
-            Restaurant detail = fetchDetail(res.getRes_id());
-            if (detail != null && detail.getRes_photoUrls() != null && !detail.getRes_photoUrls().isEmpty()) {
-                String photoUrlsStr = String.join(",", detail.getRes_photoUrls());
-                service.updatephotourls(res.getRes_id(), photoUrlsStr);
-                updateCount++;
-            }
-            Thread.sleep(2000);
-        }
-        model.addAttribute("updateCount", updateCount);
-        return "updateAllPhotosResult";
+        return "redirect:restaurant/restaurantDetail?res_id=" + resId;
     }
 }
