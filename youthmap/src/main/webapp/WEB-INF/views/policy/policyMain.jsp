@@ -488,16 +488,14 @@ a:hover {
 	
     // 검색어 및 카테고리 상태 저장
     function submitSearchForm(event) {
-    	  event.preventDefault();
+    	  event.preventDefault();	// 기본 이동 막기
 
     	  // 현재 검색어 상태 저장
     	  currentSearchInput = document.querySelector('input[name="searchInput"]').value;	// 현재 검색어
     	  currentMainCategory = document.querySelector('input[name="mainCategory"]').value;	// 대분류
     	  selectedCategories = collectSelectedCategories();		// 선택된 카테고리
-    	  //const categoryParam = encodeURIComponent(selectedCategories.join(','));
     	  
-    	  console.log(selectedCategories);
-    	  //console.log(categoryParam);
+    	  console.log("selectedCategories : " + selectedCategories);
     	  
     	  // 첫 페이지로 검색
     	  loadPage(1);

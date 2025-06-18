@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.model.PolicyModel;
 import com.example.demo.service.PolicyService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor // Constructor DI :생성자의 매개변수로 의존성 주입
@@ -58,8 +59,13 @@ public class PolicyController {
 	@RequestMapping("/policyMain")
 	public String policyTest(@RequestParam(value = "page", defaultValue = "1") int page,
 							@ModelAttribute PolicyModel pm,
+							HttpSession session,
 							Model model) {
 
+		Long memNo = (Long) session.getAttribute("memberNo");
+		
+		System.out.println("로그인 중 아이디 : " + memNo);
+		
 		int limit = 6; // 한 페이지에 출력할 데이터 갯수
 		int listcount = service.cntData(pm); // 총 데이터 갯수
 		System.out.println("listcount : " + listcount);
@@ -126,7 +132,8 @@ public class PolicyController {
 	@ResponseBody
 	public Map<String, Object> getPolicyListJson(@RequestParam("page") int page,
 												 @ModelAttribute PolicyModel pm,
-												 @RequestParam("selectedCategories") List<String> categories) {
+												 @RequestParam("selectedCategories") List<String> categories
+												 ) {
 
 		System.out.println("현재 페이지 : " + page);
 		System.out.println("현재 검색어 : " + pm.getSearchInput());
@@ -164,8 +171,13 @@ public class PolicyController {
 	@RequestMapping("/policyContent")
 	public String policyContent(@RequestParam("plcy_no") String plcy_no, 
 								@RequestParam("page") int page,
+								HttpSession session,
 								Model model) {
 
+		Long memNo = (Long) session.getAttribute("memberNo");
+		
+		System.out.println("로그인 중 아이디 : " + memNo);
+		
 		// 상세 데이터 검색
 		PolicyModel plcy = service.plcyContent(plcy_no);
 		String[] keywords  = {};
