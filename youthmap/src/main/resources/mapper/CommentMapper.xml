@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.CommentDao">
+
+    <!-- 댓글 등록 -->
+    <insert id="insert" parameterType="com.example.demo.model.Comment">
+        INSERT INTO comments (
+            comm_no, board_no, mem_id, comm_content, comm_date
+        ) VALUES (
+            seq_comments.NEXTVAL,
+            #{boardNo},
+            #{memId},
+            #{commContent},
+            SYSDATE
+        )
+    </insert>
+
+    <!-- 댓글 목록 -->
+    <select id="list" parameterType="int" resultType="com.example.demo.model.Comment">
+        SELECT comm_no AS commNo,
+               board_no AS boardNo,
+               mem_id AS memId,
+               comm_content AS commContent,
+               comm_date AS commDate,
+               comm_update AS commUpdate
+        FROM comments
+        WHERE board_no = #{boardNo}
+        ORDER BY comm_no ASC
+    </select>
+
+    <!-- 댓글 삭제 -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM comments WHERE comm_no = #{commNo}
+    </delete>
+    
+   <select id="getCommentByNo" resultType="com.example.demo.model.Comment">
+    SELECT comm_no AS commNo,
+           board_no AS boardNo,
+           mem_id AS memId,
+           comm_content AS commContent,
+           comm_date AS commDate,
+           comm_update AS commUpdate
+    FROM comments
+    WHERE comm_no = #{commNo}
+</select>
+
+</mapper>
