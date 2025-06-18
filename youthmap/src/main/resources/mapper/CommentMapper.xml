@@ -7,15 +7,15 @@
 
     <!-- 댓글 등록 -->
     <insert id="insert" parameterType="com.example.demo.model.Comment">
-        INSERT INTO comments (
-            comm_no, board_no, mem_id, comm_content, comm_date
-        ) VALUES (
-            seq_comments.NEXTVAL,
-            #{boardNo},
-            #{memId},
-            #{commContent},
-            SYSDATE
-        )
+        INSERT INTO comments
+    (comm_no, board_no, mem_no, mem_id, comm_content, comm_date)
+  VALUES
+    (comments_seq.nextval,
+     #{boardNo},
+     #{memNo},
+     #{memId},
+     #{commContent},
+     SYSDATE)
     </insert>
 
     <!-- 댓글 목록 -->

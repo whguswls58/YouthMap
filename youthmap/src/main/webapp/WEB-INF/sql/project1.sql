@@ -1,184 +1,163 @@
---댓글 
-CREATE TABLE "Comments" (
-    "comm_no"        NUMBER            NOT NULL,
-    "comm_content"   VARCHAR2(1000)    NULL,
-    "comm_date"      DATE              DEFAULT SYSDATE NOT NULL,
-    "comm_update"    DATE              NULL,
-    "board_no"       NUMBER            NOT NULL,
-    "mem_no"         NUMBER            NOT NULL,
-    CONSTRAINT "PK_COMMENTS" PRIMARY KEY ("comm_no")
-);
---첨부 파일 
-CREATE TABLE "user_file" (
-    "user_file_no"     NUMBER           NOT NULL,
-    "user_file_name"   VARCHAR2(255)    NULL,
-    "user_file_path"   VARCHAR2(200)    NULL,
-    "board_no"         NUMBER           NOT NULL,
-    CONSTRAINT "PK_USER_FILE" PRIMARY KEY ("user_file_no")
-);
---문화 후기 
-CREATE TABLE "review2" (
-    "review_id2"        NUMBER           NOT NULL,
-    "review_score2"     NUMBER           NULL,
-    "review_content2"   VARCHAR2(100)    NULL,
-    "review_file2"      VARCHAR2(100)    NULL,
-    "review_register2"  DATE             NULL,
-    "con_id"            NUMBER           NOT NULL,
-    "mem_no"            NUMBER           NOT NULL,
-    CONSTRAINT "PK_REVIEW2" PRIMARY KEY ("review_id2")
-);
---정책
-CREATE TABLE "Plcy" (
-    "plcy_no"               VARCHAR2(20)     NOT NULL,
-    "plcy_nm"               VARCHAR2(200)    NULL,
-    "plcy_expln_cn"         VARCHAR2(3000)   NULL,
-    "plcy_kywd_nm"          VARCHAR2(100)    NULL,
-    "lclsf_nm"              VARCHAR2(50)     NULL,
-    "mclsf_nm"              VARCHAR2(50)     NULL,
-    "plcy_sprt_cn"          VARCHAR2(3000)   NULL,
-    "biz_prd_bgng_ymd"      DATE             NULL,
-    "biz_prd_end_ymd"       DATE             NULL,
-    "plcy_aply_mthd_cn"     VARCHAR2(3000)   NULL,
-    "srng_mthd_cn"          VARCHAR2(3000)   NULL,
-    "aply_url_addr"         VARCHAR2(500)    NULL,
-    "sbmsn_dcmnt_cn"        VARCHAR2(300)    NULL,
-    "etc_mttr_cn"           VARCHAR2(3000)   NULL,
-    "ref_url_addr1"         VARCHAR2(500)    NULL,
-    "ref_url_addr2"         VARCHAR2(500)    NULL,
-    "sprt_scl_lmt_yn"       CHAR(1)          NULL,
-    "sprt_scl_cnt"          NUMBER           NULL,
-    "sprt_trgt_age_lmt_yn"  CHAR(1)          NULL,
-    "sprt_trgt_min_age"     NUMBER           NULL,
-    "sprt_trgt_max_age"     NUMBER           NULL,
-    "rgtr_hghrk_inst_cd_nm" VARCHAR2(100)    NULL,
-    "rgtr_up_inst_cd_nm"    VARCHAR2(100)    NULL,
-    "rgtr_iimst_cd_nm"      VARCHAR2(100)    NULL,
-    "mrg_stts_cd"           VARCHAR2(10)     NULL,
-    "earn_cnd_se_cd"        VARCHAR2(10)     NULL,
-    "earn_min_amt"          NUMBER           NULL,
-    "earn_max_amt"          NUMBER           NULL,
-    "earn_etc_cn"           VARCHAR2(500)    NULL,
-    "add_aply_qlfc_cmd_cn"  VARCHAR2(3000)   NULL,
-    "inq_cnt"               NUMBER           NULL,
-    "aply_ymd_strt"         DATE             NULL,
-    "aply_ymd_end"          DATE             NULL,
-    CONSTRAINT "PK_PLCY" PRIMARY KEY ("plcy_no")
-);
---식당
-CREATE TABLE "res" (
-    "res_id"        NUMBER           NOT NULL,
-    "res_subject"   VARCHAR2(100)    NULL,
-    "res_menu"      NUMBER           NULL,
-    "res_tel"       VARCHAR2(20)     NULL,
-    "res_score"     NUMBER           NULL,
-    "res_address"   VARCHAR2(255)    NULL,
-    "res_map_url"   VARCHAR2(1000)   NULL,  -- TEXT → VARCHAR2로 변경
-    "menu_content"  VARCHAR2(100)    NULL,
-    "res_lat"       NUMBER(10,6)     NULL,
-    "res_lon"       NUMBER(10,6)     NULL,
-    CONSTRAINT "PK_RES" PRIMARY KEY ("res_id")
-);
---회원
-CREATE TABLE "Member" (
-    "mem_no"        NUMBER           NOT NULL,
-    "mem_id"        VARCHAR2(20)     NOT NULL,
-    "mem_pass"      VARCHAR2(100)     NOT NULL,
-    "mem_name"      VARCHAR2(50)     NOT NULL,
-    "birth_date"    DATE             NULL,
-    "mem_gen"       CHAR(1)          NULL,
-    "mem_mail"      VARCHAR2(100)    NULL,
-    "mem_address"   VARCHAR2(200)    NULL,
-    "mem_addDetail" VARCHAR2(200)    NULL,
-    "mem_date"      DATE             DEFAULT SYSDATE NOT NULL,
-    CONSTRAINT "PK_MEMBER" PRIMARY KEY ("mem_no"),
-    CONSTRAINT "UK_MEMBER_ID" UNIQUE ("mem_id")
+--회원관리--
+CREATE TABLE Member (
+    mem_no          NUMBER                      PRIMARY KEY,
+    mem_id          VARCHAR2(50)                NOT NULL UNIQUE,
+    mem_pass        VARCHAR2(255)               NOT NULL,
+    mem_name        VARCHAR2(100)               NOT NULL,
+    birth_date      DATE,
+    mem_gen         CHAR(1),
+    mem_mail        VARCHAR2(255),
+    mem_address     VARCHAR2(255),
+    mem_add_detail  VARCHAR2(255),
+    mem_date        DATE         DEFAULT SYSDATE NOT NULL,  -- 가입일자
+    mem_status      VARCHAR2(20) DEFAULT 'ACTIVE',
+    mem_type        VARCHAR2(20) DEFAULT 'LOCAL',
+    oauth_id        VARCHAR2(100),
+    mem_num         VARCHAR2(50)
 );
 
---맛집 후기 
-CREATE TABLE "review1" ( 
-    "review_id1"       NUMBER           NOT NULL,
-    "review_score1"    NUMBER           NULL,
-    "review_content1"  VARCHAR2(100)    NULL,
-    "review_file1"     VARCHAR2(100)    NULL,
-    "review_register1" DATE             NULL,
-    "mem_no"           NUMBER           NOT NULL,
-    "res_id"           NUMBER           NOT NULL,
-    CONSTRAINT "PK_REVIEW_1" PRIMARY KEY ("review_id1")
-);
---문
-CREATE TABLE "content" (
-    "con_id"          NUMBER           NOT NULL,
-    "con_title"       VARCHAR2(200)    NULL,
-    "con_img"         VARCHAR2(500)    NULL,
-    "con_age"		  VARCHAR2(100)    NULL,
-    "con_location"    VARCHAR2(200)    NULL,
-    "con_map"         VARCHAR2(500)    NULL,
-    "con_start_date"  DATE             NULL,
-    "con_end_date"    DATE             NULL,
-    "con_time"        VARCHAR2(50)     NULL,   뺴기.
-    "con_cost"        VARCHAR2(50)     NULL,
-    "con_regdate"     DATE             NULL,
-    "category_id"     NUMBER           NOT NULL,
-    CONSTRAINT "PK_CONTENT" PRIMARY KEY ("con_id")
-);
--- 게시물
-CREATE TABLE "Board" (
-    "board_no"         NUMBER            NOT NULL,
-    "board_category"   VARCHAR2(20)      NULL,
-    "board_subject"    VARCHAR2(200)     NOT NULL,
-    "board_content"    VARCHAR2(2000)    NOT NULL,
-    "board_readcount"  NUMBER            DEFAULT 0 NOT NULL,
-    "board_date"       DATE              DEFAULT SYSDATE NOT NULL,
-    "mem_no"           NUMBER            NOT NULL,
-    CONSTRAINT "PK_BOARD" PRIMARY KEY ("board_no")
-);
---카테고리 
-CREATE TABLE "category" (
-    "category_id"     NUMBER           NOT NULL,
-    "category_name"   VARCHAR2(50)     NOT NULL,
-    CONSTRAINT "PK_카테고리" PRIMARY KEY ("category_id")
-);
-
-
-CREATE SEQUENCE seq_mem_no
+CREATE SEQUENCE member_seq
 START WITH 1
 INCREMENT BY 1
 NOCACHE
 NOCYCLE;
 
-CREATE SEQUENCE seq_board_no
+--정책 테이블 --
+CREATE TABLE Plcy (
+    plcy_no               VARCHAR2(100)     PRIMARY KEY,
+    plcy_nm               VARCHAR2(200),
+    plcy_expln_cn         VARCHAR2(3000),
+    plcy_kywd_nm          VARCHAR2(100),
+    lclsf_nm              VARCHAR2(100),
+    mclsf_nm              VARCHAR2(100),
+    plcy_sprt_cn          VARCHAR2(3000),
+    biz_prd_bgng_ymd      VARCHAR2(100),
+    biz_prd_end_ymd       VARCHAR2(100),
+    plcy_aply_mthd_cn     VARCHAR2(3000),
+    srng_mthd_cn          VARCHAR2(3000),
+    aply_url_addr         VARCHAR2(500),
+    sbmsn_dcmnt_cn        VARCHAR2(4000),
+    etc_mttr_cn           VARCHAR2(3000),
+    ref_url_addr1         VARCHAR2(500),
+    ref_url_addr2         VARCHAR2(500),
+    sprt_scl_lmt_yn       VARCHAR2(100),
+    sprt_scl_cnt          VARCHAR2(100),
+    sprt_trgt_age_lmt_yn  VARCHAR2(100),
+    sprt_trgt_min_age     VARCHAR2(100),
+    sprt_trgt_max_age     VARCHAR2(100),
+    rgtr_hghrk_inst_cd_nm VARCHAR2(100),
+    rgtr_up_inst_cd_nm    VARCHAR2(100),
+    rgtr_inst_cd_nm      VARCHAR2(100),
+    mrg_stts_cd           VARCHAR2(100),
+    earn_cnd_se_cd        VARCHAR2(100),
+    earn_min_amt          VARCHAR2(100),
+    earn_max_amt          VARCHAR2(100),
+    earn_etc_cn           VARCHAR2(500),
+    add_aply_qlfc_cnd_cn  CLOB,
+    inq_cnt               NUMBER,
+    aply_ymd_strt         VARCHAR2(100),
+    aply_ymd_end          VARCHAR2(100),
+    frst_reg_dt           VARCHAR2(100),
+    last_mdfcn_dt        VARCHAR2(100),
+    s_biz_cd              VARCHAR2(300),      -- 특화분야코드
+    ptcp_prp_trgt_cn      CLOB,               -- 참여제한대상내용
+    school_cd             VARCHAR2(300),       -- 학력코드
+    plcy_major_cd         VARCHAR2(300),       -- 전공코드
+    job_cd                VARCHAR2(300),       -- 취업상태코드
+    reg_date              DATE
+);
+
+
+--게시판--
+CREATE TABLE board (
+    board_no NUMBER PRIMARY KEY,
+    board_category VARCHAR2(20),
+    board_subject VARCHAR2(200) NOT NULL,
+    board_content VARCHAR2(2000) NOT NULL,
+    board_readcount NUMBER DEFAULT 0 NOT NULL,
+    board_date DATE DEFAULT SYSDATE NOT NULL,
+    mem_no NUMBER,  -- 외래키 컬럼
+
+    CONSTRAINT fk_board_member
+        FOREIGN KEY (mem_no)
+        REFERENCES member(mem_no)
+);
+CREATE SEQUENCE board_seq START WITH 1 INCREMENT BY 1;
+
+--댓글--
+CREATE TABLE comments (
+    comm_no NUMBER PRIMARY KEY,           
+    comm_content VARCHAR2(1000),          
+    comm_date DATE DEFAULT SYSDATE NOT NULL,  
+    comm_update DATE,                         
+    board_no NUMBER NOT NULL,               
+    mem_no NUMBER,
+    mem_id VARCHAR2(50),                           
+
+    CONSTRAINT fk_comments_board
+        FOREIGN KEY (board_no)
+        REFERENCES board(board_no),
+
+    CONSTRAINT fk_comments_member
+        FOREIGN KEY (mem_no)
+        REFERENCES member(mem_no)
+);
+CREATE SEQUENCE comments_seq START WITH 1 INCREMENT BY 1;
+
+-- 첨부파일
+CREATE TABLE user_file (
+    user_file_no NUMBER PRIMARY KEY,
+    board_no NUMBER REFERENCES board(board_no) ON DELETE CASCADE,
+    user_file_name VARCHAR2(255),
+    user_file_path VARCHAR2(500)
+);
+
+CREATE SEQUENCE user_file_seq START WITH 1 INCREMENT BY 1;
+
+
+CREATE TABLE culture (
+    con_id         NUMBER                          primary key,
+     category_name   VARCHAR2(50)  ,
+     con_title      VARCHAR2(200)  ,
+    con_img        VARCHAR2(500),
+    con_location   VARCHAR2(200),
+     con_lat         varchar2(50),
+   con_lot         varchar2(50),
+    con_start_date VARCHAR2(50),
+    con_end_date   VARCHAR2(50),
+    con_time       VARCHAR2(50),
+    con_age        VARCHAR2(50),
+    con_cost       VARCHAR2(50),
+    con_link       VARCHAR2(500),
+    con_regdate    DATE  );
+
+CREATE SEQUENCE culture_seq
 START WITH 1
 INCREMENT BY 1
 NOCACHE
 NOCYCLE;
 
-CREATE SEQUENCE seq_res_id
-START WITH 1
-INCREMENT BY 1
-NOCACHE
-NOCYCLE;
+-- 리뷰 테이블 생성
+CREATE TABLE review2 (
+  review_id2        NUMBER     PRIMARY KEY  ,
+  review_score2     NUMBER  ,
+  review_content2   VARCHAR2(100),
+  review_file2      VARCHAR2(300),
+  review_register2  DATE,
+  mem_no            NUMBER,
+  con_id            NUMBER  
 
-CREATE SEQUENCE seq_con_id
-START WITH 1
-INCREMENT BY 1
-NOCACHE
-NOCYCLE;
+   CONSTRAINT fk_review2_member
+      FOREIGN KEY (mem_no)
+      REFERENCES member(mem_no),
 
-CREATE SEQUENCE seq_comm_no
-START WITH 1
-INCREMENT BY 1
-NOCACHE
-NOCYCLE;
+  CONSTRAINT fk_review2_contents
+      FOREIGN KEY (con_id)
+      REFERENCES contents(con_id)
+);
 
-CREATE SEQUENCE seq_category_id
-START WITH 1
-INCREMENT BY 1
-NOCACHE
-NOCYCLE;
-
-CREATE SEQUENCE seq_file_no
-START WITH 1
-INCREMENT BY 1
-NOCACHE
-NOCYCLE;
-
+CREATE SEQUENCE review2_seq
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;

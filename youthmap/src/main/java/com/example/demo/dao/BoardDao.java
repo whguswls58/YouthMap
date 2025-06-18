@@ -20,7 +20,7 @@ public interface BoardDao {
     List<Board> getTopNotices();
 
     // 🔹 시퀀스에서 다음 번호 가져오기
-    @Select("SELECT seq_board.NEXTVAL FROM dual")
+    @Select("SELECT board_seq.NEXTVAL FROM dual")
     int getNextBoardNo();
 }
 

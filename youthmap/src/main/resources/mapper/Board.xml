@@ -4,86 +4,84 @@
 
 <mapper namespace="com.example.demo.dao.BoardDao">
 
-	<!-- 게시글 등록 -->
+    <!-- 게시글 등록 -->
     <insert id="insert" parameterType="com.example.demo.model.Board">
-    INSERT INTO board (
-        board_no, mem_id, board_category, board_subject,
-        board_content, board_readcount, board_date, mem_no
-    ) VALUES (
-        #{boardNo},        <!-- ✅ Java에서 set한 값 그대로 사용 -->
-        #{memId},
-        #{boardCategory},
-        #{boardSubject},
-        #{boardContent},
-        0,
-        SYSDATE,
-        #{memNo}
-    )
-</insert>
+        INSERT INTO board (
+            board_no, board_category, board_subject,
+            board_content, board_readcount, board_date, mem_no
+        ) VALUES (
+            #{boardNo},
+            #{boardCategory},
+            #{boardSubject},
+            #{boardContent},
+            0,
+            SYSDATE,
+            #{memNo}
+        )
+    </insert>
 
+    <!-- 게시글 수 카운트 -->
     <select id="count" parameterType="map" resultType="int">
-    SELECT COUNT(*) FROM board
-    <where>
-        <if test="category != null and category != ''">
-            board_category = #{category}
-        </if>
-        <if test="searchType != null and keyword != null and keyword != ''">
-            <choose>
-                <when test="searchType == 'subject'">
-                    AND board_subject LIKE '%' || #{keyword} || '%'
-                </when>
-                <when test="searchType == 'content'">
-                    AND board_content LIKE '%' || #{keyword} || '%'
-                </when>
-                <when test="searchType == 'writer'">
-                    AND mem_id LIKE '%' || #{keyword} || '%'
-                </when>
-            </choose>
-        </if>
-    </where>
-</select>
+        SELECT COUNT(*) FROM board b
+        JOIN member m ON b.mem_no = m.mem_no
+        <where>
+            <if test="category != null and category != ''">
+                b.board_category = #{category}
+            </if>
+            <if test="excludeCategory != null and excludeCategory != ''">
+                AND b.board_category != #{excludeCategory}
+            </if>
+            <if test="searchType != null and keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'subject'">
+                        AND b.board_subject LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'content'">
+                        AND b.board_content LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'writer'">
+                        AND m.mem_id LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
 
+    <!-- 게시글 목록 -->
     <select id="list" parameterType="map" resultType="com.example.demo.model.Board">
-    SELECT board_no AS boardNo,
-           mem_id AS memId,
-           board_category AS boardCategory,
-           board_subject AS boardSubject,
-           board_content AS boardContent,
-           board_readcount AS boardReadcount,
-           board_date AS boardDate,
-           mem_no AS memNo,
-           rnum
-    FROM (
-        SELECT b.*, ROWNUM AS rnum
-        FROM (
-            SELECT * FROM board
-            <where>
-                <if test="category != null and category != ''">
-                    AND board_category = #{category}
-                </if>
-                <if test="excludeCategory != null and excludeCategory != ''">
-                    AND board_category != #{excludeCategory}
-                </if>
-                <if test="searchType != null and keyword != null and keyword != ''">
-                    <choose>
-                        <when test="searchType == 'subject'">
-                            AND board_subject LIKE '%' || #{keyword} || '%'
-                        </when>
-                        <when test="searchType == 'content'">
-                            AND board_content LIKE '%' || #{keyword} || '%'
-                        </when>
-                        <otherwise>
-                            AND (board_subject LIKE '%' || #{keyword} || '%' OR board_content LIKE '%' || #{keyword} || '%')
-                        </otherwise>
-                    </choose>
-                </if>
-            </where>
-                ORDER BY board_no DESC
-        ) b
-        WHERE ROWNUM &lt;= #{end}
-    )
-    WHERE rnum &gt;= #{start}
-</select>
+        SELECT b.board_no AS boardNo,
+               m.mem_id AS memId,
+               b.board_category AS boardCategory,
+               b.board_subject AS boardSubject,
+               b.board_content AS boardContent,
+               b.board_readcount AS boardReadcount,
+               b.board_date AS boardDate,
+               b.mem_no AS memNo
+        FROM board b
+        JOIN member m ON b.mem_no = m.mem_no
+        <where>
+            <if test="category != null and category != ''">
+                AND b.board_category = #{category}
+            </if>
+            <if test="excludeCategory != null and excludeCategory != ''">
+                AND b.board_category != #{excludeCategory}
+            </if>
+            <if test="searchType != null and keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'subject'">
+                        AND b.board_subject LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'content'">
+                        AND b.board_content LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <otherwise>
+                        AND (b.board_subject LIKE '%' || #{keyword} || '%' OR b.board_content LIKE '%' || #{keyword} || '%')
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        ORDER BY b.board_no DESC
+    </select>
 
     <!-- 게시글 조회수 증가 -->
     <update id="updatecount" parameterType="int">
@@ -92,18 +90,20 @@
         WHERE board_no = #{no}
     </update>
 
+    <!-- 게시글 상세 조회 -->
     <select id="content" parameterType="int" resultType="com.example.demo.model.Board">
-    SELECT board_no AS boardNo,
-           mem_id AS memId,
-           board_category AS boardCategory,
-           board_subject AS boardSubject,
-           board_content AS boardContent,
-           board_readcount AS boardReadcount,
-           board_date AS boardDate,
-           mem_no AS memNo
-    FROM board
-    WHERE board_no = #{no}
-</select>
+        SELECT b.board_no AS boardNo,
+               m.mem_id AS memId,
+               b.board_category AS boardCategory,
+               b.board_subject AS boardSubject,
+               b.board_content AS boardContent,
+               b.board_readcount AS boardReadcount,
+               b.board_date AS boardDate,
+               b.mem_no AS memNo
+        FROM board b
+        JOIN member m ON b.mem_no = m.mem_no
+        WHERE b.board_no = #{no}
+    </select>
 
     <!-- 게시글 수정 -->
     <update id="update" parameterType="com.example.demo.model.Board">
@@ -119,28 +119,29 @@
         DELETE FROM board
         WHERE board_no = #{no}
     </delete>
-    
-    <!-- 게시글 중 가장 최근 번호 조회 -->
-<select id="getLastBoardNo" resultType="int">
-    SELECT MAX(board_no) FROM board
-</select>
 
-<!-- 공지사항 3개 고정용 -->
-<select id="getTopNotices" resultType="com.example.demo.model.Board">
-    SELECT board_no AS boardNo,
-           mem_id AS memId,
-           board_category AS boardCategory,
-           board_subject AS boardSubject,
-           board_content AS boardContent,
-           board_readcount AS boardReadcount,
-           board_date AS boardDate,
-           mem_no AS memNo
-    FROM (
-        SELECT * FROM board
-        WHERE board_category = '공지사항'
-        ORDER BY board_no DESC
-    )
-    WHERE ROWNUM &lt;= 3
-</select>
-		
+    <!-- 게시글 중 가장 최근 번호 조회 -->
+    <select id="getLastBoardNo" resultType="int">
+        SELECT MAX(board_no) FROM board
+    </select>
+
+    <!-- 공지사항 3개 고정용 -->
+    <select id="getTopNotices" resultType="com.example.demo.model.Board">
+        SELECT b.board_no AS boardNo,
+               m.mem_id AS memId,
+               b.board_category AS boardCategory,
+               b.board_subject AS boardSubject,
+               b.board_content AS boardContent,
+               b.board_readcount AS boardReadcount,
+               b.board_date AS boardDate,
+               b.mem_no AS memNo
+        FROM (
+            SELECT * FROM board
+            WHERE board_category = '공지'
+            ORDER BY board_no DESC
+        ) b
+        JOIN member m ON b.mem_no = m.mem_no
+        WHERE ROWNUM &lt;= 3
+    </select>
+
 </mapper>
