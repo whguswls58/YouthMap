@@ -41,12 +41,10 @@ public class CultureController {
 	@Autowired
 	private Review2Service reservice;
 	
-//	@GetMapping("/")
 	@GetMapping("datainput")
 	public String test() throws Exception {
 
 		String jsonData = service.getYouthCulture(); // service 클래스에 정책 정보 요청
-//        System.out.println(jsonData);
 
 		// JSON 파싱
 		JSONParser parser = new JSONParser();
@@ -58,7 +56,6 @@ public class CultureController {
 		// JSON에서 문화 데이터 추출
 		JSONArray culList = (JSONArray) dataObject.get("row");
 		System.out.println(culList);
-		
 		
 		// 루프 밖에서 한 번만 선언
 		Set<String> allowedTargets = Set.of("성인", "누구나");
@@ -74,7 +71,6 @@ public class CultureController {
 
 		for (Object obj : culList) {
 			JSONObject culture = (JSONObject) obj;
-
 
 		    // 1) 값 추출
 		    String codeName = (String) culture.get("CODENAME");
@@ -109,65 +105,12 @@ public class CultureController {
 		        culMd.setCon_start_date(parts[0].trim());
 		        culMd.setCon_end_date(  parts[1].trim());
 		    }
-
 		    // 4) 저장 호출
 		    int result = service.culinsert(culMd);
 		    if (result != 1) {
 		        System.err.println("저장 실패: " + codeName);
 		    }
 		}
-		
-
-//		for (Object obj : culList) {
-//			JSONObject culture = (JSONObject) obj;
-//
-//			CultureModel culMd = new CultureModel();
-//
-////			if ( (!((String) culture.get("CODENAME")).equals("") ||
-////				  ((String) culture.get("CODENAME")) != null )	&&
-////				
-////				(	
-////				((((String) culture.get("USE_TRGT")).equals("성인") ||
-////				((String) culture.get("USE_TRGT")).equals("누구나"))) && (
-////					   ((String) culture.get("CODENAME")).equals("전시/미술")
-////					|| ((String) culture.get("CODENAME")).equals("축제-문화/예술")
-////					|| ((String) culture.get("CODENAME")).equals("축제-기타")
-////					|| ((String) culture.get("CODENAME")).equals("축제-자연/경관")
-////					|| ((String) culture.get("CODENAME")).equals("콘서트")
-////					|| ((String) culture.get("CODENAME")).equals("연극")
-////					|| ((String) culture.get("CODENAME")).equals("뮤지컬/오페라")) )  ) {
-//
-//			// 1) 미리 꺼내기
-//			String codeName = (String) culture.get("CODENAME");
-//			String useTrgt  = (String) culture.get("USE_TRGT");
-//
-//			// 2) null/빈 문자열 검사
-//			if (codeName == null || codeName.isEmpty()) {
-//			    // codeName이 없으면 저장하지 않음
-//			    continue;
-//			}
-//
-//			// 3) 허용할 USE_TRGT와 CODENAME 집합 정의
-//			Set<String> allowedTargets = Set.of("성인", "누구나");
-//			Set<String> allowedCodes = Set.of(
-//			    "전시/미술",
-//			    "축제-문화/예술",
-//			    "축제-기타",
-//			    "축제-자연/경관",
-//			    "콘서트",
-//			    "연극",
-//			    "뮤지컬/오페라"
-//			);
-//
-//			// 4) 최종 조건 검사
-//			if (allowedTargets.contains(useTrgt) && allowedCodes.contains(codeName)) {
-//			    // → 여기서 DB 저장 로직 호출
-//				int result = service.culinsert(culMd);
-//			} else {
-//			    // 조건 불충족 시 저장하지 않음
-//			}
-//			
-//        }
 //		return "redirect:main";
 		return "dpdp";
 	}
@@ -824,7 +767,7 @@ public class CultureController {
 	   *  - search       : con_title, con_location, both
 	   *  - keyword      : 검색어
 	   */
-	  @GetMapping("/search")
+	  @GetMapping("/culturesearch")
 	  public String search(
 	      @RequestParam(value="mainCategory", defaultValue="all") String mainCategory,
 	      @RequestParam(value="search", defaultValue="all")      String search,

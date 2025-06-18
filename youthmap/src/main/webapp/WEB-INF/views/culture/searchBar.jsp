@@ -17,7 +17,7 @@
 <c:set var="keyword"       value="${keyword}" />
 
 <div style="text-align:center; margin:20px 0;">
-  <form action="${ctx}/search" method="get" style="display:inline-block;">
+  <form action="${ctx}/culturesearch" method="get" style="display:inline-block;">
 
     <div style="
       display:inline-flex; align-items:center;
