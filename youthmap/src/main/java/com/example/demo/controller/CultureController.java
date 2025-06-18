@@ -824,7 +824,7 @@ public class CultureController {
 	   *  - search       : con_title, con_location, both
 	   *  - keyword      : 검색어
 	   */
-	  @GetMapping("/search")
+	  @GetMapping("/culturesearch")
 	  public String search(
 	      @RequestParam(value="mainCategory", defaultValue="all") String mainCategory,
 	      @RequestParam(value="search", defaultValue="all")      String search,

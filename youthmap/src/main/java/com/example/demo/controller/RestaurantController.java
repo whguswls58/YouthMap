@@ -54,7 +54,7 @@ public class RestaurantController {
     };   
 
     // api로 검
-    @GetMapping("/search")
+    @GetMapping("/restaurantsearch")
     public String search(@RequestParam(value = "regions", required = false) List<String> regions,
                          Model model) throws Exception {
         model.addAttribute("districts", Arrays.asList(SEOUL_DISTRICTS));
@@ -89,7 +89,7 @@ public class RestaurantController {
             model.addAttribute("selectedRegions", regions);
         }
         
-        return "search";
+        return "restaurantsearch";
     }
    //search 에서 상세정보api
     private List<String> fetchPlaceIds(String keyword) throws Exception {

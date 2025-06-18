@@ -172,10 +172,10 @@
   <!-- 페이징 UI -->
   <div class="pager">
     <c:if test="${page > 1}">
-      <a href="${pageContext.request.contextPath}/search?mainCategory=all&search=${search}&keyword=${keyword}&page=1">&laquo;</a>
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=all&search=${search}&keyword=${keyword}&page=1">&laquo;</a>
     </c:if>
     <c:if test="${startpage > 10}">
-      <a href="${pageContext.request.contextPath}/search?mainCategory=all&search=${search}&keyword=${keyword}&page=${startpage-10}">[이전]</a>
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=all&search=${search}&keyword=${keyword}&page=${startpage-10}">[이전]</a>
     </c:if>
     <c:forEach var="i" begin="${startpage}" end="${endpage}">
       <c:choose>
@@ -183,15 +183,15 @@
           <span class="current">${i}</span>
         </c:when>
         <c:otherwise>
-          <a href="${pageContext.request.contextPath}/search?mainCategory=all&search=${search}&keyword=${keyword}&page=${i}">${i}</a>
+          <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=all&search=${search}&keyword=${keyword}&page=${i}">${i}</a>
         </c:otherwise>
       </c:choose>
     </c:forEach>
     <c:if test="${endpage < pagecount}">
-      <a href="${pageContext.request.contextPath}/search?mainCategory=all&search=${search}&keyword=${keyword}&page=${startpage+10}">[다음]</a>
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=all&search=${search}&keyword=${keyword}&page=${startpage+10}">[다음]</a>
     </c:if>
     <c:if test="${page < pagecount}">
-      <a href="${pageContext.request.contextPath}/search?mainCategory=all&search=${search}&keyword=${keyword}&page=${pagecount}">&raquo;</a>
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=all&search=${search}&keyword=${keyword}&page=${pagecount}">&raquo;</a>
     </c:if>
   </div>
 </body>
