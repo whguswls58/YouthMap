@@ -44,7 +44,7 @@ public class BoardController {
 	                        @RequestParam(value = "category", required = false) String category,
 	                        @RequestParam(value = "searchType", required = false) String searchType,
 	                        @RequestParam(value = "keyword", required = false) String keyword,
-	                        Model model) {
+	                        Model model) {  
 
 	    int limit = 7;  // 공지사항 3개 + 일반글 7개 = 10개
 	    int start = (page - 1) * limit;
