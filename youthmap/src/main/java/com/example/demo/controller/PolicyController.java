@@ -54,7 +54,7 @@ public class PolicyController {
 		service.executePolicyUpdate();
 		return "policy/test3";
 	}
-	
+	  
 	// 정책 메인 페이지
 	@RequestMapping("/policyMain")
 	public String policyTest(@RequestParam(value = "page", defaultValue = "1") int page,
