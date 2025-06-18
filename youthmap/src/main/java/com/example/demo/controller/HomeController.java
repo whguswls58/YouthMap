@@ -21,13 +21,13 @@ public class HomeController {
 	        model.addAttribute("name", loginMember.getMemName()); // 로그인 한 경우에만 이름 전달
 	    }
 
-	    return "home"; // views/home.jsp로 통일
+	    return "main"; // views/home.jsp로 통일
 	}
 	 @GetMapping("/")
 	    public String home(@RequestParam(value = "withdrawSuccess", required = false) String success, Model model) {
 	        if ("true".equals(success)) {
 	            model.addAttribute("withdrawSuccess", true);
 	        }
-	        return "home"; // views/home.jsp로 통일
+	        return "main"; // views/home.jsp로 통일
 	    }
 }
