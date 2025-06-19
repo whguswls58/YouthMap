@@ -107,13 +107,13 @@ public class PolicyController {
 		
 		categoryList.add(Map.of(
 			"name", "복지문화",
-			"icon", "icon-aducation.png",
+			"icon", "icon-culture.png",
 			"subcategories", List.of("취약계층 및 금융지원", "건강", "예술인지원", "문화활동")
 		));
 		
 		categoryList.add(Map.of(
 			"name", "참여권리",
-			"icon", "icon-aducation.png",
+			"icon", "icon-join.png",
 			"subcategories", List.of("청년참여", "정책인프라구축", "청년국제교류", "권익보호")
 		));
 		
@@ -206,7 +206,8 @@ public class PolicyController {
 		model.addAttribute("keywords", keywords);
 		model.addAttribute("page", page);
 		
-		return "policy/policyContent";
+		return "policy/testcontent";
+//		return "policy/policyContent";
 	}
 
 }
