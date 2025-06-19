@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.example.demo.util.KakaoKeyUtil" %>
+<%@ include file="/WEB-INF/views/culture/header.jsp" %>
 
 <%-- <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %> --%>
 
@@ -48,15 +49,14 @@
 
 <body>
 <div align="center" style="margin:20px 0;">
+  
+  <button onclick="location.href='allList'" style=" width:100px; height:26px; line-height:26px; text-align:center; 
+            font-size:18px; margin:0 8px; cursor:pointer;">
+      전체 목록
+    </button>
   <button type="button" onclick="location.href='exhibitionlist'"
-            style="
-            width:100px;
-            height:26px;
-            line-height:26px;			/* 버튼 높이랑 같게 */
-            text-align:center;
-            font-size:18px;
-            margin:0 8px;
-            cursor:pointer;">
+            style=" width:100px; height:26px; line-height:26px; text-align:center; 
+            font-size:18px; margin:0 8px; cursor:pointer;">
     전시/미술
   </button>
 

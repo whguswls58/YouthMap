@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-  <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
+  <%@ include file="/WEB-INF/views/culture/header.jsp" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -29,12 +29,21 @@
       background: #fff;
       text-align: left;
     }
-    .card img {
-      width: 100%;
-      height: 120px;
-      object-fit: cover;
-      display: block;
-    }
+    .img-wrap {
+  width: 100%;
+  height: 180px;            /* 카드 높이 고정 */
+  display: flex;
+  justify-content: center;  
+  align-items: center;      /* 가로·세로 중앙 정렬 */
+  background: #f5f5f5;      
+  overflow: hidden;
+}
+
+.img-wrap img {
+  max-width: 100%;          /* 래퍼 폭을 넘지 않음 */
+  max-height: 100%;         /* 래퍼 높이를 넘지 않음 */
+  object-fit: contain;      /* 잘리지 않고 전체 보이기 */
+}
     /* 뱃지 스타일 (축제/행사 텍스트) */
     .badge {
       position: absolute;
@@ -92,21 +101,49 @@
 </head>
 <body>
 
+  <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
+
  <div align="center" style="margin:20px 0;">
-    <button type="button" onclick="location.href='exhibitionlist'"
-            style="width:100px; height:26px; line-height:26px; text-align:center; font-size:18px; margin:0 8px; cursor:pointer;">
-      전시/미술
+	<button onclick="location.href='allList'" style=" width:100px; height:26px; line-height:26px; text-align:center; 
+            font-size:18px; margin:0 8px; cursor:pointer;">
+      전체 목록
     </button>
-    <button type="button" onclick="location.href='performancelist'"
-            style="width:100px; height:26px; line-height:26px; text-align:center; font-size:18px; margin:0 8px; cursor:pointer;">
-      공연
-    </button>
-    <button type="button" onclick="location.href='eventlist'"
-            style="width:100px; height:26px; line-height:26px; text-align:center; font-size:18px; margin:0 8px; cursor:pointer;">
-      축제/행사
-    </button>
-  </div>
-  <hr/>
+  <button type="button" onclick="location.href='exhibitionlist'"
+            style="
+            width:100px;
+            height:26px;
+            line-height:26px;			/* 버튼 높이랑 같게 */
+            text-align:center;
+            font-size:18px;
+            margin:0 8px;
+            cursor:pointer;">
+    전시/미술
+  </button>
+
+  <button type="button" onclick="location.href='performancelist'"
+	  style="
+          width:100px;
+          height:26px;
+          line-height:26px;
+          text-align:center;
+          font-size:18px;
+          margin:0 8px;
+          cursor:pointer; ">
+    공연
+  </button>
+
+  <button type="button" onclick="location.href='eventlist'"
+          style="
+            width:100px;
+            height:26px;
+            line-height:26px;
+            text-align:center;
+            font-size:18px;
+            margin:0 8px;
+            cursor:pointer; ">
+    축제/행사
+  </button>
+</div><br><hr>
 
 
   <h2 style="text-align:center; margin:20px 0;">
@@ -121,10 +158,12 @@
         <div class="badge">${cul.category_name}</div>
 
         <!-- 2) 카드 링크 & 이미지 -->
-        <a class="card-link"
-           href="${pageContext.request.contextPath}/eventcont?con_id=${cul.con_id}">
+      <a class="card-link"
+         href="${pageContext.request.contextPath}/eventcont?con_id=${cul.con_id}">
+        <div class="img-wrap">
           <img src="${cul.con_img}" alt="${cul.con_title}" />
-        </a>
+        </div>
+      </a>
 
         <!-- 3) 카드 정보 -->
         <div class="card-info">

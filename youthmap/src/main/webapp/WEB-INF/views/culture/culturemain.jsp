@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
 
 <!DOCTYPE html>
 <html>
@@ -23,132 +22,306 @@
     src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
   <style>
-    /* 카드 슬라이더 공통 스타일 */
+    /* ───────────────────────────────────────────────────────────────
+       전체 페이지 공통 스타일
+    ─────────────────────────────────────────────────────────────── */
+    body {
+      font-family: 'Playfair Display', serif;
+      margin: 0; padding: 0;
+      background-color: #fff;
+      color: #333;
+    }
+    .topbar {
+      background: #f5f0e6;
+      padding: 10px 40px;
+    }
+    .topbar .menu {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px;
+      font-size: 14px;
+    }
+    .topbar .menu a { color: #444; text-decoration: none; }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 40px;
+      background: #fff;
+      position: sticky; top: 0; z-index: 1000;
+      border-bottom: 1px solid #eee;
+    }
+    .navbar-left, .navbar-right { display: flex; gap: 18px; }
+    .navbar-center {
+      position: absolute; left: 50%; transform: translateX(-50%);
+    }
+    .nav-link {
+      font-size: 15px; color: #222; text-decoration: none;
+    }
+    .nav-link:hover, .nav-link.active {
+      border-bottom: 2px solid #222; padding-bottom: 2px;
+    }
+    .logo {
+      font-size: 20px; font-weight: bold;
+      letter-spacing: 1px; color: #111;
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* ───────────────────────────────────────────────────────────────
+       슬라이더 섹션: 위/아래 간격만, 배경 없음
+    ─────────────────────────────────────────────────────────────── */
+    .slider-section {
+      margin: 80px 0;
+    }
+
+    /* ───────────────────────────────────────────────────────────────
+       슬라이더 + 헤더를 감싸는 컨테이너에만 배경과 패딩 적용
+    ─────────────────────────────────────────────────────────────── */
+    .slider-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: #f5f0e6;  
+      padding: 40px;            /* 좌우/상하 같은 여백 */
+      box-sizing: border-box;
+    }
+
+    /* 슬라이더 헤더(타이틀 + +more 버튼) */
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0;
+      padding: 0 20px;          /* 헤더 내부 좌우 여백 추가 */
+    }
+    .slider-header h3 {
+      font-weight: bold;
+      font-size: 1.1em;
+      margin: 0;
+    }
+    .slider-header button {
+      background: none;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      color: #333;
+    }
+
+    /* 헤더 바로 아래 구분선 */
+    .slider-divider {
+      border: 0;
+      border-bottom: 1px solid #ccc;
+      margin: 8px 20px 16px;    /* 위8, 좌우20, 아래16 */
+    }
+
+    /* ───────────────────────────────────────────────────────────────
+       Slick 슬라이더 기본 설정
+    ─────────────────────────────────────────────────────────────── */
     .card-slider {
-      width: 880px;
+      width: 100%;
       margin: 0 auto;
     }
-    .card-slider .card {
-      padding: 8px;
-      box-sizing: border-box;
-      text-align: center;
+    .card-slider .slick-track {
+      display: flex !important;
     }
-    .card-slider .card img {
-      width: 170px;
-      height: 170px;
-      object-fit: cover;
-      display: block;
-      margin: 0 auto 4px;
+    .card-slider .slick-slide {
+      display: block !important;
     }
-    .card-slider .card .title {
-      height: 40px;
-      overflow: hidden;
-      line-height: 20px;
-      font-weight: bold;
-    }
-    .card-slider .card .date {
-      font-size: 0.85em;
-      color: #555;
-      margin-top: 4px;
-    }
-    /* 화살표 위치 조정 (optional) */
     .slick-prev, .slick-next {
       top: 40%;
     }
+
+    /* ───────────────────────────────────────────────────────────────
+       Polaroid 카드 스타일
+    ─────────────────────────────────────────────────────────────── */
+    .card-slider .polaroid-item {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 220px;
+      margin: 20px 12px;
+      box-sizing: border-box;
+      height: 380px;
+    }
+    .card-slider .polaroid {
+      width: 90%;
+      height: 300px;
+      background: #fff;
+      padding: 12px 12px 24px;
+      border: 1px solid #eee;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-slider .polaroid-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: cover;
+      border-radius: 2px;
+    }
+    .card-slider .polaroid-caption {
+      margin-top: auto;
+      display: inline-block;
+      width: 100%;
+      max-width: 35ch;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+      font-size: 1rem;
+      color: #333;
+    }
+    .card-slider .polaroid-date {
+      margin-top: 4px;
+      font-size: 0.85rem;
+      color: #777;
+      text-align: center;
+    }
   </style>
 </head>
+
 <body>
+  <!-- 상단 베이지 바 -->
+  <div class="topbar">
+    <div class="menu">
+      <a href="#">CART</a>
+      <a href="#">MY PAGE</a>
+      <a href="#">JOIN</a>
+    </div>
+  </div>
+
+  <!-- 네비게이션 -->
+  <div class="navbar">
+    <div class="navbar-left">
+      <a href="#" class="nav-link">About</a>
+      <a href="#" class="nav-link">Facility</a>
+      <a href="#" class="nav-link active">Food</a>
+      <a href="#" class="nav-link">Community</a>
+      <a href="#" class="nav-link">Contact</a>
+    </div>
+    <div class="navbar-center">
+      <span class="logo">YOUTHMAP</span>
+    </div>
+    <div class="navbar-right">
+      <a href="#" class="nav-link">CART</a>
+      <a href="#" class="nav-link">MY PAGE</a>
+      <a href="#" class="nav-link">JOIN</a>
+    </div>
+  </div>
+
+  <!-- 검색 바 -->
+  <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
 
   <!-- 전체 목록 버튼 -->
   <div style="text-align:center; margin:20px 0;">
     <button onclick="location.href='allList'"
-            style="width:100px; height:26px; font-size:16px;">
+            style="width:100px; height:26px; font-size:16px; cursor:pointer;">
       전체 목록
     </button>
   </div>
   <hr>
 
   <!-- 전시/미술 섹션 -->
-  <div style="text-align:center; margin:20px 0;">
-    <div style="display:flex; justify-content:space-between; width:880px; margin:0 auto 10px;">
-      <p style="font-weight:bold; font-size:1.1em; margin:0;">전시/미술</p>
-      <button type="button" onclick="location.href='exhibitionlist'"
-              style="width:100px; height:26px; font-size:18px; cursor:pointer;">
-        더보기
-      </button>
+  <section class="slider-section">
+    <div class="slider-inner">
+      <div class="slider-header">
+        <h3>전시/미술</h3>
+        <button type="button" onclick="location.href='exhibitionlist'">+more</button>
+      </div>
+      <hr class="slider-divider"/>
+      <div class="card-slider exhibition-slider">
+        <c:forEach var="cul" items="${exhibition}">
+          <div class="polaroid-item">
+            <div class="polaroid">
+              <img class="polaroid-img"
+                   src="${cul.con_img}" alt="${cul.con_title}" />
+            </div>
+            <div class="polaroid-caption" title="${cul.con_title}">
+              ${cul.con_title}
+            </div>
+            <div class="polaroid-date">
+              ${cul.con_start_date} ~ ${cul.con_end_date}
+            </div>
+          </div>
+        </c:forEach>
+      </div>
     </div>
-    <div class="card-slider exhibition-slider">
-      <c:forEach var="cul" items="${exhibition}">
-        <div class="card">
-          <img src="${cul.con_img}" alt="${cul.con_title}" />
-          <div class="title">${cul.con_title}</div>
-          <div class="date">${cul.con_start_date} ~ ${cul.con_end_date}</div>
-        </div>
-      </c:forEach>
-    </div>
-  </div>
+  </section>
 
   <!-- 공연 섹션 -->
-  <div style="text-align:center; margin:20px 0;">
-    <div style="display:flex; justify-content:space-between; width:880px; margin:0 auto 10px;">
-      <p style="font-weight:bold; font-size:1.1em; margin:0;">공연</p>
-      <button type="button" onclick="location.href='performancelist'"
-              style="width:100px; height:26px; font-size:18px; cursor:pointer;">
-        더보기
-      </button>
+  <section class="slider-section">
+    <div class="slider-inner">
+      <div class="slider-header">
+        <h3>공연</h3>
+        <button type="button" onclick="location.href='performancelist'">+more</button>
+      </div>
+      <hr class="slider-divider"/>
+      <div class="card-slider performance-slider">
+        <c:forEach var="cul" items="${performance}">
+          <div class="polaroid-item">
+            <div class="polaroid">
+              <img class="polaroid-img"
+                   src="${cul.con_img}"
+                   alt="${cul.con_title}" />
+            </div>
+            <div class="polaroid-caption" title="${cul.con_title}">
+              ${cul.con_title}
+            </div>
+            <div class="polaroid-date">
+              ${cul.con_start_date} ~ ${cul.con_end_date}
+            </div>
+          </div>
+        </c:forEach>
+      </div>
     </div>
-    <div class="card-slider performance-slider">
-      <c:forEach var="cul" items="${performance}">
-        <div class="card">
-          <img src="${cul.con_img}" alt="${cul.con_title}" />
-          <div class="title">${cul.con_title}</div>
-          <div class="date">${cul.con_start_date} ~ ${cul.con_end_date}</div>
-        </div>
-      </c:forEach>
-    </div>
-  </div>
+  </section>
 
   <!-- 축제/행사 섹션 -->
-  <div style="text-align:center; margin:20px 0;">
-    <div style="display:flex; justify-content:space-between; width:880px; margin:0 auto 10px;">
-      <p style="font-weight:bold; font-size:1.1em; margin:0;">축제/행사</p>
-      <button type="button" onclick="location.href='eventlist'"
-              style="width:100px; height:26px; font-size:18px; cursor:pointer;">
-        더보기
-      </button>
+  <section class="slider-section">
+    <div class="slider-inner">
+      <div class="slider-header">
+        <h3>축제/행사</h3>
+        <button type="button" onclick="location.href='eventlist'">+more</button>
+      </div>
+      <hr class="slider-divider"/>
+      <div class="card-slider event-slider">
+        <c:forEach var="cul" items="${event}">
+          <div class="polaroid-item">
+            <div class="polaroid">
+              <img class="polaroid-img"
+                   src="${cul.con_img}"
+                   alt="${cul.con_title}" />
+            </div>
+            <div class="polaroid-caption" title="${cul.con_title}">
+              ${cul.con_title}
+            </div>
+            <div class="polaroid-date">
+              ${cul.con_start_date} ~ ${cul.con_end_date}
+            </div>
+          </div>
+        </c:forEach>
+      </div>
     </div>
-    <div class="card-slider event-slider">
-      <c:forEach var="cul" items="${event}">
-        <div class="card">
-          <img src="${cul.con_img}" alt="${cul.con_title}" />
-          <div class="title">${cul.con_title}</div>
-          <div class="date">${cul.con_start_date} ~ ${cul.con_end_date}</div>
-        </div>
-      </c:forEach>
-    </div>
-  </div>
+  </section>
 
-  <!-- Slick 초기화 스크립트 -->
+  <!-- Slick 초기화 -->
   <script>
     $(function(){
       $('.exhibition-slider, .performance-slider, .event-slider').slick({
-       /*  slidesToShow: 3,
+        slidesToShow: 3,
         slidesToScroll: 1,
         infinite: true,
         arrows: true,
-        dots: true,
+        dots: false,
         autoplay: true,
-        autoplaySpeed: 0, */
-        
-        slidesToShow: 3,        // 한 화면에 3개
-        slidesToScroll: 1,      // 한 칸씩 이동
-        infinite: true,
-        arrows: true,          // 화살표는 숨기거나 켜도 무방
-        dots: false,            // 도트도 숨김
-        autoplay: true,
-        autoplaySpeed: 0,       // 다음 슬라이드 딜레이 없이 바로 시작
-        speed: 5000,            // 한 번 움직일 때 걸리는 시간(ms)
-        cssEase: 'linear',      // 선형 이동 — 가속/감속 없이 일정 속도
+        autoplaySpeed: 0,
+        speed: 5000,
+        cssEase: 'linear',
         pauseOnHover: true,
         responsive: [
           { breakpoint: 1024, settings: { slidesToShow: 4 } },
@@ -158,6 +331,7 @@
       });
     });
   </script>
-<br><hr><BR><BR>
+
+  <br><hr><br><br>
 </body>
 </html>
