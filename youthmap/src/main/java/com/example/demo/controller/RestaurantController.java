@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 @Controller
 public class RestaurantController {
 
+	// 테스트용 메세
+	
     private final RestaurantService service;
     private final Review1Service reviewservice;
 
