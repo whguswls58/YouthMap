@@ -227,4 +227,12 @@ public class RestaurantService {
     public List<Restaurant> findNearby(Map<String, Object> param) { return dao.findNearby(param); }
     public List<Restaurant> maplist() { return dao.maplist(); }
     public void updatephotourls(String res_id, String res_photo_urls) { dao.updatephotourls(res_id, res_photo_urls); }
+
+	public String getGOOGLE_API_KEY() {
+		return GOOGLE_API_KEY;
+	}
+
+	public void setGOOGLE_API_KEY(String gOOGLE_API_KEY) {
+		GOOGLE_API_KEY = gOOGLE_API_KEY;
+	}
 }
