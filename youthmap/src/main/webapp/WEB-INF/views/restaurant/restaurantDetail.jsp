@@ -167,7 +167,7 @@
   display: inline-block;
   padding: 10px 24px;
   border-radius: 8px;
-  background-color: #666;
+  background-color: #888;
   color: #fff;
   text-decoration: none;
   font-size: 16px;
@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="detail-container">
 <!-- 리뷰작성 버튼 -->
 <div style="text-align:right; margin: 18px 0;">
-    <button id="reviewWriteBtn" style="padding:7px 20px; border-radius:7px; background:#666; color:#fff; border:none; font-size:16px; cursor:pointer;">
+    <button id="reviewWriteBtn" style="padding:7px 20px; border-radius:7px; background:#888; color:#fff; border:none; font-size:16px; cursor:pointer;">
         리뷰 작성
     </button>
 </div>

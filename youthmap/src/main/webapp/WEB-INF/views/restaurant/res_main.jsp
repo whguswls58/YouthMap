@@ -138,7 +138,7 @@ body {
 .search-combined select:focus {
   outline: none;
   z-index: 9999;
-}
+} 
 .search-combined input[type="text"] {
   border: none;
   padding: 12px 16px;
