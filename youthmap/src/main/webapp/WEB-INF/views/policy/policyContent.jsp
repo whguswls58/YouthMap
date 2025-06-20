@@ -48,6 +48,21 @@
 	border-radius: 0;
 }
 
+.navbar-inverse {
+			background-color: #F1EFEC;
+			border-color: #F1EFEC;
+		}
+		.navbar-inverse .navbar-brand,
+		.navbar-inverse .navbar-nav > li > a {
+			color: #000; /* 텍스트 색상 (가독성을 위해 검정색 권장) */
+		}
+		.navbar-inverse .navbar-nav > .active > a,
+		.navbar-inverse .navbar-nav > .active > a:focus,
+		.navbar-inverse .navbar-nav > .active > a:hover {
+			background-color: #e0ddd9; /* 활성 메뉴 배경 강조 (선택 사항) */
+			color: #000;
+		}
+
 .row.content {
 	height: 450px
 }
@@ -81,6 +96,95 @@ footer {
 	right: 30px;
 	width: 200px;
 }
+
+/* -------------------------------*/
+/* 메인 글 스타일 */
+.policy-header {
+  text-align: center;
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 30px 0;
+}
+
+.policy-header h2 {
+  font-weight: 500;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.policy-meta {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.policy-image {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin-bottom: 30px;
+}
+
+.policy-content {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #333;
+  padding: 0 10px;
+}
+
+.policy-summary-block {
+  background: #f9f9f9;
+  border-top: 2px solid #000;
+  padding: 40px 20px;
+  margin-top: 60px;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.policy-summary-block .summary-box {
+  flex: 1 1 300px;
+  padding: 20px;
+}
+
+.policy-summary-block h4 {
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.policy-summary-block p {
+  font-size: 14px;
+  color: #666;
+}
+
+.btn.btn-outline {
+  border: 1px solid #ccc;
+  background: white;
+  color: #333;
+  padding: 6px 15px;
+  border-radius: 20px;
+  transition: all 0.3s;
+}
+
+.btn.btn-outline:hover {
+  background-color: #f1f1f1;
+  color: #000;
+}
+
+/* 반응형 정렬 */
+@media (max-width: 768px) {
+  .policy-summary-block {
+    flex-direction: column;
+    align-items: center;
+  }
+  .policy-summary-block .summary-box {
+    width: 100%;
+  }
+}
+
+
 </style>
 </head>
 <body>
@@ -359,6 +463,48 @@ footer {
 		</div>
 	</div>
 
+<%---------------------------------------------------- --%>
+<div class="container">
+  <!-- 정책 제목 -->
+  <div class="policy-header text-center">
+    <h2>${plcy.plcy_nm}</h2>
+    <div class="policy-meta">
+      최종 수정일 ${plcy.last_mdfcn_dt} | 조회수 ${plcy.inq_cnt}
+    </div>
+  </div>
+
+  <!-- 대표 이미지 -->
+<!--   <div class="row"> -->
+<!--     <div class="col-md-12"> -->
+<!--       <img src="policy/images/sample.jpg" class="img-responsive policy-image" alt="대표 이미지"> -->
+<!--     </div> -->
+<!--   </div> -->
+
+  <!-- 정책 설명 -->
+  <div class="row">
+    <div class="col-md-12 policy-content">
+      ${plcy.plcy_expln_cn}
+    </div>
+  </div>
+
+  <!-- 요약 블록 -->
+  <div class="row policy-summary-block">
+    <div class="col-md-6 summary-box">
+      <h4>Location</h4>
+<%--       <p>${plcy.addr} / ${plcy.region}</p> --%>
+      <a href="#" class="btn btn-outline">Around</a>
+    </div>
+    <div class="col-md-6 summary-box">
+      <h4>Reservation</h4>
+<%--       <p>${plcy.oprn_day} / ${plcy.oprn_time}</p> --%>
+      <a href="${plcy.aply_url_addr}" class="btn btn-outline">Contact</a>
+    </div>
+  </div>
+</div>
+
+
+
+<%---------------------------------------------------- --%>
 	<footer class="container-fluid text-center">
 		<p>Footer Text</p>
 	</footer>
