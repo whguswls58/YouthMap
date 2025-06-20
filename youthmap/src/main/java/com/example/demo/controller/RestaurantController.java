@@ -22,7 +22,88 @@ public class RestaurantController {
     private final RestaurantService service;
     private final Review1Service reviewservice;
 
+
     // --------------------- [구글 API 동기화용] ----------------------
+
+    
+    @Value("${google.api.key}")
+    private String GOOGLE_API_KEY;
+    private final OkHttpClient client = new OkHttpClient();
+    private final JSONParser parser = new JSONParser();
+
+    private static final String[] SEOUL_DISTRICTS = {
+            "서울 종로구", "서울 중구", "서울 용산구", "서울 성동구", "서울 광진구",
+            "서울 동대문구", "서울 중랑구", "서울 성북구", "서울 강북구", "서울 도봉구",
+            "서울 노원구", "서울 은평구", "서울 서대문구", "서울 마포구", "서울 양천구",
+            "서울 강서구", "서울 구로구", "서울 금천구", "서울 영등포구", "서울 동작구",
+            "서울 관악구", "서울 서초구", "서울 강남구", "서울 송파구", "서울 강동구"
+    };   
+
+    // api로 검
+    @GetMapping("/restaurantsearch")
+    public String search(@RequestParam(value = "regions", required = false) List<String> regions,
+                         Model model) throws Exception {
+        model.addAttribute("districts", Arrays.asList(SEOUL_DISTRICTS));
+
+        if (regions != null && !regions.isEmpty()) {
+            List<String> allPlaceIds = new ArrayList<>();
+
+            for (String region : regions) {
+                String gu = region.split(" ")[1];
+                List<String> placeIds = fetchPlaceIds(region);
+                allPlaceIds.addAll(placeIds);
+            }
+
+            // 중복 제거
+            List<String> uniquePlaceIds = allPlaceIds.stream()
+                    .distinct()
+                    .collect(Collectors.toList());
+
+            
+            List<Restaurant> restaurants = new ArrayList<>();
+            for (String placeId : uniquePlaceIds) {
+                Restaurant r = fetchDetail(placeId); // DB 저장 X, 정보만 받아오기!
+                if (r != null) {
+                    boolean saved = service.saveRestaurantIfNotExists(r);
+                    if (saved) { // 새로 저장된 것만 목록에 추가
+                        restaurants.add(r);
+                    }
+                }
+            }
+            
+            model.addAttribute("regionMap", restaurants);
+            model.addAttribute("selectedRegions", regions);
+        }
+        
+        return "restaurantsearch";
+    }
+   //search 에서 상세정보api
+    private List<String> fetchPlaceIds(String keyword) throws Exception {
+        List<String> placeIds = new ArrayList<>();
+        int page = 0;
+        String nextPageToken = null;
+
+        while (page < 2) {
+            String currentUrl = (page == 0)
+                    ? "https://maps.googleapis.com/maps/api/place/textsearch/json?query="
+                    + URLEncoder.encode(keyword + " 맛집", StandardCharsets.UTF_8)
+                    + "&language=ko&key=" + GOOGLE_API_KEY
+                    : "https://maps.googleapis.com/maps/api/place/textsearch/json?pagetoken="
+                    + nextPageToken + "&language=ko&key=" + GOOGLE_API_KEY;
+
+            if (page > 0) Thread.sleep(2000);
+
+            Request request = new Request.Builder().url(currentUrl).build();
+            Response response = client.newCall(request).execute();
+            JSONObject json = (JSONObject) parser.parse(response.body().string());
+            JSONArray results = (JSONArray) json.get("results");
+
+            for (Object obj : results) {
+                JSONObject jo = (JSONObject) obj;
+                String placeId = (String) jo.get("place_id");
+                placeIds.add(placeId);
+            }
+
 
     // 1. 폼(GET) - 버튼만 있는 페이지
     @GetMapping("/updateapi")
