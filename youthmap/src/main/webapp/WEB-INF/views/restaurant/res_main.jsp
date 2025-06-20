@@ -159,23 +159,25 @@ body {
   background-color: #666;
 }
 
-.gu-list { display: none; }
-.gu-list.active { display: flex !important; }
-
-/* 구 버튼 리스트 */
+/* gu-list 기본 설정 */
 .gu-list {
-  text-align: center;
-  flex-wrap: wrap;
-  display: flex;
-  justify-content: center;
+  display: none;         /* 기본 감춤 */
+  margin: 60px 0;        /* 위아래 여백 60px */
   gap: 10px;
-  margin: 20px auto;
+  justify-content: center;
+  flex-wrap: wrap;
   max-width: 1000px;
-  display: none;
+  margin-left: auto;
+  margin-right: auto;
+  
 }
+
+/* active가 붙으면 flex로 전환 */
 .gu-list.active {
-  display: flex;
+  display: flex !important;
 }
+
+/* 버튼 기본 스타일 */
 .gu-btn {
   padding: 10px 20px;
   border-radius: 20px;
@@ -183,11 +185,10 @@ body {
   border: 1px solid #aaa;
   cursor: pointer;
   font-size: 14px;
-}
-.gu-btn.active {
-  background: #222;
-  color: white;
-  font-weight: bold;
+  margin: 6px 0;        /* 위아래 여백 60px */
+  margin-left: auto;
+  margin-right: auto;
+  
 }
 /* 베이지 배경을 살짝만 크게 */
 .slider-section {
@@ -270,6 +271,11 @@ body {
   transition: all 0.3s ease-in-out;
   margin-top: 50px;
 }
+
+.restaurant-name a {
+  color: #000 !important;
+  text-decoration: none
+  }
 .restaurant-card img {
   width: 100%;
   height: 150px;
@@ -381,7 +387,7 @@ body {
 
 
 <!-- ✅ 구 버튼 -->
-<div class="gu-list <c:if test='${searchType eq \"res_gu\"}'>active</c:if>'"> 
+<div class="gu-list <c:if test='${searchType eq \"res_gu\"}'>active</c:if>">
 <form id="guForm" method="get" action="restaurants">
      <button type="submit" name="res_gu" value="" class="gu-btn <c:if test='${empty res_gu}'>active</c:if>">전체</button>
       <c:forEach var="gu" items="${seoulGuList}">
@@ -437,35 +443,32 @@ body {
 <!-- ✅ 스크립트 -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var searchType = document.getElementById('searchType');
-  var keyword = document.getElementById('keywordInput');
-  var form = document.getElementById('searchForm');
-  if(searchType && keyword && form) {
-      function onTypeChange() {
-          // 검색어 초기화
-          keywordIn.value = "";
-          // 구 버튼 리스트 토글
-          if (select.value === "res_gu") {
-            guList.classList.add("active");
-          } else {
-            guList.classList.remove("active");
-          }
-        }
+  const select = document.getElementById('searchType');
+  const keywordIn = document.getElementById('keywordInput');
+  const guList   = document.querySelector('.gu-list');
 
-        select.addEventListener("change", onTypeChange);
-        onTypeChange(); // 로드 시 한 번 실행
-      });
-});
-}
+  function onTypeChange() {
+    // 검색어 초기화
+    keywordIn.value = '';
+    // 구 버튼 리스트 토글
+    if (select.value === 'res_gu') {
+      guList.classList.add('active');
+    } else {
+      guList.classList.remove('active');
+    }
+  }
+
+  select.addEventListener('change', onTypeChange);
+  onTypeChange(); // 초기 상태 반영
 });
 
 let map;
-var mapRestaurants = [
+const mapRestaurants = [
   <c:forEach var="r" items="${mapRestaurants}" varStatus="status">
-    {lat: ${r.res_latitude}, lng: ${r.res_longitude}, name: '${r.res_subject}', id: '${r.res_id}', photo: '${r.res_photo_url}'}
-    <c:if test="${!status.last}">,</c:if>
+    {lat: ${r.res_latitude}, lng: ${r.res_longitude}, name: '${r.res_subject}', id: '${r.res_id}', photo: '${r.res_photo_url}'}<c:if test="${!status.last}">,</c:if>
   </c:forEach>
 ];
+
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 37.5665, lng: 126.9780},
@@ -474,50 +477,52 @@ function initMap() {
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(pos) {
-      var myLatLng = {
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude
-      };
+      const myLatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
       map.setCenter(myLatLng);
       map.setZoom(18);
 
       new google.maps.Marker({
         map: map,
         position: myLatLng,
-        title: "내 위치",
-        icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+        title: '내 위치',
+        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
       });
 
       mapRestaurants.forEach(function(r) {
         if (r.lat && r.lng) {
-          var marker = new google.maps.Marker({
+          const marker = new google.maps.Marker({
             map: map,
             position: {lat: r.lat, lng: r.lng},
             title: r.name,
-            icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+            icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
           });
 
-          var photoUrl = r.photo && r.photo !== 'null' ? r.photo : 'https://dummyimage.com/80x80/cccccc/fff&text=No+Image';
-          var infoHtml = `
+          const photoUrl = r.photo && r.photo !== 'null'
+            ? r.photo
+            : 'https://dummyimage.com/80x80/cccccc/fff&text=No+Image';
+          const infoHtml = `
             <div style="width:220px; padding:18px; border-radius:14px; background:#fff;">
               <a href="restaurantDetail?res_id=${r.id}" style="text-decoration:none;">
                 <img src="${photoUrl}" alt="${r.name}" style="width:100%; height:110px; object-fit:cover; border-radius:8px;">
                 <div style="font-weight:bold; margin-top:10px; color:#222;">${r.name}</div>
               </a>
             </div>`;
+          const infowindow = new google.maps.InfoWindow({ content: infoHtml });
 
-          var infowindow = new google.maps.InfoWindow({ content: infoHtml });
           marker.addListener('mouseover', function() { infowindow.open(map, marker); });
-          marker.addListener('mouseout', function() { infowindow.close(); });
-          marker.addListener('click', function() {
-            window.location.href = "restaurantDetail?res_id=" + r.id;
+          marker.addListener('mouseout',  function() { infowindow.close(); });
+          marker.addListener('click',    function() {
+            window.location.href = 'restaurantDetail?res_id=' + r.id;
+          });
         }
       });
+    }, function(error) {
+      console.error('위치 정보를 불러올 수 없습니다.', error);
     });
   }
 }
 
-document.getElementById('moveToMyLocationBtn').onclick = function() {
+document.getElementById('moveToMyLocationBtn').addEventListener('click', function() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(pos) {
       map.setCenter({ lat: pos.coords.latitude, lng: pos.coords.longitude });
@@ -528,8 +533,9 @@ document.getElementById('moveToMyLocationBtn').onclick = function() {
   } else {
     alert('브라우저가 위치 정보를 지원하지 않습니다.');
   }
-};
+});
 </script>
+
 <!--구리스트 스크립트 -->
 <script>
 document.addEventListener("DOMContentLoaded", function(){
@@ -546,9 +552,13 @@ document.addEventListener("DOMContentLoaded", function(){
   toggleGuList();  // 초기 로딩 시 상태 반영
 });
 </script>
+
 <script src="https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap" async defer></script>
+
 <!-- Swiper JS 추가 (body 끝 직전에) -->
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<!-- 슬라이더 -->
 <script>
 const swiper = new Swiper('.swiper-container', {
 	loop: true,

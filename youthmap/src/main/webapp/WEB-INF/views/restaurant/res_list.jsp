@@ -157,35 +157,46 @@
   background-color: #666;
 }
 
+/* gu-list 기본 설정 */
+.gu-list {
+  display: none;         /* 기본 감춤 */
+  margin: 60px 0;        /* 위아래 여백 60px */
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
 
-	
-	/* 구 버튼 리스트 */
-	.gu-list {
-	  text-align: center;
-	  flex-wrap: wrap;
-	  display: flex;
-	  justify-content: center;
-	  gap: 10px;
-	  margin: 20px auto;
-	  max-width: 1000px;
-	  display: none;
-	}
-	.gu-list.active {
-	  display: flex;
-	}
-	.gu-btn {
-	  padding: 10px 20px;
-	  border-radius: 20px;
-	  background: white;
-	  border: 1px solid #aaa;
-	  cursor: pointer;
-	  font-size: 14px;
-	}
-	.gu-btn.active {
-	  background: #222;
-	  color: white;
-	  font-weight: bold;
-	}
+/* active가 붙으면 flex로 전환 */
+.gu-list.active {
+  display: flex !important;
+}
+
+/* 버튼 기본 스타일 */
+.gu-btn {
+  padding: 10px 20px;
+  border-radius: 20px;
+  background: white;
+  border: 1px solid #aaa;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 6px 0;        /* 위아래 여백 60px */
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+
+/* 활성화된 버튼 (검색 버튼과 같은 색) */
+.gu-btn.active {
+  background-color: #888 !important;
+  border-color:     #888 !important;
+  color:            #fff !important;
+  font-weight:      bold;
+}
+
 	.restaurant-grid {
 		display: flex;
 		flex-wrap: wrap;
