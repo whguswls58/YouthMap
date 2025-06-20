@@ -1,0 +1,117 @@
+/*──────────────────────────────────────────────
+   카드 그리드
+──────────────────────────────────────────────*/
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 880px;
+  margin: 20px auto 0;
+  padding: 0;
+}
+
+/*──────────────────────────────────────────────
+   카드 하나당
+──────────────────────────────────────────────*/
+.card {
+  position: relative;
+  flex: 0 0 calc((100% - 60px) / 4);
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  text-align: left;
+}
+
+/*──────────────────────────────────────────────
+   이미지 래퍼
+──────────────────────────────────────────────*/
+.img-wrap {
+  width: 100%;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+.img-wrap img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/*──────────────────────────────────────────────
+   뱃지 (기본 스타일)
+──────────────────────────────────────────────*/
+.badge {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  color: #fff;
+  z-index: 10;
+}
+
+/*──────────────────────────────────────────────
+   카테고리별 뱃지 색상
+──────────────────────────────────────────────*/
+.badge.exhibition    { background: #008060; } /* 전시/미술 */
+.badge.performance   { background: #a83279; } /* 공연 */
+.badge.event         { background: #0066cc; } /* 축제/행사 */
+/* 추가 카테고리가 있으면 아래에 더 정의하세요. */
+
+/*──────────────────────────────────────────────
+   카드 정보
+──────────────────────────────────────────────*/
+.card-info {
+  padding: 8px;
+}
+.card-info .title {
+  font-size: 1em;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+.card-info .period {
+  font-size: 0.85em;
+  color: #555;
+}
+
+/*──────────────────────────────────────────────
+   링크 전체 클릭 가능
+──────────────────────────────────────────────*/
+a.card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  z-index: 0;
+}
+
+/*──────────────────────────────────────────────
+   페이지네이션
+──────────────────────────────────────────────*/
+.pager {
+  text-align: center;
+  margin: 20px auto;
+}
+.pager a,
+.pager span {
+  display: inline-block;
+  margin: 0 6px;
+  padding: 4px 8px;
+  text-decoration: none;
+  color: #000;
+}
+.pager .current {
+  font-weight: bold;
+}

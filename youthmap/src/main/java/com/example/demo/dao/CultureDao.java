@@ -47,6 +47,8 @@ public interface CultureDao {
 
 	List<CultureModel> getallList(CultureModel culMd);
 
+	CultureModel getLatestData();
+
 
 
 

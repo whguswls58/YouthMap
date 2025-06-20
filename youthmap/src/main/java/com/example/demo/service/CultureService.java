@@ -25,11 +25,16 @@ public class CultureService {
 	private CultureDao dao;
 	
 	
-	public String getYouthCulture() {
+	public String getYouthCulture(int i) {
         
-		System.out.println("apiKey:"+ apiKey);
+//		System.out.println("apiKey:"+ apiKey);
 		
-		String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/json/culturalEventInfo/1/1000";					// api url
+		String apiUrl = "http://openapi.seoul.go.kr:8088/" +
+		apiKey + "/json/culturalEventInfo/"+((i*1000)+1)+"/" + (i+1)*1000;				// api url
+
+//		System.out.println(apiUrl);
+		
+		//		String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/json/culturalEventInfo/1/1000";					// api url
 	//	String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/json/culturalEventInfo/1001/2000";					// api url
 //여기까지만	String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/json/culturalEventInfo/2001/3000";					// api url
 	
@@ -139,6 +144,11 @@ public class CultureService {
 
 	public List<CultureModel> getallList(CultureModel culMd) {
 		return dao.getallList(culMd);
+	}
+
+
+	public CultureModel getLatestData() {
+		return dao.getLatestData();
 	}
 
 

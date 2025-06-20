@@ -1,14 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.example.demo.util.KakaoKeyUtil" %>
-
-<%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
+<%@ include file="/WEB-INF/views/culture/header.jsp" %>
 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>${eventcont.con_title} 상세</title>
+  <title>YouthMap</title>
 
   <!-- ① 카카오 JS SDK: YOUR_APP_KEY 부분에 자바스크립트 키를 넣으세요 -->
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= KakaoKeyUtil.getApiKey() %>&libraries=services"></script>
@@ -35,13 +34,17 @@
     #map {
       width:100%; height:300px;
       margin:24px auto;
-      border:2px solid #3c9c35; border-radius:16px;
+      border:10px solid #f5f0e6; border-radius:16px;
     }
     .back-link {
-      display:inline-block; margin:30px auto;
-      padding:8px 16px; background:#046d52;
-      color:#fff; text-decoration:none; border-radius:4px;
-    }
+  display: inline-block;
+  margin: 30px auto;
+  padding: 8px 16px;
+  background: #e0e0e0;    /* 연한 회색 */
+  color:   #555;          /* 약간 진한 회색 텍스트 */
+  text-decoration: none;
+  border-radius: 4px;
+}
     .back-container { text-align:center }
   </style>
 </head>
@@ -49,6 +52,10 @@
 
 
 <div align="center" style="margin:20px 0;">
+	<button onclick="location.href='allList'" style=" width:100px; height:26px; line-height:26px; text-align:center; 
+            font-size:18px; margin:0 8px; cursor:pointer;">
+      전체 목록
+    </button>
   <button type="button" onclick="location.href='exhibitionlist'"
             style="
             width:100px;
@@ -125,6 +132,14 @@
         </tr>
       </table>
     </div>
+
+<!-- 뒤로가기 -->
+       <div class="back-container">
+      <a class="back-link" href="${ctx }eventlist?page=${page}">
+        ← 목록으로 돌아가기
+      </a>
+    </div>
+
 
     <!-- ② 지도 표시 영역 -->
     <div id="map" style="width:100%;height:400px;"></div>
@@ -351,12 +366,7 @@
 </script>			<!-- 리뷰댓글 끝 -->
 
 
-    <!-- 뒤로가기 -->
-       <div class="back-container">
-      <a class="back-link" href="${ctx }eventlist?page=${page}">
-        ← 목록으로 돌아가기
-      </a>
-    </div>
+    
    </div>
 </body>
 </html>

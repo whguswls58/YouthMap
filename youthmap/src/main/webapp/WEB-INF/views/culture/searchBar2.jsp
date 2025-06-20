@@ -74,6 +74,7 @@
 }
 </style>
 
+
 </head>
 <body>
 
@@ -128,6 +129,37 @@
     <input type="submit" value="검색" />
   </form>
 </div>
+
+
+
+<!-- ✅ 검색 -->
+<%-- <div class="search-wrapper">
+  <form class="search-bar" action="${ctx}/culturesearch" method="get">
+    <div class="search-combined">
+      <select name="mainCategory">
+        <option value="all"
+          <c:if test="${mainCategory=='all'}">selected</c:if>>
+          전체
+        </option>
+        <option value="exhibition"
+          <c:if test="${mainCategory=='exhibition'}">selected</c:if>>
+          전시/미술
+        </option>
+        <option value="performance"
+          <c:if test="${mainCategory=='performance'}">selected</c:if>>
+          공연
+        </option>
+        <option value="event"
+          <c:if test="${mainCategory=='event'}">selected</c:if>>
+          축제/행사
+        </option>
+      </select>
+      <input type="text" name="keyword" placeholder="검색어 입력">
+    </div>
+    <input type="submit" value="검색">
+  </form>
+</div> --%>
+
 
 </body>
 </html>
