@@ -65,7 +65,7 @@
   		SELECT COUNT(*) FROM review1 WHERE res_id = #{res_id}
 	</select>
 	
-	<!-- 리뷰파 -->
+	<!-- 리뷰파일 -->
 	<select id="reivewfile" parameterType="int" resultType="String">
     SELECT review_file1 FROM review1 WHERE review_id1 = #{review_id1}
 </select>

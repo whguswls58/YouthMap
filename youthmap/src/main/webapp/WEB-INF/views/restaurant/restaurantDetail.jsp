@@ -4,6 +4,72 @@
 <head>
     <title>${restaurant.res_subject} - 상세 정보</title>
     <style>
+    body {
+  font-family: 'Playfair Display', serif;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  color: #333
+}
+/* 상단 베이지 바 */
+.topbar {
+  background: #f5f0e6;
+  padding: 10px 40px;
+}
+.topbar .menu {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  font-size: 14px;
+}
+.topbar .menu a {
+  color: #444;
+  text-decoration: none;
+}
+/* 네비게이션 */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid #eee;
+}
+.navbar-left,
+.navbar-right {
+  display: flex;
+  gap: 18px;
+}
+.navbar-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.nav-link {
+  font-size: 15px;
+  color: #222;
+  text-decoration: none;
+}
+.nav-link:hover,
+.nav-link.active {
+  border-bottom: 2px solid #222;
+  padding-bottom: 2px;
+}
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #111;
+  font-family: 'Playfair Display', serif;
+}
+
+
+    
         .detail-container { max-width: 850px; margin: 35px auto; padding: 28px; border-radius: 16px; background: #fff; box-shadow: 0 2px 18px #eee; }
         .main-photo { width: 100%; height: 320px; object-fit: cover; border-radius: 14px; box-shadow: 0 2px 8px #e6e6e6; margin-bottom: 12px;}
         .photo-gallery { display: flex; gap: 11px; overflow-x: auto; margin-bottom: 22px; }
@@ -15,6 +81,104 @@
         .label { color: #888; margin-right: 6px; }
         .price { font-weight: bold; color: #406d36;}
         .no-img { width:100%; height:320px; border-radius:14px; background:#eee; display:flex; align-items:center; justify-content:center; color:#aaa; font-size:24px; margin-bottom:12px;}
+ 
+ 
+  .map-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.map-container iframe {
+  max-width: 900px;  /* 원하는 최대 가로폭 */
+}
+.map-container .label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1rem;
+  color: #333;
+  text-align: center;
+}
+  
+  /* 상세정보 2단 레이아웃 */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+}
+.info-table th,
+.info-table td {
+  padding: 12px 16px;
+  vertical-align: top;
+}
+.info-table th {
+  background: #f5f5f5;
+  width: 30%;
+  font-weight: normal;
+  color: #333;
+}
+.info-table td {
+  background: #fff;
+  color: #444;
+}
+.info-table tr + tr th,
+.info-table tr + tr td {
+  border-top: 1px solid #eee;
+}
+ /* 메인 사진 바로 아래 여백 늘리기 */
+.detail-container .main-photo {
+  margin-bottom: 30px;
+}
+
+/* 썸네일 갤러리 아래 여백 늘리기 */
+.detail-container .photo-gallery {
+  margin-bottom: 40px;
+}
+
+/* 식당명(타이틀) 위쪽 여백 추가 */
+.detail-container .res-title {
+  margin-top: 60px;
+}
+  
+  .main-photo {
+  /* 기존 스타일 유지 */
+  width: 600px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px #e6e6e6;
+  margin-bottom: 32px;
+
+  /* 추가 */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* 버튼 그룹 컨테이너 */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  gap: 12px;
+}
+
+/* 공통 버튼 스타일 */
+.button-group .btn {
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 8px;
+  background-color: #666;
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  transition: background-color 0.2s;
+}
+
+.button-group .btn:hover {
+  background-color: #555;
+}
     </style>
     <script>
         function showMainPhoto(url) {
@@ -23,18 +187,44 @@
     </script>
 </head>
 <body>
-<div style="margin:32px 0 0 0; text-align:right;">
-    <a href="restaurants">
-        <button style="padding:10px 28px; border-radius:8px; background:#45aaf2; color:#fff; font-size:17px; border:none; cursor:pointer;">
-            목록으로
-        </button>
-    </a>
+<!-- 상단 베이지 바 -->
+<div class="topbar">
+  <div class="menu">
+    <a href="#">CART</a>
+    <a href="#">MY PAGE</a>
+    <a href="#">JOIN</a>
+  </div>
 </div>
+
+<!-- ✅ 네비게이션 구조 -->
+<div class="navbar">
+  <div class="navbar-left">
+    <a href="#" class="nav-link">About</a>
+    <a href="#" class="nav-link">Facility</a>
+    <a href="#" class="nav-link active">Food</a>
+    <a href="#" class="nav-link">Community</a>
+    <a href="#" class="nav-link">Contact</a>
+  </div>
+  <div class="navbar-center">
+    <span class="logo">YOUTHMAP</span>
+  </div>
+  <div class="navbar-right">
+    <a href="#" class="nav-link">CART</a>
+    <a href="#" class="nav-link">MY PAGE</a>
+    <a href="#" class="nav-link">JOIN</a>
+  </div>
+</div>
+
+
+
+
+
 <div class="detail-container">
+
 <!-- 대표 사진 -->
-<c:if test="${not empty restaurant.res_photo_url}">
-    <img src="${restaurant.res_photo_url}" style="width:400px;">
-</c:if>
+ 	<c:if test="${not empty restaurant.res_photo_url}">
+     <img id="mainPhoto" class="main-photo" src="${restaurant.res_photo_url}" alt="대표 사진"> 
+     </c:if>
 <!-- 여분 사진(썸네일) -->
 <c:if test="${not empty extraPhotoUrls}">
     <div style="display:flex; gap:8px; margin-top:15px;">
@@ -69,79 +259,76 @@ document.addEventListener('DOMContentLoaded', function() {
         ${restaurant.res_subject}
         <span class="res-score">★ ${restaurant.res_score}  <%-- 리뷰/ ${restaurant.user_ratings_total}개 --%></span>
     </div>
-
-   
-
-    <div class="address">
-        <span class="label">주소:</span> ${restaurant.res_address}
-    </div>
-    <div class="tel">
-        <span class="label">전화:</span> <c:out value="${restaurant.res_tel}" default="-" />
-    </div>
-    <div class="section">
-        <span class="label">가격대:</span>
-        <c:choose>
-            <c:when test="${restaurant.res_price_level == 0}">무료~저렴</c:when>
-            <c:when test="${restaurant.res_price_level == 1}">저렴</c:when>
-            <c:when test="${restaurant.res_price_level == 2}">중간</c:when>
-            <c:when test="${restaurant.res_price_level == 3}">비쌈</c:when>
-            <c:when test="${restaurant.res_price_level == 4}">매우 비쌈</c:when>
-            <c:otherwise>정보 없음</c:otherwise>
-        </c:choose>
-    </div>
-
-    <div class="section">
-        <span class="label">영업상태:</span> ${restaurant.res_status}
-        <span class="label" style="margin-left: 15px;">영업중:</span>
-        <c:choose>
-            <c:when test="${restaurant.res_open == 'true'}">O</c:when>
-            <c:when test="${restaurant.res_open == 'false'}">X</c:when>
-            <c:otherwise>정보 없음</c:otherwise>
-        </c:choose>
-    </div>
-    <div class="section">
-        <span class="label">영업시간:</span><br/>
-        <pre style="font-family:inherit; color:#333; margin:0;">${restaurant.res_open_hours}</pre>
-    </div>
-<!-- 공식 웹사이트가 있을 때만 링크 버튼 표시 -->
-    <c:if test="${not empty restaurant.res_website}">
-        <div style="margin-top:14px;">
-            <a href="${restaurant.res_website}" target="_blank"
-               style="padding:7px 18px; border-radius:7px; background:#1784fc; color:#fff; text-decoration:none;">
-               공식 웹사이트 바로가기
-            </a>
-        </div>
-    </c:if>
+<table class="info-table">
+  <tr>
+    <th>주소</th>
+    <td>${restaurant.res_address}</td>
+  </tr>
+  <tr>
+    <th>전화</th>
+    <td><c:out value="${restaurant.res_tel}" default="-" /></td>
+  </tr>
+  <tr>
+    <th>가격대</th>
+    <td>
+      <c:choose>
+        <c:when test="${restaurant.res_price_level == 0}">무료~저렴</c:when>
+        <c:when test="${restaurant.res_price_level == 1}">저렴</c:when>
+        <c:when test="${restaurant.res_price_level == 2}">중간</c:when>
+        <c:when test="${restaurant.res_price_level == 3}">비쌈</c:when>
+        <c:when test="${restaurant.res_price_level == 4}">매우 비쌈</c:when>
+        <c:otherwise>정보 없음</c:otherwise>
+      </c:choose>
+    </td>
+  </tr>
+  <tr>
+    <th>영업상태</th>
+    <td>
+      ${restaurant.res_status}
+      (<c:choose>
+         <c:when test="${restaurant.res_open=='true'}">영업중</c:when>
+         <c:otherwise>휴업</c:otherwise>
+       </c:choose>)
+    </td>
+  </tr>
+  <tr>
+    <th>영업시간</th>
+    <td><pre style="margin:0;font-family:inherit;">${restaurant.res_open_hours}</pre></td>
+  </tr>
+</table>
+<!-- 버튼 그룹 -->
+<div class="button-group">
+  <c:if test="${not empty restaurant.res_website}">
+    <a href="${restaurant.res_website}" target="_blank" class="btn">
+      공식 웹사이트 바로가기
+    </a>
+  </c:if>
+  <a href="restaurants" class="btn">
+    목록으로
+  </a>
 </div>
+<!-- 지도 & 리뷰 영역 전체를 감싸는 container -->
+ <div class="detail-container" style="margin-top:40px;">
     <!-- 지도 -->
-    <div class="section">
-        <span class="label">위치 지도:</span><br>
-        <c:if test="${not empty restaurant.res_latitude && not empty restaurant.res_longitude}">
+<div class="section" style="text-align:center;">  <!-- 라벨을 block으로 위에 고정 -->
+  <span class="label">위치 지도</span>
+  <c:if test="${not empty restaurant.res_latitude && not empty restaurant.res_longitude}">
             <iframe
-                width="100%" height="320"
+                width=90% height="320"
                 style="border-radius:13px; border:1.5px solid #eee; margin-top:10px;"
                 frameborder="0" style="border:0"
                 src="https://maps.google.com/maps?q=${restaurant.res_latitude},${restaurant.res_longitude}&z=17&output=embed"
                 allowfullscreen>
             </iframe>
-        </c:if>
+            </c:if>
+            </div>
+       
     </div>
 
-    <div class="section">
-        <c:if test="${not empty restaurant.res_website}">
-            <a href="${restaurant.res_website}" target="_blank">공식 웹사이트</a> |
-        </c:if>
-        <a href="${restaurant.res_mapUrl}" target="_blank">구글지도에서 보기</a>
-    </div>
-</div>
 
 
-<!-- 리뷰작성 버튼 -->
-<div style="text-align:right; margin: 18px 0;">
-    <button id="reviewWriteBtn" style="padding:7px 20px; border-radius:7px; background:#222; color:#fff; border:none; font-size:16px; cursor:pointer;">
-        리뷰 작성
-    </button>
-</div>
+
+
 
 <!-- 숨겨진 리뷰작성 폼 -->
 <div id="reviewFormWrap" style="display:none;">
@@ -203,10 +390,17 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('reviewWriteBtn').style.display = 'inline-block';
     }
 </script>
+
 <!-- ★ 리뷰 리스트와 수정 폼 반복 -->
-<div style="max-width:600px;margin:40px auto;padding:18px 24px 12px 24px;border-left:6px solid #45aaf2;border-radius:12px;background:#fff;">
-    <h2 style="font-size:2em;margin-bottom:24px;">방문자 평가</h2>
-    <c:forEach var="rev" items="${reviewlist}">
+<div class="detail-container">
+<!-- 리뷰작성 버튼 -->
+<div style="text-align:right; margin: 18px 0;">
+    <button id="reviewWriteBtn" style="padding:7px 20px; border-radius:7px; background:#666; color:#fff; border:none; font-size:16px; cursor:pointer;">
+        리뷰 작성
+    </button>
+</div>
+  <h2 style="font-size:2em; margin-bottom:16px;">방문자 평가</h2>
+  <c:forEach var="rev" items="${reviewlist}">
         <div style="border-bottom:1px solid #eee;padding:16px 0 10px 0;margin-bottom:0;">
             <!-- 작성자 & 별점 -->
             <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -276,7 +470,8 @@ document.addEventListener('DOMContentLoaded', function() {
     <c:if test="${empty reviewlist}">
         <div style="text-align:center;color:#aaa;">등록된 리뷰가 없습니다.</div>
     </c:if>
-</div>
+  </div>
+ </div>  <!-- map & review detail-container 닫는 태그 -->
 
 <!-- 페이지네이션 -->
 <c:if test="${totalpage > 1}">
