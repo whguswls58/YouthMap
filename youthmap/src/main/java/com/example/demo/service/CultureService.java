@@ -74,6 +74,11 @@ public class CultureService {
      */
     @Transactional
     public void insertNewCultures() throws Exception {
+    	
+    	// 수동 업데이트 시작 로그
+        System.out.println("===== 수동 문화 업데이트 시작 =====");
+
+    	
         CultureModel latest = dao.getLatestData();
         String lastTitle     = latest.getCon_title();
         String lastStartDate = latest.getCon_start_date();
@@ -130,7 +135,7 @@ public class CultureService {
     /**
      * 매일 오후 4시 30분에 자동으로 문화 업데이트 실행
      */
-    @Scheduled(cron = "0 0 17 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 30 9 * * *", zone = "Asia/Seoul")
     public void scheduledCultureUpdate() {
         try {
             System.out.println("===== 문화 자동 업데이트 시작 =====");
