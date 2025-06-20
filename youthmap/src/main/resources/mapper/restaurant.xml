@@ -4,7 +4,7 @@
 
 <mapper namespace="com.example.demo.dao.RestaurantDao">
 
-	<insert id="saveRestaurant" parameterType="restaurant">
+	<!-- <insert id="saveRestaurant" parameterType="restaurant">
 		INSERT INTO restaurant
 		(
 		res_id, res_subject, res_tel, res_score,
@@ -26,12 +26,13 @@
 		#{res_website, jdbcType=VARCHAR },
 		#{res_gu}
 		)
-	</insert>
+	</insert> -->
+	
 	<!--메인 4개만 출력-->
 	<select id="best" resultType="restaurant">
     	SELECT * FROM 
     	(SELECT * FROM restaurant ORDER BY res_score DESC)
-   		WHERE ROWNUM &lt; 5
+   		WHERE ROWNUM &lt; 8
 	</select>
 	
 	<!-- 전체정보 -->
@@ -45,7 +46,7 @@
 
 	<!--상세 정보 -->
 	<select id="selectById" parameterType="String" resultType="restaurant">
-		SELECT * FROM restaurant WHERE res_id = #{res_id}
+		 SELECT * FROM restaurant WHERE LOWER(res_id) = LOWER(#{res_id})
 	</select>
 
 	<!-- 조건에 맞는 전체 건수 -->
@@ -77,6 +78,54 @@
 		WHERE ROWNUM &lt;= #{endRow})
 		WHERE rnum &gt;= #{startRow}
 	</select>
+	
+	<!-- INSERT: 신규 데이터 저장 -->
+	<insert id="saveres" parameterType="Restaurant">
+    INSERT INTO restaurant (
+        res_id, res_subject, res_tel, res_score, res_address,
+        res_latitude, res_longitude, res_user_ratings_total,
+        res_price_level, res_open, res_open_hours, res_file,
+        res_photo_url, res_map_url, res_content, res_status,
+        res_website, res_gu, res_photo_urls
+    ) VALUES (
+        LOWER(#{res_id}), #{res_subject},
+		#{res_tel, jdbcType=VARCHAR}, #{res_score, jdbcType=VARCHAR},
+		#{res_address, jdbcType=VARCHAR},#{res_latitude}, #{res_longitude},
+		#{res_user_ratings_total, jdbcType=VARCHAR},
+		#{res_price_level, jdbcType=VARCHAR},
+		#{res_open, jdbcType=VARCHAR}, #{res_open_hours, jdbcType=VARCHAR},
+		#{res_file, jdbcType=VARCHAR}, #{res_photo_url, jdbcType=VARCHAR},
+		#{res_mapUrl, jdbcType=VARCHAR}, #{res_content, jdbcType=VARCHAR},
+		#{res_status, jdbcType=VARCHAR},
+		#{res_website, jdbcType=VARCHAR },
+		#{res_gu}, #{res_photo_urls, jdbcType=VARCHAR}
+    )
+	</insert>
+	
+	<update id="updateres" parameterType="Restaurant">
+    UPDATE restaurant SET
+        res_subject = #{res_subject},
+        res_tel = #{res_tel, jdbcType=VARCHAR},
+        res_score = #{res_score, jdbcType=VARCHAR},
+        res_address = #{res_address, jdbcType=VARCHAR},
+        res_latitude = #{res_latitude},
+        res_longitude = #{res_longitude},
+        res_user_ratings_total = #{res_user_ratings_total, jdbcType=VARCHAR},
+        res_price_level = #{res_price_level, jdbcType=VARCHAR},
+        res_open = #{res_open, jdbcType=VARCHAR},
+        res_open_hours = #{res_open_hours, jdbcType=VARCHAR},
+        res_file = #{res_file, jdbcType=VARCHAR},
+        res_photo_url = #{res_photo_url, jdbcType=VARCHAR},
+        res_map_url = #{res_mapUrl, jdbcType=VARCHAR},
+        res_content = #{res_content, jdbcType=VARCHAR},
+        res_status = #{res_status, jdbcType=VARCHAR}, 
+        res_website = #{res_website, jdbcType=VARCHAR},
+        res_gu = #{res_gu},
+        res_photo_urls = #{res_photo_urls, jdbcType=VARCHAR}
+    WHERE res_id = #{res_id}
+	</update>
+
+	
 
 	<!--리뷰 작성 -->
 	<insert id="insertreview" parameterType="review1">
