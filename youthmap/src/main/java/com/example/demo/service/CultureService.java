@@ -1,16 +1,23 @@
 package com.example.demo.service;
 
 import java.io.BufferedReader;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dao.CultureDao;
 import com.example.demo.model.CultureModel;
@@ -18,56 +25,147 @@ import com.example.demo.model.CultureModel;
 
 @Service
 public class CultureService {
-	@Value("${culture.api.key}")
-	private String apiKey;								// 인증키
-	
-	@Autowired
-	private CultureDao dao;
-	
-	
-	public String getYouthCulture(int i) {
-        
-//		System.out.println("apiKey:"+ apiKey);
-		
-		String apiUrl = "http://openapi.seoul.go.kr:8088/" +
-		apiKey + "/json/culturalEventInfo/"+((i*1000)+1)+"/" + (i+1)*1000;				// api url
+    @Value("${culture.api.key}")
+    private String apiKey;
 
-//		System.out.println(apiUrl);
-		
-		//		String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/json/culturalEventInfo/1/1000";					// api url
-	//	String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/json/culturalEventInfo/1001/2000";					// api url
-//여기까지만	String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/json/culturalEventInfo/2001/3000";					// api url
-	
-// 아래부턴 db에 저장 x		
-		//	String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/json/culturalEventInfo/3001/4000";					// api url
-//		String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/json/culturalEventInfo/4001/5000";					// api url
-		//String apiUrl = "http://openapi.seoul.go.kr:8088/" + apiKey + "/json/culturalEventInfo/5001/6000";					// api url
-     //   String params = "?apiKeyNm=" + apiKey + "&pageNum=1&pageSize=10&rtnType=json";		// api 요청값
-        // 요청 pageNum, pageSize 어떻게 처리해서 모든 데이터를 받아올 것인지?
+    @Autowired
+    private CultureDao dao;
+
+    private static final Set<String> ALLOWED_TARGETS = Set.of(
+        "성인", "누구나", "전체관람가", "미취학아동 입장불가"
+    );
+    private static final Set<String> ALLOWED_CODES = Set.of(
+        "전시/미술", "축제-문화/예술", "축제-기타", "축제-자연/경관",
+        "콘서트", "연극", "뮤지컬/오페라", "국악", "독주회", "클래식", "무용"
+    );
+
+    /**
+     * API에서 지정 페이지의 JSON 문자열을 받아 반환
+     */
+    public String getYouthCulture(int i) {
         try {
-            URL url = new URL(apiUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            String apiUrl = String.format(
+                "http://openapi.seoul.go.kr:8088/%s/json/culturalEventInfo/%d/%d",
+                apiKey, (i * 1000) + 1, (i + 1) * 1000
+            );
+            HttpURLConnection conn = (HttpURLConnection)
+                new URL(apiUrl).openConnection();
             conn.setRequestMethod("GET");
 
             BufferedReader reader = new BufferedReader(
-                new InputStreamReader(conn.getInputStream(), "UTF-8"));
-
-            StringBuilder response = new StringBuilder();
+                new InputStreamReader(conn.getInputStream(), "UTF-8")
+            );
+            StringBuilder sb = new StringBuilder();
             String line;
-            while((line = reader.readLine()) != null) {
-                response.append(line);
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
             }
             reader.close();
-
-            return response.toString();
-
+            return sb.toString();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
 
+    /**
+     * DB에 저장된 최신 데이터 이후의 신규 페이지만 API에서 가져와
+     * 필터링 후 저장 처리
+     */
+    @Transactional
+    public void insertNewCultures() throws Exception {
+        CultureModel latest = dao.getLatestData();
+        String lastTitle     = latest.getCon_title();
+        String lastStartDate = latest.getCon_start_date();
 
+        JSONParser parser = new JSONParser();
+        for (int i = 0; i < 5; i++) {
+            String jsonData = getYouthCulture(i);
+            if (jsonData == null || jsonData.isBlank()) {
+                // API 호출 실패 또는 빈 응답 시 다음 페이지로
+                continue;
+            }
+            JSONObject root;
+            try {
+                root = (JSONObject) parser.parse(jsonData);
+            } catch (Exception e) {
+                e.printStackTrace();
+                continue;
+            }
+            JSONObject info = (JSONObject) root.get("culturalEventInfo");
+            if (info == null) {
+                continue;
+            }
+            JSONArray rows = (JSONArray) info.get("row");
+            if (rows == null) {
+                continue;
+            }
+
+            for (Object o : rows) {
+                JSONObject c = (JSONObject) o;
+                String title = (String) c.get("TITLE");
+                String dr    = (String) c.get("DATE");
+                String startDate = (dr != null && dr.contains("~"))
+                    ? dr.split("~")[0].trim()
+                    : null;
+
+                if (lastTitle.equals(title) && lastStartDate.equals(startDate)) {
+                    return;
+                }
+
+                String codeName = (String) c.get("CODENAME");
+                String useTrgt  = (String) c.get("USE_TRGT");
+                if (codeName == null
+                 || !ALLOWED_TARGETS.contains(useTrgt)
+                 || !ALLOWED_CODES.contains(codeName)) {
+                    continue;
+                }
+
+                CultureModel m = toModel(c);
+                dao.culinsert(m);
+            }
+        }
+    }
+
+    /**
+     * 매일 오후 4시 30분에 자동으로 문화 업데이트 실행
+     */
+    @Scheduled(cron = "0 0 17 * * *", zone = "Asia/Seoul")
+    public void scheduledCultureUpdate() {
+        try {
+            System.out.println("===== 문화 자동 업데이트 시작 =====");
+            System.out.println("실행 시각: " + new Date());
+            insertNewCultures();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /** JSON 객체를 CultureModel로 매핑하는 헬퍼 */
+    private CultureModel toModel(JSONObject c) {
+        CultureModel m = new CultureModel();
+        m.setCategory_name((String) c.get("CODENAME"));
+        m.setCon_title((String) c.get("TITLE"));
+        m.setCon_location((String) c.get("PLACE"));
+        m.setCon_lot((String) c.get("LOT"));
+        m.setCon_lat((String) c.get("LAT"));
+        m.setCon_age((String) c.get("USE_TRGT"));
+        m.setCon_link((String) c.get("ORG_LINK"));
+        m.setCon_img((String) c.get("MAIN_IMG"));
+
+        String fee = (String) c.get("USE_FEE");
+        m.setCon_cost((fee == null || fee.isEmpty()) ? "무료" : fee);
+        m.setCon_time("상세 시간은 해당 홈페이지에서 확인하세요.");
+
+        String dateRange = (String) c.get("DATE");
+        if (dateRange != null && dateRange.contains("~")) {
+            String[] parts = dateRange.split("~");
+            m.setCon_start_date(parts[0].trim());
+            m.setCon_end_date(parts[1].trim());
+        }
+        return m;
+    }
+	    
 	public int culinsert(CultureModel culMd) {
 		return dao.culinsert(culMd);
 	}

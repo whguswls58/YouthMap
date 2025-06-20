@@ -46,7 +46,7 @@
       SELECT *
         FROM culture
        WHERE category_name = '전시/미술'
-         AND con_age in ('누구나','성인')
+         AND con_age in ('누구나','성인','전체관람가','미취학아동 입장불가')
          AND (
            (TO_DATE(con_start_date,'yyyy-MM-dd') &lt;= SYSDATE
             AND TO_DATE(con_end_date,'yyyy-MM-dd') >= SYSDATE)
@@ -65,8 +65,8 @@
     FROM (
       SELECT *
         FROM culture
-       WHERE category_name IN ('콘서트','연극','뮤지컬/오페라')
-         AND con_age in ('누구나','성인')
+       WHERE category_name IN ('콘서트','연극','뮤지컬/오페라','국악', '독주회', '클래식','무용')
+         AND con_age in ('누구나','성인','전체관람가','미취학아동 입장불가')
          AND (
            (TO_DATE(con_start_date,'yyyy-MM-dd') &lt;= SYSDATE
             AND TO_DATE(con_end_date,'yyyy-MM-dd') >= SYSDATE)
@@ -88,7 +88,7 @@
       SELECT *
         FROM culture
        WHERE category_name IN ('축제-기타','축제-시민화합','축제-자연/경관','축제-문화/예술')
-         AND con_age in ('누구나','성인')
+         AND con_age in ('누구나','성인','전체관람가','미취학아동 입장불가')
          AND (
            (TO_DATE(con_start_date,'yyyy-MM-dd') &lt;= SYSDATE
             AND TO_DATE(con_end_date,'yyyy-MM-dd') >= SYSDATE)
@@ -107,10 +107,10 @@
   SELECT COUNT(*) FROM culture
   <where>
     category_name IN (
-      '전시/미술','콘서트','연극','뮤지컬/오페라',
+      '전시/미술','콘서트','연극','뮤지컬/오페라','국악', '독주회', '클래식','무용',
       '축제-기타','축제-시민화합','축제-자연/경관','축제-문화/예술'
     )
-    AND con_age = '누구나'
+    AND con_age in ('누구나','성인','전체관람가','미취학아동 입장불가')
     AND con_end_date >= TRUNC(SYSDATE)
 
     <!-- 키워드가 있을 때만 -->
@@ -142,10 +142,10 @@
       FROM culture
       <where>
         category_name IN (
-          '전시/미술','콘서트','연극','뮤지컬/오페라',
+          '전시/미술','콘서트','연극','뮤지컬/오페라','국악', '독주회', '클래식','무용',
           '축제-기타','축제-시민화합','축제-자연/경관','축제-문화/예술'
         )
-        AND con_age = '누구나'
+        AND con_age in ('누구나','성인','전체관람가','미취학아동 입장불가')
         AND con_end_date >= TRUNC(SYSDATE)
 
         <!-- 키워드 검색 -->
@@ -176,7 +176,7 @@
     SELECT COUNT(*) FROM culture
     <where>
       category_name = '전시/미술'
-      AND con_age = '누구나'
+      AND con_age in ('누구나','성인','전체관람가','미취학아동 입장불가')
       AND con_end_date &gt;= TRUNC(SYSDATE)
 
       <!-- 검색어가 있을 때만 -->
@@ -214,7 +214,7 @@
         FROM culture
         <where>
           category_name = '전시/미술'
-          AND con_age = '누구나'
+          AND con_age in ('누구나','성인','전체관람가','미취학아동 입장불가')
           AND con_end_date &gt;= TRUNC(SYSDATE)
 
           <if test="keyword != null and keyword.trim() != ''">
@@ -265,8 +265,8 @@
   <select id="count2" parameterType="culture" resultType="int">
     SELECT COUNT(*) FROM culture
     <where>
-      category_name IN ('콘서트','연극','뮤지컬/오페라')
-      AND con_age = '누구나'
+      category_name IN ('콘서트','연극','뮤지컬/오페라','국악', '독주회', '클래식','무용')
+      AND con_age in ('누구나','성인','전체관람가','미취학아동 입장불가')
       AND con_end_date &gt;= TRUNC(SYSDATE)
 
       <if test="keyword != null and keyword.trim() != ''">
@@ -302,8 +302,8 @@
           con_location
         FROM culture
         <where>
-          category_name IN ('콘서트','연극','뮤지컬/오페라')
-          AND con_age = '누구나'
+          category_name IN ('콘서트','연극','뮤지컬/오페라','국악', '독주회', '클래식','무용')
+          AND con_age in ('누구나','성인','전체관람가','미취학아동 입장불가')
           AND con_end_date &gt;= TRUNC(SYSDATE)
 
           <if test="keyword != null and keyword.trim() != ''">
@@ -357,7 +357,7 @@
       category_name IN (
         '축제-기타','축제-시민화합','축제-자연/경관','축제-문화/예술'
       )
-      AND con_age = '누구나'
+      AND con_age in ('누구나','성인','전체관람가','미취학아동 입장불가')
       AND con_end_date &gt;= TRUNC(SYSDATE)
 
       <if test="keyword != null and keyword.trim() != ''">
@@ -396,7 +396,7 @@
           category_name IN (
             '축제-기타','축제-시민화합','축제-자연/경관','축제-문화/예술'
           )
-          AND con_age = '누구나'
+          AND con_age in ('누구나','성인','전체관람가','미취학아동 입장불가')
           AND con_end_date &gt;= TRUNC(SYSDATE)
 
           <if test="keyword != null and keyword.trim() != ''">
