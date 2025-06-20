@@ -130,7 +130,7 @@ public class RestaurantController {
             @RequestParam(value = "searchType", required = false, defaultValue = "res_subject") String searchType,
             @RequestParam(value = "keyword", required = false) String keyword,
             Model model) {
-
+    	String apiKey = service.getGOOGLE_API_KEY();
         String[] seoulGu = {
                 "강남구", "강동구", "강북구", "강서구", "관악구", "광진구",
                 "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구",
@@ -154,7 +154,8 @@ public class RestaurantController {
         if ("res_gu".equals(searchType) && (resGu != null && !resGu.isEmpty())) {
             keyword = "";
         }
-
+        
+        model.addAttribute("apiKey", apiKey);
         model.addAttribute("seoulGuList", Arrays.asList(seoulGu));
         model.addAttribute("res_gu", resGu);
         model.addAttribute("keyword", keyword);

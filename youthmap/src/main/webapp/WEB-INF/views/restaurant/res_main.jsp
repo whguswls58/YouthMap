@@ -138,7 +138,7 @@ body {
 .search-combined select:focus {
   outline: none;
   z-index: 9999;
-}
+} 
 .search-combined input[type="text"] {
   border: none;
   padding: 12px 16px;
@@ -455,17 +455,17 @@ document.addEventListener('DOMContentLoaded', function() {
         select.addEventListener("change", onTypeChange);
         onTypeChange(); // 로드 시 한 번 실행
       });
-    });
-  }
+});
+}
 });
 
+let map;
 var mapRestaurants = [
   <c:forEach var="r" items="${mapRestaurants}" varStatus="status">
     {lat: ${r.res_latitude}, lng: ${r.res_longitude}, name: '${r.res_subject}', id: '${r.res_id}', photo: '${r.res_photo_url}'}
     <c:if test="${!status.last}">,</c:if>
   </c:forEach>
 ];
-let map;
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 37.5665, lng: 126.9780},
@@ -511,7 +511,6 @@ function initMap() {
           marker.addListener('mouseout', function() { infowindow.close(); });
           marker.addListener('click', function() {
             window.location.href = "restaurantDetail?res_id=" + r.id;
-          });
         }
       });
     });
@@ -543,11 +542,11 @@ document.addEventListener("DOMContentLoaded", function(){
       guList.classList.remove("active");
     }
   }
-  select.addEventListener("change", toggleGuList);
+  select.addEventListener("change", toggleGuList); 
   toggleGuList();  // 초기 로딩 시 상태 반영
 });
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=${GOOGLE_API_KEY}&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap" async defer></script>
 <!-- Swiper JS 추가 (body 끝 직전에) -->
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script>
