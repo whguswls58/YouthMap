@@ -10,23 +10,23 @@ import com.example.demo.model.Restaurant;
 
 @Mapper
 public interface RestaurantDao {
+	
 	void saveRestaurant(Restaurant restaurant);
 	
-    Restaurant selectById(String res_id);
-    
-    int count(Restaurant restaurant);
-    List<Restaurant> list(Restaurant restaurant);
 
-	Restaurant findById(String resId);
+// CRUD
+int saveres(Restaurant r);            // 저장 (INSERT)
+int updateres(Restaurant r);          // 수정 (UPDATE)
+Restaurant selectById(String res_id); // 단건 조회(중복 체크용)
 
-	List<Restaurant> best();
-
-	List<Restaurant> findNearby(Map<String, Object> param);
-
-	List<Restaurant> maplist();
-
-	void updatephotourls(@Param("res_id") String res_id, @Param("res_photo_urls")String res_photo_urls);
-
-    
-
+// 검색/리스트/기타
+int count(Restaurant restaurant);     // 전체/조건 건수
+List<Restaurant> list(Restaurant restaurant); // 조건+페이징 리스트
+List<Restaurant> best();              // BEST 4개
+List<Restaurant> findNearby(Map<String, Object> param); // 반경 내 검색
+List<Restaurant> maplist();           // 전체 리스트(지도용)
+void updatephotourls(
+    @Param("res_id") String res_id, 
+    @Param("res_photo_urls") String res_photo_urls
+);
 }

@@ -156,6 +156,13 @@ a:hover {
   margin: 0 auto;
 }
 
+.policy-search-count{
+  display: left;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
 .policy-card {
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -212,11 +219,103 @@ a:hover {
   margin: 3px 3px 0 0;
 }
 
+body {
+  font-family: 'Playfair Display', serif;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  color: #333;
+}
+/* 상단 베이지 바 */
+.topbar {
+  background: #f5f0e6;
+  padding: 10px 40px;
+}
+.topbar .menu {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  font-size: 14px;
+}
+.topbar .menu a {
+  color: #444;
+  text-decoration: none;
+}
+/* 네비게이션 */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid #eee;
+}
+.navbar-left,
+.navbar-right {
+  display: flex;
+  gap: 18px;
+}
+.navbar-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.nav-link {
+  font-size: 15px;
+  color: #222;
+  text-decoration: none;
+}
+.nav-link:hover,
+.nav-link.active {
+  border-bottom: 2px solid #222;
+  padding-bottom: 2px;
+}
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #111;
+  font-family: 'Playfair Display', serif;
+}
 </style>
 
 </head>
 <body>
-	<input type=button value="첫 화면" onclick="location.href='/'">
+<!-- 상단 베이지 바 -->
+<div class="topbar">
+  <div class="menu">
+    <a href="#">CART</a>
+    <a href="#">MY PAGE</a>
+    <a href="#">JOIN</a>
+  </div>
+</div>
+
+	<!-- ✅ 네비게이션 구조 -->
+<div class="navbar">
+  <div class="navbar-left">
+    <a href="#" class="nav-link">About</a>
+    <a href="#" class="nav-link">Facility</a>
+    <a href="#" class="nav-link active">Food</a>
+    <a href="#" class="nav-link">Community</a>
+    <a href="#" class="nav-link">Contact</a>
+  </div>
+  <div class="navbar-center">
+  	<span class="logo">YOUTHMAP</span>
+  </div>
+  <div class="navbar-right">
+    <a href="#" class="nav-link">CART</a>
+    <a href="#" class="nav-link">MY PAGE</a>
+    <a href="#" class="nav-link">JOIN</a>
+  </div>
+</div>
+
+
+<!-- 	<input type=button value="첫 화면" onclick="location.href='/'"> -->
 	<br>
 
 	<div class="search-container">
@@ -259,6 +358,9 @@ a:hover {
 					</div>
 				</div>
 			</c:forEach>
+			<br>
+			<input type="submit" value="검색">		
+			<input type="reset" value="초기화">		
 		</form>
 	</div>
 
@@ -306,7 +408,22 @@ a:hover {
 	      cb.closest('label').classList.toggle('active', cb.checked);
 	    });
 	  });
-	});
+	  const resetButton = document.querySelector('input[type="reset"]');
+	  resetButton.addEventListener('click', () => {
+	    // 전체 체크박스 해제
+	    document.querySelectorAll('.check-all').forEach(master => {
+	      master.checked = false;
+	    });
+
+	    // 하위 체크박스 해제 및 스타일 제거
+	    document.querySelectorAll('.subcategory-group input[type="checkbox"]').forEach(cb => {
+	      cb.checked = false;
+	      cb.closest('label').classList.remove('active');
+	    });
+	  });
+	  
+	  
+});
 	
 </script>
 
