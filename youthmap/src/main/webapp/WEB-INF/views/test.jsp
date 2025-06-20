@@ -4,10 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>테스트용 페이지</title>
 </head>
 <body>
-서버 테스트용
-깃 테스트중
+시험용 페이지123
 </body>
 </html>
