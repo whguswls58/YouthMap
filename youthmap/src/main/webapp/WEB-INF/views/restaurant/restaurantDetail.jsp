@@ -326,10 +326,6 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 
 
-
-
-
-
 <!-- 숨겨진 리뷰작성 폼 -->
 <div id="reviewFormWrap" style="display:none;">
     <div class="review-form-container" style="max-width: 400px; margin: 20px auto;">
@@ -405,11 +401,15 @@ document.addEventListener('DOMContentLoaded', function() {
             <!-- 작성자 & 별점 -->
             <div style="display:flex;justify-content:space-between;align-items:center;">
                 <span style="font-weight:bold;font-size:17px;"><c:out value="${rev.review_writer}" /></span>
+                <span style="color:#555; font-size:14px;">
+            <c:out value="${rev.review_register1}" />
+          </span>
                 <span style="color:#ffa500;letter-spacing:1px;">
                     <c:forEach var="i" begin="1" end="${rev.review_score1}">★</c:forEach>
                     <c:forEach var="i" begin="${rev.review_score1+1}" end="5">☆</c:forEach>
                 </span>
             </div>
+            
             <!-- 리뷰 내용 -->
             <div style="margin:10px 0 6px 0;line-height:1.7;font-size:16px;color:#333;">
                 <c:out value="${rev.review_content1}" />
