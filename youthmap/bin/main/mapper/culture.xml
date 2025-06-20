@@ -444,8 +444,19 @@
   </select>
 
 
+<!-- 가장 최신글 검색 -->
+<select id="getLatestData" resultType="culture">
+	select * 
+	from culture 
+	where con_id = (
+		select  MIN(con_id)
+		from culture 
+		where TRUNC(con_regdate) = (
+		    select MAX(TRUNC(con_regdate)) 
+		    from culture
+	))
 
-
+</select>
 
 
 </mapper>

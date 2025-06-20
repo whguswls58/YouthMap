@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>문화생활 메인</title>
@@ -71,72 +71,43 @@
     }
 
     /* ───────────────────────────────────────────────────────────────
-       슬라이더 섹션: 위/아래 간격만, 배경 없음
+       슬라이더 섹션
     ─────────────────────────────────────────────────────────────── */
-    .slider-section {
-      margin: 80px 0;
-    }
-
-    /* ───────────────────────────────────────────────────────────────
-       슬라이더 + 헤더를 감싸는 컨테이너에만 배경과 패딩 적용
-    ─────────────────────────────────────────────────────────────── */
+    .slider-section { margin: 80px 0; }
     .slider-inner {
       max-width: 1200px;
       margin: 0 auto;
-      background-color: #f5f0e6;  
-      padding: 40px;            /* 좌우/상하 같은 여백 */
+      background-color: #f5f0e6;
+      padding: 40px;
       box-sizing: border-box;
     }
-
-    /* 슬라이더 헤더(타이틀 + +more 버튼) */
     .slider-header {
-      display: flex;
-      justify-content: space-between;
+      display: flex; justify-content: space-between;
       align-items: center;
-      margin: 0;
-      padding: 0 20px;          /* 헤더 내부 좌우 여백 추가 */
+      margin: 0; padding: 0 20px;
     }
     .slider-header h3 {
-      font-weight: bold;
-      font-size: 1.1em;
-      margin: 0;
+      font-weight: bold; font-size: 1.1em; margin: 0;
     }
     .slider-header button {
-      background: none;
-      border: none;
-      font-size: 1rem;
-      cursor: pointer;
-      color: #333;
+      background: none; border: none;
+      font-size: 1rem; cursor: pointer; color: #333;
     }
-
-    /* 헤더 바로 아래 구분선 */
     .slider-divider {
-      border: 0;
-      border-bottom: 1px solid #ccc;
-      margin: 8px 20px 16px;    /* 위8, 좌우20, 아래16 */
+      border: 0; border-bottom: 1px solid #ccc;
+      margin: 8px 20px 16px;
     }
 
     /* ───────────────────────────────────────────────────────────────
-       Slick 슬라이더 기본 설정
+       Polaroid 카드 + 뱃지
     ─────────────────────────────────────────────────────────────── */
-    .card-slider {
-      width: 100%;
-      margin: 0 auto;
-    }
-    .card-slider .slick-track {
-      display: flex !important;
-    }
-    .card-slider .slick-slide {
-      display: block !important;
-    }
-    .slick-prev, .slick-next {
-      top: 40%;
-    }
+    .card-slider { width: 100%; margin: 0 auto; }
+    .card-slider .slick-track { display: flex !important; }
+    .card-slider .slick-slide { display: block !important; }
+    .slick-prev, .slick-next { top: 40%; }
 
-    /* ───────────────────────────────────────────────────────────────
-       Polaroid 카드 스타일
-    ─────────────────────────────────────────────────────────────── */
     .card-slider .polaroid-item {
+      position: relative;
       flex: 0 0 auto;
       display: flex;
       flex-direction: column;
@@ -145,42 +116,51 @@
       margin: 20px 12px;
       box-sizing: border-box;
       height: 380px;
+      text-decoration: none;
+      color: inherit;
     }
+    /* 뱃지 공통 */
+    /* commonList.css 또는 <style> 내 badge 스타일 수정 */
+.card-slider .badge {
+  position: absolute;
+  top: 15px;
+  right: 28px;      /* 기존 8px → 20px 로 변경 */
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+    /* 카테고리별 색상 */
+    .card-slider .badge.exhibition  { background: #008060; }
+    .card-slider .badge.performance { background: #a83279; }
+    .card-slider .badge.event       { background: #0066cc; }
+
     .card-slider .polaroid {
-      width: 90%;
-      height: 300px;
-      background: #fff;
-      padding: 12px 12px 24px;
-      border: 1px solid #eee;
+      width: 90%; height: 300px; background: #fff;
+      padding: 12px 12px 24px; border: 1px solid #eee;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border-radius: 4px; display: flex;
+      align-items: center; justify-content: center;
     }
     .card-slider .polaroid-img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: cover;
-      border-radius: 2px;
+      max-width: 100%; max-height: 100%;
+      object-fit: cover; border-radius: 2px;
     }
     .card-slider .polaroid-caption {
-      margin-top: auto;
-      display: inline-block;
-      width: 100%;
-      max-width: 35ch;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-align: center;
-      font-size: 1rem;
-      color: #333;
+      margin-top: auto; width: 100%; max-width: 35ch;
+      white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis; text-align: center;
+      font-size: 1rem; color: #333;
     }
     .card-slider .polaroid-date {
-      margin-top: 4px;
-      font-size: 0.85rem;
-      color: #777;
-      text-align: center;
+      margin-top: 4px; font-size: 0.85rem;
+      color: #777; text-align: center;
+    }
+    .card-slider .polaroid-item:hover .polaroid-caption {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -189,9 +169,7 @@
   <!-- 상단 베이지 바 -->
   <div class="topbar">
     <div class="menu">
-      <a href="#">CART</a>
-      <a href="#">MY PAGE</a>
-      <a href="#">JOIN</a>
+      <a href="#">CART</a><a href="#">MY PAGE</a><a href="#">JOIN</a>
     </div>
   </div>
 
@@ -204,9 +182,7 @@
       <a href="#" class="nav-link">Community</a>
       <a href="#" class="nav-link">Contact</a>
     </div>
-    <div class="navbar-center">
-      <span class="logo">YOUTHMAP</span>
-    </div>
+    <div class="navbar-center"><span class="logo">YOUTHMAP</span></div>
     <div class="navbar-right">
       <a href="#" class="nav-link">CART</a>
       <a href="#" class="nav-link">MY PAGE</a>
@@ -236,10 +212,12 @@
       <hr class="slider-divider"/>
       <div class="card-slider exhibition-slider">
         <c:forEach var="cul" items="${exhibition}">
-          <div class="polaroid-item">
+          <a class="polaroid-item"
+             href="${pageContext.request.contextPath}/exhibitioncont?con_id=${cul.con_id}">
+            <div class="badge exhibition">${cul.category_name}</div>
             <div class="polaroid">
-              <img class="polaroid-img"
-                   src="${cul.con_img}" alt="${cul.con_title}" />
+              <img class="polaroid-img" src="${cul.con_img}"
+                   alt="${cul.con_title}" />
             </div>
             <div class="polaroid-caption" title="${cul.con_title}">
               ${cul.con_title}
@@ -247,7 +225,7 @@
             <div class="polaroid-date">
               ${cul.con_start_date} ~ ${cul.con_end_date}
             </div>
-          </div>
+          </a>
         </c:forEach>
       </div>
     </div>
@@ -263,10 +241,11 @@
       <hr class="slider-divider"/>
       <div class="card-slider performance-slider">
         <c:forEach var="cul" items="${performance}">
-          <div class="polaroid-item">
+          <a class="polaroid-item"
+             href="${pageContext.request.contextPath}/performancecont?con_id=${cul.con_id}">
+            <div class="badge performance">${cul.category_name}</div>
             <div class="polaroid">
-              <img class="polaroid-img"
-                   src="${cul.con_img}"
+              <img class="polaroid-img" src="${cul.con_img}"
                    alt="${cul.con_title}" />
             </div>
             <div class="polaroid-caption" title="${cul.con_title}">
@@ -275,7 +254,7 @@
             <div class="polaroid-date">
               ${cul.con_start_date} ~ ${cul.con_end_date}
             </div>
-          </div>
+          </a>
         </c:forEach>
       </div>
     </div>
@@ -291,10 +270,11 @@
       <hr class="slider-divider"/>
       <div class="card-slider event-slider">
         <c:forEach var="cul" items="${event}">
-          <div class="polaroid-item">
+          <a class="polaroid-item"
+             href="${pageContext.request.contextPath}/eventcont?con_id=${cul.con_id}">
+            <div class="badge event">${cul.category_name}</div>
             <div class="polaroid">
-              <img class="polaroid-img"
-                   src="${cul.con_img}"
+              <img class="polaroid-img" src="${cul.con_img}"
                    alt="${cul.con_title}" />
             </div>
             <div class="polaroid-caption" title="${cul.con_title}">
@@ -303,7 +283,7 @@
             <div class="polaroid-date">
               ${cul.con_start_date} ~ ${cul.con_end_date}
             </div>
-          </div>
+          </a>
         </c:forEach>
       </div>
     </div>

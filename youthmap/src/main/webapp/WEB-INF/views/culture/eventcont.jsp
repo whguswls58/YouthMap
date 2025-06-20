@@ -7,7 +7,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>${eventcont.con_title} 상세</title>
+  <title>YouthMap</title>
 
   <!-- ① 카카오 JS SDK: YOUR_APP_KEY 부분에 자바스크립트 키를 넣으세요 -->
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= KakaoKeyUtil.getApiKey() %>&libraries=services"></script>
@@ -34,13 +34,17 @@
     #map {
       width:100%; height:300px;
       margin:24px auto;
-      border:2px solid #3c9c35; border-radius:16px;
+      border:10px solid #f5f0e6; border-radius:16px;
     }
     .back-link {
-      display:inline-block; margin:30px auto;
-      padding:8px 16px; background:#046d52;
-      color:#fff; text-decoration:none; border-radius:4px;
-    }
+  display: inline-block;
+  margin: 30px auto;
+  padding: 8px 16px;
+  background: #e0e0e0;    /* 연한 회색 */
+  color:   #555;          /* 약간 진한 회색 텍스트 */
+  text-decoration: none;
+  border-radius: 4px;
+}
     .back-container { text-align:center }
   </style>
 </head>
@@ -128,6 +132,14 @@
         </tr>
       </table>
     </div>
+
+<!-- 뒤로가기 -->
+       <div class="back-container">
+      <a class="back-link" href="${ctx }eventlist?page=${page}">
+        ← 목록으로 돌아가기
+      </a>
+    </div>
+
 
     <!-- ② 지도 표시 영역 -->
     <div id="map" style="width:100%;height:400px;"></div>
@@ -354,12 +366,7 @@
 </script>			<!-- 리뷰댓글 끝 -->
 
 
-    <!-- 뒤로가기 -->
-       <div class="back-container">
-      <a class="back-link" href="${ctx }eventlist?page=${page}">
-        ← 목록으로 돌아가기
-      </a>
-    </div>
+    
    </div>
 </body>
 </html>

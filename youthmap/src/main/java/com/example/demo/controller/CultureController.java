@@ -46,9 +46,14 @@ public class CultureController {
 
 		// 루프 밖에서 한 번만 선언
 		Set<String> allowedTargets = Set.of("성인", "누구나");
-		Set<String> allowedCodes = Set.of("전시/미술", "축제-문화/예술", "축제-기타", "축제-자연/경관", "콘서트", "연극", "뮤지컬/오페라");
+		Set<String> allowedCodes = Set.of("전시/미술", "축제-문화/예술", "축제-기타", "축제-자연/경관","콘서트", "연극", "뮤지컬/오페라");
 
-		for (int i = 3; i < 5; i++) {
+		// DB에 저장된 가장 최신 데이터
+		CultureModel cm = service.getLatestData();
+		System.out.println("최신 데이터 : " + cm.getCon_title());
+		System.out.println("최신 데이터 : " + cm.getCon_start_date());
+		
+		for (int i = 0; i < 5; i++) {
 			String jsonData = service.getYouthCulture(i); // service 클래스에 정책 정보 요청
 			
 //			System.out.println(jsonData);
@@ -59,13 +64,30 @@ public class CultureController {
 
 			// JSON에서 문화 데이터 추출
 			JSONArray culList = (JSONArray) dataObject.get("row");
-			System.out.println(culList);
+//			System.out.println(culList);
 			for (Object obj : culList) {
 				JSONObject culture = (JSONObject) obj;
 
 				// 1) 값 추출
 				String codeName = (String) culture.get("CODENAME");
 				String useTrgt = (String) culture.get("USE_TRGT");
+				
+				String title = (String) culture.get("TITLE");
+				String startDate = null;
+				String dr = (String) culture.get("DATE");
+				if (dr != null && dr.contains("~")) {
+					String[] parts = dr.split("~");
+					startDate = parts[0].trim();
+				}
+				System.out.println("불러온 title : " + title);
+				System.out.println("불러온 시작일 : " + startDate);
+				
+				// 중복 검사
+				if(cm.getCon_title().equals(title) && cm.getCon_start_date().equals(startDate)) {
+					System.out.println(title + "이후의 데이터는 중복데이터입니다.");
+					return "dpdp";
+				}
+				
 
 				// 2) 필터링: codename이 없거나(=빈 or null) 허용 대상·허용 코드아님 → 스킵
 				if (codeName == null || codeName.isEmpty() || !allowedTargets.contains(useTrgt)
@@ -96,8 +118,6 @@ public class CultureController {
 					culMd.setCon_end_date(parts[1].trim());
 				}
 				
-			
-				
 				// 4) 저장 호출
 				int result = service.culinsert(culMd);
 				if (result != 1) {
@@ -117,6 +137,8 @@ public class CultureController {
 	@GetMapping("/culturemain")
 	public String mainPage(CultureModel culture, Model model) {
 
+		
+		
 		List<CultureModel> exhibition = service.getexhibition(culture);
 //		System.out.println("exhibition :" + exhibition);
 

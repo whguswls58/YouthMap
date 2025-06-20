@@ -197,7 +197,7 @@
   </div>
 </div>
 
-<%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
+  <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
 
   <div align="center" style="margin:20px 0;">
 	<button onclick="location.href='allList'" style=" width:100px; height:26px; line-height:26px; text-align:center; 
