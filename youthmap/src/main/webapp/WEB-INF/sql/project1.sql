@@ -161,3 +161,15 @@ CREATE SEQUENCE review2_seq
   INCREMENT BY 1
   NOCACHE
   NOCYCLE;
+  
+  
+  -- comments 테이블에 mem_id 컬럼 추가
+ALTER TABLE comments ADD mem_id VARCHAR2(50);
+
+-- 기존 데이터가 있다면 mem_no를 통해 member 테이블에서 mem_id를 가져와서 업데이트
+UPDATE comments c 
+SET c.mem_id = (SELECT m.mem_id FROM member m WHERE m.mem_no = c.mem_no)
+WHERE c.mem_id IS NULL;
+
+-- mem_id 컬럼을 NOT NULL로 변경 (데이터 업데이트 후)
+ALTER TABLE comments MODIFY mem_id VARCHAR2(50) NOT NULL; 

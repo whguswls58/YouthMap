@@ -4,29 +4,44 @@ document.addEventListener("DOMContentLoaded", function () {
     const commentInput = document.getElementById("commentInput");
     const commentForm = document.getElementById("commentForm");
 
+    // ✅ 로그인 상태 확인 함수
+    function isLoggedIn() {
+        return loginUserId && loginUserId !== 'null' && loginUserId !== '';
+    }
+
     // ✅ 1. 댓글 목록 불러오기
     function loadComments() {
         fetch(`/api/comments/${boardNo}`)
             .then(res => res.json())
             .then(data => {
                 commentList.innerHTML = ""; // 기존 댓글 제거
+                
+                if (data.length === 0) {
+                    commentList.innerHTML = "<p class='error-message'>아직 댓글이 없습니다.</p>";
+                    return;
+                }
+                
                 data.forEach(c => {
                     const item = document.createElement("div");
+                    item.className = "comment-item";
 
                     // 본인 댓글이면 삭제 버튼 생성
                     let deleteBtn = "";
-					if (loginUserId && (loginUserId === c.memId || loginUserRole === 'ADMIN')) {
-					    deleteBtn = `<button onclick="deleteComment(${c.commNo})">삭제</button>`;
+					if (isLoggedIn() && (loginUserId === c.memId || loginUserRole === 'ADMIN')) {
+					    deleteBtn = `<button class="comment-delete-btn" onclick="deleteComment(${c.commNo})">삭제</button>`;
 					}
 
                     item.innerHTML = `
-                        <b>${c.memId}</b> (${formatDate(c.commDate)}):<br/>
-                        ${c.commContent}<br/>
+                        <div class="comment-header">${c.memId} (${formatDate(c.commDate)})</div>
+                        <div class="comment-content">${c.commContent}</div>
                         ${deleteBtn}
-                        <hr/>
                     `;
                     commentList.appendChild(item);
                 });
+            })
+            .catch(error => {
+                console.error("댓글 목록 로드 실패:", error);
+                commentList.innerHTML = "<p class='error-message'>댓글을 불러오는 중 오류가 발생했습니다.</p>";
             });
     }
 
@@ -38,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	    const content = commentInput.value.trim();
 
-	    if (!loginUserId) {
+	    if (!isLoggedIn()) {
 	        alert("로그인 후 댓글 작성이 가능합니다.");
 	        return;
 	    }
@@ -47,6 +62,12 @@ document.addEventListener("DOMContentLoaded", function () {
 	        alert("댓글을 입력하세요!");
 	        return;
 	    }
+
+	    // 로딩 상태 표시
+	    const submitBtn = commentForm.querySelector('button[type="submit"]');
+	    const originalText = submitBtn.textContent;
+	    submitBtn.textContent = "등록 중...";
+	    submitBtn.disabled = true;
 
 	    fetch("/api/comments", {
 	        method: "POST",
@@ -64,6 +85,15 @@ document.addEventListener("DOMContentLoaded", function () {
 	          } else {
 	              alert("댓글 등록 실패");
 	          }
+	      })
+	      .catch(error => {
+	          console.error("댓글 등록 실패:", error);
+	          alert("댓글 등록 중 오류가 발생했습니다.");
+	      })
+	      .finally(() => {
+	          // 로딩 상태 해제
+	          submitBtn.textContent = originalText;
+	          submitBtn.disabled = false;
 	      });
 	});
 
@@ -82,6 +112,10 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 alert("삭제 실패");
             }
+        })
+        .catch(error => {
+            console.error("댓글 삭제 실패:", error);
+            alert("댓글 삭제 중 오류가 발생했습니다.");
         });
     };
 

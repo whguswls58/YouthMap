@@ -1,0 +1,142 @@
+/* ===== Hero Background ===== */
+.hero-section {
+  background: url('/img/123.jpg') no-repeat center center/cover;
+  height: 300px;
+  position: relative;
+}
+
+/* ===== Container ===== */
+.board-container {
+  max-width: 1000px;
+  margin: -40px auto 0 auto; /* 위쪽 margin 조정 */
+  padding: 40px 20px;
+  background-color: #fff;
+  position: relative;
+  z-index: 5;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== Tabs ===== */
+.category-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  position: relative;
+  top: -25px;
+  z-index: 10;
+  background-color: white;
+  width: fit-content;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 6px 6px 0 0;
+  overflow: hidden;
+}
+
+.category-tabs a {
+  display: block;
+  padding: 14px 28px;
+  background-color: #fff;
+  border-right: 1px solid #ccc;
+  color: #333;
+  font-size: 15px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.category-tabs a:last-child {
+  border-right: none;
+}
+
+.category-tabs a:hover {
+  background-color: #eee;
+}
+
+.category-tabs a.active {
+  background-color: #4f4c48;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* ===== Search ===== */
+.search-form {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.search-form input[type="text"],
+.search-form select {
+  width: 240px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 4px;
+}
+
+.search-form button {
+  padding: 8px 14px;
+  background-color: #0072ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* ===== Table ===== */
+.board-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.board-table th,
+.board-table td {
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+  font-size: 14px;
+}
+
+.board-table th {
+  background-color: #f9f9f9;
+  font-weight: bold;
+}
+
+.board-table tr:hover {
+  background-color: #f4f4f4;
+}
+
+.notice-row {
+  background-color: #fffbe6;
+  font-weight: bold;
+}
+
+/* ===== 글쓰기 버튼 ===== */
+.write-btn-wrap {
+  text-align: right;
+  margin: 20px 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .category-tabs {
+    flex-wrap: wrap;
+  }
+
+  .category-tabs a {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .search-form input[type="text"],
+  .search-form select {
+    width: 120px;
+    font-size: 13px;
+  }
+
+  .board-container {
+    padding: 20px 10px;
+  }
+}
+
+

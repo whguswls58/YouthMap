@@ -6,94 +6,133 @@
   <meta charset="UTF-8">
   <title>회원정보 수정</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/member/mypage.css">
+
 </head>
-<body>
 
-  <h2>회원정보 수정</h2>
-  <form action="${pageContext.request.contextPath}/edit" method="post">
-    <div>
-      <label>아이디:</label>
-      <input type="text" value="${member.memId}" readonly />
+  <!-- 상단 베이지 바 -->
+  <div class="topbar">
+    <div class="menu">
+      <a href="#">CART</a>
+      <a href="#">MY PAGE</a>
+      <a href="#">JOIN</a>
     </div>
+  </div>
 
-    <div>
-      <label>이름:</label>
-      <input type="text" value="${member.memName}" readonly />
+  <!-- 네비게이션 -->
+  <div class="navbar">
+    <div class="navbar-left">
+      <a href="#" class="nav-link">About</a>
+      <a href="#" class="nav-link">Facility</a>
+      <a href="#" class="nav-link active">Food</a>
+      <a href="#" class="nav-link">Community</a>
+      <a href="#" class="nav-link">Contact</a>
     </div>
-
-    <div>
-      <label>기존 비밀번호:</label>
-      <input type="password" name="currentPass" required />
+    <div class="navbar-center">
+    <a href="${pageContext.request.contextPath}/home" class="logo">YOUTHMAP</a>
+  </div>
+    <div class="navbar-right">
+      <a href="#" class="nav-link">CART</a>
+      <a href="#" class="nav-link">MY PAGE</a>
+      <a href="#" class="nav-link">JOIN</a>
     </div>
-
-    <div>
-      <label>변경할 비밀번호:</label>
-      <input type="password" name="newPass" />
-    </div>
-
-    <div>
-      <label>이메일:</label>
-      <input type="email" name="memMail" value="${member.memMail}" required />
-    </div>
-
-    <div>
-      <label>핸드폰번호:</label>
-      <select name="phonePrefix" id="phonePrefix" required>
-        <option value="010" ${member.memNum != null && member.memNum.startsWith('010') ? 'selected' : ''}>010</option>
-        <option value="011" ${member.memNum != null && member.memNum.startsWith('011') ? 'selected' : ''}>011</option>
-        <option value="017" ${member.memNum != null && member.memNum.startsWith('017') ? 'selected' : ''}>017</option>
-        <option value="070" ${member.memNum != null && member.memNum.startsWith('070') ? 'selected' : ''}>070</option>
-      </select>
-      - <input type="text" name="phoneMiddle" id="phoneMiddle" maxlength="4" placeholder="0000" value="${member.memNum != null ? member.memNum.split('-')[1] : ''}" required>
-      - <input type="text" name="phoneLast" id="phoneLast" maxlength="4" placeholder="0000" value="${member.memNum != null ? member.memNum.split('-')[2] : ''}" required>
-    </div>
-
-    <div>
-      <label>주소:</label>
-      <input type="text" name="memAddress" value="${member.memAddress}" required />
-    </div>
-
-    <div>
-      <label>상세주소:</label>
-      <input type="text" name="memAddDetail" value="${member.memAddDetail}" required />
-    </div>
-
-    <div>
-      <button type="submit">수정하기</button>
-    </div>
-  </form>
+  </div>
   
+  <!-- 사이드바 -->
+<body>
+   <div class="mypage-container">
+    <div class="sidebar">
+      <a href="${pageContext.request.contextPath}/mypage">내 정보</a>
+      <c:if test="${sessionScope.loginMember.memType == 'LOCAL'}">
+            <a href="${pageContext.request.contextPath}/edit">정보 수정</a>
+          </c:if>
+     <a href="${pageContext.request.contextPath}/edit_pass">비밀번호 변경</a>
+      <a href="#">내 게시물</a>
+      <a href="#">내 댓글</a>
+      <a href="#">회원 탈퇴</a>
+    </div>
+
+
+<!--회원수정 -->
+   <div class="main-content">
+  <div class="edit-profile-wrapper">
+    <h2>회원 정보 수정</h2>
+
+    <form action="${pageContext.request.contextPath}/edit" method="post" class="edit-form">
+
+      <!-- 이름 (수정 불가) -->
+      <div class="edit-row">
+        <label>이름</label>
+        <input type="text" value="${member.memName}" readonly>
+      </div>
+
+      <!-- 아이디 (수정 불가) -->
+      <div class="edit-row">
+        <label>아이디</label>
+        <input type="text" value="${member.memId}" readonly>
+      </div>
+
+      <!-- 이메일 -->
+      <div class="edit-row">
+        <label>이메일</label>
+        <input type="email" name="memMail" value="${member.memMail}" required>
+      </div>
+
+      <!-- 휴대폰번호 -->
+      <div class="edit-row">
+        <label>휴대전화번호</label>
+        <input type="text" name="memPhone" value="${member.memNum}" required>
+      </div>
+
+      <!-- 주소 -->
+      <div class="edit-row">
+        <label>주소</label>
+        <input type="text" name="memAddress" value="${member.memAddress}" required>
+      </div>
+
+      <!-- 상세주소 -->
+      <div class="edit-row">
+        <label>상세 주소</label>
+        <input type="text" name="memAddDetail" value="${member.memAddDetail}">
+      </div>
+
+      <!-- 버튼 -->
+      <div class="edit-row">
+        <button type="submit">수정 완료</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+  <footer>
+    ⓒ 2025 YOUTHMAP. All Rights Reserved.
+  </footer>
+
   <c:if test="${not empty error}">
-    <script>
-      alert('${error}');
-    </script>
+    <script>alert('${error}');</script>
   </c:if>
 
   <script>
     $(function(){
-      // 핸드폰번호 입력 처리
-      // 숫자만 입력 가능
       $("#phoneMiddle, #phoneLast").on("input", function(){
         $(this).val($(this).val().replace(/[^0-9]/g, ''));
       });
 
-      // 중간번호 4자리 입력 시 마지막 번호로 자동 이동
       $("#phoneMiddle").on("input", function(){
-        const value = $(this).val();
-        if(value.length === 4){
+        if($(this).val().length === 4){
           $("#phoneLast").focus();
         }
       });
 
-      // 마지막 번호 4자리 입력 시 포커스 해제
       $("#phoneLast").on("input", function(){
-        const value = $(this).val();
-        if(value.length === 4){
+        if($(this).val().length === 4){
           $(this).blur();
         }
       });
     });
   </script>
-  
+
 </body>
-</html> 
+</html>
