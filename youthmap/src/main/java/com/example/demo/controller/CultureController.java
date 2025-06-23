@@ -138,7 +138,9 @@ public class CultureController {
 		culMd.setCon_id(con_id);
 		CultureModel exhibitioncont = service.getexhibitioncont(culMd);
 		model.addAttribute("exhibitioncont", exhibitioncont);
-
+		
+		service.addReadCount(culMd);
+		
 		// 2) 리뷰 페이징 처리
 		int pageSize = 10;
 		int totalCount = reservice.countReview2(con_id);
@@ -308,6 +310,9 @@ public class CultureController {
 		culMd.setCon_id(con_id);
 		CultureModel performancecont = service.getperformancecont(culMd);
 		model.addAttribute("performancecont", performancecont);
+		
+		service.addReadCount(culMd);
+
 
 		// 2) 리뷰 페이징 처리
 		int pageSize = 10;
@@ -493,6 +498,9 @@ public class CultureController {
 		culMd.setCon_id(con_id);
 		CultureModel eventcont = service.geteventcont(culMd);
 		model.addAttribute("eventcont", eventcont);
+		
+		service.addReadCount(culMd);
+
 
 		// 2) 리뷰 페이징 처리
 		int pageSize = 10;
@@ -733,6 +741,8 @@ public class CultureController {
 		int listcount = service.count(culMd); // 세번째 기본변수. 총 데이터 갯수 구함. db에서 구해옴
 
 		System.out.println("listcount" + listcount);
+		
+		service.addReadCount(culMd);
 
 		// 한 페이지 범위 계산 파생변수 만들기(startRow, endRow)
 		int startRow = (page - 1) * limit + 1;

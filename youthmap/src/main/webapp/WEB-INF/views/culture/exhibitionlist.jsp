@@ -9,7 +9,6 @@
   <meta charset="UTF-8">
   <title>전시/미술 리스트</title>
   
-  
   <style>
 .cards {
   display: grid;
@@ -134,6 +133,16 @@ a.card-link {
 .pager .current {
   font-weight: bold;
 }
+
+/* 카드 호버 애니메이션 추가 */
+    .cards .card {
+      transition: all 0.3s ease-in-out;
+    }
+    .cards .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
 </style>
 
 </head>

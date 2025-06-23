@@ -53,7 +53,7 @@ public interface CultureDao {
 
 	CultureModel getLatestData();
 
-
+	int addReadCount(CultureModel culMd);
 
 
 }

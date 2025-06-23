@@ -466,5 +466,13 @@
 
 </select>
 
+<update id="addReadCount" parameterType="int">
+	update culture
+	set con_readcount = con_readcount + 1
+	where con_id = #{con_id}
+</update>
+
+
+
 
 </mapper>

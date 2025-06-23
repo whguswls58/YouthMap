@@ -210,7 +210,6 @@ public class CultureService {
 		return dao.count2(culMd);
 	}
 
-
 	public CultureModel getperformancecont(CultureModel culMd) {
 		return dao.getperformancecont(culMd);
 	}
@@ -254,8 +253,9 @@ public class CultureService {
 	public CultureModel getLatestData() {
 		return dao.getLatestData();
 	}
-
-
 	
-	
+	public int addReadCount(CultureModel culMd) {
+		return dao.addReadCount(culMd);
+	}
+
 }
