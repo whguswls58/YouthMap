@@ -60,8 +60,11 @@
 </head>
 <body>
 
-
 <div align="center" style="margin:20px 0;">
+<button onclick="location.href='allList'" style=" width:100px; height:26px; line-height:26px; text-align:center; 
+            font-size:18px; margin:0 8px; cursor:pointer;">
+      전체 목록
+    </button>
   <button type="button" onclick="location.href='exhibitionlist'"
             style="
             width:100px;
