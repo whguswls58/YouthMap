@@ -15,7 +15,7 @@
  
   <style>
      body { font-family:sans-serif; margin:0; padding:0 }
-    .container { max-width:960px; margin:20px auto; padding:0 16px }
+    .containerer { max-width:960px; margin:20px auto; padding:0 16px }
     h2 { text-align:center; margin-bottom:24px; }
     .detail-flex { display:flex; gap:24px; margin-bottom:32px; }
     .thumb { flex:0 0 300px; border:1px solid #ccc; border-radius:8px; overflow:hidden }
@@ -106,7 +106,7 @@
   <!-- ② 모델로 넘어온 단일 객체를 cul 변수로 셋업 -->
   <c:set var="cul" value="${performancecont}" />
 
-  <div class="container">
+  <div class="containerer">
     <!-- 제목 -->
     <h2>${cul.con_title}</h2>
 
