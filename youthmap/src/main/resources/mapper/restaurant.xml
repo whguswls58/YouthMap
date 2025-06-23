@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.RestaurantDao">
+
+	<!-- <insert id="saveRestaurant" parameterType="restaurant">
+		INSERT INTO restaurant
+		(
+		res_id, res_subject, res_tel, res_score,
+		res_address, res_latitude,res_longitude,
+		res_user_ratings_total, res_price_level, res_open,
+		res_open_hours,
+		res_file, res_photo_url, res_map_url, res_content,
+		res_status, res_website, res_gu
+		) VALUES (
+		#{res_id}, #{res_subject},
+		#{res_tel, jdbcType=VARCHAR}, #{res_score},
+		#{res_address},#{res_latitude}, #{res_longitude},
+		#{res_user_ratings_total, jdbcType=VARCHAR},
+		#{res_price_level, jdbcType=VARCHAR},
+		#{res_open}, #{res_open_hours},
+		#{res_file, jdbcType=VARCHAR}, #{res_photo_url, jdbcType=VARCHAR},
+		#{res_mapUrl, jdbcType=VARCHAR}, #{res_content, jdbcType=VARCHAR},
+		#{res_status, jdbcType=VARCHAR},
+		#{res_website, jdbcType=VARCHAR },
+		#{res_gu}
+		)
+	</insert> -->
+	
+	<!--메인 출력-->
+	<select id="best" resultType="restaurant">
+    	SELECT * FROM  (SELECT * FROM restaurant ORDER BY res_score DESC)
+   		WHERE ROWNUM &lt; 8
+	</select>
+	
+	<!-- 전체정보 -->
+	<select id="maplist" resultType="restaurant">
+    SELECT res_id, res_subject, res_tel, res_score, res_address, res_latitude, res_longitude,
+           res_user_ratings_total, res_price_level, res_open, res_open_hours,
+           res_file, res_photo_url, res_map_url, res_content,
+           res_status, res_website, res_gu
+    FROM restaurant
+	</select>
+
+	<!--상세 정보 -->
+	<select id="selectById" parameterType="String" resultType="restaurant">
+		 SELECT * FROM restaurant WHERE LOWER(res_id) = LOWER(#{res_id})
+	</select>
+
+	<!-- 조건에 맞는 전체 건수 -->
+	<select id="count" parameterType="restaurant" resultType="int">
+		SELECT COUNT(*) FROM restaurant
+		<where>
+			<if test="res_gu != null and res_gu != ''">
+				AND res_gu = #{res_gu}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				AND res_subject LIKE '%' || #{keyword} || '%'
+			</if>
+		</where>
+	</select>
+
+	<!-- 조건+페이징 리스트 -->
+	<select id="list" parameterType="restaurant" resultType="restaurant">
+		SELECT * FROM (SELECT a.*, ROWNUM rnum FROM (
+		SELECT * FROM restaurant
+		<where>
+			<if test="res_gu != null and res_gu != ''">
+				AND res_gu = #{res_gu}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				AND res_subject LIKE '%' || #{keyword} || '%'
+			</if>
+		</where>
+		ORDER BY res_score DESC, res_id ASC) a
+		WHERE ROWNUM &lt;= #{endRow})
+		WHERE rnum &gt;= #{startRow}
+	</select>
+	
+	<!-- INSERT: 신규 데이터 저장 -->
+	<insert id="saveres" parameterType="Restaurant">
+    INSERT INTO restaurant (
+        res_id, res_subject, res_tel, res_score, res_address,
+        res_latitude, res_longitude, res_user_ratings_total,
+        res_price_level, res_open, res_open_hours, res_file,
+        res_photo_url, res_map_url, res_content, res_status,
+        res_website, res_gu, res_photo_urls
+    ) VALUES (
+        LOWER(#{res_id}), #{res_subject},
+		#{res_tel, jdbcType=VARCHAR}, #{res_score, jdbcType=VARCHAR},
+		#{res_address, jdbcType=VARCHAR},#{res_latitude}, #{res_longitude},
+		#{res_user_ratings_total, jdbcType=VARCHAR},
+		#{res_price_level, jdbcType=VARCHAR},
+		#{res_open, jdbcType=VARCHAR}, #{res_open_hours, jdbcType=VARCHAR},
+		#{res_file, jdbcType=VARCHAR}, #{res_photo_url, jdbcType=VARCHAR},
+		#{res_mapUrl, jdbcType=VARCHAR}, #{res_content, jdbcType=VARCHAR},
+		#{res_status, jdbcType=VARCHAR},
+		#{res_website, jdbcType=VARCHAR },
+		#{res_gu}, #{res_photo_urls, jdbcType=VARCHAR}
+    )
+	</insert>
+	
+	<update id="updateres" parameterType="Restaurant">
+    UPDATE restaurant SET
+        res_subject = #{res_subject},
+        res_tel = #{res_tel, jdbcType=VARCHAR},
+        res_score = #{res_score, jdbcType=VARCHAR},
+        res_address = #{res_address, jdbcType=VARCHAR},
+        res_latitude = #{res_latitude},
+        res_longitude = #{res_longitude},
+        res_user_ratings_total = #{res_user_ratings_total, jdbcType=VARCHAR},
+        res_price_level = #{res_price_level, jdbcType=VARCHAR},
+        res_open = #{res_open, jdbcType=VARCHAR},
+        res_open_hours = #{res_open_hours, jdbcType=VARCHAR},
+        res_file = #{res_file, jdbcType=VARCHAR},
+        res_photo_url = #{res_photo_url, jdbcType=VARCHAR},
+        res_map_url = #{res_mapUrl, jdbcType=VARCHAR},
+        res_content = #{res_content, jdbcType=VARCHAR},
+        res_status = #{res_status, jdbcType=VARCHAR}, 
+        res_website = #{res_website, jdbcType=VARCHAR},
+        res_gu = #{res_gu},
+        res_photo_urls = #{res_photo_urls, jdbcType=VARCHAR}
+    WHERE res_id = #{res_id}
+	</update>
+
+	
+
+	<!--리뷰 작성 -->
+	<insert id="insertreview" parameterType="review1">
+        INSERT INTO review1 (
+            review_id1,
+            review_score1,
+            review_content1,
+            review_file1,
+            review_register1,
+            mem_no,
+            res_id,
+            review_writer
+        ) VALUES (
+            review1_seq.NEXTVAL,
+            #{review_score1},
+            #{review_content1},
+            #{review_file1, jdbcType=VARCHAR},
+            SYSDATE,
+            1,
+			#{res_id},
+			#{review_writer}
+        )
+    </insert>
+    
+    <!-- 위치 -->
+   <select id="findNearby" resultType="Restaurant">
+		SELECT *,(6371 * ACOS(COS(RADIANS(#{lat})) * COS(RADIANS(res_latitude)) *
+		COS(RADIANS(res_longitude) - RADIANS(#{lng})) +
+		SIN(RADIANS(#{lat})) * SIN(RADIANS(res_latitude)))) AS distance
+		FROM restaurant WHERE res_latitude IS NOT NULL AND res_longitude IS NOT NULL
+		HAVING distance &lt;= #{radius} ORDER BY distance ASC
+	</select>
+
+    
+   <update id="updatephotourls">
+    UPDATE restaurant
+    SET res_photo_urls = #{res_photo_urls, jdbcType=VARCHAR}
+    WHERE res_id = #{res_id}
+</update>
+
+</mapper>
+
+
+

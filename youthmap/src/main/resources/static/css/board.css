@@ -1,0 +1,539 @@
+/* ===== Hero Background ===== */
+.hero-section {
+  width: 100%;
+  overflow: hidden;
+}
+
+.hero-img {
+  width: 100%;
+  height: 300px; /* 필요에 따라 조정 */
+  object-fit: cover;
+}
+
+/* ===== Container ===== */
+.board-container {
+  max-width: 1000px;
+  margin: -40px auto 0 auto; /* 위쪽 margin 조정 */
+  padding: 40px 20px;
+  background-color: #fff;
+  position: relative;
+  z-index: 5;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== Tabs ===== */
+.category-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  padding: 18px 0;
+  background-color: white;
+/*   border-bottom: 2px solid #ddd; */
+}
+
+.category-tabs a {
+  text-decoration: none;
+  color: #555;
+  font-size: 16px;
+  padding: 10px 15px;
+  position: relative;
+  transition: 0.3s;
+}
+
+.category-tabs a:hover {
+  color: #111;
+}
+
+.category-tabs a.active {
+  font-weight: bold;
+  color: #000;
+}
+
+.category-tabs a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: black;
+}
+
+
+/* ===== Search ===== */
+.search-form {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.search-form input[type="text"],
+.search-form select {
+  width: 240px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 4px;
+}
+
+.search-form button {
+  padding: 8px 14px;
+  background-color: #0072ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* ===== Table ===== */
+.board-table {
+  width: 100%;
+  table-layout: fixed;  
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.board-table th,
+.board-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0.75rem;
+  text-align: center;
+}
+/* 컬럼별 너비 설정 */
+.board-table th:nth-child(1),
+.board-table td:nth-child(1) { width: 6%;  }   /* No */
+.board-table th:nth-child(2),
+.board-table td:nth-child(2) { width: 14%; }   /* 글쓴이 */
+.board-table th:nth-child(3),
+.board-table td:nth-child(3) { width: 50%; }   /* 제목 */
+.board-table th:nth-child(4),
+.board-table td:nth-child(4) { width: 15%; }   /* 작성일 */
+.board-table th:nth-child(5),
+.board-table td:nth-child(5) { width: 15%; }   /* 조회수 */
+
+.board-table th {
+  background-color: #f9f9f9;
+  font-weight: bold;
+}
+
+.board-table tr:hover {
+  background-color: #f4f4f4;
+}
+
+.notice-row {
+  background-color: #fffbe6;
+  font-weight: bold;
+}
+
+.notice-row td:first-child {
+  color: #d4af37;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .category-tabs {
+    flex-wrap: wrap;
+  }
+
+  .category-tabs a {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .search-form input[type="text"],
+  .search-form select {
+    width: 120px;
+    font-size: 13px;
+  }
+
+  .board-container {
+    padding: 20px 10px;
+  }
+}
+/* ✅ 검색창 스타일 (밑줄만, 돋보기 오른쪽) */
+/* ✅ 검색+작성 wrapper */
+.search-and-write {
+  display: flex;
+  flex-direction: column;   /* 수직 배치 */
+  align-items: center;      /* 중앙 정렬 */
+  gap: 16px;
+  margin: 30px auto;
+}
+
+
+
+/* ✅ 기존 검색창 스타일 */
+.search-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+
+/* ✅ 검색창 input, 버튼 */
+.search-form input[type="text"] {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.search-form button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  margin-left: 6px;
+  cursor: pointer;
+}
+
+/* ✅ 글작성 버튼 */
+.write-btn {
+  padding: 9px 20px;
+  background-color: #f3ecdc;
+  color: black;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.write-btn-wrap {
+  text-align: center;  /* 버튼 중앙 정렬 */
+}
+
+
+
+/* 게시물 작성 */
+.write-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.write-title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.write-form {
+  background: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.title-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.title-row select {
+  width: 120px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.title-input-wrap {
+  flex: 1;
+}
+
+.title-input-wrap input[type="text"] {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.byte-count {
+  text-align: right;
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.write-form textarea {
+  width: 100%;
+  min-height: 300px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.content-wrap textarea {
+  width: 100%;
+  min-height: 300px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.file-wrap input[type="file"] {
+  margin: 10px 0;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.cancel-btn {
+  padding: 10px 20px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
+/* 페이징 스타일 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 30px 0;
+}
+
+.page-link {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  text-decoration: none;
+  color: #333;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.page-link:hover {
+  background-color: #f8f9fa;
+  border-color: #007bff;
+}
+
+.page-link.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.page-link.active:hover {
+  background-color: #0056b3;
+}
+
+/* ─── boardview(상세) 전용 스타일 ─── */
+.content-container {
+    max-width: 1000px; /* 전체 컨테이너 폭 지정 */
+    margin: 20px auto;  /* 상하 마진 및 중앙 정렬 */
+    padding: 20px;
+}
+
+.content-container h2 {
+    text-align: left;   /* 제목 왼쪽 정렬 */
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.content-container table {
+    width: 100%; /* 컨테이너 폭에 100% 맞춤 */
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.content-container table th,
+.content-container table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.content-container table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    width: 120px; /* 상세페이지 기준 헤더 고정폭 */
+}
+
+/* ─── 상세페이지 하단 버튼 그룹(container) ─── */
+.action-buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* ====================
+   댓글 (Comment Section)
+   ==================== */
+
+/* 전체 컨테이너 */
+.comment-section {
+  max-width: 950px; /* 게시글 너비와 맞춤 */
+  margin: 40px auto;
+  border-top: 2px solid #eee;
+  padding-top: 20px;
+}
+
+/* 1. 댓글 헤더 (댓글 수 + 글자 수 카운트) */
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.comment-header h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.comment-header .comment-meta {
+  font-size: 14px;
+  color: #888;
+}
+
+/* 2. 댓글 입력 폼 */
+.comment-form {
+  margin-bottom: 30px;
+}
+.comment-form-wrapper {
+  display: flex;
+  gap: 8px; /* 입력창과 버튼 사이 간격 */
+}
+
+.comment-form textarea {
+  flex-grow: 1; /* 남는 공간 모두 차지 */
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 80px;
+  font-size: 14px;
+}
+
+.comment-form button {
+  flex-shrink: 0; /* 버튼 크기 고정 */
+  width: 90px;
+  border: none;
+  background-color: #333;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.comment-form button:hover {
+    background-color: #555;
+}
+
+/* 로그아웃 상태일 때의 입력창 */
+.comment-login-prompt {
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+    color: #666;
+    background-color: #f9f9f9;
+}
+
+
+/* 3. 댓글 리스트 */
+.comment-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.comment-item {
+  display: flex;
+  gap: 16px; /* 아바타와 내용 사이 간격 */
+  padding: 20px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.comment-item:last-child {
+    border-bottom: none;
+}
+
+.comment-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #eee;
+}
+
+.comment-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* 내용과 정보 사이 간격 */
+}
+.comment-author-line {
+    display: flex;
+    align-items: baseline; /* 텍스트 높이 맞춤 */
+    gap: 8px;
+}
+.comment-author {
+    font-weight: bold;
+    font-size: 15px;
+    flex-shrink: 0; /* 작성자 이름이 줄어들지 않도록 */
+}
+.comment-text {
+  color: #444;
+  line-height: 1.6;
+}
+
+.comment-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: #888;
+}
+.comment-info button {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 0;
+}
+.comment-info button:hover {
+    color: #333;
+}
+.comment-info .like-btn::before { content: "👍"; margin-right: 4px;}
+
+/* 수정/삭제 버튼 */
+.comment-actions a {
+    color: #888;
+    text-decoration: none;
+    font-size: 13px;
+    margin-left: 8px;
+}
+.comment-actions a:hover {
+    text-decoration: underline;
+}
