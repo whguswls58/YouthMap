@@ -35,8 +35,9 @@
 				</foreach>
 				)
 			</if>
-
 		</where>
+		
+		
 	</select>
 	<!-- 마지막 업데이트일 -->
 	<select id="lastUpdate" resultType="java.util.Date">
@@ -116,8 +117,7 @@
 	</update>
 
 	<!-- 정책 상세 데이터 검색 -->
-	<select id="plcyContent" parameterType="java.lang.String"
-		resultType="policy">
+	<select id="plcyContent" parameterType="java.lang.String" resultType="policy">
 		SELECT * FROM plcy WHERE plcy_no = #{plcy_no}
 	</select>
 
@@ -157,9 +157,15 @@
 				</foreach>
 				)
 			</if>
-
 		</where>
-		ORDER BY last_mdfcn_dt DESC
+		<choose>
+			<when test="sortOrder == 'views'">
+				ORDER BY inq_cnt ASC, last_mdfcn_dt DESC
+			</when>
+			<otherwise>
+				ORDER BY last_mdfcn_dt DESC
+			</otherwise>
+		</choose>
 		) a
 		)
 		WHERE rn BETWEEN #{startRow} and #{endRow}

@@ -278,11 +278,32 @@ a:hover {
 }
 
 .policy-search-count{
-  display: left;
-  gap: 20px;
+  display: flex;
+  justify-content: space-between; /* 좌우 정렬 */
+  align-items: center;            /* 수직 가운데 정렬 */
+  padding: 10px 0;
+  width:100%;
   max-width: 1000px;
   margin: 0 auto;
 }
+
+.policy-search-count select{
+  border: none;
+  padding: 12px 20px;
+  font-size: 14px;
+  background-color: #fff;
+  border-right: 1px solid #ccc;
+  position: relative;
+  z-index: 2;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  appearance: none;
+  width: 100px;
+
+}
+
 
 .policy-card {
   border: 1px solid #ddd;
@@ -313,7 +334,20 @@ a:hover {
   font-size: 12px;
   color: #777;
   margin-right: 5px;
+  display: inline-block;
+  padding: 3px 8px;
+  background: #eee;
+  border-radius: 12px;
+/*   margin: 3px 3px 0 0; */
+  
 }
+
+/* D-Day 10일 이하 css */
+.dday-red {
+  color: red;
+  font-weight: bold;
+}
+
 
 .detail-btn {
   display: block;
@@ -351,8 +385,9 @@ a:hover {
 	margin: 30px 0;
 	font-size: 18px;
 }
-.pagination button {
+.page-btn {
 	color: #666;
+	background: #fff;
 	text-decoration: none;
 	margin: 0 6px;
 	padding: 6px 12px;
@@ -360,8 +395,10 @@ a:hover {
 	border: 1px solid transparent;
 	transition: background 0.2s, color 0.2s;
 }
-.pagination button:active {
-	background: #eee;
+/* .pagination button:hover, */
+.page-btn.active {
+	background: #f2f2f2;
+	font-weight: bold;
 }
 .pagination b {
 	color: #222;
@@ -511,18 +548,22 @@ a:hover {
 </script>
 
 <script>
-	window.loadPage = function(page) {
+	window.loadPage = function(page, sortOrder = null) {
 	console.log("loadPage 호출됨. page = ", page);
 	console.log(selectedCategories);
-
+	const order = sortOrder || document.getElementById("sortOrder")?.value || "latest";
+	console.log("정렬방식 : ", order);
+	
 	fetch(`${pageContext.request.contextPath}/policyListJson?page=\${page}&
 			searchInput=\${encodeURIComponent(currentSearchInput)}&
 			mainCategory=\${encodeURIComponent(currentMainCategory)}&
-			selectedCategories=\${selectedCategories}`)  // 백틱(`) 사용!
+			selectedCategories=\${selectedCategories}&
+			sortOrder=\${order}`)  // 백틱(`) 사용!
 	 	.then(response =>  	response.json())
 	    .then(data => {
 		console.log("data:", data);
-	 	
+		
+		
 		const container = document.getElementById("policy-container");
 		const countBox = document.getElementById("policy-search-count");
 	    const pagination = document.getElementById("pagination");
@@ -541,6 +582,58 @@ a:hover {
 	    countBox.classList.remove("hidden");
 	    pagination.classList.remove("hidden");
 	    
+	 	// 검색 결과 갯수 출력
+		const plcy_cnt = document.createElement("div");
+		plcy_cnt.className = "policy-search-count";
+		
+		console.log(`listcount : \${data.listcount}`);
+		
+		const plcy_cnt_leftDiv = document.createElement("div");
+		const search_result = document.createElement("p");
+		search_result.textContent = `검색 된 결과 : \${data.listcount}개`;
+		plcy_cnt_leftDiv.appendChild(search_result);
+		plcy_cnt.appendChild(plcy_cnt_leftDiv);
+		
+		
+		// 정렬 방식 선택 select box 추가
+		const plcy_cnt_rightDiv = document.createElement("div");
+		const select = document.createElement("select");
+		select.name = "sortOrder";
+		select.id = "sortOrder";
+
+		// option: 최신순
+		const option1 = document.createElement("option");
+		option1.value = "latest";
+		option1.textContent = "최신순";
+		option1.selected = true;
+
+		// option: 조회순
+		const option2 = document.createElement("option");
+		option2.value = "views";
+		option2.textContent = "조회순";
+
+		// select에 option 추가
+		select.appendChild(option1);
+		select.appendChild(option2);
+		
+		select.addEventListener("change", function () {
+			  const selected = this.value;
+			  console.log("정렬 방식 선택:", selected);
+			  lodePage(data.page, selected);
+			  // 정렬 기준에 따라 리스트 다시 요청 또는 필터링 로직 추가 가능
+		});
+		
+		plcy_cnt_rightDiv.appendChild(select);
+
+		// select를 div에 추가
+		plcy_cnt.appendChild(plcy_cnt_rightDiv);
+		const container_search = document.getElementById("policy-search-count");
+	    container_search.innerHTML = "";
+		
+		container_search.appendChild(plcy_cnt);
+	    
+	    
+	    
 	    console.log("data.pmList 출력 확인:", data.pmList);
 		data.pmList.forEach(p => {
 			console.log("각 항목 확인:", p);
@@ -551,17 +644,32 @@ a:hover {
 		   	
 		 	// 라벨
 		    const labels = document.createElement("div");
-		    
+		 	
 		    if(p.aply_ymd_strt == null){
 			 	labels.innerHTML = `
 			        <span class="policy-label">상시</span><br>
 			        <span class="policy-label">\${p.lclsf_nm}</span><br>
 			    `;
 		    }else{
-		    	const ddayText = getDday(p.aply_ymd_end);
-		    	console.log(ddayText);
+		    	const dday = getDday(p.aply_ymd_end);
+		    	
+				// 출력 포맷
+		    	let ddayText = '';
+				if (parseInt(dday) > 0) {
+				    ddayText = `D-\${dday}`;
+				} else if (parseInt(dday) === 0) {
+					ddayText = "D-Day";
+				} else {
+					ddayText = `D+\${dday}`;
+				}
+		    	
+		    	let ddayColorClass = '';
+		    	if (parseInt(dday) <= 10) {
+		    	  ddayColorClass = 'dday-red';
+		    	}
+
 			 	labels.innerHTML = `
-			        <span class="policy-label">\${ddayText}</span><br>
+			        <span class="policy-label \${ddayColorClass}">\${ddayText}</span><br>
 			        <span class="policy-label">\${p.lclsf_nm}</span><br>
 			    `;
 		    	
@@ -624,27 +732,14 @@ a:hover {
 		    card.appendChild(keywordBox);
 			container.appendChild(card);
 			
-			// 검색 결과 갯수 출력
-			const plcy_cnt = document.createElement("div");
-			plcy_cnt.className = "policy-search-count";
 			
-			console.log(`listcount : \${data.listcount}`);
-			const search_result = document.createElement("p");
-			search_result.textContent = `검색 된 결과 : \${data.listcount}개`;
-			plcy_cnt.appendChild(search_result);
-			
-			const container_search = document.getElementById("policy-search-count");
-		    container_search.innerHTML = "";
-			
-			container_search.appendChild(plcy_cnt);
 			
 	    });
 	      
 	   	// 페이지네이션 렌더링 호출
-	    renderPagination(data.page, data.pagecount, data.startpage, data.endpage);
-	      
-	    })
-	    .catch(error => console.error("오류 발생:", error));
+	    renderPagination(data.page, data.pagecount, data.startpage, data.endpage, data.sortOrder);
+
+	    }).catch(error => console.error("오류 발생:", error));
 	}
 	
 	// 페이지 렌더 처리
@@ -654,11 +749,13 @@ a:hover {
 		pagination.innerHTML = "";
 
 	    // 처음 페이지
-	    pagination.innerHTML += `<button onclick="loadPage(1)">◀</button> `;
+	    pagination.innerHTML += 
+	    	`<button class="page-btn" onclick="loadPage(1, \${sortOrder})">◀</button> `;
 
 	    // 이전 블록
 	    if (start > 6) {
-	      pagination.innerHTML += `<button onclick="loadPage(\${start - 6})">[이전]</button> `;
+	      pagination.innerHTML += 
+	    	  `<button class="page-btn" onclick="loadPage(\${start - 6}, \${sortOrder})">[이전]</button> `;
 	    } 	//end if
 
 	    // 페이지 번호들
@@ -666,24 +763,26 @@ a:hover {
 	      if (i === current) {
 	        pagination.innerHTML += `<b>\${i}</b>`;
 	      } else {
-	        pagination.innerHTML += `<button onclick="loadPage(\${i})">\${i}</button>`;
+	        pagination.innerHTML += 
+	        	`<button class="page-btn" onclick="loadPage(\${i}, \${sortOrder})">\${i}</button>`;
 	      }	// end if
 	    }	// end for
 
 	    // 다음 블록
 	    if (end < total) {
-	      pagination.innerHTML += `<button onclick="loadPage(\${start + 6})">[다음]</button> `;
+	      pagination.innerHTML += 
+	    	  `<button class="page-btn" onclick="loadPage(\${start + 6}, \${sortOrder})">[다음]</button> `;
 	    }	// end if
 
 	    // 마지막 페이지
-	    pagination.innerHTML += `<button onclick="loadPage(\${total}">▶</button>`;
+	    pagination.innerHTML += 
+	    	`<button class="page-btn" onclick="loadPage(\${total}, \${sortOrder})">▶</button>`;
 	  }		// end function
 
 	  // 초기 로딩
 	 window.addEventListener("DOMContentLoaded", () => {
 		 currentSearchInput = "";  // 초기화
 		 currentMainCategory = "youthPolicy";
-
     });		// end window
 	
     // 검색어 및 카테고리 상태 저장
@@ -731,15 +830,10 @@ a:hover {
 	    const diffTime = endDate.getTime() - today.getTime();
 	    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-		// 출력 포맷
-		if (diffDays > 0) {
-		    return `D-\${diffDays}`;
-		} else if (diffDays === 0) {
-			return "D-Day";
-		} else {
-			return `D+\${Math.abs(diffDays || 0)}`;
-		}
+	    return `\${diffDays}`;
+	    
 	}
+ 	
  	
 </script>
 

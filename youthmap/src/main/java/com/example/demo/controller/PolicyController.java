@@ -66,6 +66,8 @@ public class PolicyController {
 		
 		System.out.println("로그인 중 아이디 : " + memNo);
 		
+		System.out.println("현재 정렬방법 : " + pm.getSortOrder());
+		
 		int limit = 6; // 한 페이지에 출력할 데이터 갯수
 		int listcount = service.cntData(pm); // 총 데이터 갯수
 		System.out.println("listcount : " + listcount);
@@ -139,6 +141,8 @@ public class PolicyController {
 		System.out.println("현재 검색어 : " + pm.getSearchInput());
 		System.out.println("현재 메인카테고리 : " + pm.getMainCategory());
 		System.out.println("현재 선택된 카테고리 : " + categories);
+		System.out.println("현재 정렬방법 : " + pm.getSortOrder());
+		
 		
 		pm.setCategories(categories);
 		
