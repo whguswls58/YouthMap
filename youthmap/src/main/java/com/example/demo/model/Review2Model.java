@@ -19,5 +19,5 @@ public class Review2Model {
     private int con_id;  //(컨텐츠 PK 맞추기)
     
     //임시
-    private String review_writer; 
+    private String review_writer2; 
 }

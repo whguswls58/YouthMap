@@ -52,7 +52,7 @@ public class CultureController {
             model.addAttribute("message", "업데이트 중 오류: " + e.getMessage());
         }
         // /WEB-INF/views/updateResult.jsp
-        return "updateResult";   
+        return "culture/updateResult";   
     }
 				
 	// 메인 페이지
@@ -96,7 +96,7 @@ public class CultureController {
 		// 검색 안하면 startR-,endR-만 저장되는데. 검색하면 키워드 서치 까지 board에 담아서 다 가져감(총 4)
 		culMd.setStartRow(startRow);
 		culMd.setEndRow(endRow);
-		culMd.setCon_age("누구나");
+//		culMd.setCon_age("누구나");
 
 		// 해당 페이지 데이터 조회
 		List<CultureModel> exhibitionlist = service.getexhibitionlist(culMd);
@@ -173,7 +173,7 @@ public class CultureController {
 //        review2.setReview_score2(review_score2);
 //        review2.setReview_content2(review_content2);
 
-		System.out.println("▶▶ review_writer = " + review2.getReview_writer());
+		System.out.println("▶▶ review_writer2 = " + review2.getReview_writer2());
 
 		// ★ 실제 경로 찾기 (static/images)
 		String uploadPath = session.getServletContext().getRealPath("images");
@@ -274,7 +274,7 @@ public class CultureController {
 		int endRow = page * limit;
 		culMd.setStartRow(startRow);
 		culMd.setEndRow(endRow);
-		culMd.setCon_age("누구나");
+//		culMd.setCon_age("누구나");
 
 		// 서비스에서 공연만 조회해 주는 메서드
 		List<CultureModel> performancelist = service.getperformancelist(culMd);
@@ -344,7 +344,7 @@ public class CultureController {
 //        review2.setReview_score2(review_score2);
 //        review2.setReview_content2(review_content2);
 
-		System.out.println("▶▶ review_writer = " + review2.getReview_writer());
+		System.out.println("▶▶ review_writer2 = " + review2.getReview_writer2());
 
 		// ★ 실제 경로 찾기 (static/images)
 		String uploadPath = session.getServletContext().getRealPath("images");
@@ -456,7 +456,7 @@ public class CultureController {
 		int endRow = page * limit;
 		culMd.setStartRow(startRow);
 		culMd.setEndRow(endRow);
-		culMd.setCon_age("누구나");
+//		culMd.setCon_age("누구나");
 
 		// 서비스에서 공연만 조회해 주는 메서드
 		List<CultureModel> eventlist = service.geteventlist(culMd);
@@ -513,8 +513,8 @@ public class CultureController {
 			model.addAttribute("editReview", editReview);
 		}
 
-		System.out.println("eventcont 넘어가는 model : " + model);
-		System.out.println("eventcont 넘어가는 eventcont값 : " + eventcont);
+//		System.out.println("eventcont 넘어가는 model : " + model);
+//		System.out.println("eventcont 넘어가는 eventcont값 : " + eventcont);
 		return "culture/eventcont";
 	}
 
@@ -530,7 +530,7 @@ public class CultureController {
 //	        review2.setReview_score2(review_score2);
 //	        review2.setReview_content2(review_content2);
 
-		System.out.println("▶▶ review_writer = " + review2.getReview_writer());
+		System.out.println("▶▶ review_writer2 = " + review2.getReview_writer2());
 
 		// ★ 실제 경로 찾기 (static/images)
 		String uploadPath = session.getServletContext().getRealPath("images");
@@ -652,7 +652,7 @@ public class CultureController {
 		culMd.setCategory_name("all".equals(mainCategory) ? null : mainCategory);
 		culMd.setSearch(search);
 		culMd.setKeyword(keyword);
-		culMd.setCon_age("누구나");
+//		culMd.setCon_age("누구나");
 
 		// 페이징
 		int limit = 12;
@@ -669,7 +669,7 @@ public class CultureController {
 			list = service.getallList(culMd);
 			totalCount = service.countall(culMd);
 
-			System.out.println(">>> allList.size() = " + list.size());
+//			System.out.println(">>> allList.size() = " + list.size());
 			for (CultureModel c : list) {
 				System.out.println("  id=" + c.getCon_id() + ", category=" + c.getCategory_name());
 			}
@@ -750,7 +750,7 @@ public class CultureController {
 
 		// --- 1) DTO 세팅 ---
 		// 전체 모드: category_name = null
-		culMd.setCon_age("누구나");
+//		culMd.setCon_age("누구나");
 		culMd.setStartRow((page - 1) * limit + 1);
 		culMd.setEndRow(page * limit);
 		// 해당 페이지 데이터 조회

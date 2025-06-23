@@ -15,7 +15,7 @@
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= KakaoKeyUtil.getApiKey() %>&libraries=services"></script>
  
   <style>
-    body { font-family:sans-serif; margin:0; padding:0 }
+   body { font-family:sans-serif; margin:0; padding:0 }
     .container { max-width:960px; margin:20px auto; padding:0 16px }
     h2 { text-align:center; margin-bottom:24px; }
     .detail-flex { display:flex; gap:24px; margin-bottom:32px; }
@@ -23,9 +23,9 @@
     .thumb img { width:100%; display:block }
     .detail-table { flex:1; border-collapse:collapse; width:100% }
     .detail-table th {
-      width:120px; background:#f7f7f7;
+      width:120px; background:#f5f5f5;
       text-align:center; padding:12px 8px; border:1px solid #ddd;
-    }
+    } 
     .detail-table td {
       padding:12px 8px; border:1px solid #ddd;
     }
@@ -35,15 +35,28 @@
     }
     #map {
       width:100%; height:300px;
-      margin:24px auto;
-      border:2px solid #3c9c35; border-radius:16px;
+      margin:20px auto;
+      border:10px solid #f5f0e6; border-radius:16px;
     }
     .back-link {
-      display:inline-block; margin:30px auto;
-      padding:8px 16px; background:#046d52;
-      color:#fff; text-decoration:none; border-radius:4px;
-    }
+  display: inline-block;
+  margin: 1px auto;
+  padding: 8px 16px;
+  background: #888;    /* 연한 회색 >>회색 */
+  color:   #fff;          /* 약간 진한 회색 텍스트 >> 흰색 */
+  text-decoration: none;
+  border-radius: 4px;
+}
     .back-container { text-align:center }
+    
+    .visitor-review-container {
+    width:102%;
+    margin: 20px auto;
+    border: 3px solid #f5f0e6;	/* #ced4da; 연한회색*/
+    border-radius: 10px;
+    padding: 24px;
+    box-sizing: border-box;
+}
   </style>
 </head>
 
@@ -122,7 +135,7 @@
         </tr>
       </table>
     </div>
-
+	
 
     <!-- ② 지도 표시 영역 -->
     <div id="map"></div>
@@ -154,18 +167,13 @@
         ← 목록으로 돌아가기
       </a>
     </div>
-  </div>
+
   
-<!-- 				여기서부터 리뷰 기능 추가한 코드 				-->  
   
  <!-- 리뷰작성 버튼 -->
-<div style="text-align:right; margin: 18px 0;">
-    <button id="reviewWriteBtn" style="padding:7px 20px; border-radius:7px; background:#222; color:#fff; border:none; font-size:16px; cursor:pointer;">
-        리뷰 작성
-    </button>
-</div>
-
+<!-- 				여기서부터 리뷰 기능 추가한 코드 				-->  
 <!-- 숨겨진 리뷰작성 폼 -->
+<div class="visitor-review-container">
 <div id="reviewFormWrap" style="display:none;">
     <div class="review-form-container" style="max-width: 400px; margin: 20px auto;">
         <h2 style="text-align:center; margin-bottom: 20px;">리뷰 작성</h2>
@@ -174,8 +182,8 @@
             <input type="hidden" name="con_id" value="${exhibitioncont.con_id}" />
             <input type="hidden" name="page" value="${page }">
             <div class="review-form-row" style="margin-bottom:16px;">
-                <label for="review_writer">작성자</label>
-                <input type="text" name="review_writer" id="review_writer" maxlength="30" required placeholder="작성자 닉네임 또는 아이디" style="width:100%;padding:8px;">
+                <label for="review_writer2">작성자</label>
+                <input type="text" name="review_writer2" id="review_writer2" maxlength="30" required placeholder="작성자 닉네임 또는 아이디" style="width:100%;padding:8px;">
             </div>
 
             <div class="review-form-row" style="margin-bottom:16px;">
@@ -201,7 +209,7 @@
             </div>
 
             <div class="review-form-btns" style="text-align:center;">
-                <input type="submit" value="작성완료" style="padding:8px 28px; border-radius:6px; border:none; background:#222; color:#fff; font-size:16px; cursor:pointer;">
+                <input type="submit" value="작성완료" style="padding:8px 28px; border-radius:6px; border:none; background:#888; color:#fff; font-size:16px; cursor:pointer;">
                 <button type="button" onclick="closeReviewForm()" style="padding:8px 28px; border-radius:6px; border:none; background: #888; color:#fff; font-size:16px; cursor:pointer;">취소</button>
             </div>
         </form>
@@ -226,19 +234,31 @@
         document.getElementById('reviewWriteBtn').style.display = 'inline-block';
     }
 </script>
-<!-- ★ 리뷰 리스트와 수정 폼 반복 -->
-<div style="max-width:600px;margin:40px auto;padding:18px 24px 12px 24px;border-left:6px solid #45aaf2;border-radius:12px;background:#fff;">
-    <h2 style="font-size:2em;margin-bottom:24px;">방문자 평가</h2>
-    <c:forEach var="rev" items="${reviewlist}">
+
+  
+  <!-- ★ 리뷰 리스트와 수정 폼 반복 -->
+<div class="detail-container">
+<!-- 리뷰작성 버튼 -->
+<div style="text-align:right; margin: 18px 0;">
+    <button id="reviewWriteBtn" style="padding:7px 20px; border-radius:7px; background:#888; color:#fff; border:none; font-size:16px; cursor:pointer;">
+        리뷰 작성
+    </button>
+</div>
+  <h2 style="font-size:2em; margin-bottom:16px;">방문자 평가</h2>
+  <c:forEach var="rev" items="${reviewlist}">
         <div style="border-bottom:1px solid #eee;padding:16px 0 10px 0;margin-bottom:0;">
             <!-- 작성자 & 별점 -->
             <div style="display:flex;justify-content:space-between;align-items:center;">
-                <span style="font-weight:bold;font-size:17px;"><c:out value="${rev.review_writer}" /></span>
+                <span style="font-weight:bold;font-size:17px;"><c:out value="${rev.review_writer2}" /></span>
+                <span style="color:#555; font-size:14px;">
+            <c:out value="${rev.review_register2}" />
+          </span>
                 <span style="color:#ffa500;letter-spacing:1px;">
                     <c:forEach var="i" begin="1" end="${rev.review_score2}">★</c:forEach>
                     <c:forEach var="i" begin="${rev.review_score2+1}" end="5">☆</c:forEach>
                 </span>
             </div>
+            
             <!-- 리뷰 내용 -->
             <div style="margin:10px 0 6px 0;line-height:1.7;font-size:16px;color:#333;">
                 <c:out value="${rev.review_content2}" />
@@ -255,22 +275,17 @@
                 <button type="button" class="reviewEditBtn" data-reviewid="${rev.review_id2}" style="padding:3px 13px 4px 13px;border-radius:5px;background:#7f8c8d;color:#fff;border:none;cursor:pointer;font-size:14px;">
                     수정
                 </button>
-                <a href="${pageContext.request.contextPath}/exhibitioncont/reviewdelete?review_id2=${rev.review_id2}&con_id=${rev.con_id}" 
-                	onclick="return confirm('정말 삭제하시겠습니까?');">
+                <a href="reviewdelete?review_id2=${rev.review_id2}&res_id=${rev.con_id}" onclick="return confirm('정말 삭제하시겠습니까?');">
                     <button style="padding:3px 13px 4px 13px;border-radius:5px;background:#c0392b;color:#fff;border:none;cursor:pointer;font-size:14px;">
                         삭제
                     </button>
                 </a>
             </div>
             <!-- ★ 리뷰 수정 폼 (리스트 내, 처음엔 숨김) -->
-            작성자명 : ${rev.review_writer}
             <div id="reviewEditForm${rev.review_id2}" class="review-edit-form" style="display:none; background:#f8f9fa; border:1px solid #ccc; border-radius:9px; padding:20px; margin-top:10px;">
-                <form action="${pageContext.request.contextPath}/exhibitioncont/reviewedit"
-                		 method="post" enctype="multipart/form-data">
+                <form action="reviewedit" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="review_id2" value="${rev.review_id2}" />
                     <input type="hidden" name="con_id" value="${rev.con_id}" />
-                    <input type="hidden" name="review_writer" value="${rev.review_writer}">
-					<input type="hidden" name="page" value="${page }" />                    
                     <input type="hidden" name="old_file2" value="${rev.review_file2}" />
                     <div>
                         <label>별점</label>
@@ -288,9 +303,9 @@
                     </div>
                     <div>
                         <label>사진 첨부</label>
-                        <input type="file" name="review_file22" accept="image/*" />
+                        <input type="file2" name="review_file22" accept="image/*" />
                         <c:if test="${not empty rev.review_file2}">
-                            <div>기존: <img src="${pageContext.request.contextPath}/images/${rev.review_file2}" style="max-width:70px;vertical-align:middle;"></div>
+                            <div>기존: <img src="/images/${rev.review_file2}" style="max-width:70px;vertical-align:middle;"></div>
                         </c:if>
                     </div>
                     <div style="margin-top:10px;">
@@ -304,7 +319,10 @@
     <c:if test="${empty reviewlist}">
         <div style="text-align:center;color:#aaa;">등록된 리뷰가 없습니다.</div>
     </c:if>
-</div>
+  </div>
+ </div>
+  
+ 
 
 <!-- 페이지네이션 -->
 <c:if test="${totalpage > 1}">
@@ -322,6 +340,9 @@
     </c:forEach>
   </div>
 </c:if>
+
+<!-- //////////////////////////////////////////////////////////////////////////////// -->
+
 
 <!-- 리뷰 작성/수정 폼 toggle JS -->
 <script>
@@ -355,9 +376,11 @@
         document.getElementById('reviewFormWrap').style.display = 'none';
         document.getElementById('reviewWriteBtn').style.display = 'inline-block';
     }
-</script>
-  
-  
+</script>			<!-- 리뷰댓글 끝 -->
+
+
+    
+   </div>
   
 </body>
 </html>

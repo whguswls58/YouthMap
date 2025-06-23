@@ -12,7 +12,6 @@ import java.util.Set;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dao.CultureDao;
 import com.example.demo.model.CultureModel;
-
 
 @Service
 public class CultureService {
@@ -32,24 +30,23 @@ public class CultureService {
     private CultureDao dao;
 
     private static final Set<String> ALLOWED_TARGETS = Set.of(
-        "성인", "누구나", "전체관람가", "미취학아동 입장불가"
+        "성인", "누구나", "전체관람가", "미취학아동입장불가", "전체관람"
     );
     private static final Set<String> ALLOWED_CODES = Set.of(
         "전시/미술", "축제-문화/예술", "축제-기타", "축제-자연/경관",
         "콘서트", "연극", "뮤지컬/오페라", "국악", "독주회", "클래식", "무용"
     );
 
-    /**
-     * API에서 지정 페이지의 JSON 문자열을 받아 반환
-     */
-    public String getYouthCulture(int i) {
+    /** 한 페이지(1000개)씩 API 호출 */
+    public String getYouthCulture(int pageIndex) {
         try {
             String apiUrl = String.format(
                 "http://openapi.seoul.go.kr:8088/%s/json/culturalEventInfo/%d/%d",
-                apiKey, (i * 1000) + 1, (i + 1) * 1000
+                apiKey,
+                pageIndex * 1000 + 1,
+                (pageIndex + 1) * 1000
             );
-            HttpURLConnection conn = (HttpURLConnection)
-                new URL(apiUrl).openConnection();
+            HttpURLConnection conn = (HttpURLConnection) new URL(apiUrl).openConnection();
             conn.setRequestMethod("GET");
 
             BufferedReader reader = new BufferedReader(
@@ -69,34 +66,26 @@ public class CultureService {
     }
 
     /**
-     * DB에 저장된 최신 데이터 이후의 신규 페이지만 API에서 가져와
-     * 필터링 후 저장 처리
+     * DB에 없는 데이터만 삽입하도록 수정:
+     *  - 제목+시작일 기준으로 exists 체크
+     *  - useTrgt 공백 제거 후 필터링
+     *  - 중간에 끼어든 신규 행도 모두 삽입
      */
     @Transactional
     public void insertNewCultures() throws Exception {
-    	
-    	// 수동 업데이트 시작 로그
         System.out.println("===== 수동 문화 업데이트 시작 =====");
 
-    	
-        CultureModel latest = dao.getLatestData();
-        String lastTitle     = latest.getCon_title();
-        String lastStartDate = latest.getCon_start_date();
-
         JSONParser parser = new JSONParser();
+        int insertCount = 0;
+
+        // 최대 5페이지(1~5000건) 조회
         for (int i = 0; i < 5; i++) {
             String jsonData = getYouthCulture(i);
             if (jsonData == null || jsonData.isBlank()) {
-                // API 호출 실패 또는 빈 응답 시 다음 페이지로
                 continue;
             }
-            JSONObject root;
-            try {
-                root = (JSONObject) parser.parse(jsonData);
-            } catch (Exception e) {
-                e.printStackTrace();
-                continue;
-            }
+
+            JSONObject root = (JSONObject) parser.parse(jsonData);
             JSONObject info = (JSONObject) root.get("culturalEventInfo");
             if (info == null) {
                 continue;
@@ -106,47 +95,59 @@ public class CultureService {
                 continue;
             }
 
+            System.out.println("▶ 페이지 " + i + " 항목 수: " + rows.size());
+
             for (Object o : rows) {
                 JSONObject c = (JSONObject) o;
-                String title = (String) c.get("TITLE");
-                String dr    = (String) c.get("DATE");
-                String startDate = (dr != null && dr.contains("~"))
-                    ? dr.split("~")[0].trim()
-                    : null;
 
-                if (lastTitle.equals(title) && lastStartDate.equals(startDate)) {
-                    return;
+                // 1) TITLE + START_DATE 기준으로 존재 여부 확인
+                String titleRaw  = (String) c.get("TITLE");
+                String dateRaw   = (String) c.get("DATE");
+                String startDate = dateRaw != null && dateRaw.contains("~")
+                    ? dateRaw.split("~")[0].trim()
+                    : dateRaw;
+
+                if (dao.existsByTitleAndDate(titleRaw, startDate)) {
+                    continue;  // 이미 DB에 있으면 스킵
                 }
 
-                String codeName = (String) c.get("CODENAME");
-                String useTrgt  = (String) c.get("USE_TRGT");
-                if (codeName == null
-                 || !ALLOWED_TARGETS.contains(useTrgt)
-                 || !ALLOWED_CODES.contains(codeName)) {
+                // 2) USE_TRGT 정규화 + 필터링
+                String useTrgtRaw = (String) c.get("USE_TRGT");
+                String useTrgt    = useTrgtRaw == null
+                                   ? ""
+                                   : useTrgtRaw.replaceAll("\\s+", "");
+                if (!ALLOWED_TARGETS.contains(useTrgt)) {
                     continue;
                 }
 
+                // 3) CODENAME 필터링
+                String codeName = (String) c.get("CODENAME");
+                if (codeName == null || !ALLOWED_CODES.contains(codeName)) {
+                    continue;
+                }
+
+                // 4) 삽입
                 CultureModel m = toModel(c);
                 dao.culinsert(m);
+                insertCount++;
             }
         }
+
+        System.out.println("▶ 신규 삽입 건수: " + insertCount);
     }
 
-    /**
-     * 매일 오후 4시 30분에 자동으로 문화 업데이트 실행
-     */
-    @Scheduled(cron = "0 30 9 * * *", zone = "Asia/Seoul")
+    /** 매일 16:30 자동 업데이트 */
+    @Scheduled(cron = "0 30 17 * * *", zone = "Asia/Seoul")
     public void scheduledCultureUpdate() {
+        System.out.println("===== 문화 자동 업데이트 시작 ===== " + new Date());
         try {
-            System.out.println("===== 문화 자동 업데이트 시작 =====");
-            System.out.println("실행 시각: " + new Date());
             insertNewCultures();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    /** JSON 객체를 CultureModel로 매핑하는 헬퍼 */
+    /** JSON → Model 매핑 */
     private CultureModel toModel(JSONObject c) {
         CultureModel m = new CultureModel();
         m.setCategory_name((String) c.get("CODENAME"));

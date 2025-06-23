@@ -2,12 +2,11 @@
    카드 그리드
 ──────────────────────────────────────────────*/
 .cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  max-width: 880px;
-  margin: 20px auto 0;
-  padding: 0;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개 칼럼 고정 */
+	gap: 20px;
+	max-width: 1000px; /* 전체 컨테이너 너비를 조정하면 카드 너비도 함께 결정 */
+	margin: 0 auto;
 }
 
 /*──────────────────────────────────────────────
@@ -21,7 +20,9 @@
   border-radius: 8px;
   overflow: hidden;
   background: #fff;
-  text-align: left;
+  text-align: center;
+  margin:20px;
+  width: 250px;
 }
 
 /*──────────────────────────────────────────────
@@ -29,17 +30,17 @@
 ──────────────────────────────────────────────*/
 .img-wrap {
   width: 100%;
-  height: 180px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #f5f5f5;
-  overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center; /* 가로·세로 중앙 정렬 */
+	overflow: hidden;
+	height: 300px;
+	text-align: center;
 }
 .img-wrap img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  max-width: 90%; /* 래퍼 폭을 넘지 않음 */
+	max-height: 90%; /* 래퍼 높이를 넘지 않음 */
+	border-radius: 8px;
 }
 
 /*──────────────────────────────────────────────
@@ -49,43 +50,73 @@
   position: absolute;
   top: 7px;
   right: 7px;
+  color: #fff;
   padding: 4px 12px;
   border-radius: 12px;
   font-size: 0.85rem;
   font-weight: bold;
   white-space: nowrap;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  color: #fff;
   z-index: 10;
 }
 
 /*──────────────────────────────────────────────
    카테고리별 뱃지 색상
 ──────────────────────────────────────────────*/
-.badge.exhibition    { background: #008060; } /* 전시/미술 */
-.badge.performance   { background: #a83279; } /* 공연 */
-.badge.event         { background: #0066cc; } /* 축제/행사 */
+.badge.exhibitionlist    { background: #008060; } /* 전시/미술 */
+.badge.performancelist   { background: #a83279; } /* 공연 */
+.badge.eventlist         { background: #0066cc; } /* 축제/행사 */
 /* 추가 카테고리가 있으면 아래에 더 정의하세요. */
 
 /*──────────────────────────────────────────────
    카드 정보
 ──────────────────────────────────────────────*/
-.card-info {
+.card-info .title,
+.card-info .period,
+
+.card-info .location {
+  text-align: center;
   padding: 8px;
+  display: block;           /* 블록 레벨로 만들어서 width 적용 가능 */
+  width: 100%;              /* 부모(.card)의 너비 전체를 차지 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
 }
-.card-info .title {
+/* .card-info .title {
   font-size: 1em;
   color: #333;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 4px;
+  	text-align: center;
+  
 }
-.card-info .period {
+.card-info .location {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
   font-size: 0.85em;
   color: #555;
+  margin-top: 2px;
 }
-
+.card-info .period {
+  margin: 0 auto; 블록 자체를 부모 중앙에 놓습니다
+	white-space: nowrap;
+	text-align: center; 블록 내부 텍스트도 가운데
+	width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 0.85em;
+	color: #555;
+	text-align: center;
+}
+ */
 /*──────────────────────────────────────────────
    링크 전체 클릭 가능
 ──────────────────────────────────────────────*/
@@ -93,8 +124,6 @@ a.card-link {
   display: block;
   text-decoration: none;
   color: inherit;
-  position: relative;
-  z-index: 0;
 }
 
 /*──────────────────────────────────────────────
@@ -115,3 +144,4 @@ a.card-link {
 .pager .current {
   font-weight: bold;
 }
+

@@ -1,214 +1,127 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ include file="/WEB-INF/views/culture/header.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>전체 콘텐츠 목록</title>
-  <!-- 검색바 포함 -->
+
 
   <style>
-  
-      
-body {
-  font-family: 'Playfair Display', serif;
-  margin: 0;
-  padding: 0;
-  background-color: #fff;
-  color: #333;
-}
-/* 상단 베이지 바 */
-.topbar {
-  background: #f5f0e6;
-  padding: 10px 40px;
-}
-.topbar .menu {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: flex-end;
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);  /* 명확히 한 줄에 4개의 카드 고정 */
   gap: 20px;
-  font-size: 14px;
+  width: 100%;               /* 부모 컨테이너의 전체 너비를 사용 */
+  max-width: 1200px;         /* 좀 더 여유 있게 설정 (기존 1000px → 1200px) */
+  margin: 0 auto;
+  box-sizing: border-box;
 }
-.topbar .menu a {
-  color: #444;
-  text-decoration: none;
-}
-/* 네비게이션 */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 40px;
+
+
+.card {
+  position: relative;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
   background: #fff;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  border-bottom: 1px solid #eee;
-}
-.navbar-left,
-.navbar-right {
-  display: flex;
-  gap: 18px;
-}
-.navbar-center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.nav-link {
-  font-size: 15px;
-  color: #222;
-  text-decoration: none;
-}
-.nav-link:hover,
-.nav-link.active {
-  border-bottom: 2px solid #222;
-  padding-bottom: 2px;
-}
-.logo {
-  font-size: 20px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  color: #111;
-  font-family: 'Playfair Display', serif;
-}
-
-/* Hero */
-.hero {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 60px 0 40px 0;
-}
-.hero-text {
-  background: #888;
-  color: white;
-  padding: 20px 36px;
-  border-radius: 10px;
   text-align: center;
-  max-width: 360px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 90%;
 }
-  
-    /* 카드 그리드 */
-    .cards {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      max-width: 880px;
-      margin: 20px auto;
-      padding: 0;
-    }
-    /* 카드 하나당 */
-    .card {
-      position: relative;
-      flex: 0 0 calc((100% - 60px) / 4);
-      box-sizing: border-box;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      overflow: hidden;
-      background: #fff;
-    }
-    .card img {
-      width: 100%;
-      height: 120px;
-      object-fit: cover;
-      display: block;
-    }
-    /* 뱃지 기본 */
-    .badge {
-      position: absolute;
-      top: 7px;
-      right: 7px;
-      color: #fff;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      white-space: nowrap;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-      z-index: 10;
-    }
-    /* 카테고리별 배경색 */
-    .badge-exhibition { background: #008060; }
-    .badge-performance { background: #ff6600; }
-    .badge-event       { background: #0066cc; }
 
-    .card-info {
-      padding: 8px;
-    }
-    .card-info .title {
-      font-size: 1em;
-      color: #333;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 4px;
-    }
-    .card-info .period {
-      font-size: 0.85em;
-      color: #555;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    /* 링크 */
-    a.card-link {
-      display: block;
-      text-decoration: none;
-      color: inherit;
-      position: relative;
-      z-index: 0;
-    }
-    /* 페이징 */
-    .pager {
-      text-align: center;
-      margin: 20px auto;
-    }
-    .pager a, .pager span {
-      display: inline-block;
-      margin: 0 6px;
-      padding: 4px 8px;
-      text-decoration: none;
-      color: #000;
-    }
-    .pager .current {
-      font-weight: bold;
-    }
-    
+.img-wrap {
+ width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center; /* 가로·세로 중앙 정렬 */
+	overflow: hidden;
+	height: 300px;
+	text-align: center;
+	
+}
+.img-wrap img {
+  max-width: 90%; /* 래퍼 폭을 넘지 않음 */
+	max-height: 90%; /* 래퍼 높이를 넘지 않음 */
+	border-radius: 8px;
+}
+.card-info {
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+
+.card-info .period,
+.card-info .location {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+    color: #555;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+}
+
+.card-info .title {
+  font-weight: bold;
+  margin-bottom: 4px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/*──────────────────────────────────────────────
+   뱃지 (기본 스타일)
+──────────────────────────────────────────────*/
+.badge {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  color: #fff;
+  background: #008060;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+/*──────────────────────────────────────────────
+   카테고리별 뱃지 색상
+──────────────────────────────────────────────*/
+.badge.exhibitionlist    { background: #008060; } /* 전시/미술 */
+.badge.performancelist   { background: #a83279; } /* 공연 */
+.badge.eventlist         { background: #0066cc; } /* 축제/행사 */
+/* 추가 카테고리가 있으면 아래에 더 정의하세요. */
+
+
+/*──────────────────────────────────────────────
+   페이지네이션
+──────────────────────────────────────────────*/
+.pager {
+  text-align: center;
+  margin: 20px auto;
+}
+
+.pager a,
+.pager span {
+  display: inline-block;
+  margin: 0 6px;
+  padding: 4px 8px;
+  text-decoration: none;
+  color: #000;
+}
+
+.pager .current {
+  font-weight: bold;
+}
+
   </style>
 </head>
 <body>
-
-<!-- 상단 베이지 바 -->
-<div class="topbar">
-  <div class="menu">
-    <a href="#">CART</a>
-    <a href="#">MY PAGE</a>
-    <a href="#">JOIN</a>
-  </div>
-</div>
-
-<!-- ✅ 네비게이션 구조 -->
-<div class="navbar">
-  <div class="navbar-left">
-    <a href="#" class="nav-link">About</a>
-    <a href="#" class="nav-link">Facility</a>
-    <a href="#" class="nav-link active">Food</a>
-    <a href="#" class="nav-link">Community</a>
-    <a href="#" class="nav-link">Contact</a>
-  </div>
-  <div class="navbar-center">
-    <span class="logo">YOUTHMAP</span>
-  </div>
-  <div class="navbar-right">
-    <a href="#" class="nav-link">CART</a>
-    <a href="#" class="nav-link">MY PAGE</a>
-    <a href="#" class="nav-link">JOIN</a>
-  </div>
-</div>
 
   <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
 
@@ -256,58 +169,65 @@ body {
 
   <h2 style="text-align:center; margin:20px 0;">
     전체 콘텐츠 목록 (${page}/${pagecount})
-  </h2>
+  </h2><br>
 
 <div class="cards">
   <c:if test="${empty allList }">
-  		검색 결과가 없습니다.
+    검색 결과가 없습니다.
   </c:if>
-  
-  <c:if test="${!empty allList }">
-  <c:forEach var="item" items="${allList}">
-    <div class="card">
-      <!-- 전시/미술 뱃지 (해당하면) -->
-      <c:if test="${item.category_name == '전시/미술'}">
-        <div class="badge badge-exhibition">${item.category_name}</div>
-      </c:if>
 
-      <!-- 공연 뱃지 (콘서트·연극·뮤지컬/오페라) -->
-      <c:if test="${item.category_name == '콘서트'
-         or item.category_name == '연극'
-         or item.category_name == '뮤지컬/오페라'}">
-  <div class="badge badge-performance">${item.category_name}</div>
-</c:if>
+  <c:if test="${!empty allList}">
+    <c:forEach var="item" items="${allList}">
 
-<c:if test="${item.category_name == '축제-기타'
-         or item.category_name == '축제-시민화합'
-         or item.category_name == '축제-자연/경관'
-         or item.category_name == '축제-문화/예술'}">
-  <div class="badge badge-event">축제/행사</div>
-</c:if>
+      <!-- 상세페이지 URL 설정 -->
+      <c:choose>
+        <c:when test="${item.category_name == '전시/미술'}">
+          <c:set var="detailUrl" value="${pageContext.request.contextPath}/exhibitioncont"/>
+        </c:when>
+        <c:when test="${item.category_name == '콘서트' 
+                      or item.category_name == '연극' 
+                      or item.category_name == '뮤지컬/오페라'
+                      or item.category_name == '국악'
+                      or item.category_name == '독주회'
+                      or item.category_name == '클래식'
+                      or item.category_name == '무용'}">
+          <c:set var="detailUrl" value="${pageContext.request.contextPath}/performancecont"/>
+        </c:when>
+        <c:otherwise>
+          <c:set var="detailUrl" value="${pageContext.request.contextPath}/eventcont"/>
+        </c:otherwise>
+      </c:choose>
 
-    <!-- 이미지 & 링크 -->    
-    <c:set var="detailPage"
-       value="${(item.category_name=='전시/미술')?'exhibitioncont'
-                :(item.category_name=='콘서트'||item.category_name=='연극'||item.category_name=='뮤지컬/오페라')?'performancecont'
-                :(item.category_name=='축제-기타'||item.category_name=='축제-시민화합'||item.category_name=='축제-자연/경관'||item.category_name=='축제-문화/예술')?'eventcont'
-                :'defaultcont'}"/>
+      <!-- URL 파라미터 설정 -->
+      <c:url var="urlWithParams" value="${detailUrl}">
+        <c:param name="con_id" value="${item.con_id}" />
+        <c:param name="page" value="${page}" />
+      </c:url>
 
-	<a class="card-link"
-  	   href="${pageContext.request.contextPath}/${detailPage}?con_id=${item.con_id}&page=${page}">
-  	   <img src="${item.con_img}" title="${item.con_title}"/>
-	</a>
+      <!-- 카드 구성 -->
+      <div class="card">
+        
+        <!-- 🔗 이미지에만 링크 -->
+        <a href="${urlWithParams}">
+          <div class="img-wrap">
+            <img src="${item.con_img}" alt="${item.con_title}" />
+          </div>
+        </a>
 
-      <!-- 제목·기간·위치 -->
-      <div class="card-info">
-        <div class="title">${item.con_title}</div>
-        <div class="period">
-          ${item.con_start_date} ~ ${item.con_end_date}<br/>
-          ${item.con_location}
+        <div class="card-info">
+          <!-- 🔗 제목에만 링크 -->
+          <div class="title">
+            <a href="${urlWithParams}" style="text-decoration:none; color:inherit;">
+              ${item.con_title}
+            </a>
+          </div>
+          <div class="period">${item.con_start_date} ~ ${item.con_end_date}</div>
+          <div class="location">${item.con_location}</div>
         </div>
+
       </div>
-    </div>
-    
-  </c:forEach>
+
+    </c:forEach>
   </c:if>
 </div>
 
@@ -336,5 +256,7 @@ body {
       <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=all&search=${search}&keyword=${keyword}&page=${pagecount}">&raquo;</a>
     </c:if>
   </div>
+  
+  
 </body>
 </html>
