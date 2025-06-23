@@ -8,49 +8,86 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/member/mypage.css">
-
+   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 </head>
+<body>
 
-  <!-- 상단 베이지 바 -->
-  <div class="topbar">
-    <div class="menu">
-      <a href="#">CART</a>
-      <a href="#">MY PAGE</a>
-      <a href="#">JOIN</a>
-    </div>
+<!-- 상단 베이지 바 -->
+<div class="topbar">
+  <div class="menu">
+    <c:choose>
+      <c:when test="${empty sessionScope.loginMember}">
+        <a href="/login">로그인</a>
+        <a href="/register">회원가입</a>
+      </c:when>
+      <c:otherwise>
+        <a href="/mypage">마이페이지</a>
+        <a href="/logout">로그아웃</a>
+      </c:otherwise>
+    </c:choose>
   </div>
+</div>
 
-  <!-- 네비게이션 -->
-  <div class="navbar">
-    <div class="navbar-left">
-      <a href="#" class="nav-link">About</a>
-      <a href="#" class="nav-link">Facility</a>
-      <a href="#" class="nav-link active">Food</a>
-      <a href="#" class="nav-link">Community</a>
-      <a href="#" class="nav-link">Contact</a>
+<!-- ✅ 네비게이션 구조 -->
+<div class="navbar">
+  <div class="navbar-left">
+  <div class="nav-item">
+    <a href="/policyMain" class="nav-link">정책</a>
+    <div class="dropdown">
+        <a href="/policyMain?mainCategory=일자리">일자리</a>
+        <a href="/policyMain?mainCategory=주거">주거</a>
+        <a href="/policyMain?mainCategory=교육">교육</a>
+      </div>
+      </div>
+      <div class="nav-item">
+    <a href="/culturemain" class="nav-link">문화</a>
+    <div class="dropdown">
+       <a href="/exhibitionlist">전시/미술</a>
+       <a href="/performancelist">공연</a>
+      <a href="/eventlist">축제/행사</a>
     </div>
-    <div class="navbar-center">
+    </div>
+    <div class="nav-item">
+    <a href="/res_main" class="nav-link">맛집</a>
+    <div class="dropdown">
+       <a href="/res_main?res_gu=강남구">강남구</a>
+       <a href="/res_main?res_gu=강북구">강북구</a>
+       <a href="/res_main?res_gu=강서구">강서구</a>
+       <a href="/res_main?res_gu=강동구">강동구</a>
+    </div>
+    </div>
+    <div class="nav-item">
+    <a href="/boardlist" class="nav-link">유저게시판</a>
+   </div>
+   
+  </div>
+ <div class="navbar-center">
     <a href="${pageContext.request.contextPath}/home" class="logo">YOUTHMAP</a>
   </div>
-    <div class="navbar-right">
-      <a href="#" class="nav-link">CART</a>
-      <a href="#" class="nav-link">MY PAGE</a>
-      <a href="#" class="nav-link">JOIN</a>
-    </div>
-  </div>
   
+  <div class="navbar-right">
+    <c:if test="${not empty sessionScope.loginMember}">
+      <input type="hidden" id="session-start-time" value="${sessionScope.loginStartTime}" />
+      <span style="color: #333; font-size: 12px;">환영합니다 <b>${sessionScope.loginMember.memName}</b>님</span>
+      <span id="login-timer" style="font-weight: bold; color: #d33; font-size: 14px;"></span>
+    </c:if>
+  </div>
+</div>
   <!-- 사이드바 -->
 <body>
    <div class="mypage-container">
-    <div class="sidebar">
+      <div class="sidebar">
+    <div style="margin-bottom: 30px; font-weight: bold;">
+      ${member.memName}님의 마이페이지
+    </div>
       <a href="${pageContext.request.contextPath}/mypage">내 정보</a>
       <c:if test="${sessionScope.loginMember.memType == 'LOCAL'}">
             <a href="${pageContext.request.contextPath}/edit">정보 수정</a>
           </c:if>
      <a href="${pageContext.request.contextPath}/edit_pass">비밀번호 변경</a>
-      <a href="#">내 게시물</a>
-      <a href="#">내 댓글</a>
-      <a href="#">회원 탈퇴</a>
+      <a href="${pageContext.request.contextPath}/mypage-posts">내 게시물</a>
+      <a href="${pageContext.request.contextPath}/mypage-comments">내 댓글</a>
+      <a href="javascript:void(0);" onclick="confirmWithdraw()" style="color: red;">회원 탈퇴</a>
     </div>
 
 
@@ -133,6 +170,6 @@
       });
     });
   </script>
-
+<script src="/js/session.js"></script>
 </body>
 </html>

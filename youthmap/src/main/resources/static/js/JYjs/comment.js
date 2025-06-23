@@ -22,19 +22,34 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 
                 data.forEach(c => {
-                    const item = document.createElement("div");
+                    const item = document.createElement("li");
                     item.className = "comment-item";
 
-                    // 본인 댓글이면 삭제 버튼 생성
-                    let deleteBtn = "";
-					if (isLoggedIn() && (loginUserId === c.memId || loginUserRole === 'ADMIN')) {
-					    deleteBtn = `<button class="comment-delete-btn" onclick="deleteComment(${c.commNo})">삭제</button>`;
-					}
+                    // 수정/삭제 버튼
+                    let actions = "";
+                    if (isLoggedIn() && (loginUserId === c.memId || loginUserRole === 'ADMIN')) {
+                        actions = `
+                            <div class="comment-actions">
+                                <a href="javascript:void(0);" onclick="editComment(${c.commNo})">수정</a>
+                                <a href="javascript:void(0);" onclick="deleteComment(${c.commNo})">삭제</a>
+                            </div>
+                        `;
+                    }
 
                     item.innerHTML = `
-                        <div class="comment-header">${c.memId} (${formatDate(c.commDate)})</div>
-                        <div class="comment-content">${c.commContent}</div>
-                        ${deleteBtn}
+                        <div class="comment-avatar">
+                            <img src="/img/JYimg/Profile_icon.png" alt="프로필">
+                        </div>
+                        <div class="comment-body">
+                            <div class="comment-author-line">
+                                <span class="comment-author">${c.memName}</span>
+                                <span class="comment-text">${c.commContent}</span>
+                            </div>
+                            <div class="comment-info">
+                                <span class="comment-time">${formatDate(c.commDate)}</span>
+                                ${actions}
+                            </div>
+                        </div>
                     `;
                     commentList.appendChild(item);
                 });

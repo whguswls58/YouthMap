@@ -55,19 +55,41 @@ public class BoardController {
         List<Board> notices = boardService.getTopNotices();
         model.addAttribute("topNotices", notices);
 
+        // 페이징 설정
+        int pageSize = 10; // 페이지당 게시글 수
+        int startRow = (page - 1) * pageSize + 1;
+        int endRow = page * pageSize;
+
         // 일반 글
         Map<String,Object> map = new HashMap<>();
         if (category != null && !category.isEmpty()) map.put("category", category);
         map.put("searchType", searchType);
         map.put("keyword", keyword);
-        map.put("excludeCategory", "공지");
+        map.put("excludeCategory", "공지사항");
+        map.put("startRow", startRow);
+        map.put("endRow", endRow);
 
         List<Board> boardlist = boardService.list(map);
-        int count = boardService.count(map);
+        
+        // 일반 게시글만 카운트 (공지사항 제외)
+        Map<String,Object> countMap = new HashMap<>();
+        if (category != null && !category.isEmpty()) countMap.put("category", category);
+        countMap.put("searchType", searchType);
+        countMap.put("keyword", keyword);
+        countMap.put("excludeCategory", "공지사항");
+        int count = boardService.count(countMap);
+
+        // 페이징 정보 계산
+        int totalPages = (int) Math.ceil((double) count / pageSize);
+        int startPage = ((page - 1) / 5) * 5 + 1; // 5개씩 페이지 번호 표시
+        int endPage = Math.min(startPage + 4, totalPages);
 
         model.addAttribute("boardlist", boardlist);
         model.addAttribute("listcount", count);
         model.addAttribute("page", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         model.addAttribute("category", category);
         model.addAttribute("searchType", searchType);
         model.addAttribute("keyword", keyword);
@@ -207,4 +229,6 @@ public class BoardController {
         return "board/deleteconfirm";
     }
 }
+
+
 

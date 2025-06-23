@@ -11,6 +11,7 @@ import lombok.Data;
 public class Board {
     private int boardNo;
     private String memId;
+    private String memName;
     private String boardCategory;
     private String boardSubject;
     private String boardContent;
