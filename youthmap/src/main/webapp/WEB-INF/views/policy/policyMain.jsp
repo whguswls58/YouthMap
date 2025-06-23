@@ -352,6 +352,31 @@ a:hover {
   margin: 3px 3px 0 0;
 }
 
+/* ✅ 페이징 스타일 */
+.pagination {
+	text-align: center;
+	margin: 30px 0;
+	font-size: 18px;
+}
+.pagination a {
+	color: #666;
+	text-decoration: none;
+	margin: 0 6px;
+	padding: 6px 12px;
+	border-radius: 6px;
+	border: 1px solid transparent;
+	transition: background 0.2s, color 0.2s;
+}
+.pagination a:hover {
+	background: #eee;
+}
+.pagination b {
+	color: #222;
+	font-weight: bold;
+	padding: 6px 12px;
+	background: #e0e0e0;
+	border-radius: 6px;
+}
 </style>
 
 </head>
@@ -636,29 +661,29 @@ a:hover {
 		pagination.innerHTML = "";
 
 	    // 처음 페이지
-	    pagination.innerHTML += `<button onclick="loadPage(1)">&lt;</button> `;
+	    pagination.innerHTML += `<a href="#" onclick="loadPage(1)">&lt;</a> `;
 
 	    // 이전 블록
 	    if (start > 6) {
-	      pagination.innerHTML += `<button onclick="loadPage(\${start - 6})">[이전]</button> `;
+	      pagination.innerHTML += `<a href="#" onclick="loadPage(\${start - 6})">[이전]</a> `;
 	    } 	//end if
 
 	    // 페이지 번호들
 	    for (let i = start; i <= end; i++) {
 	      if (i === current) {
-	        pagination.innerHTML += `<strong>[\${i}]</strong>`;
+	        pagination.innerHTML += `<b>\${i}</b>`;
 	      } else {
-	        pagination.innerHTML += `<button onclick="loadPage(\${i})">\${i}</button> `;
+	        pagination.innerHTML += `<a href="#" onclick="loadPage(\${i})">\${i}</a>`;
 	      }	// end if
 	    }	// end for
 
 	    // 다음 블록
 	    if (end < total) {
-	      pagination.innerHTML += `<button onclick="loadPage(\${start + 6})">[다음]</button> `;
+	      pagination.innerHTML += `<a href="#" onclick="loadPage(\${start + 6})">[다음]</a> `;
 	    }	// end if
 
 	    // 마지막 페이지
-	    pagination.innerHTML += `<button onclick="loadPage(\${total})">&gt;</button>`;
+	    pagination.innerHTML += `<a href="#" onclick="loadPage(\${total}">&gt;</a>`;
 	  }		// end function
 
 	  // 초기 로딩
