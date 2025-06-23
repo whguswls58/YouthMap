@@ -10,24 +10,169 @@
 <title>정책 통합 검색 페이지</title>
 
 <style>
-.search-container {
-	text-align: center;
-	margin: 20px 0;
+/* 상단 베이지 바 */
+.topbar {
+  background: #f5f0e6;
+  padding: 10px 40px;
+}
+.topbar .menu {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  font-size: 14px;
+}
+.topbar .menu a {
+  color: #444;
+  text-decoration: none;
+}
+/* 네비게이션바 */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid #eee;
+}
+.navbar-left,
+.navbar-right {
+  display: flex;
+  gap: 18px;
+}
+.navbar-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.nav-link {
+  font-size: 15px;
+  color: #222;
+  text-decoration: none;
+}
+.nav-link:hover,
+.nav-link.active {
+  border-bottom: 2px solid #222;
+  padding-bottom: 2px;
+}
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #111;
+  font-family: 'Playfair Display', serif;
 }
 
-/* 폼 전체 */
-.search-form {
-	display: inline-block;
+/* body */
+body {
+  font-family: 'Playfair Display', serif;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  color: #333;
 }
 
-/* 검색 박스 래퍼 */
-.search-box {
-	display: inline-flex;
-	align-items: center;
-	border: 1px solid #000;
-	border-radius: 6px;
-	background: #eee;
-	overflow: hidden;
+/* 검색컨테이너 */
+.search-wrapper {
+  	display: flex;
+  	justify-content: center;
+  	margin: 50px 0;
+  	position: relative;
+  	z-index: 1;
+}
+
+/* 검색바 */
+.search-bar {
+	display: flex;
+  	align-items: center;
+  	background: #f2f2f2;
+  	padding: 20px 40px;
+  	border-radius: 12px;
+  	box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  	gap: 12px;
+  	width: fit-content; /* ✅ 내부 크기에 맞춤 */
+  max-width: 100%;     /* ✅ 모바일 대응 */
+  flex-direction: column; /* ✅ 내부 항목 세로 정렬 */
+  align-items: center;
+  	justify-content: center;
+  	position: relative;
+  	z-index: 1;
+}
+
+.search-combined {
+  display: flex;
+  background-color: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  flex-grow: 1;
+  max-width: 760px;
+  position: relative;
+  z-index: 2;
+}
+
+.search-combined select {
+  border: none;
+  padding: 12px 20px;
+  font-size: 14px;
+  background-color: #fff;
+  border-right: 1px solid #ccc;
+  position: relative;
+  z-index: 2;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  appearance: none;
+  width: 160px;
+}
+.search-combined select:focus {
+  outline: none;
+  z-index: 9999;
+} 
+
+/* 검색창 */
+.search-combined input[type="text"] {
+  border: none;
+  padding: 12px 16px;
+  font-size: 14px;
+  width: 100%;
+  outline: none;
+}
+
+/* 검색버튼 */
+.search-bar input[type="submit"] {
+  padding: 12px 20px;
+  background-color: #888;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 초기화 버튼 */
+.search-bar input[type="reset"] {
+  padding: 12px 20px;
+  background-color: #888;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.search-bar input[type="submit"]:hover {
+  background-color: #666;
+}
+
+.search-buttons {
+  display: flex;
+  gap: 10px;
 }
 
 /* 셀렉트 박스 */
@@ -38,45 +183,16 @@
 	font-size: 1em;
 }
 
-/* 검색어 입력창 */
-.search-input {
-	width: 800px;
-	padding: 8px;
-	border: none;
-	outline: none;
-	font-size: 1em;
-	background: transparent;
-}
-
-/* 검색 버튼 */
-.search-button {
-	border: none;
-	background: #fff;
-	padding: 8px 16px;
-	cursor: pointer;
-	font-size: 1em;
-}
-
 /* 체크박스 css */
 .subcategory-group input[type="checkbox"] {
   display: none;
 }
 
-
-.icon-checkbox-group {
+.category-container {
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
-}
-
-.icon-checkbox img {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 8px;
-  border: 2px solid transparent;
-  border-radius: 12px;
-  transition: transform 0.2s ease;
 }
 
 .category-group {
@@ -88,6 +204,10 @@
 .category-header {
   text-align: center;
   margin-bottom: 10px;
+  background-color: #f2f2f2;
+  justify-content: center;
+  align-items: center;
+  
 }
 
 .category-header img {
@@ -128,12 +248,13 @@
 
 a {
 	text-decoration: none;
-	color: #007bff;
+	color: #888;
 	margin: 0 5px;
 }
 
 a:hover {
 	text-decoration: underline;
+	color: #666;
 }
 
 .policy-item {
@@ -157,11 +278,32 @@ a:hover {
 }
 
 .policy-search-count{
-  display: left;
-  gap: 20px;
+  display: flex;
+  justify-content: space-between; /* 좌우 정렬 */
+  align-items: center;            /* 수직 가운데 정렬 */
+  padding: 10px 0;
+  width:100%;
   max-width: 1000px;
   margin: 0 auto;
 }
+
+.policy-search-count select{
+  border: none;
+  padding: 12px 20px;
+  font-size: 14px;
+  background-color: #fff;
+  border-right: 1px solid #ccc;
+  position: relative;
+  z-index: 2;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  appearance: none;
+  width: 100px;
+
+}
+
 
 .policy-card {
   border: 1px solid #ddd;
@@ -192,21 +334,39 @@ a:hover {
   font-size: 12px;
   color: #777;
   margin-right: 5px;
+  display: inline-block;
+  padding: 3px 8px;
+  background: #eee;
+  border-radius: 12px;
+/*   margin: 3px 3px 0 0; */
+  
 }
+
+/* D-Day 10일 이하 css */
+.dday-red {
+  color: red;
+  font-weight: bold;
+}
+
 
 .detail-btn {
   display: block;
   margin-top: 15px;
-  border: 1px solid #337ab7;
-  color: #337ab7;
-  padding: 6px 12px;
+  border:none; 
   border-radius: 5px;
+  padding: 10px 28px;
+  background-color: #888;
+  color: #fff;
+  font-size:17px; 
+  cursor:pointer;
   text-align: center;
   text-decoration: none;
+  
+  
 }
 
 .detail-btn:hover {
-  background-color: #337ab7;
+  background-color: #666;
   color: white;
 }
 
@@ -219,68 +379,33 @@ a:hover {
   margin: 3px 3px 0 0;
 }
 
-body {
-  font-family: 'Playfair Display', serif;
-  margin: 0;
-  padding: 0;
-  background-color: #fff;
-  color: #333;
+/* ✅ 페이징 스타일 */
+.pagination {
+	text-align: center;
+	margin: 30px 0;
+	font-size: 18px;
 }
-/* 상단 베이지 바 */
-.topbar {
-  background: #f5f0e6;
-  padding: 10px 40px;
+.page-btn {
+	color: #666;
+	background: #fff;
+	text-decoration: none;
+	margin: 0 6px;
+	padding: 6px 12px;
+	border-radius: 6px;
+	border: 1px solid transparent;
+	transition: background 0.2s, color 0.2s;
 }
-.topbar .menu {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: flex-end;
-  gap: 20px;
-  font-size: 14px;
+/* .pagination button:hover, */
+.page-btn.active {
+	background: #f2f2f2;
+	font-weight: bold;
 }
-.topbar .menu a {
-  color: #444;
-  text-decoration: none;
-}
-/* 네비게이션 */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 40px;
-  background: #fff;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  border-bottom: 1px solid #eee;
-}
-.navbar-left,
-.navbar-right {
-  display: flex;
-  gap: 18px;
-}
-.navbar-center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.nav-link {
-  font-size: 15px;
-  color: #222;
-  text-decoration: none;
-}
-.nav-link:hover,
-.nav-link.active {
-  border-bottom: 2px solid #222;
-  padding-bottom: 2px;
-}
-.logo {
-  font-size: 20px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  color: #111;
-  font-family: 'Playfair Display', serif;
+.pagination b {
+	color: #222;
+	font-weight: bold;
+	padding: 6px 12px;
+	background: #e0e0e0;
+	border-radius: 6px;
 }
 </style>
 
@@ -288,61 +413,52 @@ body {
 <body>
 <!-- 상단 베이지 바 -->
 <div class="topbar">
-  <div class="menu">
-    <a href="#">CART</a>
-    <a href="#">MY PAGE</a>
-    <a href="#">JOIN</a>
-  </div>
+	<div class="menu">
+    	<a href="#">CART</a>
+	    <a href="#">MY PAGE</a>
+	    <a href="#">JOIN</a>
+  	</div>
 </div>
 
 	<!-- ✅ 네비게이션 구조 -->
 <div class="navbar">
-  <div class="navbar-left">
-    <a href="#" class="nav-link">About</a>
-    <a href="#" class="nav-link">Facility</a>
-    <a href="#" class="nav-link active">Food</a>
-    <a href="#" class="nav-link">Community</a>
-    <a href="#" class="nav-link">Contact</a>
-  </div>
-  <div class="navbar-center">
-  	<span class="logo">YOUTHMAP</span>
-  </div>
-  <div class="navbar-right">
-    <a href="#" class="nav-link">CART</a>
-    <a href="#" class="nav-link">MY PAGE</a>
-    <a href="#" class="nav-link">JOIN</a>
-  </div>
+  	<div class="navbar-left">
+		<a href="#" class="nav-link">About</a>
+	    <a href="#" class="nav-link">Facility</a>
+	    <a href="#" class="nav-link active">Food</a>
+	    <a href="#" class="nav-link">Community</a>
+		<a href="#" class="nav-link">Contact</a>
+  	</div>
+ 	<div class="navbar-center">
+  		<span class="logo">YOUTHMAP</span>
+  	</div>
+  	<div class="navbar-right">
+	    <a href="#" class="nav-link">CART</a>
+	    <a href="#" class="nav-link">MY PAGE</a>
+	    <a href="#" class="nav-link">JOIN</a>
+  	</div>
 </div>
-
-
-<!-- 	<input type=button value="첫 화면" onclick="location.href='/'"> -->
 	<br>
 
-	<div class="search-container">
-		<form onsubmit="return submitSearchForm(event);" class="search-form">
-			<div class="search-box">
-				<!-- 카테고리 선택 -->
-				<input type="hidden" name="mainCategory" value="youthPolicy" />
-				<select
-					name="mainCategory" class="category-select" disabled>
-					<option value="youthPolicy" selected>청년정책</option>
-					<option value="culture">문화생활</option>
-					<option value="food">맛집</option>
-				</select>
+<div class="search-wrapper">
+	<form onsubmit="return submitSearchForm(event);" class="search-bar" method="get" >
+  		<div class="search-combined">
+  			<input type="hidden" name="mainCategory" value="youthPolicy" />
+  			<select	name="mainCategory" class="category-select" disabled>
+				<option value="youthPolicy" selected>청년정책</option>
+				<option value="culture">문화생활</option>
+				<option value="food">맛집</option>
+			</select>
 
-				<!-- 검색어 입력 -->
-				<input type="text" name="searchInput" class="search-input"
-					placeholder="검색어를 입력하세요" />
-				<input type="hidden" name="page" value="${page }"/>
-				<!-- 검색 버튼 -->
-				<button type="submit" class="search-button">검색</button>
-			</div><br>
-			
-			<!-- 카테고리 체크박스 -->
+			<input type="text" name="searchInput" placeholder="검색어를 입력하세요" />
+	  		<input type="submit" value="검색" />
+  		</div>
+  		
+  		<div class="category-container">
 			<c:forEach var="cat" items="${categoryList}">
 				<div class="category-group">
 					<div class="category-header">
-				    	<img src="policy/policyIcon/${cat.icon}" width="40" />
+				    	<img src="${pageContext.request.contextPath}/policy/policyIcon/${cat.icon}" width="40" />
 				      	<p><strong>${cat.name}</strong></p>
 						<label>
 							<input type="checkbox" class="check-all" data-target="${cat.name}" /> 전체
@@ -358,11 +474,15 @@ body {
 					</div>
 				</div>
 			</c:forEach>
-			<br>
-			<input type="submit" value="검색">		
-			<input type="reset" value="초기화">		
-		</form>
+		</div>
+			<div id="search-button">
+				<input type="submit" value="검색">		
+				<input type="reset" value="초기화">		
+			</div>
+  		  		
+	</form>
 	</div>
+
 
 <div id="policy-search-count" class="policy-search-count hidden"></div>
 
@@ -428,18 +548,22 @@ body {
 </script>
 
 <script>
-	window.loadPage = function(page) {
+	window.loadPage = function(page, sortOrder = null) {
 	console.log("loadPage 호출됨. page = ", page);
 	console.log(selectedCategories);
-
-	fetch(`/policyListJson?page=\${page}&
+	const order = sortOrder || document.getElementById("sortOrder")?.value || "latest";
+	console.log("정렬방식 : ", order);
+	
+	fetch(`${pageContext.request.contextPath}/policyListJson?page=\${page}&
 			searchInput=\${encodeURIComponent(currentSearchInput)}&
 			mainCategory=\${encodeURIComponent(currentMainCategory)}&
-			selectedCategories=\${selectedCategories}`)  // 백틱(`) 사용!
+			selectedCategories=\${selectedCategories}&
+			sortOrder=\${order}`)  // 백틱(`) 사용!
 	 	.then(response =>  	response.json())
 	    .then(data => {
 		console.log("data:", data);
-	 	
+		
+		
 		const container = document.getElementById("policy-container");
 		const countBox = document.getElementById("policy-search-count");
 	    const pagination = document.getElementById("pagination");
@@ -458,6 +582,58 @@ body {
 	    countBox.classList.remove("hidden");
 	    pagination.classList.remove("hidden");
 	    
+	 	// 검색 결과 갯수 출력
+		const plcy_cnt = document.createElement("div");
+		plcy_cnt.className = "policy-search-count";
+		
+		console.log(`listcount : \${data.listcount}`);
+		
+		const plcy_cnt_leftDiv = document.createElement("div");
+		const search_result = document.createElement("p");
+		search_result.textContent = `검색 된 결과 : \${data.listcount}개`;
+		plcy_cnt_leftDiv.appendChild(search_result);
+		plcy_cnt.appendChild(plcy_cnt_leftDiv);
+		
+		
+		// 정렬 방식 선택 select box 추가
+		const plcy_cnt_rightDiv = document.createElement("div");
+		const select = document.createElement("select");
+		select.name = "sortOrder";
+		select.id = "sortOrder";
+
+		// option: 최신순
+		const option1 = document.createElement("option");
+		option1.value = "latest";
+		option1.textContent = "최신순";
+		option1.selected = true;
+
+		// option: 조회순
+		const option2 = document.createElement("option");
+		option2.value = "views";
+		option2.textContent = "조회순";
+
+		// select에 option 추가
+		select.appendChild(option1);
+		select.appendChild(option2);
+		
+		select.addEventListener("change", function () {
+			  const selected = this.value;
+			  console.log("정렬 방식 선택:", selected);
+			  lodePage(data.page, selected);
+			  // 정렬 기준에 따라 리스트 다시 요청 또는 필터링 로직 추가 가능
+		});
+		
+		plcy_cnt_rightDiv.appendChild(select);
+
+		// select를 div에 추가
+		plcy_cnt.appendChild(plcy_cnt_rightDiv);
+		const container_search = document.getElementById("policy-search-count");
+	    container_search.innerHTML = "";
+		
+		container_search.appendChild(plcy_cnt);
+	    
+	    
+	    
 	    console.log("data.pmList 출력 확인:", data.pmList);
 		data.pmList.forEach(p => {
 			console.log("각 항목 확인:", p);
@@ -468,17 +644,32 @@ body {
 		   	
 		 	// 라벨
 		    const labels = document.createElement("div");
-		    
+		 	
 		    if(p.aply_ymd_strt == null){
 			 	labels.innerHTML = `
 			        <span class="policy-label">상시</span><br>
 			        <span class="policy-label">\${p.lclsf_nm}</span><br>
 			    `;
 		    }else{
-		    	const ddayText = getDday(p.aply_ymd_end);
-		    	console.log(ddayText);
+		    	const dday = getDday(p.aply_ymd_end);
+		    	
+				// 출력 포맷
+		    	let ddayText = '';
+				if (parseInt(dday) > 0) {
+				    ddayText = `D-\${dday}`;
+				} else if (parseInt(dday) === 0) {
+					ddayText = "D-Day";
+				} else {
+					ddayText = `D+\${dday}`;
+				}
+		    	
+		    	let ddayColorClass = '';
+		    	if (parseInt(dday) <= 10) {
+		    	  ddayColorClass = 'dday-red';
+		    	}
+
 			 	labels.innerHTML = `
-			        <span class="policy-label">\${ddayText}</span><br>
+			        <span class="policy-label \${ddayColorClass}">\${ddayText}</span><br>
 			        <span class="policy-label">\${p.lclsf_nm}</span><br>
 			    `;
 		    	
@@ -487,7 +678,7 @@ body {
 		    card.appendChild(labels);
 			
 		 	const aContent = document.createElement("a");
-		 	aContent.href= `/policyContent?page=${page}&plcy_no=\${p.plcy_no}`;
+		 	aContent.href= `${pageContext.request.contextPath}/policyContent?page=\${page}&plcy_no=\${p.plcy_no}`;
  	
 		    // 제목
 		    const title = document.createElement("div");
@@ -517,7 +708,7 @@ body {
 		    
 		 	// 자세히 보기 버튼
 		    const detailBtn = document.createElement("a");
-		    detailBtn.href = `/policyContent?page=${page}&plcy_no=\${p.plcy_no}`;
+		    detailBtn.href = `${pageContext.request.contextPath}/policyContent?page=${page}&plcy_no=\${p.plcy_no}`;
 		    detailBtn.className = "detail-btn";
 		    detailBtn.textContent = "자세히보기";
 		    card.appendChild(detailBtn);
@@ -541,27 +732,14 @@ body {
 		    card.appendChild(keywordBox);
 			container.appendChild(card);
 			
-			// 검색 결과 갯수 출력
-			const plcy_cnt = document.createElement("div");
-			plcy_cnt.className = "policy-search-count";
 			
-			console.log(`listcount : \${data.listcount}`);
-			const search_result = document.createElement("p");
-			search_result.textContent = `검색 된 결과 : \${data.listcount}개`;
-			plcy_cnt.appendChild(search_result);
-			
-			const container_search = document.getElementById("policy-search-count");
-		    container_search.innerHTML = "";
-			
-			container_search.appendChild(plcy_cnt);
 			
 	    });
 	      
 	   	// 페이지네이션 렌더링 호출
-	    renderPagination(data.page, data.pagecount, data.startpage, data.endpage);
-	      
-	    })
-	    .catch(error => console.error("오류 발생:", error));
+	    renderPagination(data.page, data.pagecount, data.startpage, data.endpage, data.sortOrder);
+
+	    }).catch(error => console.error("오류 발생:", error));
 	}
 	
 	// 페이지 렌더 처리
@@ -571,36 +749,40 @@ body {
 		pagination.innerHTML = "";
 
 	    // 처음 페이지
-	    pagination.innerHTML += `<button onclick="loadPage(1)">&lt;</button> `;
+	    pagination.innerHTML += 
+	    	`<button class="page-btn" onclick="loadPage(1, \${sortOrder})">◀</button> `;
 
 	    // 이전 블록
 	    if (start > 6) {
-	      pagination.innerHTML += `<button onclick="loadPage(\${start - 6})">[이전]</button> `;
+	      pagination.innerHTML += 
+	    	  `<button class="page-btn" onclick="loadPage(\${start - 6}, \${sortOrder})">[이전]</button> `;
 	    } 	//end if
 
 	    // 페이지 번호들
 	    for (let i = start; i <= end; i++) {
 	      if (i === current) {
-	        pagination.innerHTML += `<strong>[\${i}]</strong>`;
+	        pagination.innerHTML += `<b>\${i}</b>`;
 	      } else {
-	        pagination.innerHTML += `<button onclick="loadPage(\${i})">\${i}</button> `;
+	        pagination.innerHTML += 
+	        	`<button class="page-btn" onclick="loadPage(\${i}, \${sortOrder})">\${i}</button>`;
 	      }	// end if
 	    }	// end for
 
 	    // 다음 블록
 	    if (end < total) {
-	      pagination.innerHTML += `<button onclick="loadPage(\${start + 6})">[다음]</button> `;
+	      pagination.innerHTML += 
+	    	  `<button class="page-btn" onclick="loadPage(\${start + 6}, \${sortOrder})">[다음]</button> `;
 	    }	// end if
 
 	    // 마지막 페이지
-	    pagination.innerHTML += `<button onclick="loadPage(\${total})">&gt;</button>`;
+	    pagination.innerHTML += 
+	    	`<button class="page-btn" onclick="loadPage(\${total}, \${sortOrder})">▶</button>`;
 	  }		// end function
 
 	  // 초기 로딩
 	 window.addEventListener("DOMContentLoaded", () => {
 		 currentSearchInput = "";  // 초기화
 		 currentMainCategory = "youthPolicy";
-
     });		// end window
 	
     // 검색어 및 카테고리 상태 저장
@@ -648,15 +830,10 @@ body {
 	    const diffTime = endDate.getTime() - today.getTime();
 	    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-		// 출력 포맷
-		if (diffDays > 0) {
-		    return `D-\${diffDays}`;
-		} else if (diffDays === 0) {
-			return "D-Day";
-		} else {
-			return `D+\${Math.abs(diffDays || 0)}`;
-		}
+	    return `\${diffDays}`;
+	    
 	}
+ 	
  	
 </script>
 

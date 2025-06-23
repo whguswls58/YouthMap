@@ -63,6 +63,7 @@ public class PolicyModel {
     private int startRow;
     private int endRow;
     
-    private List<String> categories;
+    private List<String> categories;			// 카테고리
+    private String sortOrder;					// 정렬방법
     
 }
