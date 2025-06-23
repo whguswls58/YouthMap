@@ -38,6 +38,8 @@ public class CultureModel {
 	private String search;
 	private String keyword;
 	 	
+	// 정렬
+    private String sort;                 // 정렬 기준 (mostViewed, newest, endingSoon)
 }
 	 	
 //	>>  DATE를 (~) 기준으로 split 해서 con_start_date  ,  con_end_date에 담고
