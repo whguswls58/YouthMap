@@ -4,9 +4,9 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>마이페이지</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/member/mypage.css">
+  <title>내 댓글 - 마이페이지</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/member/mypage.css">
 </head>
 <body>
 
@@ -89,35 +89,59 @@
     </c:if>
     <a href="${pageContext.request.contextPath}/edit_pass">비밀번호 변경</a>
     <a href="${pageContext.request.contextPath}/mypage/posts">내 게시물</a>
-    <a href="${pageContext.request.contextPath}/mypage/comments">내 댓글</a>
+    <a href="${pageContext.request.contextPath}/mypage/comments" class="active">내 댓글</a>
     <form id="withdrawForm" action="${pageContext.request.contextPath}/withdraw" method="post" style="display: none;"></form>
     <a href="javascript:void(0);" onclick="confirmWithdraw()" style="color: red;">회원 탈퇴</a>
   </div>
 
-  <!-- 오른쪽 컨텐츠: 회원정보 + 활동통계 -->
+  <!-- 오른쪽 컨텐츠 -->
   <div class="main-content">
-
-    <c:if test="${param.error == 'socialUserCannotEdit'}">
-      <div class="error-message" style="color: red; margin-bottom: 15px; padding: 10px; background-color: #ffe6e6; border: 1px solid #ff9999; border-radius: 5px;">
-        소셜 로그인 계정은 정보 수정이 불가합니다.
-      </div>
-    </c:if>
-
-    <div class="info-stats-row">
-      <div class="mypage-info">
-        <h3>회원 정보</h3>
-        <p><strong>아이디:</strong> ${member.memId}</p>
-        <p><strong>이름:</strong> ${member.memName}</p>
-        <p><strong>이메일:</strong> ${member.memMail}</p>
-        <p><strong>주소:</strong> ${member.memAddress} ${member.memAddDetail}</p>
-        <p><strong>가입일:</strong> ${member.memDate}</p>
-      </div>
-
-      <div class="mypage-stats">
-        <h3>활동 통계</h3>
-        <p><strong>작성한 게시물:</strong> ${postCount}개</p>
-        <p><strong>작성한 댓글:</strong> ${commentCount}개</p>
-      </div>
+    <div class="content-section">
+      <h3>내 댓글 (${commentCount}개)</h3>
+      <c:choose>
+        <c:when test="${empty myComments}">
+          <div class="empty-message">작성한 댓글이 없습니다.</div>
+        </c:when>
+        <c:otherwise>
+          <div class="comment-list">
+            <c:forEach var="comment" items="${myComments}">
+              <div class="comment-item">
+                <div class="comment-header">
+                  <span class="comment-date">${comment.commDate}</span>
+                </div>
+                <div class="comment-content">${comment.commContent}</div>
+                <div class="comment-meta">
+                  <span class="comment-post">게시글: <a href="${pageContext.request.contextPath}/boardview?no=${comment.boardNo}">${comment.boardSubject}</a></span>
+                </div>
+              </div>
+            </c:forEach>
+          </div>
+          
+          <!-- 페이징 네비게이션 -->
+          <c:if test="${totalPages > 1}">
+            <div class="pagination">
+              <c:if test="${currentPage > 1}">
+                <a href="?page=${currentPage - 1}" class="page-link">&lt;</a>
+              </c:if>
+              
+              <c:forEach var="i" begin="1" end="${totalPages}">
+                <c:choose>
+                  <c:when test="${i == currentPage}">
+                    <span class="page-link active">${i}</span>
+                  </c:when>
+                  <c:otherwise>
+                    <a href="?page=${i}" class="page-link">${i}</a>
+                  </c:otherwise>
+                </c:choose>
+              </c:forEach>
+              
+              <c:if test="${currentPage < totalPages}">
+                <a href="?page=${currentPage + 1}" class="page-link">&gt;</a>
+              </c:if>
+            </div>
+          </c:if>
+        </c:otherwise>
+      </c:choose>
     </div>
   </div>
 </div>
@@ -135,5 +159,4 @@
 </script>
 <script src="/js/session.js"></script>
 </body>
-</html>
-
+</html> 

@@ -197,5 +197,63 @@ public class MemberController {
 
 		return "redirect:/home?withdrawSuccess=true"; // 메인 페이지로 이동
 	}
+	
+	@GetMapping("/edit_pass")
+	public String showChangePasswordPage(Model model, HttpSession session) {
+	    // 로그인된 사용자 정보 조회 등 필요 시 처리
+	    model.addAttribute("member", session.getAttribute("loginMember"));
+	    return "member/edit_pass"; // 실제 JSP 위치가 /WEB-INF/views/member/change-pass.jsp
+	}
+
+	// 비밀번호 변경 처리
+	@PostMapping("/edit_pass")
+	public String changePassword(@RequestParam("currentPassword") String currentPass,
+	                            @RequestParam("newPassword") String newPass,
+	                            @RequestParam("confirmPassword") String confirmPass,
+	                            HttpSession session, Model model) {
+	    
+	    MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
+	    
+	    // 로그인 체크
+	    if (loginMember == null) {
+	        return "redirect:/login";
+	    }
+	    
+	    // 소셜 로그인 회원이면 수정 차단
+	    if (loginMember.getMemType() != null && !"LOCAL".equals(loginMember.getMemType())) {
+	        return "redirect:/mypage?error=socialUserCannotEdit";
+	    }
+	    
+	    // 현재 비밀번호 검증
+	    if (!currentPass.equals(loginMember.getMemPass())) {
+	        model.addAttribute("error", "현재 비밀번호가 틀렸습니다.");
+	        model.addAttribute("member", loginMember);
+	        return "member/edit_pass";
+	    }
+	    
+	    // 새 비밀번호와 확인 비밀번호 일치 검증
+	    if (!newPass.equals(confirmPass)) {
+	        model.addAttribute("error", "새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+	        model.addAttribute("member", loginMember);
+	        return "member/edit_pass";
+	    }
+	    
+	    // 새 비밀번호가 현재 비밀번호와 같은지 검증
+	    if (currentPass.equals(newPass)) {
+	        model.addAttribute("error", "새 비밀번호는 현재 비밀번호와 달라야 합니다.");
+	        model.addAttribute("member", loginMember);
+	        return "member/edit_pass";
+	    }
+	    
+	    // 비밀번호 변경
+	    loginMember.setMemPass(newPass);
+	    memberService.updateMember(loginMember);
+	    
+	    // 세션 갱신
+	    session.setAttribute("loginMember", loginMember);
+	    
+	    // 성공 메시지와 함께 edit_pass 페이지로 리다이렉트
+	    return "redirect:/edit_pass?success=passwordChanged";
+	}
 
 }

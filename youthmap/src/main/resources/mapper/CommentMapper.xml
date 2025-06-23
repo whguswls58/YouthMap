@@ -8,27 +8,29 @@
     <!-- 댓글 등록 -->
     <insert id="insert" parameterType="com.example.demo.model.Comment">
         INSERT INTO comments
-    (comm_no, board_no, mem_no, mem_id, comm_content, comm_date)
+    (comm_no, board_no, mem_no, comm_content, comm_date)
   VALUES
     (comments_seq.nextval,
      #{boardNo},
      #{memNo},
-     #{memId},
      #{commContent},
      SYSDATE)
     </insert>
 
     <!-- 댓글 목록 -->
     <select id="list" parameterType="int" resultType="com.example.demo.model.Comment">
-        SELECT comm_no AS commNo,
-               board_no AS boardNo,
-               mem_id AS memId,
-               comm_content AS commContent,
-               comm_date AS commDate,
-               comm_update AS commUpdate
-        FROM comments
-        WHERE board_no = #{boardNo}
-        ORDER BY comm_no ASC
+        SELECT c.comm_no AS commNo,
+               c.board_no AS boardNo,
+               c.mem_no AS memNo,
+               m.mem_id AS memId,
+               m.mem_name AS memName,
+               c.comm_content AS commContent,
+               c.comm_date AS commDate,
+               c.comm_update AS commUpdate
+        FROM comments c
+        LEFT JOIN member m ON c.mem_no = m.mem_no
+        WHERE c.board_no = #{boardNo}
+        ORDER BY c.comm_no ASC
     </select>
 
     <!-- 댓글 삭제 -->
@@ -37,14 +39,42 @@
     </delete>
     
    <select id="getCommentByNo" resultType="com.example.demo.model.Comment">
-    SELECT comm_no AS commNo,
-           board_no AS boardNo,
-           mem_id AS memId,
-           comm_content AS commContent,
-           comm_date AS commDate,
-           comm_update AS commUpdate
-    FROM comments
-    WHERE comm_no = #{commNo}
+    SELECT c.comm_no AS commNo,
+           c.board_no AS boardNo,
+           c.mem_no AS memNo,
+           m.mem_id AS memId,
+           m.mem_name AS memName,
+           c.comm_content AS commContent,
+           c.comm_date AS commDate,
+           c.comm_update AS commUpdate
+    FROM comments c
+    LEFT JOIN member m ON c.mem_no = m.mem_no
+    WHERE c.comm_no = #{commNo}
 </select>
+
+    <!-- 내 댓글 조회 -->
+    <select id="getMyComments" parameterType="map" resultType="com.example.demo.model.Comment">
+        SELECT * FROM (
+            SELECT inner_q.*, ROWNUM AS rn
+            FROM (
+                SELECT c.comm_no AS commNo,
+                       c.board_no AS boardNo,
+                       c.mem_no AS memNo,
+                       m.mem_id AS memId,
+                       m.mem_name AS memName,
+                       c.comm_content AS commContent,
+                       c.comm_date AS commDate,
+                       c.comm_update AS commUpdate,
+                       b.board_subject AS boardSubject
+                FROM comments c
+                LEFT JOIN member m ON c.mem_no = m.mem_no
+                LEFT JOIN board b ON c.board_no = b.board_no
+                WHERE c.mem_no = #{memNo}
+                ORDER BY c.comm_no DESC
+            ) inner_q
+            WHERE ROWNUM &lt;= #{endRow}
+        )
+        WHERE rn &gt;= #{startRow}
+    </select>
 
 </mapper>

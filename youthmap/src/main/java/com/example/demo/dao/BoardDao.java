@@ -22,6 +22,9 @@ public interface BoardDao {
     // 🔹 시퀀스에서 다음 번호 가져오기
     @Select("SELECT board_seq.NEXTVAL FROM dual")
     int getNextBoardNo();
+    
+    // 내 게시물 조회
+    List<Board> getMyPosts(Map<String, Object> params);
 }
 
 

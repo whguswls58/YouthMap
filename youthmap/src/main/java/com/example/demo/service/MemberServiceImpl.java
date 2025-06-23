@@ -21,14 +21,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void register(MemberModel member) {
-        // 비밀번호 암호화
-        PasswordEncoder passwordEncoder = applicationContext.getBean(PasswordEncoder.class);
-        String encodedPassword = passwordEncoder.encode(member.getMemPass());
-        member.setMemPass(encodedPassword);
-        
-        System.out.println("회원가입 - 원본 비밀번호 길이: " + member.getMemPass().length());
-        System.out.println("회원가입 - 암호화된 비밀번호 길이: " + encodedPassword.length());
-        
+        // 비밀번호를 평문 그대로 저장 (암호화 제거)
         memberMapper.insertMember(member);
     }
 

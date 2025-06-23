@@ -47,41 +47,58 @@
         </where>
     </select>
 
-    <!-- 게시글 목록 -->
-    <select id="list" parameterType="map" resultType="com.example.demo.model.Board">
-        SELECT b.board_no AS boardNo,
-               m.mem_id AS memId,
-               b.board_category AS boardCategory,
-               b.board_subject AS boardSubject,
-               b.board_content AS boardContent,
-               b.board_readcount AS boardReadcount,
-               b.board_date AS boardDate,
-               b.mem_no AS memNo
-        FROM board b
-        JOIN member m ON b.mem_no = m.mem_no
-        <where>
-            <if test="category != null and category != ''">
-                AND b.board_category = #{category}
-            </if>
-            <if test="excludeCategory != null and excludeCategory != ''">
-                AND b.board_category != #{excludeCategory}
-            </if>
-            <if test="searchType != null and keyword != null and keyword != ''">
-                <choose>
-                    <when test="searchType == 'subject'">
-                        AND b.board_subject LIKE '%' || #{keyword} || '%'
-                    </when>
-                    <when test="searchType == 'content'">
-                        AND b.board_content LIKE '%' || #{keyword} || '%'
-                    </when>
-                    <otherwise>
-                        AND (b.board_subject LIKE '%' || #{keyword} || '%' OR b.board_content LIKE '%' || #{keyword} || '%')
-                    </otherwise>
-                </choose>
-            </if>
-        </where>
-        ORDER BY b.board_no DESC
-    </select>
+   <!-- 게시글 목록 -->
+<select id="list" parameterType="map" resultType="com.example.demo.model.Board">
+  SELECT * FROM (
+    SELECT inner_q.*, ROWNUM AS rn
+    FROM (
+      SELECT 
+        b.board_no        AS boardNo,
+        m.mem_id          AS memId,
+        m.mem_name        AS memName,
+        b.board_category  AS boardCategory,
+        b.board_subject   AS boardSubject,
+        b.board_content   AS boardContent,
+        b.board_readcount AS boardReadcount,
+        b.board_date      AS boardDate,
+        b.mem_no          AS memNo
+      FROM board b
+      JOIN member m ON b.mem_no = m.mem_no
+      <where>
+        <if test="category != null and category != ''">
+          AND b.board_category = #{category}
+        </if>
+        <if test="excludeCategory != null and excludeCategory != ''">
+          AND b.board_category != #{excludeCategory}
+        </if>
+        <if test="searchType != null and keyword != null and keyword != ''">
+          <choose>
+            <when test="searchType == 'subject'">
+              AND b.board_subject LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="searchType == 'content'">
+              AND b.board_content LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="searchType == 'writer'">
+              AND m.mem_id LIKE '%' || #{keyword} || '%'
+            </when>
+            <otherwise>
+              AND (
+                b.board_subject LIKE '%' || #{keyword} || '%'
+                OR b.board_content LIKE '%' || #{keyword} || '%'
+              )
+            </otherwise>
+          </choose>
+        </if>
+      </where>
+      ORDER BY b.board_no DESC
+    ) inner_q
+    WHERE ROWNUM &lt;= #{endRow}
+  )
+  WHERE rn &gt;= #{startRow}
+</select>
+
+
 
     <!-- 게시글 조회수 증가 -->
     <update id="updatecount" parameterType="int">
@@ -94,6 +111,7 @@
     <select id="content" parameterType="int" resultType="com.example.demo.model.Board">
         SELECT b.board_no AS boardNo,
                m.mem_id AS memId,
+               m.mem_name AS memName,
                b.board_category AS boardCategory,
                b.board_subject AS boardSubject,
                b.board_content AS boardContent,
@@ -129,6 +147,7 @@
     <select id="getTopNotices" resultType="com.example.demo.model.Board">
         SELECT b.board_no AS boardNo,
                m.mem_id AS memId,
+               m.mem_name AS memName,
                b.board_category AS boardCategory,
                b.board_subject AS boardSubject,
                b.board_content AS boardContent,
@@ -142,6 +161,30 @@
         ) b
         JOIN member m ON b.mem_no = m.mem_no
         WHERE ROWNUM &lt;= 3
+    </select>
+
+    <!-- 내 게시물 조회 -->
+    <select id="getMyPosts" parameterType="map" resultType="com.example.demo.model.Board">
+        SELECT * FROM (
+            SELECT inner_q.*, ROWNUM AS rn
+            FROM (
+                SELECT b.board_no AS boardNo,
+                       m.mem_id AS memId,
+                       m.mem_name AS memName,
+                       b.board_category AS boardCategory,
+                       b.board_subject AS boardSubject,
+                       b.board_content AS boardContent,
+                       b.board_readcount AS boardReadcount,
+                       b.board_date AS boardDate,
+                       b.mem_no AS memNo
+                FROM board b
+                JOIN member m ON b.mem_no = m.mem_no
+                WHERE b.mem_no = #{memNo}
+                ORDER BY b.board_no DESC
+            ) inner_q
+            WHERE ROWNUM &lt;= #{endRow}
+        )
+        WHERE rn &gt;= #{startRow}
     </select>
 
 </mapper>
