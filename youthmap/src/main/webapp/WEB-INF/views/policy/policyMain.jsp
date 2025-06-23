@@ -188,23 +188,6 @@ body {
   display: none;
 }
 
-
-.icon-checkbox-group {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.icon-checkbox img {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 8px;
-  border: 2px solid transparent;
-  border-radius: 12px;
-  transition: transform 0.2s ease;
-}
-
 .category-container {
   display: flex;
   flex-wrap: wrap;
@@ -221,6 +204,10 @@ body {
 .category-header {
   text-align: center;
   margin-bottom: 10px;
+  background-color: #f2f2f2;
+  justify-content: center;
+  align-items: center;
+  
 }
 
 .category-header img {
@@ -261,12 +248,13 @@ body {
 
 a {
 	text-decoration: none;
-	color: #007bff;
+	color: #888;
 	margin: 0 5px;
 }
 
 a:hover {
 	text-decoration: underline;
+	color: #666;
 }
 
 .policy-item {
@@ -330,16 +318,21 @@ a:hover {
 .detail-btn {
   display: block;
   margin-top: 15px;
-  border: 1px solid #337ab7;
-  color: #337ab7;
-  padding: 6px 12px;
+  border:none; 
   border-radius: 5px;
+  padding: 10px 28px;
+  background-color: #888;
+  color: #fff;
+  font-size:17px; 
+  cursor:pointer;
   text-align: center;
   text-decoration: none;
+  
+  
 }
 
 .detail-btn:hover {
-  background-color: #337ab7;
+  background-color: #666;
   color: white;
 }
 
@@ -661,7 +654,7 @@ a:hover {
 		pagination.innerHTML = "";
 
 	    // 처음 페이지
-	    pagination.innerHTML += `<a href="#" onclick="loadPage(1)">&lt;</a> `;
+	    pagination.innerHTML += `<a href="#" onclick="loadPage(1)">◀</a> `;
 
 	    // 이전 블록
 	    if (start > 6) {
@@ -683,7 +676,7 @@ a:hover {
 	    }	// end if
 
 	    // 마지막 페이지
-	    pagination.innerHTML += `<a href="#" onclick="loadPage(\${total}">&gt;</a>`;
+	    pagination.innerHTML += `<a href="#" onclick="loadPage(\${total}">▶</a>`;
 	  }		// end function
 
 	  // 초기 로딩
