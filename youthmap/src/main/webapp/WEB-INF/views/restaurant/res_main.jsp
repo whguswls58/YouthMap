@@ -332,7 +332,7 @@ body {
 <!-- 상단 베이지 바 -->
 <div class="topbar">
   <div class="menu">
-    <a href="#">CART</a>
+
     <a href="#">MY PAGE</a>
     <a href="#">JOIN</a>
   </div>

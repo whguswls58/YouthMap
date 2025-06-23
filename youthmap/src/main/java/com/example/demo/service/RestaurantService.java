@@ -191,6 +191,7 @@ public class RestaurantService {
      * @return int[] {신규insert수, update수}
      */
     public int[] syncFromGoogleApi() throws Exception {
+    	 System.out.println("==== [수동 호출] 구글 API 동기화 시작! ====");
         List<String> apiPlaceIds = fetchPlaceIds("서울 맛집");
         List<Restaurant> allRestaurants = dao.maplist();
         Set<String> dbPlaceIds = allRestaurants.stream()
@@ -205,6 +206,7 @@ public class RestaurantService {
             if (isInsert) insertCnt++;
             else updateCnt++;
         }
+        System.out.println("==== [수동 호출] 동기화 완료: 신규=" + insertCnt + ", 업데이트=" + updateCnt);
         return new int[]{insertCnt, updateCnt};
     }
 

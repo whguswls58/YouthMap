@@ -28,10 +28,9 @@
 		)
 	</insert> -->
 	
-	<!--메인 4개만 출력-->
+	<!--메인 출력-->
 	<select id="best" resultType="restaurant">
-    	SELECT * FROM 
-    	(SELECT * FROM restaurant ORDER BY res_score DESC)
+    	SELECT * FROM  (SELECT * FROM restaurant ORDER BY res_score DESC)
    		WHERE ROWNUM &lt; 8
 	</select>
 	
