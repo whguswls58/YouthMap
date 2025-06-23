@@ -3,6 +3,7 @@ package com.example.demo.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.example.demo.model.CultureModel;
 
@@ -10,6 +11,9 @@ import com.example.demo.model.CultureModel;
 public interface CultureDao {
 
 	int culinsert(CultureModel culMd);
+	
+	boolean existsByTitleAndDate(@Param("title") String title,
+            @Param("startDate") String startDate);
 
 	List<CultureModel> getexhibhition();
 

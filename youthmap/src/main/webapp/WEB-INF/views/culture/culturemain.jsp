@@ -22,124 +22,184 @@
     src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
   <style>
-    /* ───────────────────────────────────────────────────────────────
+/* ───────────────────────────────────────────────────────────────
        전체 페이지 공통 스타일
     ─────────────────────────────────────────────────────────────── */
-    body {
-      font-family: 'Playfair Display', serif;
-      margin: 0; padding: 0;
-      background-color: #fff;
-      color: #333;
-    }
-    .topbar {
-      background: #f5f0e6;
-      padding: 10px 40px;
-    }
-    .topbar .menu {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: flex-end;
-      gap: 20px;
-      font-size: 14px;
-    }
-    .topbar .menu a { color: #444; text-decoration: none; }
+body {
+	font-family: 'Playfair Display', serif;
+	margin: 0;
+	padding: 0;
+	background-color: #fff;
+	color: #333;
+}
 
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 40px;
-      background: #fff;
-      position: sticky; top: 0; z-index: 1000;
-      border-bottom: 1px solid #eee;
-    }
-    .navbar-left, .navbar-right { display: flex; gap: 18px; }
-    .navbar-center {
-      position: absolute; left: 50%; transform: translateX(-50%);
-    }
-    .nav-link {
-      font-size: 15px; color: #222; text-decoration: none;
-    }
-    .nav-link:hover, .nav-link.active {
-      border-bottom: 2px solid #222; padding-bottom: 2px;
-    }
-    .logo {
-      font-size: 20px; font-weight: bold;
-      letter-spacing: 1px; color: #111;
-      font-family: 'Playfair Display', serif;
-    }
+.topbar {
+	background: #f5f0e6;
+	padding: 10px 40px;
+}
 
-    /* ───────────────────────────────────────────────────────────────
+.topbar .menu {
+	max-width: 1200px;
+	margin: 0 auto;
+	display: flex;
+	justify-content: flex-end;
+	gap: 20px;
+	font-size: 14px;
+}
+
+.topbar .menu a {
+	color: #444;
+	text-decoration: none;
+}
+
+.navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 18px 40px;
+	background: #fff;
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+	border-bottom: 1px solid #eee;
+}
+
+.navbar-left, .navbar-right {
+	display: flex;
+	gap: 18px;
+}
+
+.navbar-center {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.nav-link {
+	font-size: 15px;
+	color: #222;
+	text-decoration: none;
+}
+
+.nav-link:hover, .nav-link.active {
+	border-bottom: 2px solid #222;
+	padding-bottom: 2px;
+}
+
+.logo {
+	font-size: 20px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	color: #111;
+	font-family: 'Playfair Display', serif;
+}
+
+/* ───────────────────────────────────────────────────────────────
        슬라이더 섹션
     ─────────────────────────────────────────────────────────────── */
-    .slider-section { margin: 80px 0; }
-    .slider-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      background-color: #f5f0e6;
-      padding: 40px;
-      box-sizing: border-box;
-    }
-    .slider-header {
-      display: flex; justify-content: space-between;
-      align-items: center;
-      margin: 0; padding: 0 20px;
-    }
-    .slider-header h3 {
-      font-weight: bold; font-size: 1.1em; margin: 0;
-    }
-    .slider-header button {
-      background: none; border: none;
-      font-size: 1rem; cursor: pointer; color: #333;
-    }
-    .slider-divider {
-      border: 0; border-bottom: 1px solid #ccc;
-      margin: 8px 20px 16px;
-    }
+.slider-section {
+	margin: 60px 0;
+}
 
-    /* ───────────────────────────────────────────────────────────────
+.slider-inner {
+	max-width: 1500px;
+	margin: 100px;
+	background-color: #f5f0e6;
+	box-sizing: border-box;
+	height: auto;              /* 카드 높이에 맞춰 늘어나게 */
+  	padding: 40px;             /* 패딩도 비율에 맞게 줄이기 */
+}
+
+.slider-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 0;
+	padding: 0 20px;
+}
+
+.slider-header h3 {
+	font-weight: bold;
+	font-size: 1.1em;
+	margin: 0;
+}
+
+.slider-header button {
+	background: none;
+	border: none;
+	font-size: 1rem;
+	cursor: pointer;
+	color: #333;
+}
+
+.slider-divider {
+	border: 0;
+	border-bottom: 1px solid #ccc;
+	margin: 8px 20px 16px;
+}
+
+/* ───────────────────────────────────────────────────────────────
        Polaroid 카드 + 뱃지
     ─────────────────────────────────────────────────────────────── */
-    .card-slider { width: 100%; margin: 0 auto; }
-    .card-slider .slick-track { display: flex !important; }
-    .card-slider .slick-slide { display: block !important; }
-    .slick-prev, .slick-next { top: 40%; }
+.card-slider {
+	width: 100%;
+	margin: 0 auto;
+}
 
-    .card-slider .polaroid-item {
+.card-slider .slick-track {
+	display: flex !important;
+}
+
+.card-slider .slick-slide {
+	 flex: 0 0 160px !important;
+}
+
+.slick-prev, .slick-next {
+	top: 40%;
+}
+
+/* .card-slider .polaroid-item {
       position: relative;
       flex: 0 0 auto;
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 220px;
-      margin: 20px 12px;
+      width: 80px;
+      margin: 5px 5px;
       box-sizing: border-box;
-      height: 380px;
+      height: 140px;
       text-decoration: none;
       color: inherit;
-    }
-    /* 뱃지 공통 */
-    /* commonList.css 또는 <style> 내 badge 스타일 수정 */
+    } */
+/* 뱃지 공통 */
+/* commonList.css 또는 <style> 내 badge 스타일 수정 */
 .card-slider .badge {
-  position: absolute;
-  top: 15px;
-  right: 28px;      /* 기존 8px → 20px 로 변경 */
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: bold;
-  color: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  z-index: 10;
+	position: absolute;
+	top: 15px;
+	right: 28px; /* 기존 8px → 20px 로 변경 */
+	padding: 4px 10px;
+	border-radius: 12px;
+	font-size: 0.85rem;
+	font-weight: bold;
+	color: #fff;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	z-index: 10;
 }
-    /* 카테고리별 색상 */
-    .card-slider .badge.exhibition  { background: #008060; }
-    .card-slider .badge.performance { background: #a83279; }
-    .card-slider .badge.event       { background: #0066cc; }
+/* 카테고리별 색상 */
+.card-slider .badge.exhibition {
+	background: #008060;
+}
 
-    .card-slider .polaroid {
-      width: 90%; height: 300px; background: #fff;
+.card-slider .badge.performance {
+	background: #a83279;
+}
+
+.card-slider .badge.event {
+	background: #0066cc;
+}
+
+/*  .card-slider .polaroid {
+      width: 90%; height: 250px; background: #fff;
       padding: 12px 12px 24px; border: 1px solid #eee;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       border-radius: 4px; display: flex;
@@ -148,21 +208,73 @@
     .card-slider .polaroid-img {
       max-width: 100%; max-height: 100%;
       object-fit: cover; border-radius: 2px;
-    }
-    .card-slider .polaroid-caption {
-      margin-top: auto; width: 100%; max-width: 35ch;
-      white-space: nowrap; overflow: hidden;
-      text-overflow: ellipsis; text-align: center;
-      font-size: 1rem; color: #333;
-    }
-    .card-slider .polaroid-date {
-      margin-top: 4px; font-size: 0.85rem;
-      color: #777; text-align: center;
-    }
-    .card-slider .polaroid-item:hover .polaroid-caption {
-      text-decoration: underline;
-    }
-  </style>
+    } */
+
+.card-slider .slick-slide {
+  flex: 0 0 180px !important;
+  width: 180px !important;
+}
+
+/* 3) 폴라로이드 카드 스타일 (이전 restaurant-card) */
+.card-slider .polaroid-item {
+	width: 100% /* 이전 220px → 240px */
+	height: 250px;
+	padding: 16px; /* 안쪽 여백 */
+	border: 1px solid #ccc;
+	border-radius: 12px;
+	background: #fff;
+	text-align: center;
+	transition: all 0.3s ease-in-out;
+	margin: 0 13px; /* 카드 사이 간격 */
+}
+
+.card-slider .polaroid-item:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 4) 이미지 영역 (이전 restaurant-card img) */
+.card-slider .polaroid-img {
+	width: 100%; /* 카드 폭에 꽉 채우기 */
+	height: 180px; /* 이전 150px → 180px */
+	object-fit: cover;
+	border-radius: 8px;
+	margin-bottom: 12px;
+}
+
+/* 5) 카드 타이틀 (이전 restaurant-name) */
+.card-slider .polaroid-caption {
+	font-weight: bold;
+	margin-top: 8px;
+	color: #222;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.card-slider .polaroid-caption {
+	margin-top: auto;
+	width: 100%;
+	max-width: 35ch;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: center;
+	font-size: 1rem;
+	color: #333;
+}
+
+.card-slider .polaroid-date {
+	margin-top: 4px;
+	font-size: 0.85rem;
+	color: #777;
+	text-align: center;
+}
+
+.card-slider .polaroid-item:hover .polaroid-caption {
+	text-decoration: underline;
+}
+</style>
 </head>
 
 <body>

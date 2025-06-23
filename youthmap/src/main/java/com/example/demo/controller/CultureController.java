@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.io.File;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -41,98 +42,19 @@ public class CultureController {
 	@Autowired
 	private Review2Service reservice;
 
-	@GetMapping("datainput")
-	public String test() throws Exception {
-
-		// 루프 밖에서 한 번만 선언
-		Set<String> allowedTargets = Set.of("성인", "누구나");
-		Set<String> allowedCodes = Set.of("전시/미술", "축제-문화/예술", "축제-기타", "축제-자연/경관","콘서트", "연극", "뮤지컬/오페라");
-
-		// DB에 저장된 가장 최신 데이터
-		CultureModel cm = service.getLatestData();
-		System.out.println("최신 데이터 : " + cm.getCon_title());
-		System.out.println("최신 데이터 : " + cm.getCon_start_date());
-		
-		for (int i = 0; i < 5; i++) {
-			String jsonData = service.getYouthCulture(i); // service 클래스에 정책 정보 요청
-			
-//			System.out.println(jsonData);
-			// JSON 파싱
-			JSONParser parser = new JSONParser();
-			JSONObject jsonObject = (JSONObject) parser.parse(jsonData);
-			JSONObject dataObject = (JSONObject) jsonObject.get("culturalEventInfo");
-
-			// JSON에서 문화 데이터 추출
-			JSONArray culList = (JSONArray) dataObject.get("row");
-//			System.out.println(culList);
-			for (Object obj : culList) {
-				JSONObject culture = (JSONObject) obj;
-
-				// 1) 값 추출
-				String codeName = (String) culture.get("CODENAME");
-				String useTrgt = (String) culture.get("USE_TRGT");
+	// 1) 업데이트 결과 페이지
+    @GetMapping("/datainput")
+    public String datainput(Model model) {
+        try {
+            service.insertNewCultures();
+            model.addAttribute("message", "업데이트가 완료되었습니다.");
+        } catch (Exception e) {
+            model.addAttribute("message", "업데이트 중 오류: " + e.getMessage());
+        }
+        // /WEB-INF/views/updateResult.jsp
+        return "culture/updateResult";   
+    }
 				
-				String title = (String) culture.get("TITLE");
-				String startDate = null;
-				String dr = (String) culture.get("DATE");
-				if (dr != null && dr.contains("~")) {
-					String[] parts = dr.split("~");
-					startDate = parts[0].trim();
-				}
-				System.out.println("불러온 title : " + title);
-				System.out.println("불러온 시작일 : " + startDate);
-				
-				// 중복 검사
-				if(cm.getCon_title().equals(title) && cm.getCon_start_date().equals(startDate)) {
-					System.out.println(title + "이후의 데이터는 중복데이터입니다.");
-					return "dpdp";
-				}
-				
-
-				// 2) 필터링: codename이 없거나(=빈 or null) 허용 대상·허용 코드아님 → 스킵
-				if (codeName == null || codeName.isEmpty() || !allowedTargets.contains(useTrgt)
-						|| !allowedCodes.contains(codeName)) {
-					continue;
-				}
-				CultureModel culMd = new CultureModel();
-
-				// 3) 여기까지 오면 저장 대상이므로, 모델을 새로 만들고 모든 필드를 세팅
-				culMd.setCategory_name((String) culture.get("CODENAME"));
-				culMd.setCon_title((String) culture.get("TITLE"));
-				culMd.setCon_location((String) culture.get("PLACE"));
-				culMd.setCon_lot((String) culture.get("LOT"));
-				culMd.setCon_lat((String) culture.get("LAT"));
-				culMd.setCon_age((String) culture.get("USE_TRGT"));
-				culMd.setCon_link((String) culture.get("ORG_LINK"));
-				culMd.setCon_img((String) culture.get("MAIN_IMG"));
-				// 비용 처리 (null/빈 → "무료")
-				String fee = (String) culture.get("USE_FEE");
-				culMd.setCon_cost((fee == null || fee.isEmpty()) ? "무료" : fee);
-				// 시간 기본값
-				culMd.setCon_time("상세 시간은 해당 홈페이지에서 확인하세요.");
-				// 날짜 파싱
-				String dateRange = (String) culture.get("DATE");
-				if (dateRange != null && dateRange.contains("~")) {
-					String[] parts = dateRange.split("~");
-					culMd.setCon_start_date(parts[0].trim());
-					culMd.setCon_end_date(parts[1].trim());
-				}
-				
-				// 4) 저장 호출
-				int result = service.culinsert(culMd);
-				if (result != 1) {
-					System.err.println("저장 실패: " + codeName);
-				}
-
-			}
-		}
-
-//		List<CultureModel> cm = new ArrayList<CultureModel>();
-
-//		return "redirect:main";
-		return "dpdp";
-	}
-
 	// 메인 페이지
 	@GetMapping("/culturemain")
 	public String mainPage(CultureModel culture, Model model) {
@@ -174,7 +96,7 @@ public class CultureController {
 		// 검색 안하면 startR-,endR-만 저장되는데. 검색하면 키워드 서치 까지 board에 담아서 다 가져감(총 4)
 		culMd.setStartRow(startRow);
 		culMd.setEndRow(endRow);
-		culMd.setCon_age("누구나");
+//		culMd.setCon_age("누구나");
 
 		// 해당 페이지 데이터 조회
 		List<CultureModel> exhibitionlist = service.getexhibitionlist(culMd);
@@ -251,7 +173,7 @@ public class CultureController {
 //        review2.setReview_score2(review_score2);
 //        review2.setReview_content2(review_content2);
 
-		System.out.println("▶▶ review_writer = " + review2.getReview_writer());
+		System.out.println("▶▶ review_writer2 = " + review2.getReview_writer2());
 
 		// ★ 실제 경로 찾기 (static/images)
 		String uploadPath = session.getServletContext().getRealPath("images");
@@ -352,7 +274,7 @@ public class CultureController {
 		int endRow = page * limit;
 		culMd.setStartRow(startRow);
 		culMd.setEndRow(endRow);
-		culMd.setCon_age("누구나");
+//		culMd.setCon_age("누구나");
 
 		// 서비스에서 공연만 조회해 주는 메서드
 		List<CultureModel> performancelist = service.getperformancelist(culMd);
@@ -422,7 +344,7 @@ public class CultureController {
 //        review2.setReview_score2(review_score2);
 //        review2.setReview_content2(review_content2);
 
-		System.out.println("▶▶ review_writer = " + review2.getReview_writer());
+		System.out.println("▶▶ review_writer2 = " + review2.getReview_writer2());
 
 		// ★ 실제 경로 찾기 (static/images)
 		String uploadPath = session.getServletContext().getRealPath("images");
@@ -534,7 +456,7 @@ public class CultureController {
 		int endRow = page * limit;
 		culMd.setStartRow(startRow);
 		culMd.setEndRow(endRow);
-		culMd.setCon_age("누구나");
+//		culMd.setCon_age("누구나");
 
 		// 서비스에서 공연만 조회해 주는 메서드
 		List<CultureModel> eventlist = service.geteventlist(culMd);
@@ -591,8 +513,8 @@ public class CultureController {
 			model.addAttribute("editReview", editReview);
 		}
 
-		System.out.println("eventcont 넘어가는 model : " + model);
-		System.out.println("eventcont 넘어가는 eventcont값 : " + eventcont);
+//		System.out.println("eventcont 넘어가는 model : " + model);
+//		System.out.println("eventcont 넘어가는 eventcont값 : " + eventcont);
 		return "culture/eventcont";
 	}
 
@@ -608,7 +530,7 @@ public class CultureController {
 //	        review2.setReview_score2(review_score2);
 //	        review2.setReview_content2(review_content2);
 
-		System.out.println("▶▶ review_writer = " + review2.getReview_writer());
+		System.out.println("▶▶ review_writer2 = " + review2.getReview_writer2());
 
 		// ★ 실제 경로 찾기 (static/images)
 		String uploadPath = session.getServletContext().getRealPath("images");
@@ -730,7 +652,7 @@ public class CultureController {
 		culMd.setCategory_name("all".equals(mainCategory) ? null : mainCategory);
 		culMd.setSearch(search);
 		culMd.setKeyword(keyword);
-		culMd.setCon_age("누구나");
+//		culMd.setCon_age("누구나");
 
 		// 페이징
 		int limit = 12;
@@ -747,7 +669,7 @@ public class CultureController {
 			list = service.getallList(culMd);
 			totalCount = service.countall(culMd);
 
-			System.out.println(">>> allList.size() = " + list.size());
+//			System.out.println(">>> allList.size() = " + list.size());
 			for (CultureModel c : list) {
 				System.out.println("  id=" + c.getCon_id() + ", category=" + c.getCategory_name());
 			}
@@ -828,7 +750,7 @@ public class CultureController {
 
 		// --- 1) DTO 세팅 ---
 		// 전체 모드: category_name = null
-		culMd.setCon_age("누구나");
+//		culMd.setCon_age("누구나");
 		culMd.setStartRow((page - 1) * limit + 1);
 		culMd.setEndRow(page * limit);
 		// 해당 페이지 데이터 조회
