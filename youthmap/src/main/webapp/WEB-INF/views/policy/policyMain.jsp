@@ -351,7 +351,7 @@ a:hover {
 	margin: 30px 0;
 	font-size: 18px;
 }
-.pagination a {
+.pagination button {
 	color: #666;
 	text-decoration: none;
 	margin: 0 6px;
@@ -360,7 +360,7 @@ a:hover {
 	border: 1px solid transparent;
 	transition: background 0.2s, color 0.2s;
 }
-.pagination a:hover {
+.pagination button:active {
 	background: #eee;
 }
 .pagination b {
@@ -421,7 +421,7 @@ a:hover {
 			<c:forEach var="cat" items="${categoryList}">
 				<div class="category-group">
 					<div class="category-header">
-				    	<img src="policy/policyIcon/${cat.icon}" width="40" />
+				    	<img src="${pageContext.request.contextPath}/policy/policyIcon/${cat.icon}" width="40" />
 				      	<p><strong>${cat.name}</strong></p>
 						<label>
 							<input type="checkbox" class="check-all" data-target="${cat.name}" /> 전체
@@ -515,7 +515,7 @@ a:hover {
 	console.log("loadPage 호출됨. page = ", page);
 	console.log(selectedCategories);
 
-	fetch(`/policyListJson?page=\${page}&
+	fetch(`${pageContext.request.contextPath}/policyListJson?page=\${page}&
 			searchInput=\${encodeURIComponent(currentSearchInput)}&
 			mainCategory=\${encodeURIComponent(currentMainCategory)}&
 			selectedCategories=\${selectedCategories}`)  // 백틱(`) 사용!
@@ -570,7 +570,7 @@ a:hover {
 		    card.appendChild(labels);
 			
 		 	const aContent = document.createElement("a");
-		 	aContent.href= `/policyContent?page=${page}&plcy_no=\${p.plcy_no}`;
+		 	aContent.href= `${pageContext.request.contextPath}/policyContent?page=\${page}&plcy_no=\${p.plcy_no}`;
  	
 		    // 제목
 		    const title = document.createElement("div");
@@ -600,7 +600,7 @@ a:hover {
 		    
 		 	// 자세히 보기 버튼
 		    const detailBtn = document.createElement("a");
-		    detailBtn.href = `/policyContent?page=${page}&plcy_no=\${p.plcy_no}`;
+		    detailBtn.href = `${pageContext.request.contextPath}/policyContent?page=${page}&plcy_no=\${p.plcy_no}`;
 		    detailBtn.className = "detail-btn";
 		    detailBtn.textContent = "자세히보기";
 		    card.appendChild(detailBtn);
@@ -654,11 +654,11 @@ a:hover {
 		pagination.innerHTML = "";
 
 	    // 처음 페이지
-	    pagination.innerHTML += `<a href="#" onclick="loadPage(1)">◀</a> `;
+	    pagination.innerHTML += `<button onclick="loadPage(1)">◀</button> `;
 
 	    // 이전 블록
 	    if (start > 6) {
-	      pagination.innerHTML += `<a href="#" onclick="loadPage(\${start - 6})">[이전]</a> `;
+	      pagination.innerHTML += `<button onclick="loadPage(\${start - 6})">[이전]</button> `;
 	    } 	//end if
 
 	    // 페이지 번호들
@@ -666,17 +666,17 @@ a:hover {
 	      if (i === current) {
 	        pagination.innerHTML += `<b>\${i}</b>`;
 	      } else {
-	        pagination.innerHTML += `<a href="#" onclick="loadPage(\${i})">\${i}</a>`;
+	        pagination.innerHTML += `<button onclick="loadPage(\${i})">\${i}</button>`;
 	      }	// end if
 	    }	// end for
 
 	    // 다음 블록
 	    if (end < total) {
-	      pagination.innerHTML += `<a href="#" onclick="loadPage(\${start + 6})">[다음]</a> `;
+	      pagination.innerHTML += `<button onclick="loadPage(\${start + 6})">[다음]</button> `;
 	    }	// end if
 
 	    // 마지막 페이지
-	    pagination.innerHTML += `<a href="#" onclick="loadPage(\${total}">▶</a>`;
+	    pagination.innerHTML += `<button onclick="loadPage(\${total}">▶</button>`;
 	  }		// end function
 
 	  // 초기 로딩
