@@ -67,7 +67,7 @@ body {
 	color: #111;
 	font-family: 'Playfair Display', serif;
 }
-
+/* 상세 내용 */
 .detail-container {
 	max-width: 850px;
 	margin: 35px auto;
@@ -76,15 +76,92 @@ body {
 	background: #fff;
 	box-shadow: 0 2px 18px #eee;
 }
+#mainPhoto {
+    width: 100%;              /* 가로 100%, max-width 이하로 제한 */
+    max-width: 600px;         /* 최대 너비 600px */
+    height: 400px;            /* 고정 높이 400px */
+    object-fit: cover;        /* 잘라내기 모드로 비율 유지 */
+    border-radius: 8px;       /* 둥근 모서리 */
+    cursor: pointer;          /* 클릭 가능한 커서 */
+    display: block;           /* 블록 요소 */
+    margin: 0 auto;           /* 수평 중앙 정렬 */
+  }
 
-.main-photo {
-	width: 100%;
-	height: 320px;
-	object-fit: cover;
-	border-radius: 14px;
-	box-shadow: 0 2px 8px #e6e6e6;
-	margin-bottom: 12px;
-}
+  /* 메인 사진 컨테이너: 버튼 절대 배치 기준 */
+  .main-photo-container {
+    position: relative;
+    max-width: 600px;
+    margin: 20px auto;
+  }
+
+  /* 이전/다음 버튼 공통 스타일 */
+  .photo-nav {
+    position: absolute;                       /* 부모 기준 절대 위치 */
+    top: 50%;                                 /* 수직 중앙 */
+    transform: translateY(-50%);              /* 정확히 중앙 맞춤 */
+    background: rgba(255,255,255,0.8);        /* 반투명 배경 */
+    border: none;                             /* 테두리 제거 */
+    width: 36px; height: 36px;                /* 정사각형 크기 */
+    border-radius: 50%;                       /* 원형 */
+    cursor: pointer;                          /* 클릭 가능한 커서 */
+    font-size: 1.5em;                         /* 아이콘 크기 */
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1;                               /* 사진 위에 배치 */
+  }
+  /* 이전 버튼 위치 */
+  #mainPrev { left: -18px; }
+  /* 다음 버튼 위치 */
+  #mainNext { right: -18px; }
+
+  /* 썸네일 슬라이더: 가로 스크롤, 가운데 정렬 */
+  .thumb-slider {
+    display: flex;
+    gap: 8px;                 /* 썸네일 간 간격 */
+    justify-content: center;
+    margin: 15px auto;
+    max-width: 600px;
+    overflow-x: auto;         /* 가로 스크롤 */
+  }
+  /* 썸네일 이미지: 고정 크기, 비율 유지 */
+  .thumb-slider img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  /* 모달 전체 배경 */
+  #imgModal {
+    display: none;            /* 초기 숨김 */
+    position: fixed;
+    left: 0; top: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.8);
+    align-items: center; justify-content: center;
+    z-index: 9999;
+  }
+  /* 모달 내 이전/다음 버튼 */
+  .modal-nav {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2em;
+    cursor: pointer;
+    z-index: 10000;
+  }
+  /* 모달 이전 버튼 위치 */
+  #modalPrev { left: 20px; }
+  /* 모달 다음 버튼 위치 */
+  #modalNext { right: 20px; }
+  /* 모달 이미지: 최대 크기 제한 */
+  #imgModal img {
+    max-width: 90vw;
+    max-height: 90vh;
+  }
+
 
 .photo-gallery {
 	display: flex;

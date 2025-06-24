@@ -3,7 +3,53 @@
 <html>
 <head>
 <title>${restaurant.res_subject}- 상세 정보</title>
+ <script>
+    // 모든 사진 배열 생성 (대표 + 여분)
+    const photos = [
+      '<c:out value="${restaurant.res_photo_url}" escapeXml="false"/>'
+      <c:if test="${not empty extraPhotoUrls}">
+        <c:forEach var="url" items="${extraPhotoUrls}" varStatus="st">
+          , '<c:out value="${url}" escapeXml="false"/>'
+        </c:forEach>
+      </c:if>
+    ];
 
+    // 메인 사진 인덱스
+    let currentMainIndex = 0;
+    function updateMainPhoto(idx) {
+      currentMainIndex = idx;
+      document.getElementById('mainPhoto').src = photos[idx];
+    }
+    function prevMainPhoto() {
+      updateMainPhoto((currentMainIndex - 1 + photos.length) % photos.length);
+    }
+    function nextMainPhoto() {
+      updateMainPhoto((currentMainIndex + 1) % photos.length);
+    }
+
+    // 모달 인덱스 및 함수
+    let currentModalIndex = 0;
+    function openModalAt(idx) {
+      currentModalIndex = idx;
+      document.getElementById('modalImg').src = photos[idx];
+      document.getElementById('imgModal').style.display = 'flex';
+    }
+    function prevModal() {
+      currentModalIndex = (currentModalIndex - 1 + photos.length) % photos.length;
+      document.getElementById('modalImg').src = photos[currentModalIndex];
+    }
+    function nextModal() {
+      currentModalIndex = (currentModalIndex + 1) % photos.length;
+      document.getElementById('modalImg').src = photos[currentModalIndex];
+    }
+    function closeModal() {
+      document.getElementById('imgModal').style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateMainPhoto(0);
+    });
+  </script>
  <!-- CSS 파일 로드 -->
   <link rel="stylesheet" href="<c:url value='/css/res/res_detail.css'/>" />
 
@@ -15,6 +61,7 @@
 		document.getElementById('mainPhoto').src = url;
 	}
 </script>
+
 </head>
 <body>
 	<!-- 상단 베이지 바 -->
@@ -46,15 +93,16 @@
 
 	<div class="detail-container">
 
-		<!-- 대표 사진 -->
-		<c:if test="${not empty restaurant.res_photo_url}">
-			<img id="mainPhoto" class="main-photo"
-				src="${restaurant.res_photo_url}" alt="대표 사진">
-		</c:if>
-		<!-- 사진이 없을 때 -->
-		<c:if test="${empty restaurant.res_photo_url}">
-			<div class="no-img">이미지 없음</div>
-		</c:if>
+	 <!-- 메인 사진 & 버튼 -->
+    <div class="main-photo-container">
+      <button id="mainPrev" class="photo-nav" onclick="prevMainPhoto()">‹</button>
+      <img id="mainPhoto"
+           src=""
+           alt="대표 사진"
+           style="width:100%; border-radius:8px; display:block; cursor:pointer;"
+           onclick="openModalAt(currentMainIndex)" />
+      <button id="mainNext" class="photo-nav" onclick="nextMainPhoto()">›</button>
+    </div>
 		<!-- 여분 사진(썸네일) -->
 		<c:if test="${not empty extraPhotoUrls}">
 			<div style="display: flex; gap: 8px; margin-top: 15px;">
@@ -86,6 +134,7 @@
 						};
 				});
 		</script>
+		
 
 
 		<!-- 음식점명 & 별점 -->
