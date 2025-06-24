@@ -271,7 +271,7 @@ body {
 	margin-top: 50px;
 	margin-bottom: 50px;
 	display: flex;
-	width: 100vw;
+/* 	width: 100vw; */
 }
 
 /* swiper-container 를 화면 폭의 90%로 고정하고 최대 1200px 까지만 늘어나게 */
@@ -280,6 +280,7 @@ body {
 	max-width: 2000px; /* (원하는 최대값) */
 	margin: 0 auto; /* 좌우 자동 중앙정렬 */
 	margin-bottom: 0px; /* 슬라이더 하단 여백 */
+	overflow: hidden;
 	padding: 0px; /* 좌우 여백 */
 	box-sizing: border-box;
 }

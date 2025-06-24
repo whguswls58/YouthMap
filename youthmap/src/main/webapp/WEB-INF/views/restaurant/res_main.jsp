@@ -240,22 +240,21 @@
   <!-- Swiper JS -->
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script>
-	const totalSlides = 20;  // 실제 슬라이드 갯수에 맞춰 조정
+	const totalSlides = 10;  // 실제 슬라이드 갯수에 맞춰 조정
 
   	const swiper = new Swiper('.swiper-container', {
 	  loop: true,
 	  loopedSlides: totalSlides,    // 전체 슬라이드 수
-	  slidesPerView: totalSlides,   // 한 화면에 꽉 채워 보여줄 개수
-	   speed: 5000,
+	  slidesPerView: 5,   // 한 화면에 꽉 채워 보여줄 개수
+	   speed: 6000,
 	   spaceBetween: 10,
-	   slidesPerView: 10,           // 보여줄 카드 수
+	   slidesPerView: 7,           // 보여줄 카드 수
 	   slidesPerGroup: 1,
 	   spaceBetween: 20,
-	   loopedSlides: 7,             // 실제 카드 개수만큼 복제(clone)해서
-	   loopAdditionalSlides: 7,     // 앞뒤로 여분을 더 만들어 줍니다
-
+ 	   loopedSlides: 7,             // 실제 카드 개수만큼 복제(clone)해서
+ 	   loopAdditionalSlides: 7,     // 앞뒤로 여분을 더 만들어 줍니다
     // 하단 도트 내비게이션 제거 (dots: false)
-    pagination: false,
+    	pagination: false,
 
     // 자동 재생 설정
     autoplay: {
