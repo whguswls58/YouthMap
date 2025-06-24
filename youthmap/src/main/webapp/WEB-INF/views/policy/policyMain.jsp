@@ -482,10 +482,16 @@ a:hover {
 	</form>
 	</div>
 
+<!-- 검색 전 보여줄 콘텐츠 -->
+<div id="pre-search-content" class="pre-search-content"></div>
+
+<!-- 검색 결과 갯수 -->
 <div id="policy-search-count" class="policy-search-count hidden"></div>
 
+<!-- 검색 결과 출력 컨테이너 -->
 <div id="policy-container" class="policy-container hidden"></div>
 
+<!-- 검색 결과 페이징 처리 -->
 <div id="pagination" class="pagination hidden" style="text-align:center; margin-top: 20px;"></div>
 
 <script>
@@ -563,7 +569,7 @@ a:hover {
 	    .then(data => {
 		console.log("data:", data);
 		
-		
+		const preSearch = document.getElementById("pre-search-content");
 		const container = document.getElementById("policy-container");
 		const countBox = document.getElementById("policy-search-count");
 	    const pagination = document.getElementById("pagination");
@@ -578,6 +584,9 @@ a:hover {
 	    } 
 	    
 	    // 검색 결과 있는 경우
+	    // 검색 전 콘텐츠 숨기기
+  		preSearch.style.display = "none";
+	    // 검색 후 결과 출력
 	    container.classList.remove("hidden");
 	    countBox.classList.remove("hidden");
 	    pagination.classList.remove("hidden");
