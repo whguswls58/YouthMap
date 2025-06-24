@@ -376,13 +376,15 @@ footer {
 				    <!-- 신청 시작일이 null이면 -->
 		    <c:choose>
 		        <c:when test="${empty plcy.aply_ymd_strt}">
-		            <span class="policy-label">상시</span>
+		            <span class="policy-label">상시</span><br>
 		        </c:when>
 		        <c:otherwise>
-		            <span class="policy-label dday-text"></span>
+		            <span class="policy-label dday-text"></span><br>
 		        </c:otherwise>
 		    </c:choose>
-		    <span class="policy-label">${plcy.lclsf_nm}</span><br>
+		    <c:forEach var="lc" items="${lclsf}">
+			    <span class="policy-label">${lc}</span>		    
+		    </c:forEach>
 		</div>
 		<table class="policy-table policy-nm">
 			<tr>

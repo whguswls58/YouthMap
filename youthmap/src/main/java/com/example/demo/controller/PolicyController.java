@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -152,7 +153,13 @@ public class PolicyController {
 		pm.setStartRow(startRow);
 		pm.setEndRow(endRow);
 		List<PolicyModel> pmList = service.plcyListByPage(pm); // 페이징 적용된 리스트
-
+		
+		for(PolicyModel p : pmList) {
+			System.out.println(p.getLclsf_nm());
+			p.setLclsf_nms(service.splitByComma(p.getLclsf_nm()));
+			p.setPlcy_kywd_nms(service.splitByComma(p.getPlcy_kywd_nm()));
+		}
+		
 		int pagecount = listcount / limit + ((listcount % limit == 0) ? 0 : 1);
 		int startpage = ((page - 1) / 6) * limit + 1;
 		int endpage = Math.min(startpage + 6 - 1, pagecount);
@@ -181,15 +188,15 @@ public class PolicyController {
 		
 		// 상세 데이터 검색
 		PolicyModel plcy = service.plcyContent(plcy_no);
-		String[] keywords  = {};
-		if (plcy.getPlcy_kywd_nm() != null && !plcy.getPlcy_kywd_nm().isBlank()) {
-		    keywords = plcy.getPlcy_kywd_nm().split(",");
-		}
 		
-		System.out.println(keywords);
+		// 검색키워드, 정책 소분류 문자열을 배열로 변환 및 중복 제거
+		String[] keywords  = service.splitByComma(plcy.getPlcy_kywd_nm());
+		String[] lclsf = service.splitByComma(plcy.getLclsf_nm());
+		
 		System.out.println(plcy.getAply_ymd_end());
 		System.out.println(plcy.getAply_ymd_strt());
 		
+		// 각 정책코드, 학력코드, 직업코드, 특화분야코드 -> 각각 명칭으로 치환
 		plcy.setPlcy_major_cd(service.convertCodes(plcy.getPlcy_major_cd(), service.plcy_major_map));
 		plcy.setSchool_cd(service.convertCodes(plcy.getSchool_cd(), service.school_map));
 		plcy.setJob_cd(service.convertCodes(plcy.getJob_cd(), service.job_map));
@@ -207,6 +214,7 @@ public class PolicyController {
 
 		model.addAttribute("plcy", plcy);
 		model.addAttribute("keywords", keywords);
+		model.addAttribute("lclsf", lclsf);
 		model.addAttribute("page", page);
 		
 		return "policy/policyContent";

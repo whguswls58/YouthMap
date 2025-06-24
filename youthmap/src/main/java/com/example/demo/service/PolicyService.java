@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -105,6 +106,19 @@ public class PolicyService {
 	// "\n" -> "<br>"로 치환
 	public String convertNewlines(String text) {
 	    return (text != null) ? text.replace("\n", "<br>") : null;
+	}
+	
+	// , 로 이어진 String형 배열로 변환하여 리턴
+	public String[] splitByComma(String commaData) {
+		
+		String[] splitData = {};
+		if (commaData != null && !commaData.isBlank()) {
+		    splitData = commaData.split(",");
+		    // 중복 제거 및 순서 유지
+		    Set<String> uniqueSet = new LinkedHashSet<>(Arrays.asList(splitData));
+		    splitData = uniqueSet.toArray(new String[0]);
+		}
+		return splitData;
 	}
 	
 	// api에 요청하여 json 데이터 받아옴

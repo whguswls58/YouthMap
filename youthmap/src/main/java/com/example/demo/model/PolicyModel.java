@@ -65,5 +65,7 @@ public class PolicyModel {
     
     private List<String> categories;			// 카테고리
     private String sortOrder;					// 정렬방법
+    private String[] lclsf_nms;					// 분류이름
+    private String[] plcy_kywd_nms;				// 정책키워드
     
 }
