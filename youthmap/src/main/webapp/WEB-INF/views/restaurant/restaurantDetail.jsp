@@ -3,75 +3,9 @@
 <html>
 <head>
 <title>${restaurant.res_subject}- 상세 정보</title>
+ <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+
 <style>
-body {
-	font-family: 'Playfair Display', serif;
-	margin: 0;
-	padding: 0;
-	background-color: #fff;
-	color: #333
-}
-/* 상단 베이지 바 */
-.topbar {
-	background: #f5f0e6;
-	padding: 10px 40px;
-}
-
-.topbar .menu {
-	max-width: 1200px;
-	margin: 0 auto;
-	display: flex;
-	justify-content: flex-end;
-	gap: 20px;
-	font-size: 14px;
-}
-
-.topbar .menu a {
-	color: #444;
-	text-decoration: none;
-}
-/* 네비게이션 */
-.navbar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 18px 40px;
-	background: #fff;
-	position: sticky;
-	top: 0;
-	z-index: 1000;
-	border-bottom: 1px solid #eee;
-}
-
-.navbar-left, .navbar-right {
-	display: flex;
-	gap: 18px;
-}
-
-.navbar-center {
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-}
-
-.nav-link {
-	font-size: 15px;
-	color: #222;
-	text-decoration: none;
-}
-
-.nav-link:hover, .nav-link.active {
-	border-bottom: 2px solid #222;
-	padding-bottom: 2px;
-}
-
-.logo {
-	font-size: 20px;
-	font-weight: bold;
-	letter-spacing: 1px;
-	color: #111;
-	font-family: 'Playfair Display', serif;
-}
 
 .detail-container {
 	max-width: 850px;
@@ -258,28 +192,8 @@ body {
 </script>
 </head>
 <body>
-	<!-- 상단 베이지 바 -->
-	<div class="topbar">
-		<div class="menu">
-			<a href="#">CART</a> <a href="#">MY PAGE</a> <a href="#">JOIN</a>
-		</div>
-	</div>
-
-	<!-- ✅ 네비게이션 구조 -->
-	<div class="navbar">
-		<div class="navbar-left">
-			<a href="#" class="nav-link">About</a> <a href="#" class="nav-link">Facility</a>
-			<a href="#" class="nav-link active">Food</a> <a href="#"
-				class="nav-link">Community</a> <a href="#" class="nav-link">Contact</a>
-		</div>
-		<div class="navbar-center">
-			<span class="logo">YOUTHMAP</span>
-		</div>
-		<div class="navbar-right">
-			<a href="#" class="nav-link">CART</a> <a href="#" class="nav-link">MY
-				PAGE</a> <a href="#" class="nav-link">JOIN</a>
-		</div>
-	</div>
+<!-- 헤더-->
+<%@ include file="/WEB-INF/views/header.jsp" %>
 
 
 

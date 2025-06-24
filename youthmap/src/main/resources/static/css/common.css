@@ -47,6 +47,12 @@ body {
   display: flex;
   gap: 10px;
 }
+.navbar-left {
+  display: flex;
+  gap: 30px;
+  position: relative;
+  left: 80px;  /* ✅ 오른쪽으로 80px 이동 */
+}
 .navbar-right {
   display: flex;
   align-items: center;

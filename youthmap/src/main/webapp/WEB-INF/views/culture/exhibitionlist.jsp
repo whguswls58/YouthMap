@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ include file="/WEB-INF/views/culture/header.jsp" %>
 
 
 <!DOCTYPE html>
@@ -8,6 +7,9 @@
 <head>
   <meta charset="UTF-8">
   <title>전시/미술 리스트</title>
+  
+   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+  
   
   
   <style>
@@ -138,6 +140,8 @@ a.card-link {
 
 </head>
 <body>
+<!-- 헤더-->
+<%@ include file="/WEB-INF/views/header.jsp" %>
 
   <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
 

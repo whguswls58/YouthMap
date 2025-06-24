@@ -38,6 +38,4 @@ public interface MemberDao {
     //아이디 중복
     void updateOauthId(MemberModel member);
 
-
-
 }

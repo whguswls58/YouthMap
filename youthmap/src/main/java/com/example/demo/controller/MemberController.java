@@ -46,39 +46,39 @@ public class MemberController {
 
 	@PostMapping("/register")
 	public String register(@RequestParam("emailId") String emailId, @RequestParam("emailDomain") String emailDomain,
-			@RequestParam("phonePrefix") String phonePrefix, @RequestParam("phoneMiddle") String phoneMiddle, 
-			@RequestParam("phoneLast") String phoneLast, @ModelAttribute MemberModel member, Model model) {
-
-		// 아이디 중복 체크
-		if (memberService.isIdDuplicate(member.getMemId())) {
-			model.addAttribute("error", "이미 존재하는 아이디입니다.");
-			return "member/register";
-		}
-
-		// 이메일 조합해서 저장
-		String fullEmail = emailId + "@" + emailDomain;
-		member.setMemMail(fullEmail);
-
-		// 핸드폰번호 조합해서 저장
-		String fullPhone = phonePrefix + "-" + phoneMiddle + "-" + phoneLast;
-		member.setMemNum(fullPhone);
-
-		// 일반 회원가입이므로 memType을 LOCAL로 설정
-		member.setMemType("LOCAL");
-		
-		// 디버깅: memType 설정 확인
-		System.out.println("회원가입 - 설정된 memType: " + member.getMemType());
-
-		// 회원가입 처리
-		memberService.register(member);
-
-		// 가입 성공 메시지 전달
-		return "redirect:/register-success";
+		  @RequestParam("phonePrefix") String phonePrefix, @RequestParam("phoneMiddle") String phoneMiddle, 
+		  @RequestParam("phoneLast") String phoneLast, @ModelAttribute MemberModel member, Model model) {
+ 
+	   // 아이디 중복 체크
+	   if (memberService.isIdDuplicate(member.getMemId())) {
+		  model.addAttribute("error", "이미 존재하는 아이디입니다.");
+		  return "member/register";
+	   }
+ 
+	   // 이메일 조합해서 저장
+	   String fullEmail = emailId + "@" + emailDomain;
+	   member.setMemMail(fullEmail);
+ 
+	   // 핸드폰번호 조합해서 저장
+	   String fullPhone = phonePrefix + "-" + phoneMiddle + "-" + phoneLast;
+	   member.setMemNum(fullPhone);
+ 
+	   // 일반 회원가입이므로 memType을 LOCAL로 설정
+	   member.setMemType("LOCAL");
+	   
+	   // 디버깅: memType 설정 확인
+	   System.out.println("회원가입 - 설정된 memType: " + member.getMemType());
+ 
+	   // 회원가입 처리
+	   memberService.register(member);
+ 
+	   // 가입 성공 메시지 전달
+	   return "redirect:/register-success";
 	}
-
+ 
 	@GetMapping("/register-success")
 	public String registerSuccess() {
-		return "member/register-success";
+	   return "member/register-success";
 	}
 
 	// 로그인 페이지
@@ -200,9 +200,20 @@ public class MemberController {
 	
 	@GetMapping("/edit_pass")
 	public String showChangePasswordPage(Model model, HttpSession session) {
-	    // 로그인된 사용자 정보 조회 등 필요 시 처리
-	    model.addAttribute("member", session.getAttribute("loginMember"));
-	    return "member/edit_pass"; // 실제 JSP 위치가 /WEB-INF/views/member/change-pass.jsp
+	    MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
+	    
+	    // 로그인 체크
+	    if (loginMember == null) {
+	        return "redirect:/login";
+	    }
+	    
+	    // 소셜 로그인 회원이면 수정 차단
+	    if (loginMember.getMemType() != null && !"LOCAL".equals(loginMember.getMemType())) {
+	        return "redirect:/mypage?error=socialUserCannotEdit";
+	    }
+	    
+	    model.addAttribute("member", loginMember);
+	    return "member/edit_pass";
 	}
 
 	// 비밀번호 변경 처리

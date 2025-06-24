@@ -7,7 +7,9 @@
 <title>Bootstrap Example</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+  
 <style>
 /* 메인 정책 상세 페이지 스타일 - 순수 CSS 기반 */
 
@@ -308,33 +310,8 @@ footer {
 </style>
 </head>
 <body>
-<!-- 상단 베이지 바 -->
-<div class="topbar2">
-  <div class="menu">
-    <a href="#">CART</a>
-    <a href="#">MY PAGE</a>
-    <a href="#">JOIN</a>
-  </div>
-</div>
-
-<!-- 네비게이션 구조 -->
-<div class="navbar2">
-  <div class="navbar2-left">
-    <a href="#" class="nav-link">About</a>
-    <a href="#" class="nav-link">Facility</a>
-    <a href="#" class="nav-link active">Food</a>
-    <a href="#" class="nav-link">Community</a>
-    <a href="#" class="nav-link">Contact</a>
-  </div>
-  <div class="navbar2-center">
-  	<span class="logo">YOUTHMAP</span>
-  </div>
-  <div class="navbar2-right">
-    <a href="#" class="nav-link">CART</a>
-    <a href="#" class="nav-link">MY PAGE</a>
-    <a href="#" class="nav-link">JOIN</a>
-  </div>
-</div>
+<!-- 상단 베이지 바 --<!-- 헤더-->
+<%@ include file="/WEB-INF/views/header.jsp" %>
 
 <div class="container-fluid text-center">
 	<div class="col-sm-2 sidenav">

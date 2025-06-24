@@ -1,12 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ include file="/WEB-INF/views/culture/header.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>전체 콘텐츠 목록</title>
+ <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 
 
   <style>
@@ -119,53 +119,25 @@
   font-weight: bold;
 }
 
+
   </style>
 </head>
 <body>
 
+<!-- 헤더-->
+<%@ include file="/WEB-INF/views/header.jsp" %>
   <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
 
-  <div align="center" style="margin:20px 0;">
-	<button onclick="location.href='allList'" style=" width:100px; height:26px; line-height:26px; text-align:center; 
-            font-size:18px; margin:0 8px; cursor:pointer;">
-      전체 목록
-    </button>
-  <button type="button" onclick="location.href='exhibitionlist'"
-            style="
-            width:100px;
-            height:26px;
-            line-height:26px;			/* 버튼 높이랑 같게 */
-            text-align:center;
-            font-size:18px;
-            margin:0 8px;
-            cursor:pointer;">
-    전시/미술
-  </button>
-
-  <button type="button" onclick="location.href='performancelist'"
-	  style="
-          width:100px;
-          height:26px;
-          line-height:26px;
-          text-align:center;
-          font-size:18px;
-          margin:0 8px;
-          cursor:pointer; ">
-    공연
-  </button>
-
-  <button type="button" onclick="location.href='eventlist'"
-          style="
-            width:100px;
-            height:26px;
-            line-height:26px;
-            text-align:center;
-            font-size:18px;
-            margin:0 8px;
-            cursor:pointer; ">
-    축제/행사
-  </button>
-</div><br><hr>
+ 
+  <!-- 우측: 정렬 -->
+  <div class="sort-nav">
+    <a href="#" data-sort="mostViewed"
+       class="${sort == 'mostViewed' ? 'active' : ''}">• 인기순</a>
+    <a href="#" data-sort="newest"
+       class="${sort == 'newest' ? 'active' : ''}">• 최신순</a>
+    <a href="#" data-sort="endingSoon"
+       class="${sort == 'endingSoon' ? 'active' : ''}">• 마감임박</a>
+  </div>
 
   <h2 style="text-align:center; margin:20px 0;">
     전체 콘텐츠 목록 (${page}/${pagecount})
