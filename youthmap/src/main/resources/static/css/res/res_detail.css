@@ -1,0 +1,323 @@
+@charset "UTF-8";
+body {
+	font-family: 'Playfair Display', serif;
+	margin: 0;
+	padding: 0;
+	background-color: #fff;
+	color: #333
+}
+/* 상단 베이지 바 */
+.topbar {
+	background: #f5f0e6;
+	padding: 10px 40px;
+}
+
+.topbar .menu {
+	max-width: 1200px;
+	margin: 0 auto;
+	display: flex;
+	justify-content: flex-end;
+	gap: 20px;
+	font-size: 14px;
+}
+
+.topbar .menu a {
+	color: #444;
+	text-decoration: none;
+}
+/* 네비게이션 */
+.navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 18px 40px;
+	background: #fff;
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+	border-bottom: 1px solid #eee;
+}
+
+.navbar-left, .navbar-right {
+	display: flex;
+	gap: 18px;
+}
+
+.navbar-center {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.nav-link {
+	font-size: 15px;
+	color: #222;
+	text-decoration: none;
+}
+
+.nav-link:hover, .nav-link.active {
+	border-bottom: 2px solid #222;
+	padding-bottom: 2px;
+}
+
+.logo {
+	font-size: 20px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	color: #111;
+	font-family: 'Playfair Display', serif;
+}
+/* 상세 내용 */
+.detail-container {
+	max-width: 850px;
+	margin: 35px auto;
+	padding: 28px;
+	border-radius: 16px;
+	background: #fff;
+	box-shadow: 0 2px 18px #eee;
+}
+#mainPhoto {
+    width: 100%;              /* 가로 100%, max-width 이하로 제한 */
+    max-width: 600px;         /* 최대 너비 600px */
+    height: 400px;            /* 고정 높이 400px */
+    object-fit: cover;        /* 잘라내기 모드로 비율 유지 */
+    border-radius: 8px;       /* 둥근 모서리 */
+    cursor: pointer;          /* 클릭 가능한 커서 */
+    display: block;           /* 블록 요소 */
+    margin: 0 auto;           /* 수평 중앙 정렬 */
+  }
+
+  /* 메인 사진 컨테이너: 버튼 절대 배치 기준 */
+  .main-photo-container {
+    position: relative;
+    max-width: 600px;
+    margin: 20px auto;
+  }
+
+  /* 이전/다음 버튼 공통 스타일 */
+  .photo-nav {
+    position: absolute;                       /* 부모 기준 절대 위치 */
+    top: 50%;                                 /* 수직 중앙 */
+    transform: translateY(-50%);              /* 정확히 중앙 맞춤 */
+    background: rgba(255,255,255,0.8);        /* 반투명 배경 */
+    border: none;                             /* 테두리 제거 */
+    width: 36px; height: 36px;                /* 정사각형 크기 */
+    border-radius: 50%;                       /* 원형 */
+    cursor: pointer;                          /* 클릭 가능한 커서 */
+    font-size: 1.5em;                         /* 아이콘 크기 */
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1;                               /* 사진 위에 배치 */
+  }
+  /* 이전 버튼 위치 */
+  #mainPrev { left: -18px; }
+  /* 다음 버튼 위치 */
+  #mainNext { right: -18px; }
+
+  /* 썸네일 슬라이더: 가로 스크롤, 가운데 정렬 */
+  .thumb-slider {
+    display: flex;
+    gap: 8px;                 /* 썸네일 간 간격 */
+    justify-content: center;
+    margin: 15px auto;
+    max-width: 600px;
+    overflow-x: auto;         /* 가로 스크롤 */
+  }
+  /* 썸네일 이미지: 고정 크기, 비율 유지 */
+  .thumb-slider img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  /* 모달 전체 배경 */
+  #imgModal {
+    display: none;            /* 초기 숨김 */
+    position: fixed;
+    left: 0; top: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.8);
+    align-items: center; justify-content: center;
+    z-index: 9999;
+  }
+  /* 모달 내 이전/다음 버튼 */
+  .modal-nav {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2em;
+    cursor: pointer;
+    z-index: 10000;
+  }
+  /* 모달 이전 버튼 위치 */
+  #modalPrev { left: 20px; }
+  /* 모달 다음 버튼 위치 */
+  #modalNext { right: 20px; }
+  /* 모달 이미지: 최대 크기 제한 */
+  #imgModal img {
+    max-width: 90vw;
+    max-height: 90vh;
+  }
+
+
+.photo-gallery {
+	display: flex;
+	gap: 11px;
+	overflow-x: auto;
+	margin-bottom: 22px;
+}
+
+.photo-gallery img {
+	height: 70px;
+	border-radius: 7px;
+	cursor: pointer;
+	border: 2px solid #f3f3f3;
+}
+
+.res-title {
+	font-size: 2rem;
+	font-weight: bold;
+	margin-bottom: 7px;
+}
+
+.res-score {
+	color: #ffa500;
+	font-size: 1.3rem;
+	margin-left: 7px;
+}
+
+.address, .tel {
+	color: #555;
+	margin-bottom: 8px;
+}
+
+.section {
+	margin-bottom: 22px;
+}
+
+.label {
+	color: #888;
+	margin-right: 6px;
+}
+
+.price {
+	font-weight: bold;
+	color: #406d36;
+}
+
+
+.no-img {
+	width: 100%;
+	height: 320px;
+	border-radius: 14px;
+	background: #eee;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #aaa;
+	font-size: 24px;
+	margin-bottom: 12px;
+}
+
+.map-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.map-container iframe {
+	max-width: 900px; /* 원하는 최대 가로폭 */
+}
+
+.map-container .label {
+	display: block;
+	margin-bottom: 8px;
+	font-size: 1rem;
+	color: #333;
+	text-align: center;
+}
+
+/* 상세정보 2단 레이아웃 */
+.info-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 24px;
+}
+
+.info-table th, .info-table td {
+	padding: 12px 16px;
+	vertical-align: top;
+}
+
+.info-table th {
+	background: #f5f5f5;
+	width: 30%;
+	font-weight: normal;
+	color: #333;
+}
+
+.info-table td {
+	background: #fff;
+	color: #444;
+}
+
+.info-table tr+tr th, .info-table tr+tr td {
+	border-top: 1px solid #eee;
+}
+/* 메인 사진 바로 아래 여백 늘리기 */
+.detail-container .main-photo {
+	margin-bottom: 30px;
+}
+
+/* 썸네일 갤러리 아래 여백 늘리기 */
+.detail-container .photo-gallery {
+	margin-bottom: 40px;
+}
+
+/* 식당명(타이틀) 위쪽 여백 추가 */
+.detail-container .res-title {
+	margin-top: 60px;
+}
+
+.main-photo {
+	/* 기존 스타일 유지 */
+	width: 600px;
+	height: 400px;
+	object-fit: cover;
+	border-radius: 14px;
+	box-shadow: 0 2px 8px #e6e6e6;
+	margin-bottom: 32px;
+	/* 추가 */
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+/* 버튼 그룹 컨테이너 */
+.button-group {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 20px;
+	gap: 12px;
+}
+
+/* 공통 버튼 스타일 */
+.button-group .btn {
+	display: inline-block;
+	padding: 10px 24px;
+	border-radius: 8px;
+	background-color: #888;
+	color: #fff;
+	text-decoration: none;
+	font-size: 16px;
+	font-weight: 500;
+	text-align: center;
+	transition: background-color 0.2s;
+}
+
+.button-group .btn:hover {
+	background-color: #555;
+}

@@ -4,334 +4,15 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <html>
 <head>
+
+
 <title>맛집 리스트</title>
-<style>
-body {
-	font-family: 'Playfair Display', serif;
-	margin: 0;
-	padding: 0;
-	background-color: #fff;
-	color: #333;
-}
-/* 상단 베이지 바 */
-.topbar {
-	background: #f5f0e6;
-	padding: 10px 40px;
-}
 
-.topbar .menu {
-	max-width: 1200px;
-	margin: 0 auto;
-	display: flex;
-	justify-content: flex-end;
-	gap: 20px;
-	font-size: 14px;
-}
+ <!-- CSS 파일 로드 -->
+  <link rel="stylesheet" href="<c:url value='/css/res/res_list.css'/>" />
 
-.topbar .menu a {
-	color: #444;
-	text-decoration: none;
-}
-/* 네비게이션 */
-.navbar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 18px 40px;
-	background: #fff;
-	position: sticky;
-	top: 0;
-	z-index: 1000;
-	border-bottom: 1px solid #eee;
-}
-
-.navbar-left, .navbar-right {
-	display: flex;
-	gap: 18px;
-}
-
-.navbar-center {
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-}
-
-.nav-link {
-	font-size: 15px;
-	color: #222;
-	text-decoration: none;
-}
-
-.nav-link:hover, .nav-link.active {
-	border-bottom: 2px solid #222;
-	padding-bottom: 2px;
-}
-
-.logo {
-	font-size: 20px;
-	font-weight: bold;
-	letter-spacing: 1px;
-	color: #111;
-	font-family: 'Playfair Display', serif;
-}
-
-/* 검색 래퍼 */
-.search-wrapper {
-	display: flex;
-	justify-content: center;
-	margin: 50px 0;
-	position: relative;
-	z-index: 1;
-}
-/* 검색 래퍼 */
-.search-wrapper {
-	display: flex;
-	justify-content: center;
-	margin: 50px 0;
-	position: relative;
-	z-index: 1;
-}
-
-/* 검색 바 */
-.search-bar {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 800px;
-	padding: 20px 40px;
-	gap: 12px;
-	background: #f2f2f2;
-	border-radius: 12px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-	position: relative;
-	z-index: 1;
-}
-
-/* 콤보 박스 + 입력 필드 래퍼 */
-.search-combined {
-	display: flex;
-	flex-grow: 1;
-	max-width: 760px;
-	background: #fff;
-	border: 1px solid #ccc;
-	border-radius: 6px;
-	overflow: hidden;
-	position: relative;
-	z-index: 2;
-}
-
-/* select 스타일 */
-.search-combined select {
-	width: 160px;
-	padding: 12px 20px;
-	font-size: 14px;
-	border: none;
-	border-right: 1px solid #ccc;
-	background: #fff
-		url('data:image/svg+xml;utf8,<svg fill="black" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>')
-		no-repeat right 10px center;
-	background-size: 12px;
-	appearance: none;
-	outline: none;
-	position: relative;
-	z-index: 2;
-}
-
-/* 텍스트 입력 필드 */
-.search-combined input[type="text"], #keywordInput {
-	flex: 1;
-	padding: 12px 16px;
-	font-size: 14px;
-	border: none;
-	outline: none;
-}
-
-/* 검색 버튼 */
-.search-bar input[type="submit"] {
-	padding: 12px 20px;
-	background-color: #888;
-	color: #fff;
-	border: none;
-	border-radius: 6px;
-	font-weight: bold;
-	cursor: pointer;
-	transition: background-color 0.2s;
-}
-
-.search-bar input[type="submit"]:hover {
-	background-color: #666;
-}
-
-/* gu-list 기본 설정 */
-.gu-list {
-	display: none; /* 기본 감춤 */
-	margin: 60px 0; /* 위아래 여백 60px */
-	gap: 10px;
-	justify-content: center;
-	flex-wrap: wrap;
-	max-width: 1000px;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-/* active가 붙으면 flex로 전환 */
-.gu-list.active {
-	display: flex !important;
-}
-
-/* 버튼 기본 스타일 */
-.gu-btn {
-	padding: 10px 20px;
-	border-radius: 20px;
-	background: white;
-	border: 1px solid #aaa;
-	cursor: pointer;
-	font-size: 14px;
-	margin: 6px 0; /* 위아래 여백 60px */
-	margin-left: auto;
-	margin-right: auto;
-}
-
-/* 활성화된 버튼 (검색 버튼과 같은 색) */
-.gu-btn.active {
-	background-color: #888 !important;
-	border-color: #888 !important;
-	color: #fff !important;
-	font-weight: bold;
-}
-
-.restaurant-grid {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	gap: 36px 36px;
-	max-width: 1000px;
-	margin: 30px auto;
-}
-
-.restaurant-card {
-	width: 30%;
-	min-width: 240px;
-	box-sizing: border-box;
-	border: 1px solid #ccc;
-	padding: 14px;
-	border-radius: 12px;
-	text-align: center;
-	background: #fff;
-	box-shadow: 0 2px 8px #eee;
-	margin-bottom: 28px;
-	transition: all 0.3s ease-in-out;
-}
-
-.restaurant-card:hover {
-	transform: translateY(-4px);
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.restaurant-card img {
-	width: 100%;
-	height: 140px;
-	object-fit: cover;
-	border-radius: 8px;
-	background: #fafafa;
-}
-
-.restaurant-name {
-	font-weight: bold;
-	margin-top: 13px;
-	font-size: 17px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.restaurant-score {
-	color: #ffa500;
-	font-size: 16px;
-	margin-top: 6px;
-}
-.no-img {
-  width: 100%;
-  height: 140px;           /* 기존 img 높이와 맞춰주세요 */
-  background: #eee;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #aaa;
-  font-size: 16px;
-  border-radius: 8px;
-}
-/* 반응형 */
-@media ( max-width : 800px) {
-	.restaurant-card {
-		width: 46%;
-		min-width: 160px;
-	}
-}
-
-@media ( max-width : 500px) {
-	.restaurant-card {
-		width: 95%;
-		min-width: 100px;
-	}
-	.restaurant-grid {
-		gap: 20px 0;
-	}
-}
-
-/* 검색 input, select, button 한 번에 키움 */
-#searchForm select, #searchForm input[type="text"], #searchForm input[type="submit"]
-	{
-	font-size: 20px;
-	padding: 13px 20px;
-	height: 52px;
-	border-radius: 10px;
-}
-
-#searchForm input[type="text"] {
-	width: 260px; /* 필요하면 더 크게 */
-}
-
-#searchForm input[type="submit"] {
-	background: #1976d2;
-	color: #fff;
-	font-weight: 700;
-	border: none;
-	transition: background 0.18s font-weight: 700; /* ← 폰트 두껍게! */;
-}
-
-#searchForm input[type="submit"]:hover {
-	background: #12549b;
-}
-/* ✅ 페이징 스타일 */
-.pagination {
-	text-align: center;
-	margin: 30px 0;
-	font-size: 18px;
-}
-
-.pagination a {
-	color: #666;
-	text-decoration: none;
-	margin: 0 6px;
-	padding: 6px 12px;
-	border-radius: 6px;
-	border: 1px solid transparent;
-	transition: background 0.2s, color 0.2s;
-}
-
-.pagination a:hover {
-	background: #eee;
-}
-
-.pagination b {
-	color: #222;
-	font-weight: bold;
-	padding: 6px 12px;
-	background: #e0e0e0;
-	border-radius: 6px;
-}
-</style>
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
 </head>
 <body>
 	<!-- 상단 베이지 바 -->
@@ -357,7 +38,8 @@ body {
 		</div>
 	</div>
 
-
+ <!-- Hero 배너 -->
+  <section class="hero-banner"></section>
 	<!-- 검색 -->
 
 	<div class="search-wrapper">
@@ -374,12 +56,13 @@ body {
 					value="<c:out value='${keyword}'/>" />
 			</div>
 			<input type="submit" value="검색" />
+			
+			
 		</form>
 	</div>
 
 	<!-- ✅ 구 버튼 -->
-	<div
-		class="gu-list <c:if test='${searchType eq \"res_gu\"}'>active</c:if>'">
+	<div class="gu-list <c:if test='${searchType eq \"res_gu\"}'>active</c:if>'">
 		<form method="get" action="restaurants">
 			<button type="submit" name="res_gu" value=""
 				class="gu-btn <c:if test='${empty res_gu}'>active</c:if>">전체</button>

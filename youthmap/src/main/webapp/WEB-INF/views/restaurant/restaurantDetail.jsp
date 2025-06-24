@@ -3,259 +3,65 @@
 <html>
 <head>
 <title>${restaurant.res_subject}- 상세 정보</title>
-<style>
-body {
-	font-family: 'Playfair Display', serif;
-	margin: 0;
-	padding: 0;
-	background-color: #fff;
-	color: #333
-}
-/* 상단 베이지 바 */
-.topbar {
-	background: #f5f0e6;
-	padding: 10px 40px;
-}
+ <script>
+    // 모든 사진 배열 생성 (대표 + 여분)
+    const photos = [
+      '<c:out value="${restaurant.res_photo_url}" escapeXml="false"/>'
+      <c:if test="${not empty extraPhotoUrls}">
+        <c:forEach var="url" items="${extraPhotoUrls}" varStatus="st">
+          , '<c:out value="${url}" escapeXml="false"/>'
+        </c:forEach>
+      </c:if>
+    ];
 
-.topbar .menu {
-	max-width: 1200px;
-	margin: 0 auto;
-	display: flex;
-	justify-content: flex-end;
-	gap: 20px;
-	font-size: 14px;
-}
+    // 메인 사진 인덱스
+    let currentMainIndex = 0;
+    function updateMainPhoto(idx) {
+      currentMainIndex = idx;
+      document.getElementById('mainPhoto').src = photos[idx];
+    }
+    function prevMainPhoto() {
+      updateMainPhoto((currentMainIndex - 1 + photos.length) % photos.length);
+    }
+    function nextMainPhoto() {
+      updateMainPhoto((currentMainIndex + 1) % photos.length);
+    }
 
-.topbar .menu a {
-	color: #444;
-	text-decoration: none;
-}
-/* 네비게이션 */
-.navbar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 18px 40px;
-	background: #fff;
-	position: sticky;
-	top: 0;
-	z-index: 1000;
-	border-bottom: 1px solid #eee;
-}
+    // 모달 인덱스 및 함수
+    let currentModalIndex = 0;
+    function openModalAt(idx) {
+      currentModalIndex = idx;
+      document.getElementById('modalImg').src = photos[idx];
+      document.getElementById('imgModal').style.display = 'flex';
+    }
+    function prevModal() {
+      currentModalIndex = (currentModalIndex - 1 + photos.length) % photos.length;
+      document.getElementById('modalImg').src = photos[currentModalIndex];
+    }
+    function nextModal() {
+      currentModalIndex = (currentModalIndex + 1) % photos.length;
+      document.getElementById('modalImg').src = photos[currentModalIndex];
+    }
+    function closeModal() {
+      document.getElementById('imgModal').style.display = 'none';
+    }
 
-.navbar-left, .navbar-right {
-	display: flex;
-	gap: 18px;
-}
+    document.addEventListener('DOMContentLoaded', () => {
+      updateMainPhoto(0);
+    });
+  </script>
+ <!-- CSS 파일 로드 -->
+  <link rel="stylesheet" href="<c:url value='/css/res/res_detail.css'/>" />
 
-.navbar-center {
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-}
-
-.nav-link {
-	font-size: 15px;
-	color: #222;
-	text-decoration: none;
-}
-
-.nav-link:hover, .nav-link.active {
-	border-bottom: 2px solid #222;
-	padding-bottom: 2px;
-}
-
-.logo {
-	font-size: 20px;
-	font-weight: bold;
-	letter-spacing: 1px;
-	color: #111;
-	font-family: 'Playfair Display', serif;
-}
-
-.detail-container {
-	max-width: 850px;
-	margin: 35px auto;
-	padding: 28px;
-	border-radius: 16px;
-	background: #fff;
-	box-shadow: 0 2px 18px #eee;
-}
-
-.main-photo {
-	width: 100%;
-	height: 320px;
-	object-fit: cover;
-	border-radius: 14px;
-	box-shadow: 0 2px 8px #e6e6e6;
-	margin-bottom: 12px;
-}
-
-.photo-gallery {
-	display: flex;
-	gap: 11px;
-	overflow-x: auto;
-	margin-bottom: 22px;
-}
-
-.photo-gallery img {
-	height: 70px;
-	border-radius: 7px;
-	cursor: pointer;
-	border: 2px solid #f3f3f3;
-}
-
-.res-title {
-	font-size: 2rem;
-	font-weight: bold;
-	margin-bottom: 7px;
-}
-
-.res-score {
-	color: #ffa500;
-	font-size: 1.3rem;
-	margin-left: 7px;
-}
-
-.address, .tel {
-	color: #555;
-	margin-bottom: 8px;
-}
-
-.section {
-	margin-bottom: 22px;
-}
-
-.label {
-	color: #888;
-	margin-right: 6px;
-}
-
-.price {
-	font-weight: bold;
-	color: #406d36;
-}
-
-
-.no-img {
-	width: 100%;
-	height: 320px;
-	border-radius: 14px;
-	background: #eee;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: #aaa;
-	font-size: 24px;
-	margin-bottom: 12px;
-}
-
-.map-container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-
-.map-container iframe {
-	max-width: 900px; /* 원하는 최대 가로폭 */
-}
-
-.map-container .label {
-	display: block;
-	margin-bottom: 8px;
-	font-size: 1rem;
-	color: #333;
-	text-align: center;
-}
-
-/* 상세정보 2단 레이아웃 */
-.info-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-bottom: 24px;
-}
-
-.info-table th, .info-table td {
-	padding: 12px 16px;
-	vertical-align: top;
-}
-
-.info-table th {
-	background: #f5f5f5;
-	width: 30%;
-	font-weight: normal;
-	color: #333;
-}
-
-.info-table td {
-	background: #fff;
-	color: #444;
-}
-
-.info-table tr+tr th, .info-table tr+tr td {
-	border-top: 1px solid #eee;
-}
-/* 메인 사진 바로 아래 여백 늘리기 */
-.detail-container .main-photo {
-	margin-bottom: 30px;
-}
-
-/* 썸네일 갤러리 아래 여백 늘리기 */
-.detail-container .photo-gallery {
-	margin-bottom: 40px;
-}
-
-/* 식당명(타이틀) 위쪽 여백 추가 */
-.detail-container .res-title {
-	margin-top: 60px;
-}
-
-.main-photo {
-	/* 기존 스타일 유지 */
-	width: 600px;
-	height: 400px;
-	object-fit: cover;
-	border-radius: 14px;
-	box-shadow: 0 2px 8px #e6e6e6;
-	margin-bottom: 32px;
-	/* 추가 */
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-}
-/* 버튼 그룹 컨테이너 */
-.button-group {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-top: 20px;
-	gap: 12px;
-}
-
-/* 공통 버튼 스타일 */
-.button-group .btn {
-	display: inline-block;
-	padding: 10px 24px;
-	border-radius: 8px;
-	background-color: #888;
-	color: #fff;
-	text-decoration: none;
-	font-size: 16px;
-	font-weight: 500;
-	text-align: center;
-	transition: background-color 0.2s;
-}
-
-.button-group .btn:hover {
-	background-color: #555;
-}
-</style>
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
 
 <script>
 	function showMainPhoto(url) {
 		document.getElementById('mainPhoto').src = url;
 	}
 </script>
+
 </head>
 <body>
 	<!-- 상단 베이지 바 -->
@@ -287,15 +93,16 @@ body {
 
 	<div class="detail-container">
 
-		<!-- 대표 사진 -->
-		<c:if test="${not empty restaurant.res_photo_url}">
-			<img id="mainPhoto" class="main-photo"
-				src="${restaurant.res_photo_url}" alt="대표 사진">
-		</c:if>
-		<!-- 사진이 없을 때 -->
-		<c:if test="${empty restaurant.res_photo_url}">
-			<div class="no-img">이미지 없음</div>
-		</c:if>
+	 <!-- 메인 사진 & 버튼 -->
+    <div class="main-photo-container">
+      <button id="mainPrev" class="photo-nav" onclick="prevMainPhoto()">‹</button>
+      <img id="mainPhoto"
+           src=""
+           alt="대표 사진"
+           style="width:100%; border-radius:8px; display:block; cursor:pointer;"
+           onclick="openModalAt(currentMainIndex)" />
+      <button id="mainNext" class="photo-nav" onclick="nextMainPhoto()">›</button>
+    </div>
 		<!-- 여분 사진(썸네일) -->
 		<c:if test="${not empty extraPhotoUrls}">
 			<div style="display: flex; gap: 8px; margin-top: 15px;">
@@ -314,29 +121,20 @@ body {
 		</div>
 
 		<script>
-			document
-					.addEventListener(
-							'DOMContentLoaded',
-							function() {
-								document
-										.querySelectorAll('.thumb')
+			document.addEventListener('DOMContentLoaded',
+					function() {document.querySelectorAll('.thumb')
 										.forEach(
-												function(img) {
-													img
-															.addEventListener(
-																	'click',
-																	function() {
-																		document
-																				.getElementById('modalImg').src = this.src;
-																		document
-																				.getElementById('imgModal').style.display = 'flex';
-																	});
-												});
-								document.getElementById('imgModal').onclick = function() {
-									this.style.display = 'none';
-								};
-							});
+					function(img) {img.addEventListener('click',
+					function() {document.getElementById('modalImg').src = this.src;
+								document.getElementById('imgModal').style.display = 'flex';
+					});
+				});
+			document.getElementById('imgModal').onclick = function() {
+				this.style.display = 'none';
+						};
+				});
 		</script>
+		
 
 
 		<!-- 음식점명 & 별점 -->
@@ -614,18 +412,14 @@ body {
 
 			// 리뷰수정 폼 (여러 개, 버튼 클릭 시)
 			document.querySelectorAll('.reviewEditBtn').forEach(
-					function(btn) {
-						btn.addEventListener('click',
-								function() {
-									document.querySelectorAll(
-											'.review-edit-form').forEach(
-											function(div) {
-												div.style.display = 'none';
-											});
-									var id = btn.getAttribute('data-reviewid');
-									document.getElementById('reviewEditForm'
-											+ id).style.display = 'block';
+					function(btn) {btn.addEventListener('click',
+					function() {document.querySelectorAll('.review-edit-form').forEach(
+					function(div) {div.style.display = 'none';
 								});
+						var id = btn.getAttribute('data-reviewid');
+						document.getElementById('reviewEditForm'
+						+ id).style.display = 'block';
+							});
 					});
 		});
 
