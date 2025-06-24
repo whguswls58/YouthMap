@@ -585,7 +585,9 @@ a:hover {
 	                  </span><br />
 	              </c:otherwise>
 	          </c:choose>
-	          <span class="policy-label">${p.lclsf_nm}</span><br />
+	          <c:forEach var="lclsf" items="${p.lclsf_nms}">
+		          <span class="policy-label">${lclsf}</span>
+	          </c:forEach>
 	      </div>
 	      <!-- 링크 및 내용 -->
 	        <a href="${pageContext.request.contextPath}/policyContent?page=${page}&plcy_no=${p.plcy_no}">
@@ -617,7 +619,9 @@ a:hover {
 	        <div class="policy-tags">
 	            <c:choose>
 	                <c:when test="${not empty p.plcy_kywd_nm}">
-	                    <span class="policy-tag">${p.plcy_kywd_nm}</span>
+	                	<c:forEach var="kywd" items="${p.plcy_kywd_nms}">
+	                    	<span class="policy-tag">${kywd}</span>
+	                	</c:forEach>
 	                </c:when>
 	                <c:otherwise>
 	                    <span class="policy-tag">키워드 없음</span>
@@ -806,10 +810,12 @@ a:hover {
 		    const labels = document.createElement("div");
 		 	
 		    if(p.aply_ymd_strt == null){
-			 	labels.innerHTML = `
-			        <span class="policy-label">상시</span><br>
-			        <span class="policy-label">\${p.lclsf_nm}</span><br>
-			    `;
+		    	let labelHtml = `<span class="policy-label">상시</span><br>`;
+ 		    	p.lclsf_nms.forEach(lclsf => {
+		    		labelHtml += `<span class="policy-label">\${lclsf}</span>`;
+		    	});
+		    	  
+		    	labels.innerHTML = labelHtml;
 		    }else{
 		    	const dday = getDday(p.aply_ymd_end);
 		    	
@@ -828,10 +834,12 @@ a:hover {
 		    	  ddayColorClass = 'dday-red';
 		    	}
 
-			 	labels.innerHTML = `
-			        <span class="policy-label \${ddayColorClass}">\${ddayText}</span><br>
-			        <span class="policy-label">\${p.lclsf_nm}</span><br>
-			    `;
+		    	let labelHtml = `<span class="policy-label \${ddayColorClass}">\${ddayText}</span><br>`;
+ 		    	p.lclsf_nms.forEach(lclsf => {
+		    		labelHtml += `<span class="policy-label">\${lclsf}</span>`;
+		    	});
+		    	
+			 	labels.innerHTML = labelHtml;
 		    	
 		    }
 		    
@@ -878,10 +886,12 @@ a:hover {
 
 		    // 정책 키워드가 있을 경우
 		    if (p.plcy_kywd_nm) {
-		      const keywordTag = document.createElement("span");
-		      keywordTag.className = "policy-tag";
-		      keywordTag.textContent = p.plcy_kywd_nm;
-		      keywordBox.appendChild(keywordTag);
+		    	p.plcy_kywd_nms.forEach(keyword => {
+		    		const keywordTag = document.createElement("span");
+		    		keywordTag.className = "policy-tag";
+		    		keywordTag.textContent = keyword;
+		    		keywordBox.appendChild(keywordTag);
+		    	});
 		    } else {
 		      const noneTag = document.createElement("span");
 		      noneTag.className = "policy-tag";

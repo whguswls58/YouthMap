@@ -77,6 +77,12 @@ public class PolicyController {
 		pm.setSortOrder("views");		// 첫 페이지에서 인기순(조회수 순)으로 결과 출력
 		List<PolicyModel> pmList = service.plcyListByPage(pm); // 페이징 적용된 리스트
 
+		for(PolicyModel p : pmList) {
+			System.out.println(p.getLclsf_nm());
+			p.setLclsf_nms(service.splitByComma(p.getLclsf_nm()));
+			p.setPlcy_kywd_nms(service.splitByComma(p.getPlcy_kywd_nm()));
+		}
+		
 		// 총 페이지수
 		int pagecount = listcount / limit + ((listcount % limit == 0) ? 0 : 1);
 		int startpage = ((page - 1) / 6) * limit + 1;
