@@ -304,6 +304,24 @@ footer {
   }
 }
 
+/* 정책 라벨 */
+.policy-label {
+  font-size: 12px;
+  color: #777;
+  margin-right: 5px;
+  display: inline-block;
+  padding: 3px 8px;
+  background: #eee;
+  border-radius: 12px;
+  
+}
+
+/* D-Day 10일 이하 css */
+.dday-red {
+  color: red;
+  font-weight: bold;
+}
+
 
 </style>
 </head>
@@ -354,7 +372,6 @@ footer {
 	</div>
 
 	<div class="col-sm-8 text-left">
-		<input type=button value="목록" onclick="location.href='policyMain'">
 		<div class="policy-labels" data-end-date="${plcy.aply_ymd_end}">
 				    <!-- 신청 시작일이 null이면 -->
 		    <c:choose>
@@ -568,6 +585,7 @@ footer {
 					<li><a href="#qualification">신청자격</a></li>
 					<li><a href="#method">신청방법</a></li>
 					<li><a href="#etc">기타</a></li>
+					<li><a href="policyMain">목록</a></li>
 				</ul>
 			</div>
 		</div>
