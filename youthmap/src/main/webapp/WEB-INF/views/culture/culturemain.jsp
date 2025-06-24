@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/WEB-INF/views/culture/header.jsp" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -22,94 +23,29 @@
     src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
   <style>
-/* ───────────────────────────────────────────────────────────────
-       전체 페이지 공통 스타일
-    ─────────────────────────────────────────────────────────────── */
-body {
-	font-family: 'Playfair Display', serif;
-	margin: 0;
-	padding: 0;
-	background-color: #fff;
-	color: #333;
-}
-
-.topbar {
-	background: #f5f0e6;
-	padding: 10px 40px;
-}
-
-.topbar .menu {
-	max-width: 1200px;
-	margin: 0 auto;
-	display: flex;
-	justify-content: flex-end;
-	gap: 20px;
-	font-size: 14px;
-}
-
-.topbar .menu a {
-	color: #444;
-	text-decoration: none;
-}
-
-.navbar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 18px 40px;
-	background: #fff;
-	position: sticky;
-	top: 0;
-	z-index: 1000;
-	border-bottom: 1px solid #eee;
-}
-
-.navbar-left, .navbar-right {
-	display: flex;
-	gap: 18px;
-}
-
-.navbar-center {
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-}
-
-.nav-link {
-	font-size: 15px;
-	color: #222;
-	text-decoration: none;
-}
-
-.nav-link:hover, .nav-link.active {
-	border-bottom: 2px solid #222;
-	padding-bottom: 2px;
-}
-
-.logo {
-	font-size: 20px;
-	font-weight: bold;
-	letter-spacing: 1px;
-	color: #111;
-	font-family: 'Playfair Display', serif;
-}
 
 /* ───────────────────────────────────────────────────────────────
        슬라이더 섹션
     ─────────────────────────────────────────────────────────────── */
+  /* 슬라이더(전시·공연·축제) 영역 위아래 여백을 60px씩 줍니다. */
 .slider-section {
-	margin: 60px 0;
-}
+	margin: 5px 0;
+} 
 
+/*───────────────────────────────────────────────────────────────
+ 슬라이더 내부 컨테이너 최대 너비 2000px, 상하 100px·좌우 자동 중앙 정렬.
+  배경색·패딩·box-sizing을 지정합니다. 
+  ───────────────────────────────────────────────────────────────*/
 .slider-inner {
-	max-width: 1500px;
-	margin: 100px;
+	max-width: 80%;
+	margin: 50px auto;       /* ← top/bottom 100px, left/right auto 로 바꿔서 가로 중앙 정렬 */
 	background-color: #f5f0e6;
 	box-sizing: border-box;
 	height: auto;              /* 카드 높이에 맞춰 늘어나게 */
   	padding: 40px;             /* 패딩도 비율에 맞게 줄이기 */
 }
 
+/* 제목(“전시/미술” 등)과 “+more” 버튼을 좌우 끝에 배치합니다. */
 .slider-header {
 	display: flex;
 	justify-content: space-between;
@@ -117,7 +53,7 @@ body {
 	margin: 0;
 	padding: 0 20px;
 }
-
+/* 헤더 텍스트·버튼 스타일, 그리고 가로 구분선을 세팅합니다. */
 .slider-header h3 {
 	font-weight: bold;
 	font-size: 1.1em;
@@ -150,33 +86,16 @@ body {
 	display: flex !important;
 }
 
-.card-slider .slick-slide {
-	 flex: 0 0 160px !important;
-}
-
 .slick-prev, .slick-next {
 	top: 40%;
 }
 
-/* .card-slider .polaroid-item {
-      position: relative;
-      flex: 0 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 80px;
-      margin: 5px 5px;
-      box-sizing: border-box;
-      height: 140px;
-      text-decoration: none;
-      color: inherit;
-    } */
 /* 뱃지 공통 */
 /* commonList.css 또는 <style> 내 badge 스타일 수정 */
 .card-slider .badge {
 	position: absolute;
 	top: 15px;
-	right: 28px; /* 기존 8px → 20px 로 변경 */
+	right: 15px; /* 기존 8px → 20px 로 변경 */
 	padding: 4px 10px;
 	border-radius: 12px;
 	font-size: 0.85rem;
@@ -198,22 +117,9 @@ body {
 	background: #0066cc;
 }
 
-/*  .card-slider .polaroid {
-      width: 90%; height: 250px; background: #fff;
-      padding: 12px 12px 24px; border: 1px solid #eee;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      border-radius: 4px; display: flex;
-      align-items: center; justify-content: center;
-    }
-    .card-slider .polaroid-img {
-      max-width: 100%; max-height: 100%;
-      object-fit: cover; border-radius: 2px;
-    } */
-
-.card-slider .slick-slide {
-  flex: 0 0 180px !important;
+/* .card-slider .slick-slide {
   width: 180px !important;
-}
+} */
 
 /* 3) 폴라로이드 카드 스타일 (이전 restaurant-card) */
 .card-slider .polaroid-item {
@@ -226,11 +132,8 @@ body {
 	text-align: center;
 	transition: all 0.3s ease-in-out;
 	margin: 0 13px; /* 카드 사이 간격 */
-}
-
-.card-slider .polaroid-item:hover {
-	transform: translateY(-4px);
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	position: relative;
+	text-decoration: none !important;
 }
 
 /* 4) 이미지 영역 (이전 restaurant-card img) */
@@ -252,17 +155,6 @@ body {
 	text-overflow: ellipsis;
 }
 
-.card-slider .polaroid-caption {
-	margin-top: auto;
-	width: 100%;
-	max-width: 35ch;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	text-align: center;
-	font-size: 1rem;
-	color: #333;
-}
 
 .card-slider .polaroid-date {
 	margin-top: 4px;
@@ -274,45 +166,17 @@ body {
 .card-slider .polaroid-item:hover .polaroid-caption {
 	text-decoration: underline;
 }
+
+.card-slider .polaroid-item:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 </style>
 </head>
 
 <body>
-  <!-- 상단 베이지 바 -->
-  <div class="topbar">
-    <div class="menu">
-      <a href="#">CART</a><a href="#">MY PAGE</a><a href="#">JOIN</a>
-    </div>
-  </div>
-
-  <!-- 네비게이션 -->
-  <div class="navbar">
-    <div class="navbar-left">
-      <a href="#" class="nav-link">About</a>
-      <a href="#" class="nav-link">Facility</a>
-      <a href="#" class="nav-link active">Food</a>
-      <a href="#" class="nav-link">Community</a>
-      <a href="#" class="nav-link">Contact</a>
-    </div>
-    <div class="navbar-center"><span class="logo">YOUTHMAP</span></div>
-    <div class="navbar-right">
-      <a href="#" class="nav-link">CART</a>
-      <a href="#" class="nav-link">MY PAGE</a>
-      <a href="#" class="nav-link">JOIN</a>
-    </div>
-  </div>
-
   <!-- 검색 바 -->
   <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
-
-  <!-- 전체 목록 버튼 -->
-  <div style="text-align:center; margin:20px 0;">
-    <button onclick="location.href='allList'"
-            style="width:100px; height:26px; font-size:16px; cursor:pointer;">
-      전체 목록
-    </button>
-  </div>
-  <hr>
 
   <!-- 전시/미술 섹션 -->
   <section class="slider-section">
@@ -405,20 +269,24 @@ body {
   <script>
     $(function(){
       $('.exhibition-slider, .performance-slider, .event-slider').slick({
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        infinite: true,
-        arrows: true,
-        dots: false,
-        autoplay: true,
-        autoplaySpeed: 0,
-        speed: 5000,
-        cssEase: 'linear',
-        pauseOnHover: true,
+        slidesToShow: 4,		// ③ 화면에 한 번에 보여줄 슬라이드 개수 (여기선 3개)
+      					  //    → 하지만 CSS에서 .slick-slide width를 고정해 두면, 이 설정이 무시되기도 합니다.
+        slidesToScroll: 1,		// ④ 한 번에 몇 칸씩 넘길지 (화살표나 autoplay 시 이동 단위)
+        infinite: true,  	    // ⑤ 슬라이드를 끝까지 넘겨도 다시 처음으로 “무한 반복” 여부
+        arrows: false,			// ⑥ 좌우 화살표(prev/next) 표시 여부
+        dots: false,			// ⑦ 하단 도트 내비게이션 표시 여부
+        autoplay: true,			// ⑧ 페이지 로드 직후 자동 재생 시작 여부
+        autoplaySpeed: 1,		// ⑨ 자동 재생 시 “다음 애니메이션” 트리거 대기(ms)
+       							 //    보통 2000 정도 주는데, 0을 주면 트리거가 바로바로 찍혀서
+       							 //    속도(speed)만큼의 애니메이션이 연달아 계속 돌게 됩니다.
+        speed: 5000,	   // ⑩ 한 번의 슬라이드 애니메이션(translate) 지속 시간(ms) //    5초 동안 천천히 넘어가도록 설정
+        cssEase: 'linear',		// ⑪ 애니메이션 속도 곡선: 일정한 속도로 움직이기 위한 ‘linear’
+        pauseOnHover: true,			// ⑫ 마우스 올리면 autoplay 일시정지 여부
         responsive: [
-          { breakpoint: 1024, settings: { slidesToShow: 4 } },
-          { breakpoint: 768,  settings: { slidesToShow: 2 } },
-          { breakpoint: 480,  settings: { slidesToShow: 1 } }
+          { breakpoint: 1024, settings: { slidesToShow: 5 } },
+          { breakpoint: 768,  settings: { slidesToShow: 4 } },
+          { breakpoint: 480,  settings: { slidesToShow: 2 } }
+       // ⑬ 반응형: 화면폭이 작아질 때 슬라이드 개수 재지정
         ]
       });
     });

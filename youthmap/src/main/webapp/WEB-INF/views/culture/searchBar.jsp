@@ -14,7 +14,8 @@
 .search-wrapper {
   display: flex;
   justify-content: center;
-  margin: 50px 0;
+  margin-top: 50px;
+  margin-bottom : 20px;
   z-index: 1;
   position: relative;
 }
