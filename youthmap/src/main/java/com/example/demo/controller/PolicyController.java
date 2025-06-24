@@ -1,29 +1,15 @@
 package com.example.demo.controller;
 
-import java.io.FileReader;
-import java.io.Reader;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,21 +29,18 @@ public class PolicyController {
 
 	private final PolicyService service;
 
-	@RequestMapping("/")
-	public String tt() {
-		return "policy/test";
-	}
-
 	// 정책 데이터 수동 업데이트
 	@RequestMapping("/policyUpdate")
 	public String policyUpdate() throws Exception {
 		service.executePolicyUpdate();
+		// 추후 관리자 페이지에서 요청 -> 관리자 페이지로 리턴할 예정
 		return "policy/test3";
 	}
 	  
 	// 정책 메인 페이지
 	@RequestMapping("/policyMain")
-	public String policyTest(@RequestParam(value = "page", defaultValue = "1") int page,
+	public String policyMain(@RequestParam(value = "page", defaultValue = "1") int page,
+							@RequestParam(value = "selectedCategory", required = false) String category,
 							@ModelAttribute PolicyModel pm,
 							HttpSession session,
 							Model model) {
@@ -68,7 +51,7 @@ public class PolicyController {
 		
 		System.out.println("현재 정렬방법 : " + pm.getSortOrder());
 		
-		int limit = 6; // 한 페이지에 출력할 데이터 갯수
+		int limit = 10; // 한 페이지에 출력할 데이터 갯수
 		int listcount = service.cntData(pm); // 총 데이터 갯수
 		System.out.println("listcount : " + listcount);
 
@@ -77,8 +60,14 @@ public class PolicyController {
 
 		pm.setStartRow(startRow);
 		pm.setEndRow(endRow);
+		pm.setSortOrder("views");		// 첫 페이지에서 인기순(조회수 순)으로 결과 출력
 		List<PolicyModel> pmList = service.plcyListByPage(pm); // 페이징 적용된 리스트
 
+		for(PolicyModel p : pmList) {
+			p.setLclsf_nms(service.splitByComma(p.getLclsf_nm()));
+			p.setPlcy_kywd_nms(service.splitByComma(p.getPlcy_kywd_nm()));
+		}
+		
 		// 총 페이지수
 		int pagecount = listcount / limit + ((listcount % limit == 0) ? 0 : 1);
 		int startpage = ((page - 1) / 6) * limit + 1;
@@ -87,6 +76,7 @@ public class PolicyController {
 		if (endpage > pagecount)
 			endpage = pagecount;
 
+		// 카테고리 상세 항목
 		List<Map<String, Object>> categoryList = new ArrayList<>();
 
 		categoryList.add(Map.of(
@@ -119,12 +109,26 @@ public class PolicyController {
 			"subcategories", List.of("청년참여", "정책인프라구축", "청년국제교류", "권익보호")
 		));
 		
+		List<String> selectedCategories = null;
+		
+		if(category != null) {
+			Optional<Map<String, Object>> selectedCategory = 
+					categoryList.stream().filter(c -> category.equals(c.get("name"))).findFirst();
+			
+			if (selectedCategory.isPresent()) {
+				Map<String, Object> result = selectedCategory.get();
+				selectedCategories =(List<String>)result.get("subcategories");
+				System.out.println(selectedCategories);
+			}		
+		}
+		
 		model.addAttribute("page", page);
 		model.addAttribute("pmList", pmList);
 		model.addAttribute("listcount", listcount);
 		model.addAttribute("pagecount", pagecount);
 		model.addAttribute("startpage", startpage);
 		model.addAttribute("endpage", endpage);
+		model.addAttribute("selectedCategories", selectedCategories);
 		model.addAttribute("categoryList", categoryList);
 		return "policy/policyMain";
 	}
@@ -155,7 +159,13 @@ public class PolicyController {
 		pm.setStartRow(startRow);
 		pm.setEndRow(endRow);
 		List<PolicyModel> pmList = service.plcyListByPage(pm); // 페이징 적용된 리스트
-
+		
+		for(PolicyModel p : pmList) {
+			System.out.println(p.getLclsf_nm());
+			p.setLclsf_nms(service.splitByComma(p.getLclsf_nm()));
+			p.setPlcy_kywd_nms(service.splitByComma(p.getPlcy_kywd_nm()));
+		}
+		
 		int pagecount = listcount / limit + ((listcount % limit == 0) ? 0 : 1);
 		int startpage = ((page - 1) / 6) * limit + 1;
 		int endpage = Math.min(startpage + 6 - 1, pagecount);
@@ -184,13 +194,15 @@ public class PolicyController {
 		
 		// 상세 데이터 검색
 		PolicyModel plcy = service.plcyContent(plcy_no);
-		String[] keywords  = {};
-		if (plcy.getPlcy_kywd_nm() != null && !plcy.getPlcy_kywd_nm().isBlank()) {
-		    keywords = plcy.getPlcy_kywd_nm().split(",");
-		}
 		
-		System.out.println(keywords);
+		// 검색키워드, 정책 소분류 문자열을 배열로 변환 및 중복 제거
+		String[] keywords  = service.splitByComma(plcy.getPlcy_kywd_nm());
+		String[] lclsf = service.splitByComma(plcy.getLclsf_nm());
 		
+		System.out.println(plcy.getAply_ymd_end());
+		System.out.println(plcy.getAply_ymd_strt());
+		
+		// 각 정책코드, 학력코드, 직업코드, 특화분야코드 -> 각각 명칭으로 치환
 		plcy.setPlcy_major_cd(service.convertCodes(plcy.getPlcy_major_cd(), service.plcy_major_map));
 		plcy.setSchool_cd(service.convertCodes(plcy.getSchool_cd(), service.school_map));
 		plcy.setJob_cd(service.convertCodes(plcy.getJob_cd(), service.job_map));
@@ -208,10 +220,10 @@ public class PolicyController {
 
 		model.addAttribute("plcy", plcy);
 		model.addAttribute("keywords", keywords);
+		model.addAttribute("lclsf", lclsf);
 		model.addAttribute("page", page);
 		
-		return "policy/testcontent";
-//		return "policy/policyContent";
+		return "policy/policyContent";
 	}
 
 }

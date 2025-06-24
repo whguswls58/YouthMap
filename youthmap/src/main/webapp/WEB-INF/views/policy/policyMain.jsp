@@ -94,10 +94,10 @@ body {
   	border-radius: 12px;
   	box-shadow: 0 4px 8px rgba(0,0,0,0.05);
   	gap: 12px;
-  	width: fit-content; /* ✅ 내부 크기에 맞춤 */
-  max-width: 100%;     /* ✅ 모바일 대응 */
-  flex-direction: column; /* ✅ 내부 항목 세로 정렬 */
-  align-items: center;
+  	width: fit-content; 		/* 내부 크기에 맞춤 */
+    max-width: 100%;     		/* 모바일 대응 */
+    flex-direction: column; 	/* 내부 항목 세로 정렬 */
+    align-items: center;
   	justify-content: center;
   	position: relative;
   	z-index: 1;
@@ -257,18 +257,94 @@ a:hover {
 	color: #666;
 }
 
-.policy-item {
-  margin: 10px 0;
-  font-size: 1.2em;
-  border: 1px solid black;
-}
-
 .keyword {
   font-size: 0.9em;
   color: #555;
   margin: 4px 0 0 10px;
 }
 
+/* 인기 정책 */
+.popular-policy {
+  max-width: 1170px;
+  margin: 0 auto;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------------- */
+/* 베이지 배경을 살짝만 크게 */
+.slider-section {
+  background-color: #f5f0e6;
+  height:400px;
+  padding: 10px 0;              /* 위아래 여백만 줘서 카드보다 살짝 크게 */
+  margin-top:50px;
+  margin-bottom:50px;
+}
+
+/* 섹션 내부 컨텐츠 가운데 정렬 및 최대 너비 제한 */
+.slider-section h2 {
+  text-align: center;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.slider-section .swiper-container {
+  width: 100%;
+  max-width: 1020px;            /* 필요에 따라 조절 */
+  margin: 0 auto;               /* 가운데 정렬 */
+  overflow: hidden;
+  padding: 0 10px;              /* 좌우 여백 */
+  box-sizing: border-box;
+}
+/* 카드 자체는 원래 스타일 유지 (흰 배경, 그림자 등 그대로) */
+.slider-section .restaurant-card {
+  background: #fff;             /* 백그라운드 흰색 유지 */
+  /* 기존 스타일 그대로… */
+}
+
+
+ /* 1) 슬라이더 하단 여백 */
+ .swiper-container {
+    margin-bottom: 0px;
+    overflow: hidden;  /* 중요: 넘침 방지 */
+ }
+/* 슬라이더 카드 크기 키우기 */
+.swiper-slide {
+ /* slide 자체 너비를 늘려서 사진을 크게 보여줍니다 */
+  width: 300px !important;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+.slider-section .slider-title {
+  text-align: center;
+  margin-bottom: 12px;
+  color: #333;
+  }
+.swiper-slide .restaurant-card {
+  width: 240px;       /* 기존 200px → 240px */
+  padding: 16px;      /* 안쪽 여백도 살짝 늘려줍니다 */
+}
+
+.swiper-slide .restaurant-card img {
+  height: 180px;      /* 기존 150px → 180px */
+}
+
+/* 슬라이드 각각의 고정 폭 */
+.swiper-slide {
+  width: 240px;        /* 카드+여백 포함 너비 */
+}
+
+/* 1) swiper-container 를 화면 폭의 90%로 고정하고 최대 1200px 까지만 늘어나게 */
+.swiper-container {
+  width: 90vw;        /* 화면 너비의 90% */
+  max-width: 1200px;  /* (원하는 최대값) */
+  margin: 0 auto;     /* 좌우 자동 중앙정렬 */
+}
+
+
+/* ---------------------------------------------- */
+
+/* 검색 결과 출력 컨테이너 */
 .policy-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 가로 3개 */
@@ -277,6 +353,7 @@ a:hover {
   margin: 0 auto;
 }
 
+/* 검색 결과 갯수 */
 .policy-search-count{
   display: flex;
   justify-content: space-between; /* 좌우 정렬 */
@@ -304,7 +381,6 @@ a:hover {
 
 }
 
-
 .policy-card {
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -313,6 +389,11 @@ a:hover {
   background-color: #fff;
   vertical-align: top;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.policy-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .policy-title {
@@ -378,7 +459,7 @@ a:hover {
   margin: 3px 3px 0 0;
 }
 
-/* ✅ 페이징 스타일 */
+/* 페이징 스타일 */
 .pagination {
 	text-align: center;
 	margin: 30px 0;
@@ -394,7 +475,6 @@ a:hover {
 	border: 1px solid transparent;
 	transition: background 0.2s, color 0.2s;
 }
-/* .pagination button:hover, */
 .page-btn.active {
 	background: #f2f2f2;
 	font-weight: bold;
@@ -407,7 +487,7 @@ a:hover {
 	border-radius: 6px;
 }
 </style>
-
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 </head>
 <body>
 <!-- 상단 베이지 바 -->
@@ -419,11 +499,11 @@ a:hover {
   	</div>
 </div>
 
-	<!-- ✅ 네비게이션 구조 -->
+<!--  네비게이션 구조 -->
 <div class="navbar">
   	<div class="navbar-left">
 		<a href="#" class="nav-link">About</a>
-	    <a href="#" class="nav-link">Facility</a>
+	    <a href="policyMain" class="nav-link">Facility</a>
 	    <a href="#" class="nav-link active">Food</a>
 	    <a href="#" class="nav-link">Community</a>
 		<a href="#" class="nav-link">Contact</a>
@@ -468,27 +548,103 @@ a:hover {
 						  	<label class="btn btn-default btn-pill">
 						    	<input type="checkbox" name="${cat.name}" value="${sub}" />
 						        <span class="check-icon">✔</span> ${sub}
+						        <script>console.log("${sub}")</script>
 						     </label>
 						</c:forEach>
 					</div>
 				</div>
 			</c:forEach>
 		</div>
-			<div id="search-button">
-				<input type="submit" value="검색">		
-				<input type="reset" value="초기화">		
-			</div>
-  		  		
+		<div id="search-button">
+			<input type="submit" value="검색">		
+			<input type="reset" value="초기화">		
+		</div>
 	</form>
-	</div>
+</div>
 
 <!-- 검색 전 보여줄 콘텐츠 -->
-<div id="pre-search-content" class="pre-search-content"></div>
+<div id="pre-search-content" class="pre-search-content">
+<section class="slider-section">
+<div class="popular-policy"><p>인기 정책</p></div>
+<div class="swiper-container">
+  <div class="swiper-wrapper">
+    <c:forEach var="p" items="${pmList}">
+      <div class="swiper-slide">
+        <div class="policy-card">
+          <!-- 라벨 -->
+	      <div>
+	          <c:choose>
+	              <c:when test="${empty p.aply_ymd_strt}">
+	                  <span class="policy-label">상시</span><br />
+	              </c:when>
+	              <c:otherwise>
+	                  <c:set var="dday" value="p.aply_ymd_end" />
+<%-- 	                  <c:set var="ddayVal" value="${fn:replace(dday, '-', '')}" /> --%>
+	                  <%-- 실제 D-day 계산은 서버에서 하거나 커스텀 태그로 처리 필요 --%>
+	                  <span class="policy-label dday-red">
+	                      D-10
+	                  </span><br />
+	              </c:otherwise>
+	          </c:choose>
+	          <c:forEach var="lclsf" items="${p.lclsf_nms}">
+		          <span class="policy-label">${lclsf}</span>
+	          </c:forEach>
+	      </div>
+	      <!-- 링크 및 내용 -->
+	        <a href="${pageContext.request.contextPath}/policyContent?page=${page}&plcy_no=${p.plcy_no}">
+	            <div class="policy-title">${p.plcy_nm}</div>
+	            <div class="policy-desc">
+	                <c:out value="${p.plcy_expln_cn}" default="설명이 없습니다." />
+	            </div>
+	            <div>
+	                <strong>신청기간</strong>
+	                <span class="policy-label">
+	                    <c:choose>
+	                        <c:when test="${empty p.aply_ymd_strt}">
+	                            상시
+	                        </c:when>
+	                        <c:otherwise>
+	                            ${p.aply_ymd_strt} ~ ${p.aply_ymd_end}
+	                        </c:otherwise>
+	                    </c:choose>
+	                </span>
+	            </div>
+	        </a>
+	         <!-- 자세히 보기 버튼 -->
+	        <a href="${pageContext.request.contextPath}/policyContent?page=${page}&plcy_no=${p.plcy_no}"
+	           class="detail-btn">
+	            자세히보기
+	        </a>
+
+	        <!-- 키워드 태그 -->
+	        <div class="policy-tags">
+	            <c:choose>
+	                <c:when test="${not empty p.plcy_kywd_nm}">
+	                	<c:forEach var="kywd" items="${p.plcy_kywd_nms}">
+	                    	<span class="policy-tag">${kywd}</span>
+	                	</c:forEach>
+	                </c:when>
+	                <c:otherwise>
+	                    <span class="policy-tag">키워드 없음</span>
+	                </c:otherwise>
+	            </c:choose>
+	        </div>
+        </div>
+      </div>
+    </c:forEach>
+  </div>
+</div>
+</section>
+
+
+</div>
 
 <!-- 검색 결과 갯수 -->
 <div id="policy-search-count" class="policy-search-count hidden"></div>
+
 <!-- 검색 결과 출력 컨테이너 -->
 <div id="policy-container" class="policy-container hidden"></div>
+
 <!-- 검색 결과 페이징 처리 -->
 <div id="pagination" class="pagination hidden" style="text-align:center; margin-top: 20px;"></div>
 
@@ -655,10 +811,12 @@ a:hover {
 		    const labels = document.createElement("div");
 		 	
 		    if(p.aply_ymd_strt == null){
-			 	labels.innerHTML = `
-			        <span class="policy-label">상시</span><br>
-			        <span class="policy-label">\${p.lclsf_nm}</span><br>
-			    `;
+		    	let labelHtml = `<span class="policy-label">상시</span><br>`;
+ 		    	p.lclsf_nms.forEach(lclsf => {
+		    		labelHtml += `<span class="policy-label">\${lclsf}</span>`;
+		    	});
+		    	  
+		    	labels.innerHTML = labelHtml;
 		    }else{
 		    	const dday = getDday(p.aply_ymd_end);
 		    	
@@ -677,10 +835,12 @@ a:hover {
 		    	  ddayColorClass = 'dday-red';
 		    	}
 
-			 	labels.innerHTML = `
-			        <span class="policy-label \${ddayColorClass}">\${ddayText}</span><br>
-			        <span class="policy-label">\${p.lclsf_nm}</span><br>
-			    `;
+		    	let labelHtml = `<span class="policy-label \${ddayColorClass}">\${ddayText}</span><br>`;
+ 		    	p.lclsf_nms.forEach(lclsf => {
+		    		labelHtml += `<span class="policy-label">\${lclsf}</span>`;
+		    	});
+		    	
+			 	labels.innerHTML = labelHtml;
 		    	
 		    }
 		    
@@ -727,10 +887,12 @@ a:hover {
 
 		    // 정책 키워드가 있을 경우
 		    if (p.plcy_kywd_nm) {
-		      const keywordTag = document.createElement("span");
-		      keywordTag.className = "policy-tag";
-		      keywordTag.textContent = p.plcy_kywd_nm;
-		      keywordBox.appendChild(keywordTag);
+		    	p.plcy_kywd_nms.forEach(keyword => {
+		    		const keywordTag = document.createElement("span");
+		    		keywordTag.className = "policy-tag";
+		    		keywordTag.textContent = keyword;
+		    		keywordBox.appendChild(keywordTag);
+		    	});
 		    } else {
 		      const noneTag = document.createElement("span");
 		      noneTag.className = "policy-tag";
@@ -788,15 +950,47 @@ a:hover {
 	    	`<button class="page-btn" onclick="loadPage(\${total}, '\${sortOrder}')">▶</button>`;
 	  }		// end function
 
-	  // 초기 로딩
-	 window.addEventListener("DOMContentLoaded", () => {
-		 currentSearchInput = "";  // 초기화
-		 currentMainCategory = "youthPolicy";
+	// 초기 로딩
+	window.addEventListener("DOMContentLoaded", () => {
+		currentSearchInput = "";  // 초기화
+		currentMainCategory = "youthPolicy";
+		// selectedCategories를 JS 배열로 변환하여 저장
+		selectedCategories = [
+		    <c:forEach var="cat" items="${selectedCategories}" varStatus="status">
+		      "${cat}"<c:if test="${!status.last}">, </c:if>
+		    </c:forEach>
+		  ];
+		console.log(selectedCategories);
+
+		if (selectedCategories.length > 0 && selectedCategories[0] !== "") {
+			selectedCategories.forEach(cat => {
+			    const checkbox = document.querySelector(`input[type="checkbox"][value="${cat}"]`);
+			    if (checkbox) {
+			      checkbox.checked = true;
+			      checkbox.closest("label").classList.add("active");
+	
+			      // 해당 카테고리의 전체 체크박스도 동기화 시도
+			      const group = checkbox.closest(".subcategory-group");
+			      if (group) {
+			        const category = group.dataset.category;
+			        const allChecked = [...group.querySelectorAll(`input[type="checkbox"][name="${category}"]`)].every(box => box.checked);
+			        const master = document.querySelector(`.check-all[data-target="${category}"]`);
+			        if (master) master.checked = allChecked;
+			      }
+			    }
+			  });
+			
+			// DOM 반영 후 비동기 검색 호출
+		    requestAnimationFrame(() => {
+		      submitSearchForm();
+		    });
+		}
+		
     });		// end window
 	
     // 검색어 및 카테고리 상태 저장
     function submitSearchForm(event) {
-    	  event.preventDefault();	// 기본 이동 막기
+//     	  event.preventDefault();	// 기본 이동 막기
 
     	  // 현재 검색어 상태 저장
     	  currentSearchInput = document.querySelector('input[name="searchInput"]').value;	// 현재 검색어
@@ -846,6 +1040,41 @@ a:hover {
  	
 </script>
 
+<!-- Swiper JS 추가 (body 끝 직전에) -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<!-- 슬라이더 -->
+<script>
+const swiper = new Swiper('.swiper-container', {
+	loop: true,
+    centeredSlides: false,          // 항상 가운데 슬라이드가 중앙에 오도록
+    centerInsufficientSlides: true, // 슬라이드 수가 적을 때도 가운데 정렬
+    slidesPerView: 3,               // 한 번에 보여줄 카드 개수
+    speed: 5000,               		// 애니메이션 속도 (ms)
+	spaceBetween: 60,      			// 카드 간격 
+    autoplay: {
+      delay: 0,
+      disableOnInteraction: false
+    },
+    freeMode: true,            // 자연스럽게 끊김 없이 흘러감
+    grabCursor: true,          // 마우스 커서 변경 (UX 개선)
+// 	pagination: {
+// 	  el: '.swiper-pagination',
+// 	  clickable: true
+// 	},
+	navigation: {
+	  nextEl: '.swiper-button-next',
+	  prevEl: '.swiper-button-prev',
+	},
+	breakpoints: {
+	  0:  { slidesPerView: 1 },
+	  640:  { slidesPerView: 2 },
+// 	  768:  { slidesPerView: 3 },
+	  1024: { slidesPerView: 3 },
+// 	  1440: { slidesPerView: 5 }
+	}
+});
+</script>
 
 </body>
 </html>
