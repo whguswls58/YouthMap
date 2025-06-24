@@ -2,14 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/culture/header.jsp" %>
 
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>공연 리스트</title>
+  <title>전시/미술 리스트</title>
   
   <style>
-   
 .cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -106,7 +106,7 @@ a.card-link {
   top: 7px;
   right: 7px;
   color: #fff;
-  background: #008060;
+  background: #a83279;
   padding: 4px 12px;
   border-radius: 12px;
   font-size: 0.85rem;
@@ -133,64 +133,27 @@ a.card-link {
 .pager .current {
   font-weight: bold;
 }
-  
+
+/* 카드 호버 애니메이션 추가 */
+    .cards .card {
+      transition: all 0.3s ease-in-out;
+    }
+    .cards .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
 </style>
 
 </head>
 <body>
 
   <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
-<%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
-
-  <div align="center" style="margin:20px 0;">
-	<button onclick="location.href='allList'" style=" width:100px; height:26px; line-height:26px; text-align:center; 
-            font-size:18px; margin:0 8px; cursor:pointer;">
-      전체 목록
-    </button>
-  <button type="button" onclick="location.href='exhibitionlist'"
-            style="
-            width:100px;
-            height:26px;
-            line-height:26px;			/* 버튼 높이랑 같게 */
-            text-align:center;
-            font-size:18px;
-            margin:0 8px;
-            cursor:pointer;">
-    전시/미술
-  </button>
-
-  <button type="button" onclick="location.href='performancelist'"
-	  style="
-          width:100px;
-          height:26px;
-          line-height:26px;
-          text-align:center;
-          font-size:18px;
-          margin:0 8px;
-          cursor:pointer; ">
-    공연
-  </button>
-
-  <button type="button" onclick="location.href='eventlist'"
-          style="
-            width:100px;
-            height:26px;
-            line-height:26px;
-            text-align:center;
-            font-size:18px;
-            margin:0 8px;
-            cursor:pointer; ">
-    축제/행사
-  </button>
-</div><br><hr>
-
-  <h2 style="text-align:center; margin:20px 0;">
-    공연
-  </h2><br>
+  <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
 
 <div id="card-container">
-   <!-- 카드 그리드 -->
-  <div class="cards">
+  <!-- 카드 그리드 -->
+<div class="cards">
   <c:forEach var="cul" items="${performancelist}">
     <div class="card">
       <!-- 1) 카테고리 뱃지 -->
@@ -250,8 +213,7 @@ a.card-link {
     </c:if>
   </div>
  </div>
-
- <!-- ❶ jQuery 라이브러리 (한 번만!) -->
+   <!-- ❶ jQuery 라이브러리 (한 번만!) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- 미니리스트 결과를 담을 팝업 레이어 -->
@@ -326,5 +288,6 @@ $(function(){
 	  });
 	});
 </script>
+
 </body>
 </html>

@@ -312,6 +312,7 @@ public class CultureController {
 		model.addAttribute("endpage", endpage);
 		model.addAttribute("search", culMd.getSearch());
 		model.addAttribute("keyword", culMd.getKeyword());
+		model.addAttribute("mainCategory", "공연");
 
 		return "culture/performancelist";
 	}
@@ -504,6 +505,7 @@ public class CultureController {
 		model.addAttribute("endpage", endpage);
 		model.addAttribute("search", culMd.getSearch());
 		model.addAttribute("keyword", culMd.getKeyword());
+		model.addAttribute("mainCategory", "축제/행사");
 		model.addAttribute("sort",         sort);
 
 		return "culture/eventlist";
@@ -822,7 +824,7 @@ public class CultureController {
 		model.addAttribute("pagecount", pagecount);
 		model.addAttribute("startpage", startpage);
 		model.addAttribute("endpage", endpage);
-		model.addAttribute("mainCategory", "mainCategory");
+		model.addAttribute("mainCategory", "all");
 		model.addAttribute("sort",         sort);
 
 //				// 검색
@@ -841,5 +843,6 @@ public class CultureController {
 	    model.addAttribute("miniList", miniList);
 	    return "culture/miniList"; // 미니 카드 JSP
 	}
+	
 	
 }

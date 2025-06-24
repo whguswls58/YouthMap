@@ -151,53 +151,6 @@ a.card-link {
   <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
   <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
 
-  <div align="center" style="margin:20px 0;">
-	<button onclick="location.href='allList'" style=" width:100px; height:26px; line-height:26px; text-align:center; 
-            font-size:18px; margin:0 8px; cursor:pointer;">
-      전체 목록
-    </button>
-  <button type="button" onclick="location.href='exhibitionlist'"
-            style="
-            width:100px;
-            height:26px;
-            line-height:26px;			/* 버튼 높이랑 같게 */
-            text-align:center;
-            font-size:18px;
-            margin:0 8px;
-            cursor:pointer;">
-    전시/미술
-  </button>
-
-  <button type="button" onclick="location.href='performancelist'"
-	  style="
-          width:100px;
-          height:26px;
-          line-height:26px;
-          text-align:center;
-          font-size:18px;
-          margin:0 8px;
-          cursor:pointer; ">
-    공연
-  </button>
-
-  <button type="button" onclick="location.href='eventlist'"
-          style="
-            width:100px;
-            height:26px;
-            line-height:26px;
-            text-align:center;
-            font-size:18px;
-            margin:0 8px;
-            cursor:pointer; ">
-    축제/행사
-  </button>
-</div><br><hr>
-
-  <h2 style="text-align:center; margin:20px 0;">
-    전시/미술
-  </h2><br>
-
-
 <div id="card-container">
   <!-- 카드 그리드 -->
 <div class="cards">
@@ -222,8 +175,8 @@ a.card-link {
         </div>
         <!-- 날짜+장소에 링크 -->
          <div class="period">
-    ${cul.con_start_date} ~ ${cul.con_end_date}
-  </div>
+    		${cul.con_start_date} ~ ${cul.con_end_date}
+ 		 </div>
   <div class="location">
     <a class="card-link" href="${pageContext.request.contextPath}/exhibitioncont?con_id=${cul.con_id}">
       ${cul.con_location}

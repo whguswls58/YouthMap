@@ -78,10 +78,17 @@
 }
 
 .card-info .location {
+  display: block;         /* 필수 */
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none !important;
+  color: inherit !important;
   text-align: center;
   margin-top: 2px;
-  overflow: hidden;
   color: #555;
+  
 }
 .card-info .location a {
   display: block;         /* 필수 */
@@ -146,61 +153,11 @@ a.card-link {
 </head>
 <body>
 
-	
-
- <div align="center" >
-	<a onclick="location.href='allList'" style=" width:100px; height:26px; line-height:26px; text-align:center; 
-            font-size:18px; margin:0 8px; cursor:pointer;">
-      전체 목록
-    </a>
-  <a onclick="location.href='exhibitionlist'"
-            style="
-            width:100px;
-            height:26px;
-            line-height:26px;			/* 버튼 높이랑 같게 */
-            text-align:center;
-            font-size:18px;
-            margin:0 8px;
-            cursor:pointer;">
-    전시/미술
-  </a>
-
-  <a onclick="location.href='performancelist'"
-	  style="
-          width:100px;
-          height:26px;
-          line-height:26px;
-          text-align:center;
-          font-size:18px;
-          margin:0 8px;
-          cursor:pointer; ">
-    공연
-  </a>
-
-  <a onclick="location.href='eventlist'"
-          style="
-            width:100px;
-            height:26px;
-            line-height:26px;
-            text-align:center;
-            font-size:18px;
-            margin:0 8px;
-            cursor:pointer; ">
-    축제/행사
-  </a>
-</div>
-
-  
 <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
-
 <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
 
-
-	<h2 style="text-align:center; margin:20px 0; margin-top:3rem; margin-bottom:4rem;">
-		    전체 콘텐츠 목록 (${page}/${pagecount})
-	</h2>
-
 <div id="card-container">
+  <!-- 카드 그리드 -->
 <div class="cards">
   <c:if test="${empty allList }">
     검색 결과가 없습니다.
@@ -259,8 +216,6 @@ a.card-link {
           <div class="period">${item.con_start_date} ~ ${item.con_end_date}</div>
           <div class="location">${item.con_location}</div>
         </div>
-
-
     </div>
     </c:forEach>
   </c:if>
@@ -346,15 +301,15 @@ $(function(){
 	    var ctx = '${pageContext.request.contextPath}';
 	    var url = ctx + '/allList-mini?sort=' + sort;
 
-	    // 🌟 정렬별로 상단 멘트 다르게!
+	 // 문구 다르게 세팅
 	    var headerMsg = "실시간 인기 콘텐츠";
 	    if(sort == 'newest')     headerMsg = "최신 등록 콘텐츠";
 	    if(sort == 'endingSoon') headerMsg = "마감 임박 콘텐츠";
-	    $('#miniModalHeader').text(headerMsg);
+	    $('#miniModalHeader').text(headerMsg); // ← 바로 여기!
 
 	    // AJAX로 mini 데이터 가져와서 팝업에 삽입
 	    $.get(url, function(html){
-	      $('#miniModalContent').html(html);
+	      $('#miniModalContent').html(html);   // ← 여기!
 	      $('#miniModal').fadeIn(180);
 	    });
 	  });

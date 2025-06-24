@@ -274,5 +274,5 @@ public class CultureService {
 	public List<CultureModel> getallListMini(String sort) {
 		return dao.getallListMini(sort);
 	}
-	
+
 }

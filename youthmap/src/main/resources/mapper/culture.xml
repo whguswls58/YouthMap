@@ -500,6 +500,7 @@
     </choose>
   </sql>
 
+<!-- 팝업창 - 전체용 -->
 <select id="getallListMini" parameterType="string" resultType="culture">
     SELECT * FROM (
       SELECT
@@ -527,5 +528,6 @@
     )
     WHERE ROWNUM &lt;= 7
   </select>
+
 
 </mapper>
