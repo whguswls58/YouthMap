@@ -257,18 +257,94 @@ a:hover {
 	color: #666;
 }
 
-.policy-item {
-  margin: 10px 0;
-  font-size: 1.2em;
-  border: 1px solid black;
-}
-
 .keyword {
   font-size: 0.9em;
   color: #555;
   margin: 4px 0 0 10px;
 }
 
+/* 인기 정책 */
+.popular-policy {
+  max-width: 1170px;
+  margin: 0 auto;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------------- */
+/* 베이지 배경을 살짝만 크게 */
+.slider-section {
+  background-color: #f5f0e6;
+  height:400px;
+  padding: 10px 0;              /* 위아래 여백만 줘서 카드보다 살짝 크게 */
+  margin-top:50px;
+  margin-bottom:50px;
+}
+
+/* 섹션 내부 컨텐츠 가운데 정렬 및 최대 너비 제한 */
+.slider-section h2 {
+  text-align: center;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.slider-section .swiper-container {
+  width: 100%;
+  max-width: 1020px;            /* 필요에 따라 조절 */
+  margin: 0 auto;               /* 가운데 정렬 */
+  overflow: hidden;
+  padding: 0 10px;              /* 좌우 여백 */
+  box-sizing: border-box;
+}
+/* 카드 자체는 원래 스타일 유지 (흰 배경, 그림자 등 그대로) */
+.slider-section .restaurant-card {
+  background: #fff;             /* 백그라운드 흰색 유지 */
+  /* 기존 스타일 그대로… */
+}
+
+
+ /* 1) 슬라이더 하단 여백 */
+ .swiper-container {
+    margin-bottom: 0px;
+    overflow: hidden;  /* 중요: 넘침 방지 */
+ }
+/* 슬라이더 카드 크기 키우기 */
+.swiper-slide {
+ /* slide 자체 너비를 늘려서 사진을 크게 보여줍니다 */
+  width: 300px !important;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+.slider-section .slider-title {
+  text-align: center;
+  margin-bottom: 12px;
+  color: #333;
+  }
+.swiper-slide .restaurant-card {
+  width: 240px;       /* 기존 200px → 240px */
+  padding: 16px;      /* 안쪽 여백도 살짝 늘려줍니다 */
+}
+
+.swiper-slide .restaurant-card img {
+  height: 180px;      /* 기존 150px → 180px */
+}
+
+/* 슬라이드 각각의 고정 폭 */
+.swiper-slide {
+  width: 240px;        /* 카드+여백 포함 너비 */
+}
+
+/* 1) swiper-container 를 화면 폭의 90%로 고정하고 최대 1200px 까지만 늘어나게 */
+.swiper-container {
+  width: 90vw;        /* 화면 너비의 90% */
+  max-width: 1200px;  /* (원하는 최대값) */
+  margin: 0 auto;     /* 좌우 자동 중앙정렬 */
+}
+
+
+/* ---------------------------------------------- */
+
+/* 검색 결과 출력 컨테이너 */
 .policy-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 가로 3개 */
@@ -277,6 +353,7 @@ a:hover {
   margin: 0 auto;
 }
 
+/* 검색 결과 갯수 */
 .policy-search-count{
   display: flex;
   justify-content: space-between; /* 좌우 정렬 */
@@ -304,7 +381,6 @@ a:hover {
 
 }
 
-
 .policy-card {
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -313,6 +389,11 @@ a:hover {
   background-color: #fff;
   vertical-align: top;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.policy-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .policy-title {
@@ -378,7 +459,7 @@ a:hover {
   margin: 3px 3px 0 0;
 }
 
-/* ✅ 페이징 스타일 */
+/* 페이징 스타일 */
 .pagination {
 	text-align: center;
 	margin: 30px 0;
@@ -394,7 +475,6 @@ a:hover {
 	border: 1px solid transparent;
 	transition: background 0.2s, color 0.2s;
 }
-/* .pagination button:hover, */
 .page-btn.active {
 	background: #f2f2f2;
 	font-weight: bold;
@@ -407,7 +487,7 @@ a:hover {
 	border-radius: 6px;
 }
 </style>
-
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 </head>
 <body>
 <!-- 상단 베이지 바 -->
@@ -474,16 +554,85 @@ a:hover {
 				</div>
 			</c:forEach>
 		</div>
-			<div id="search-button">
-				<input type="submit" value="검색">		
-				<input type="reset" value="초기화">		
-			</div>
-  		  		
+		<div id="search-button">
+			<input type="submit" value="검색">		
+			<input type="reset" value="초기화">		
+		</div>
 	</form>
-	</div>
+</div>
 
 <!-- 검색 전 보여줄 콘텐츠 -->
-<div id="pre-search-content" class="pre-search-content"></div>
+<div id="pre-search-content" class="pre-search-content">
+<section class="slider-section">
+<div class="popular-policy"><p>인기 정책</p></div>
+<div class="swiper-container">
+  <div class="swiper-wrapper">
+    <c:forEach var="p" items="${pmList}">
+      <div class="swiper-slide">
+        <div class="policy-card">
+          <!-- 라벨 -->
+	      <div>
+	          <c:choose>
+	              <c:when test="${empty p.aply_ymd_strt}">
+	                  <span class="policy-label">상시</span><br />
+	              </c:when>
+	              <c:otherwise>
+	                  <c:set var="dday" value="p.aply_ymd_end" />
+<%-- 	                  <c:set var="ddayVal" value="${fn:replace(dday, '-', '')}" /> --%>
+	                  <%-- 실제 D-day 계산은 서버에서 하거나 커스텀 태그로 처리 필요 --%>
+	                  <span class="policy-label dday-red">
+	                      D-10
+	                  </span><br />
+	              </c:otherwise>
+	          </c:choose>
+	          <span class="policy-label">${p.lclsf_nm}</span><br />
+	      </div>
+	      <!-- 링크 및 내용 -->
+	        <a href="${pageContext.request.contextPath}/policyContent?page=${page}&plcy_no=${p.plcy_no}">
+	            <div class="policy-title">${p.plcy_nm}</div>
+	            <div class="policy-desc">
+	                <c:out value="${p.plcy_expln_cn}" default="설명이 없습니다." />
+	            </div>
+	            <div>
+	                <strong>신청기간</strong>
+	                <span class="policy-label">
+	                    <c:choose>
+	                        <c:when test="${empty p.aply_ymd_strt}">
+	                            상시
+	                        </c:when>
+	                        <c:otherwise>
+	                            ${p.aply_ymd_strt} ~ ${p.aply_ymd_end}
+	                        </c:otherwise>
+	                    </c:choose>
+	                </span>
+	            </div>
+	        </a>
+	         <!-- 자세히 보기 버튼 -->
+	        <a href="${pageContext.request.contextPath}/policyContent?page=${page}&plcy_no=${p.plcy_no}"
+	           class="detail-btn">
+	            자세히보기
+	        </a>
+
+	        <!-- 키워드 태그 -->
+	        <div class="policy-tags">
+	            <c:choose>
+	                <c:when test="${not empty p.plcy_kywd_nm}">
+	                    <span class="policy-tag">${p.plcy_kywd_nm}</span>
+	                </c:when>
+	                <c:otherwise>
+	                    <span class="policy-tag">키워드 없음</span>
+	                </c:otherwise>
+	            </c:choose>
+	        </div>
+        </div>
+      </div>
+    </c:forEach>
+  </div>
+</div>
+</section>
+
+
+</div>
 
 <!-- 검색 결과 갯수 -->
 <div id="policy-search-count" class="policy-search-count hidden"></div>
@@ -848,6 +997,41 @@ a:hover {
  	
 </script>
 
+<!-- Swiper JS 추가 (body 끝 직전에) -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<!-- 슬라이더 -->
+<script>
+const swiper = new Swiper('.swiper-container', {
+	loop: true,
+    centeredSlides: false,           // 항상 가운데 슬라이드가 중앙에 오도록
+    centerInsufficientSlides: true, // 슬라이드 수가 적을 때도 가운데 정렬
+    slidesPerView: 3,               // 한 번에 보여줄 카드 개수
+    speed: 3000,               // 애니메이션 속도 (ms)
+	spaceBetween: 60,      // 카드 간격 
+    autoplay: {
+      delay: 0,
+      disableOnInteraction: false
+    },
+    freeMode: true,            // 자연스럽게 끊김 없이 흘러감
+    grabCursor: true,          // 마우스 커서 변경 (UX 개선)
+// 	pagination: {
+// 	  el: '.swiper-pagination',
+// 	  clickable: true
+// 	},
+	navigation: {
+	  nextEl: '.swiper-button-next',
+	  prevEl: '.swiper-button-prev',
+	},
+	breakpoints: {
+	  0:  { slidesPerView: 1 },
+	  640:  { slidesPerView: 2 },
+// 	  768:  { slidesPerView: 3 },
+	  1024: { slidesPerView: 3 },
+// 	  1440: { slidesPerView: 5 }
+	}
+});
+</script>
 
 </body>
 </html>

@@ -64,7 +64,7 @@ public class PolicyController {
 		
 		System.out.println("현재 정렬방법 : " + pm.getSortOrder());
 		
-		int limit = 6; // 한 페이지에 출력할 데이터 갯수
+		int limit = 10; // 한 페이지에 출력할 데이터 갯수
 		int listcount = service.cntData(pm); // 총 데이터 갯수
 		System.out.println("listcount : " + listcount);
 
@@ -73,6 +73,7 @@ public class PolicyController {
 
 		pm.setStartRow(startRow);
 		pm.setEndRow(endRow);
+		pm.setSortOrder("views");		// 첫 페이지에서 인기순(조회수 순)으로 결과 출력
 		List<PolicyModel> pmList = service.plcyListByPage(pm); // 페이징 적용된 리스트
 
 		// 총 페이지수
@@ -186,6 +187,8 @@ public class PolicyController {
 		}
 		
 		System.out.println(keywords);
+		System.out.println(plcy.getAply_ymd_end());
+		System.out.println(plcy.getAply_ymd_strt());
 		
 		plcy.setPlcy_major_cd(service.convertCodes(plcy.getPlcy_major_cd(), service.plcy_major_map));
 		plcy.setSchool_cd(service.convertCodes(plcy.getSchool_cd(), service.school_map));
