@@ -2,9 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<title>Bootstrap Example</title>
+<title>정책 상세 페이지</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -19,35 +19,32 @@ body {
   color: #333;
 }
 
-.container-fluid {
+/* 전체 컨테이너 */
+.policy-container {
   display: flex;
   justify-content: center;
   padding: 0 40px;
   box-sizing: border-box;
 }
 
-.col-sm-2,
-.col-md-2 {
+/* 좌우측 사이드바 */
+.policy-left-side,
+.policy-right-side {
   width: 200px;
   box-sizing: border-box;
 }
 
-.col-sm-8 {
-  flex-grow: 1;
-  max-width: 800px;
-  padding: 0 20px;
-  box-sizing: border-box;
-}
-
+/* 글 가운데 정렬 */
 .text-center {
   text-align: center;
 }
 
+/* 글 좌측 정렬 */
 .text-left {
   text-align: left;
 }
 
-/* 사이드바 고정 위치 */
+/* 우측 사이드바 고정 위치 */
 .sidebar-fixed {
   position: fixed;
   top: 30%;
@@ -56,17 +53,20 @@ body {
   width: 200px;
 }
 
+/* 좌측 사이드바 위치 조정 */
 .sidebar-fixed.left {
   left: 30px;
   right: auto;
 }
 
-.panel {
+/* 사이드바 panel */
+.sidebar-panel {
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #ffffff;
 }
 
+/* 사이드바 패널 머릿말 */
 .p-heading {
   background-color: #f5f0e6;
   color: #333;
@@ -78,12 +78,14 @@ body {
   border-top-right-radius: 6px;
 }
 
+/* 사이드바 패널 ul */
 .panel-body ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+/* 사이드바 패널 li */
 .panel-body li a {
   display: block;
   padding: 10px 15px;
@@ -99,6 +101,33 @@ body {
   background-color: #eee;
 }
 
+/* 정책 내용 div */
+.policy-content {
+  flex-grow: 1;
+  max-width: 800px;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+/* 정책 라벨 */
+.policy-label {
+  font-size: 12px;
+  color: #777;
+  margin-right: 5px;
+  display: inline-block;
+  padding: 3px 8px;
+  background: #eee;
+  border-radius: 12px;
+  
+}
+
+/* D-Day 10일 이하 css */
+.dday-red {
+  color: red;
+  font-weight: bold;
+}
+
+/* 정책 테이블 */
 .policy-table {
   margin: 20px auto;
   width: 100%;
@@ -122,19 +151,8 @@ body {
   vertical-align: top;
 }
 
-.policy-header h2 {
-  font-weight: 500;
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
-.policy-meta {
-  font-size: 13px;
-  color: #777;
-  margin-bottom: 20px;
-}
-
-.policy-content {
+/* 정책 설명 */
+.policy-explane {
   font-family: 'Playfair Display', serif;
   font-size: 15px;
   line-height: 1.8;
@@ -145,53 +163,12 @@ body {
   margin: 0 auto 40px;
 }
 
-.policy-summary-block {
-  background: #f9f9f9;
-  border-top: 2px solid #000;
-  padding: 40px 20px;
-  margin-top: 60px;
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  text-align: center;
-}
-
-.policy-summary-block .summary-box {
-  flex: 1 1 300px;
-  padding: 20px;
-}
-
-.policy-summary-block h4 {
-  font-weight: 600;
-  margin-bottom: 10px;
-  font-size: 18px;
-}
-
-.policy-summary-block p {
-  font-size: 14px;
-  color: #666;
-}
-
-.btn.btn-outline {
-  border: 1px solid #ccc;
-  background: white;
-  color: #333;
-  padding: 6px 15px;
-  border-radius: 20px;
-  transition: all 0.3s;
-  display: inline-block;
-  text-align: center;
-}
-
-.btn.btn-outline:hover {
-  background-color: #f1f1f1;
-  color: #000;
-}
-
-.title {
-  text-align: center;
+/* 정책 테이블 타이틀 */
+.policy-table-title {
+  text-align: left;
   font-weight: bold;
   font-size: 18px;
+  margin-left: 30px;
   margin-top: 40px;
   margin-bottom: 10px;
 }
@@ -268,7 +245,7 @@ footer {
 
 /* 반응형 */
 @media (max-width: 768px) {
-  .container-fluid {
+  .policy-container {
     flex-direction: column;
   }
   .sidebar-fixed,
@@ -292,37 +269,10 @@ footer {
     transform: none;
     margin-top: 10px;
   }
-  .policy-summary-block {
-    flex-direction: column;
-    align-items: center;
-  }
-  .policy-summary-block .summary-box {
-    width: 100%;
-  }
   .policy-table {
     width: 100%;
   }
 }
-
-/* 정책 라벨 */
-.policy-label {
-  font-size: 12px;
-  color: #777;
-  margin-right: 5px;
-  display: inline-block;
-  padding: 3px 8px;
-  background: #eee;
-  border-radius: 12px;
-  
-}
-
-/* D-Day 10일 이하 css */
-.dday-red {
-  color: red;
-  font-weight: bold;
-}
-
-
 </style>
 </head>
 <body>
@@ -354,12 +304,12 @@ footer {
   </div>
 </div>
 
-<div class="container-fluid text-center">
-	<div class="col-sm-2 sidenav">
-		<div class="sidebar-fixed left panel panel-default">
+<div class="policy-container text-center">
+	<div class="policy-left-side sidenav">
+		<div class="sidebar-fixed left sidebar-panel panel-default">
 			<div class="p-heading">정부 사이트</div>
 			<div class="panel-body">
-				<ul class="nav nav-pills nav-stacked">
+				<ul>
 					<li><a href="https://www.work24.go.kr/cm/main.do">고용24</a></li>
 					<li><a href="https://www.2030db.go.kr/">청년인재DB</a></li>
 					<li><a href="https://yw.work24.go.kr/main.do">청년일경험포털</a></li>
@@ -371,7 +321,7 @@ footer {
 		</div>
 	</div>
 
-	<div class="col-sm-8 text-left">
+	<div class="policy-content text-left">
 		<div class="policy-labels" data-end-date="${plcy.aply_ymd_end}">
 				    <!-- 신청 시작일이 null이면 -->
 		    <c:choose>
@@ -407,11 +357,10 @@ footer {
 				</td>
 			</tr>
 		</table>
-		<br><br>
 		
-		<p class="policy-content" align=center>${plcy.plcy_expln_cn }</p><br>
+		<p class="policy-explane" align=center>${plcy.plcy_expln_cn }</p>
 				
-		<div id="summary" class="title">한 눈에 보는 정책 요약</div>
+		<div id="summary" class="policy-table-title">한 눈에 보는 정책 요약</div>
 		<table class="policy-table policy-summary">
 			<tr>
 				<th>정책번호</th>
@@ -438,8 +387,7 @@ footer {
 				<td>${plcy.sprt_scl_cnt} 명</td>
 			</tr>
 		</table>
-		<br><br>
-		<div id="qualification" class="title">신청 자격</div>
+		<div id="qualification" class="policy-table-title">신청 자격</div>
 		
 		<table class="policy-table policy-qualification">
 			<tr>
@@ -538,7 +486,7 @@ footer {
 				
 		<br>
 					
-		<div id="method" class="title">신청방법</div>
+		<div id="method" class="policy-table-title">신청방법</div>
 		<table class="policy-table policy-method">
 			<tr>
 				<th>신청절차</th>
@@ -557,9 +505,8 @@ footer {
 				<td>${plcy.sbmsn_dcmnt_cn}</td>
 			</tr>
 		</table>
-		<br><br>
 
-		<div id="etc" class="title">기타</div>
+		<div id="etc" class="policy-table-title">기타</div>
 		<table class="policy-table policy-etc">
 			<tr>
 				<th>기타 정보</th>
@@ -574,15 +521,14 @@ footer {
 				<td><a href='${plcy.ref_url_addr2}'>${plcy.ref_url_addr2}</a></td>
 			</tr>
 		</table>
-		<br><br>
 	</div>
 		
 			
-	<div class="col-md-2 sidenav">
-		<div class="sidebar-fixed panel panel-default">
+	<div class="policy-right-side sidenav">
+		<div class="sidebar-fixed sidebar-panel panel-default">
 			<div class="p-heading">정책 메뉴</div>
 			<div class="panel-body">
-				<ul class="nav nav-pills nav-stacked">
+				<ul>
 					<li><a href="#summary">정책 요약</a></li>
 					<li><a href="#qualification">신청자격</a></li>
 					<li><a href="#method">신청방법</a></li>
@@ -595,7 +541,7 @@ footer {
 </div>
 
 
-<footer class="container-fluid text-center">
+<footer class="policy-container text-center">
 	<p>Footer Text</p>
 </footer>
 
