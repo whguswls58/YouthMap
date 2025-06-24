@@ -1,0 +1,147 @@
+/*──────────────────────────────────────────────
+   카드 그리드
+──────────────────────────────────────────────*/
+.cards {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개 칼럼 고정 */
+	gap: 20px;
+	max-width: 1000px; /* 전체 컨테이너 너비를 조정하면 카드 너비도 함께 결정 */
+	margin: 0 auto;
+}
+
+/*──────────────────────────────────────────────
+   카드 하나당
+──────────────────────────────────────────────*/
+.card {
+  position: relative;
+  flex: 0 0 calc((100% - 60px) / 4);
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  text-align: center;
+  margin:20px;
+  width: 250px;
+}
+
+/*──────────────────────────────────────────────
+   이미지 래퍼
+──────────────────────────────────────────────*/
+.img-wrap {
+  width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center; /* 가로·세로 중앙 정렬 */
+	overflow: hidden;
+	height: 300px;
+	text-align: center;
+}
+.img-wrap img {
+  max-width: 90%; /* 래퍼 폭을 넘지 않음 */
+	max-height: 90%; /* 래퍼 높이를 넘지 않음 */
+	border-radius: 8px;
+}
+
+/*──────────────────────────────────────────────
+   뱃지 (기본 스타일)
+──────────────────────────────────────────────*/
+.badge {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+/*──────────────────────────────────────────────
+   카테고리별 뱃지 색상
+──────────────────────────────────────────────*/
+.badge.exhibitionlist    { background: #008060; } /* 전시/미술 */
+.badge.performancelist   { background: #a83279; } /* 공연 */
+.badge.eventlist         { background: #0066cc; } /* 축제/행사 */
+/* 추가 카테고리가 있으면 아래에 더 정의하세요. */
+
+/*──────────────────────────────────────────────
+   카드 정보
+──────────────────────────────────────────────*/
+.card-info .title,
+.card-info .period,
+
+.card-info .location {
+  text-align: center;
+  padding: 8px;
+  display: block;           /* 블록 레벨로 만들어서 width 적용 가능 */
+  width: 100%;              /* 부모(.card)의 너비 전체를 차지 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+/* .card-info .title {
+  font-size: 1em;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+  	text-align: center;
+  
+}
+.card-info .location {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  font-size: 0.85em;
+  color: #555;
+  margin-top: 2px;
+}
+.card-info .period {
+  margin: 0 auto; 블록 자체를 부모 중앙에 놓습니다
+	white-space: nowrap;
+	text-align: center; 블록 내부 텍스트도 가운데
+	width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 0.85em;
+	color: #555;
+	text-align: center;
+}
+ */
+/*──────────────────────────────────────────────
+   링크 전체 클릭 가능
+──────────────────────────────────────────────*/
+a.card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+/*──────────────────────────────────────────────
+   페이지네이션
+──────────────────────────────────────────────*/
+.pager {
+  text-align: center;
+  margin: 20px auto;
+}
+.pager a,
+.pager span {
+  display: inline-block;
+  margin: 0 6px;
+  padding: 4px 8px;
+  text-decoration: none;
+  color: #000;
+}
+.pager .current {
+  font-weight: bold;
+}
+

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.MemberDao">
+
+	<!-- 회원가입 -->
+	<insert id="insertMember" parameterType="MemberModel">
+		INSERT INTO member (
+		mem_no, mem_id, mem_pass, mem_name,
+		birth_date, mem_gen, mem_mail,
+		mem_address, mem_addDetail, mem_date, mem_type, oauth_id, mem_num
+		)
+		VALUES (
+		member_seq.NEXTVAL,
+		#{memId, jdbcType=VARCHAR},
+		#{memPass,
+		jdbcType=VARCHAR},
+		#{memName, jdbcType=VARCHAR},
+		#{birthDate,
+		jdbcType=DATE},
+		#{memGen, jdbcType=VARCHAR},
+		#{memMail,
+		jdbcType=VARCHAR},
+		#{memAddress, jdbcType=VARCHAR},
+		#{memAddDetail,
+		jdbcType=VARCHAR},
+		SYSDATE,
+		#{memType, jdbcType=VARCHAR},
+		#{oauthId,
+		jdbcType=VARCHAR},
+		#{memNum, jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<!-- 로그인 시 ID로 회원 조회 -->
+	<select id="findByMemId" resultType="MemberModel">
+		SELECT
+		MEM_NO AS memNo,
+		MEM_ID AS memId,
+		MEM_PASS AS memPass,
+		MEM_NAME AS memName,
+		BIRTH_DATE AS
+		birthDate,
+		MEM_GEN AS memGen,
+		MEM_MAIL AS memMail,
+		MEM_ADDRESS AS
+		memAddress,
+		MEM_ADDDETAIL AS memAddDetail,
+		MEM_DATE AS memDate,
+		MEM_STATUS AS memStatus,
+		MEM_TYPE AS memType,
+		OAUTH_ID as oauthId,
+		MEM_NUM as memNum
+		FROM
+		MEMBER
+		WHERE MEM_ID = #{memId, jdbcType=VARCHAR}
+		AND ROWNUM = 1
+	</select>
+
+	<select id="findByOauthId" parameterType="String"
+		resultType="MemberModel">
+		SELECT * FROM MEMBER WHERE OAUTH_ID = #{oauthId, jdbcType=VARCHAR}
+	</select>
+
+
+	<!-- 아이디 중복 확인 -->
+	<select id="countByMemId" parameterType="String"
+		resultType="int">
+		SELECT COUNT(*) FROM MEMBER WHERE MEM_ID = #{memId, jdbcType=VARCHAR}
+		<!-- 디버깅: 실제 쿼리 실행 -->
+	</select>
+
+	<update id="updateOauthId"
+		parameterType="com.example.demo.model.MemberModel">
+		UPDATE member
+		SET oauth_id = #{oauthId}
+		WHERE mem_id = #{memId}
+	</update>
+
+
+	<!-- 회원 기본 정보 조회 -->
+	<select id="selectMemberInfo"
+		resultType="com.example.demo.model.MemberModel">
+		SELECT
+		MEM_NO AS memNo,
+		MEM_ID AS memId,
+		MEM_PASS AS memPass,
+		MEM_NAME AS memName,
+		BIRTH_DATE AS birthDate,
+		MEM_GEN AS memGen,
+		MEM_MAIL AS memMail,
+		MEM_ADDRESS AS memAddress,
+		MEM_ADDDETAIL AS
+		memAddDetail,
+		MEM_DATE AS memDate,
+		MEM_NUM as memNum
+		FROM member
+		WHERE mem_no = #{memNo}
+	</select>
+
+	<!-- 회원이 쓴 게시물 수 -->
+	<select id="countPostsByMember" resultType="int">
+		SELECT COUNT(*) FROM
+		BOARD WHERE MEM_NO = #{memNo}
+	</select>
+
+	<!-- 회원이 쓴 댓글 수 -->
+	<select id="countCommentsByMember" resultType="int">
+		SELECT COUNT(*)
+		FROM COMMENTS WHERE MEM_NO = #{memNo}
+	</select>
+
+
+	<!-- 회원 정보 수정 -->
+	<update id="updateMember"
+		parameterType="com.example.demo.model.MemberModel">
+		UPDATE MEMBER
+		SET
+		MEM_PASS = #{memPass},
+		MEM_MAIL =
+		#{memMail},
+		MEM_ADDRESS = #{memAddress},
+		MEM_ADDDETAIL = #{memAddDetail},
+		MEM_NUM = #{memNum}
+		WHERE MEM_NO = #{memNo}
+	</update>
+
+	<!-- 회원탈 -->
+	<update id="updateMemberStatus"
+		parameterType="com.example.demo.model.MemberModel">
+		UPDATE Member
+		SET mem_status = #{memStatus}
+		WHERE mem_no =
+		#{memNo}
+	</update>
+
+
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.Review1Dao">
+
+	<!--리뷰 작성 -->
+	<insert id="insertreview" parameterType="review1">
+        INSERT INTO review1 (
+            review_id1,
+            review_score1,
+            review_content1,
+            review_file1,
+            review_register1,
+            mem_no,
+            res_id,
+            review_writer
+        ) VALUES (
+            review1_seq.NEXTVAL,
+            #{review_score1},
+            #{review_content1},
+            #{review_file1, jdbcType=VARCHAR},
+            SYSDATE,
+            1,
+			#{res_id},
+			#{review_writer}
+        )
+    </insert>
+
+	
+	<!-- 리뷰 수정 -->
+    <update id="updatereview" parameterType="review1">
+        UPDATE review1 SET review_score1 = #{review_score1},
+         	review_content1 = #{review_content1},
+            review_file1 = #{review_file1, jdbcType=VARCHAR}
+        WHERE review_id1 = #{review_id1}
+    </update>
+
+    <!-- 리뷰 삭제 -->
+    <delete id="deletereview" parameterType="int">
+        DELETE FROM review1 WHERE review_id1 = #{review_id1}
+    </delete>
+
+    <!-- 리뷰 한 건 조회 -->
+    <select id="selectreview" parameterType="int" resultType="review1">
+        SELECT * FROM review1 WHERE review_id1 = #{review_id1}
+    </select>
+
+    <!-- 식당별 리뷰 리스트 -->
+  <select id="reviewlist" resultType="review1">
+    SELECT * FROM (
+        SELECT a.*, ROWNUM rnum FROM (
+            SELECT * FROM review1
+            WHERE res_id = #{res_id}
+            ORDER BY review_register1 DESC
+        ) a
+        WHERE ROWNUM &lt;= #{endRow}
+    )
+    WHERE rnum &gt;= #{startRow}
+</select>
+
+	
+	<!--전체리뷰구하기 -->
+	<select id="countreview" parameterType="string" resultType="int">
+  		SELECT COUNT(*) FROM review1 WHERE res_id = #{res_id}
+	</select>
+	
+	<!-- 리뷰파일 -->
+	<select id="reivewfile" parameterType="int" resultType="String">
+    SELECT review_file1 FROM review1 WHERE review_id1 = #{review_id1}
+</select>
+</mapper>
+
+
+
