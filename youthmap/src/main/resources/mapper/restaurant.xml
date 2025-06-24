@@ -31,7 +31,7 @@
 	<!--메인 출력-->
 	<select id="best" resultType="restaurant">
     	SELECT * FROM  (SELECT * FROM restaurant ORDER BY res_score DESC)
-   		WHERE ROWNUM &lt; 8
+   		WHERE ROWNUM &lt; 20
 	</select>
 	
 	<!-- 전체정보 -->
