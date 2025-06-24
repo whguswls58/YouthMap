@@ -94,10 +94,10 @@ body {
   	border-radius: 12px;
   	box-shadow: 0 4px 8px rgba(0,0,0,0.05);
   	gap: 12px;
-  	width: fit-content; /* ✅ 내부 크기에 맞춤 */
-  max-width: 100%;     /* ✅ 모바일 대응 */
-  flex-direction: column; /* ✅ 내부 항목 세로 정렬 */
-  align-items: center;
+  	width: fit-content; 		/* 내부 크기에 맞춤 */
+    max-width: 100%;     		/* 모바일 대응 */
+    flex-direction: column; 	/* 내부 항목 세로 정렬 */
+    align-items: center;
   	justify-content: center;
   	position: relative;
   	z-index: 1;
@@ -499,11 +499,11 @@ a:hover {
   	</div>
 </div>
 
-	<!-- ✅ 네비게이션 구조 -->
+<!--  네비게이션 구조 -->
 <div class="navbar">
   	<div class="navbar-left">
 		<a href="#" class="nav-link">About</a>
-	    <a href="#" class="nav-link">Facility</a>
+	    <a href="policyMain" class="nav-link">Facility</a>
 	    <a href="#" class="nav-link active">Food</a>
 	    <a href="#" class="nav-link">Community</a>
 		<a href="#" class="nav-link">Contact</a>
@@ -548,6 +548,7 @@ a:hover {
 						  	<label class="btn btn-default btn-pill">
 						    	<input type="checkbox" name="${cat.name}" value="${sub}" />
 						        <span class="check-icon">✔</span> ${sub}
+						        <script>console.log("${sub}")</script>
 						     </label>
 						</c:forEach>
 					</div>
@@ -949,15 +950,47 @@ a:hover {
 	    	`<button class="page-btn" onclick="loadPage(\${total}, '\${sortOrder}')">▶</button>`;
 	  }		// end function
 
-	  // 초기 로딩
-	 window.addEventListener("DOMContentLoaded", () => {
-		 currentSearchInput = "";  // 초기화
-		 currentMainCategory = "youthPolicy";
+	// 초기 로딩
+	window.addEventListener("DOMContentLoaded", () => {
+		currentSearchInput = "";  // 초기화
+		currentMainCategory = "youthPolicy";
+		// selectedCategories를 JS 배열로 변환하여 저장
+		selectedCategories = [
+		    <c:forEach var="cat" items="${selectedCategories}" varStatus="status">
+		      "${cat}"<c:if test="${!status.last}">, </c:if>
+		    </c:forEach>
+		  ];
+		console.log(selectedCategories);
+
+		if (selectedCategories.length > 0 && selectedCategories[0] !== "") {
+			selectedCategories.forEach(cat => {
+			    const checkbox = document.querySelector(`input[type="checkbox"][value="${cat}"]`);
+			    if (checkbox) {
+			      checkbox.checked = true;
+			      checkbox.closest("label").classList.add("active");
+	
+			      // 해당 카테고리의 전체 체크박스도 동기화 시도
+			      const group = checkbox.closest(".subcategory-group");
+			      if (group) {
+			        const category = group.dataset.category;
+			        const allChecked = [...group.querySelectorAll(`input[type="checkbox"][name="${category}"]`)].every(box => box.checked);
+			        const master = document.querySelector(`.check-all[data-target="${category}"]`);
+			        if (master) master.checked = allChecked;
+			      }
+			    }
+			  });
+			
+			// DOM 반영 후 비동기 검색 호출
+		    requestAnimationFrame(() => {
+		      submitSearchForm();
+		    });
+		}
+		
     });		// end window
 	
     // 검색어 및 카테고리 상태 저장
     function submitSearchForm(event) {
-    	  event.preventDefault();	// 기본 이동 막기
+//     	  event.preventDefault();	// 기본 이동 막기
 
     	  // 현재 검색어 상태 저장
     	  currentSearchInput = document.querySelector('input[name="searchInput"]').value;	// 현재 검색어

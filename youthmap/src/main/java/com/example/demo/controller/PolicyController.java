@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,6 +40,7 @@ public class PolicyController {
 	// 정책 메인 페이지
 	@RequestMapping("/policyMain")
 	public String policyMain(@RequestParam(value = "page", defaultValue = "1") int page,
+							@RequestParam(value = "selectedCategory", required = false) String category,
 							@ModelAttribute PolicyModel pm,
 							HttpSession session,
 							Model model) {
@@ -62,7 +64,6 @@ public class PolicyController {
 		List<PolicyModel> pmList = service.plcyListByPage(pm); // 페이징 적용된 리스트
 
 		for(PolicyModel p : pmList) {
-			System.out.println(p.getLclsf_nm());
 			p.setLclsf_nms(service.splitByComma(p.getLclsf_nm()));
 			p.setPlcy_kywd_nms(service.splitByComma(p.getPlcy_kywd_nm()));
 		}
@@ -75,6 +76,7 @@ public class PolicyController {
 		if (endpage > pagecount)
 			endpage = pagecount;
 
+		// 카테고리 상세 항목
 		List<Map<String, Object>> categoryList = new ArrayList<>();
 
 		categoryList.add(Map.of(
@@ -107,12 +109,26 @@ public class PolicyController {
 			"subcategories", List.of("청년참여", "정책인프라구축", "청년국제교류", "권익보호")
 		));
 		
+		List<String> selectedCategories = null;
+		
+		if(category != null) {
+			Optional<Map<String, Object>> selectedCategory = 
+					categoryList.stream().filter(c -> category.equals(c.get("name"))).findFirst();
+			
+			if (selectedCategory.isPresent()) {
+				Map<String, Object> result = selectedCategory.get();
+				selectedCategories =(List<String>)result.get("subcategories");
+				System.out.println(selectedCategories);
+			}		
+		}
+		
 		model.addAttribute("page", page);
 		model.addAttribute("pmList", pmList);
 		model.addAttribute("listcount", listcount);
 		model.addAttribute("pagecount", pagecount);
 		model.addAttribute("startpage", startpage);
 		model.addAttribute("endpage", endpage);
+		model.addAttribute("selectedCategories", selectedCategories);
 		model.addAttribute("categoryList", categoryList);
 		return "policy/policyMain";
 	}
