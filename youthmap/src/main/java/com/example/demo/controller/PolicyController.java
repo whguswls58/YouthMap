@@ -1,30 +1,14 @@
 package com.example.demo.controller;
 
-import java.io.FileReader;
-import java.io.Reader;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -54,7 +38,7 @@ public class PolicyController {
 	  
 	// 정책 메인 페이지
 	@RequestMapping("/policyMain")
-	public String policyTest(@RequestParam(value = "page", defaultValue = "1") int page,
+	public String policyMain(@RequestParam(value = "page", defaultValue = "1") int page,
 							@ModelAttribute PolicyModel pm,
 							HttpSession session,
 							Model model) {
