@@ -1047,11 +1047,11 @@ a:hover {
 <script>
 const swiper = new Swiper('.swiper-container', {
 	loop: true,
-    centeredSlides: false,           // 항상 가운데 슬라이드가 중앙에 오도록
+    centeredSlides: false,          // 항상 가운데 슬라이드가 중앙에 오도록
     centerInsufficientSlides: true, // 슬라이드 수가 적을 때도 가운데 정렬
     slidesPerView: 3,               // 한 번에 보여줄 카드 개수
-    speed: 3000,               // 애니메이션 속도 (ms)
-	spaceBetween: 60,      // 카드 간격 
+    speed: 5000,               		// 애니메이션 속도 (ms)
+	spaceBetween: 60,      			// 카드 간격 
     autoplay: {
       delay: 0,
       disableOnInteraction: false
