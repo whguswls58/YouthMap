@@ -43,15 +43,11 @@ public class PolicyController {
 
 	private final PolicyService service;
 
-	@RequestMapping("/")
-	public String tt() {
-		return "policy/test";
-	}
-
 	// 정책 데이터 수동 업데이트
 	@RequestMapping("/policyUpdate")
 	public String policyUpdate() throws Exception {
 		service.executePolicyUpdate();
+		// 추후 관리자 페이지에서 요청 -> 관리자 페이지로 리턴할 예정
 		return "policy/test3";
 	}
 	  
@@ -210,8 +206,7 @@ public class PolicyController {
 		model.addAttribute("keywords", keywords);
 		model.addAttribute("page", page);
 		
-		return "policy/testcontent";
-//		return "policy/policyContent";
+		return "policy/policyContent";
 	}
 
 }
