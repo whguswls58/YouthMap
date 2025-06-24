@@ -338,7 +338,6 @@ a:hover {
   padding: 3px 8px;
   background: #eee;
   border-radius: 12px;
-/*   margin: 3px 3px 0 0; */
   
 }
 
@@ -483,11 +482,14 @@ a:hover {
 	</form>
 	</div>
 
+<!-- 검색 전 보여줄 콘텐츠 -->
+<div id="pre-search-content" class="pre-search-content"></div>
 
+<!-- 검색 결과 갯수 -->
 <div id="policy-search-count" class="policy-search-count hidden"></div>
-
+<!-- 검색 결과 출력 컨테이너 -->
 <div id="policy-container" class="policy-container hidden"></div>
-
+<!-- 검색 결과 페이징 처리 -->
 <div id="pagination" class="pagination hidden" style="text-align:center; margin-top: 20px;"></div>
 
 <script>
@@ -548,10 +550,12 @@ a:hover {
 </script>
 
 <script>
-	window.loadPage = function(page, sortOrder = null) {
+	let currentSortOrder = "latest"; // 기본값
+	window.loadPage = function(page, sortOrder) {
 	console.log("loadPage 호출됨. page = ", page);
 	console.log(selectedCategories);
-	const order = sortOrder || document.getElementById("sortOrder")?.value || "latest";
+	currentSortOrder = sortOrder || currentSortOrder || "latest";
+	const order = currentSortOrder;
 	console.log("정렬방식 : ", order);
 	
 	fetch(`${pageContext.request.contextPath}/policyListJson?page=\${page}&
@@ -563,7 +567,7 @@ a:hover {
 	    .then(data => {
 		console.log("data:", data);
 		
-		
+		const preSearch = document.getElementById("pre-search-content");
 		const container = document.getElementById("policy-container");
 		const countBox = document.getElementById("policy-search-count");
 	    const pagination = document.getElementById("pagination");
@@ -578,6 +582,9 @@ a:hover {
 	    } 
 	    
 	    // 검색 결과 있는 경우
+	    // 검색 전 콘텐츠 숨기기
+  		preSearch.style.display = "none";
+	    // 검색 후 결과 출력
 	    container.classList.remove("hidden");
 	    countBox.classList.remove("hidden");
 	    pagination.classList.remove("hidden");
@@ -601,16 +608,19 @@ a:hover {
 		select.name = "sortOrder";
 		select.id = "sortOrder";
 
+		const crntOrder = sortOrder || "latest";
+		
 		// option: 최신순
 		const option1 = document.createElement("option");
 		option1.value = "latest";
 		option1.textContent = "최신순";
-		option1.selected = true;
+		if (crntOrder === "latest") option1.selected = true;
 
 		// option: 조회순
 		const option2 = document.createElement("option");
 		option2.value = "views";
 		option2.textContent = "조회순";
+		if (crntOrder === "views") option2.selected = true;
 
 		// select에 option 추가
 		select.appendChild(option1);
@@ -619,7 +629,8 @@ a:hover {
 		select.addEventListener("change", function () {
 			  const selected = this.value;
 			  console.log("정렬 방식 선택:", selected);
-			  lodePage(data.page, selected);
+			  currentSortOrder = selected;
+			  loadPage(1, selected);
 			  // 정렬 기준에 따라 리스트 다시 요청 또는 필터링 로직 추가 가능
 		});
 		
@@ -629,11 +640,9 @@ a:hover {
 		plcy_cnt.appendChild(plcy_cnt_rightDiv);
 		const container_search = document.getElementById("policy-search-count");
 	    container_search.innerHTML = "";
-		
 		container_search.appendChild(plcy_cnt);
-	    
-	    
-	    
+
+		
 	    console.log("data.pmList 출력 확인:", data.pmList);
 		data.pmList.forEach(p => {
 			console.log("각 항목 확인:", p);
@@ -737,25 +746,25 @@ a:hover {
 	    });
 	      
 	   	// 페이지네이션 렌더링 호출
-	    renderPagination(data.page, data.pagecount, data.startpage, data.endpage, data.sortOrder);
+	    renderPagination(data.page, data.pagecount, data.startpage, data.endpage, currentSortOrder);
 
 	    }).catch(error => console.error("오류 발생:", error));
 	}
 	
 	// 페이지 렌더 처리
-	function renderPagination(current, total, start, end) {
+	function renderPagination(current, total, start, end, sortOrder) {
 
 		const pagination = document.getElementById("pagination");
 		pagination.innerHTML = "";
 
 	    // 처음 페이지
 	    pagination.innerHTML += 
-	    	`<button class="page-btn" onclick="loadPage(1, \${sortOrder})">◀</button> `;
+	    	`<button class="page-btn" onclick="loadPage(1, '\${sortOrder}')">◀</button> `;
 
 	    // 이전 블록
 	    if (start > 6) {
 	      pagination.innerHTML += 
-	    	  `<button class="page-btn" onclick="loadPage(\${start - 6}, \${sortOrder})">[이전]</button> `;
+	    	  `<button class="page-btn" onclick="loadPage(\${start - 6}, '\${sortOrder}')">[이전]</button> `;
 	    } 	//end if
 
 	    // 페이지 번호들
@@ -764,19 +773,19 @@ a:hover {
 	        pagination.innerHTML += `<b>\${i}</b>`;
 	      } else {
 	        pagination.innerHTML += 
-	        	`<button class="page-btn" onclick="loadPage(\${i}, \${sortOrder})">\${i}</button>`;
+	        	`<button class="page-btn" onclick="loadPage(\${i}, '\${sortOrder}')">\${i}</button>`;
 	      }	// end if
 	    }	// end for
 
 	    // 다음 블록
 	    if (end < total) {
 	      pagination.innerHTML += 
-	    	  `<button class="page-btn" onclick="loadPage(\${start + 6}, \${sortOrder})">[다음]</button> `;
+	    	  `<button class="page-btn" onclick="loadPage(\${start + 6}, '\${sortOrder}')">[다음]</button> `;
 	    }	// end if
 
 	    // 마지막 페이지
 	    pagination.innerHTML += 
-	    	`<button class="page-btn" onclick="loadPage(\${total}, \${sortOrder})">▶</button>`;
+	    	`<button class="page-btn" onclick="loadPage(\${total}, '\${sortOrder}')">▶</button>`;
 	  }		// end function
 
 	  // 초기 로딩
