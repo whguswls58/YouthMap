@@ -6,7 +6,6 @@
 <head>
   <meta charset="UTF-8">
   <title>전체 콘텐츠 목록</title>
- <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 
 
   <style>
@@ -163,7 +162,7 @@ a.card-link {
       text-align: center;
       box-shadow: 0 2px 4px rgba(0,0,0,0.04);
     }
-
+   
   </style>
 </head>
 <body>

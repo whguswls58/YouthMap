@@ -7,7 +7,7 @@
 <head>
   <meta charset="UTF-8">
   <title>전시/미술 리스트</title>
-
+  
   <style>
 .cards {
   display: grid;
@@ -143,13 +143,13 @@ a.card-link {
     }
     
 </style>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" />
+
 </head>
 <body>
-<!-- 헤더-->
-<%@ include file="/WEB-INF/views/header.jsp" %>
-<%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
-<%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
+
+  <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
+  <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
+  <%@ include file="/WEB-INF/views/header.jsp" %>
 
 <div id="card-container">
   <!-- 카드 그리드 -->
