@@ -34,6 +34,8 @@
         <a href="/policyMain?selectedCategory=일자리">일자리</a>
         <a href="/policyMain?selectedCategory=주거">주거</a>
         <a href="/policyMain?selectedCategory=교육">교육</a>
+        <a href="/policyMain?selectedCategory=복지문화">복지문화</a>
+        <a href="/policyMain?selectedCategory=참여권리">참여권리</a>
       </div>
       </div>
       <div class="nav-item">

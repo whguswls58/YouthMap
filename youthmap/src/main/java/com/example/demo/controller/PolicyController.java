@@ -50,6 +50,7 @@ public class PolicyController {
 		System.out.println("로그인 중 아이디 : " + memNo);
 		
 		System.out.println("현재 정렬방법 : " + pm.getSortOrder());
+		System.out.println("카테고리 : " + category);
 		
 		int limit = 10; // 한 페이지에 출력할 데이터 갯수
 		int listcount = service.cntData(pm); // 총 데이터 갯수

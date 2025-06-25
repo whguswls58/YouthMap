@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/policy/policy-main.css" />
+
 </head>
 <body>
 <!-- 헤더-->
@@ -145,11 +146,6 @@
 <!-- 검색 결과 페이징 처리 -->
 <div id="pagination" class="pagination hidden" style="text-align:center; margin-top: 20px;"></div>
 
-
-
-<!-- Swiper JS -->
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
 <script>
 	<!-- 파일 경로 전역변수 -->
   	const contextPath = "${pageContext.request.contextPath}";
@@ -159,9 +155,16 @@
    	    "${cat}"<c:if test="${!status.last}">, </c:if>
    	  </c:forEach>
    	];
+   	console.log("main.jsp 출력 : " + selectedCategories);
 </script>
 <!-- 메인 script -->
 <script src="${pageContext.request.contextPath}/js/policy-main.js"></script>
+
+
+<!-- Swiper JS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+
 
 </body>
 </html>
