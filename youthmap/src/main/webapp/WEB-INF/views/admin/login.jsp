@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>관리자 로그인</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
     <style>
         .login-container {
             width: 400px;
@@ -53,6 +54,8 @@
     </style>
 </head>
 <body>
+<!-- 헤더-->
+<%@ include file="/WEB-INF/views/header.jsp" %>
 
 <div class="login-container">
     <h2>관리자 로그인</h2>

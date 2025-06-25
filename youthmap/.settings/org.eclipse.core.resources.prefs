@@ -1,7 +1,5 @@
-<<<<<<< HEAD
+=\=\=\=\=\=\=
+<<<<<<<=HEAD
+>>>>>>>=hyeonjin
 eclipse.preferences.version=1
 encoding//src/main/resources/application.properties=UTF-8
-=======
-eclipse.preferences.version=1
-encoding//src/main/webapp/WEB-INF/views/policy/policyContent.jsp=UTF-8
->>>>>>> hyeonjin

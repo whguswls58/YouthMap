@@ -37,7 +37,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         session.setAttribute("loginMember", m);
         session.setAttribute("memberNo", m.getMemNo());
         
+        // ✅ 폼 로그인 시에도 세션 시간 설정
+        session.setMaxInactiveInterval(30 * 60); // 30분 (1800초)
+        session.setAttribute("loginStartTime", System.currentTimeMillis());
+        
         System.out.println("세션에 로그인 정보 저장 완료");
+        System.out.println("세션에 loginStartTime: " + session.getAttribute("loginStartTime"));
         System.out.println("=== CustomUserDetailsService 완료 ===");
         
         return User.builder()

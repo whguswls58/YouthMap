@@ -187,4 +187,20 @@
         WHERE rn &gt;= #{startRow}
     </select>
 
+    <!-- 모든 게시물 조회 (관리자용) -->
+    <select id="getAllPosts" resultType="com.example.demo.model.Board">
+        SELECT b.board_no AS boardNo,
+               m.mem_id AS memId,
+               m.mem_name AS memName,
+               b.board_category AS boardCategory,
+               b.board_subject AS boardSubject,
+               b.board_content AS boardContent,
+               b.board_readcount AS boardReadcount,
+               b.board_date AS boardDate,
+               b.mem_no AS memNo
+        FROM board b
+        JOIN member m ON b.mem_no = m.mem_no
+        ORDER BY b.board_no DESC
+    </select>
+
 </mapper>

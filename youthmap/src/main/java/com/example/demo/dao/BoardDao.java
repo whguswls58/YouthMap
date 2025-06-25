@@ -25,6 +25,9 @@ public interface BoardDao {
     
     // 내 게시물 조회
     List<Board> getMyPosts(Map<String, Object> params);
+    
+    // 모든 게시물 조회 (관리자용)
+    List<Board> getAllPosts();
 }
 
 

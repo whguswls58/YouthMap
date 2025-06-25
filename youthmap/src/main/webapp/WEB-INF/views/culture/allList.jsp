@@ -1,12 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ include file="/WEB-INF/views/culture/header.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>전체 콘텐츠 목록</title>
+ <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 
 
   <style>
@@ -163,13 +163,14 @@ a.card-link {
       text-align: center;
       box-shadow: 0 2px 4px rgba(0,0,0,0.04);
     }
-   
+
   </style>
 </head>
 <body>
 
 <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
 <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
+<%@ include file="/WEB-INF/views/header.jsp" %>
 
 <div id="card-container">
   <!-- 카드 그리드 -->

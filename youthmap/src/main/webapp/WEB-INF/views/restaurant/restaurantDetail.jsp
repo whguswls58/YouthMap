@@ -3,7 +3,8 @@
 <html>
 <head>
 <title>${restaurant.res_subject}- 상세 정보</title>
- <script>
+
+<script>
     // 모든 사진 배열 생성 (대표 + 여분)
     const photos = [
       '<c:out value="${restaurant.res_photo_url}" escapeXml="false"/>'
@@ -64,28 +65,8 @@
 
 </head>
 <body>
-	<!-- 상단 베이지 바 -->
-	<div class="topbar">
-		<div class="menu">
-			<a href="#">CART</a> <a href="#">MY PAGE</a> <a href="#">JOIN</a>
-		</div>
-	</div>
-
-	<!-- ✅ 네비게이션 구조 -->
-	<div class="navbar">
-		<div class="navbar-left">
-			<a href="#" class="nav-link">About</a> <a href="#" class="nav-link">Facility</a>
-			<a href="#" class="nav-link active">Food</a> <a href="#"
-				class="nav-link">Community</a> <a href="#" class="nav-link">Contact</a>
-		</div>
-		<div class="navbar-center">
-			<span class="logo">YOUTHMAP</span>
-		</div>
-		<div class="navbar-right">
-			<a href="#" class="nav-link">CART</a> <a href="#" class="nav-link">MY
-				PAGE</a> <a href="#" class="nav-link">JOIN</a>
-		</div>
-	</div>
+<!-- 헤더-->
+<%@ include file="/WEB-INF/views/header.jsp" %>
 
 
 

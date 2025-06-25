@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.service.AdminService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.*;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -22,7 +24,7 @@ public class AdminController {
     // 관리자 로그인 페이지 (GET)
     @GetMapping("/login")
     public String adminLoginForm() {
-        return "admin/login"; // templates/admin/login.html
+        return "admin/login";
     }
 
     // 관리자 로그인 처리 (POST)
@@ -32,9 +34,13 @@ public class AdminController {
                                  HttpSession session,
                                  Model model) {
 
-        // 간단한 예시 (나중에 DB 연동 가능)
-        if ("admin".equals(adminId) && "1234".equals(adminPass)) {
+        // DB에서 관리자 로그인 검증
+        if (adminService.validateAdminLogin(adminId, adminPass)) {
             session.setAttribute("adminLogin", true);
+            session.setAttribute("adminId", adminId);
+            // 세션 시간 설정 (30분)
+            session.setMaxInactiveInterval(30 * 60);
+            session.setAttribute("loginStartTime", System.currentTimeMillis());
             return "redirect:/admin/dashboard";
         } else {
             model.addAttribute("error", "아이디 또는 비밀번호가 틀렸습니다.");
@@ -52,6 +58,9 @@ public class AdminController {
         model.addAttribute("userCount", adminService.getUserCount());
         model.addAttribute("postCount", adminService.getPostCount());
         model.addAttribute("commentCount", adminService.getCommentCount());
+        model.addAttribute("restaurantCount", adminService.getRestaurantCount());
+        model.addAttribute("policyCount", adminService.getPolicyCount());
+        model.addAttribute("cultureCount", adminService.getCultureCount());
 
         return "admin/dashboard";
     }
@@ -62,6 +71,5 @@ public class AdminController {
         session.invalidate();
         return "redirect:/admin/login";
     }
-    
 }
 
