@@ -149,6 +149,21 @@ a.card-link {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
    
+   
+   /* 팝업 상단 문구 스타일 */
+    #miniModalHeader {
+      border-bottom:1.5px solid #ececec;
+      padding: 20px 14px 13px 14px;
+      font-size: 1.11em;
+      font-weight: 700;
+      color: #262626;
+      background:rgba(245,240,230,0.95);
+      border-radius: 24px 24px 0 0;
+      letter-spacing: -0.5px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+   
   </style>
 </head>
 <body>
@@ -251,77 +266,64 @@ a.card-link {
  <!-- ❶ jQuery 라이브러리 (한 번만!) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- 미니리스트 결과를 담을 팝업 레이어 -->
+<!-- ======================== -->
+<!--       팝업 레이어        -->
+<!-- ======================== -->
 <div id="miniModal" style="
   display:none; position:fixed; left:0; top:0; width:100vw; height:100vh;
-  z-index:1000; background:rgba(30,40,50,0.11); 
-  backdrop-filter: blur(2.5px);">
-
+  z-index:1000; background:rgba(30,40,50,0.11); backdrop-filter: blur(2.5px);">
   <div style="
     position:absolute; left:50%; top:52%; transform:translate(-50%,-50%);
-    background:#fff;
-    border-radius: 28px;                   /* 더 부드러운 라운드 */
-    box-shadow: 0 10px 38px 0 rgba(30,60,90,0.20), 0 2px 8px 0 rgba(0,0,0,0.07);
-    min-width: 390px; max-width: 540px;    /* 크기 여유 */
-    max-height: 80vh; overflow-y:auto;
-    border: none;
-    padding: 0 0 18px 0;
-    transition: box-shadow 0.2s;
-    ">
+    background:#fff; border-radius:28px;
+    box-shadow:0 10px 38px 0 rgba(30,60,90,0.20), 0 2px 8px 0 rgba(0,0,0,0.07);
+    min-width:390px; max-width:540px; max-height:80vh; overflow-y:auto;
+    border:none; padding:0 0 18px 0;">
     <button id="closeModalBtn" style="
       position:absolute; top:15px; right:16px; z-index:10;
-      background:none; border:none; font-size:2.1rem; color:#b5b5b5; cursor:pointer; transition:color 0.18s;"
-      onmouseover="this.style.color='#008060';"
-      onmouseout="this.style.color='#b5b5b5';"
-    >&times;</button>
-    <!-- 🟡 여기! 문구 박스 추가 -->
-    <div id="miniModalHeader" style="
-      border-bottom:1.5px solid #ececec; 
-      padding:29px 22px 14px 28px; 
-      font-size:1.11em; font-weight:600; color:rgba(40,40,44,0.88);  /* 👈 이 부분만 변경! */ 
-      background:rgba(245,240,230,0.67); 
-      border-radius:28px 28px 0 0;
-      letter-spacing:-1px;
-    ">
-      실시간 인기 콘텐츠
-    </div>
+      background:none; border:none; font-size:2.1rem; color:#b5b5b5; cursor:pointer;">
+      &times;
+    </button>
+    <!-- 🟡 팝업 상단 문구(고정) -->
+    <div id="miniModalHeader">실시간 인기 콘텐츠</div>
+    <!-- 🟡 AJAX로 리스트만 들어옴 -->
     <div id="miniModalContent" style="padding:28px 22px 16px 22px;">
-      <!-- AJAX로 결과 들어옴 -->
+      <!-- AJAX로 콘텐츠 미니리스트만 들어옴 -->
     </div>
   </div>
 </div>
 
-<!-- ❷ 정렬 팝업 AJAX (한 번만!) -->
+<!-- jQuery (한 번만!) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(function(){
-	  $('.sort-nav a').click(function(e){
-	    e.preventDefault();
+  $('.sort-nav a').click(function(e){
+    e.preventDefault();
 
-	    var sort = $(this).data('sort');
-	    var ctx = '${pageContext.request.contextPath}';
-	    var url = ctx + '/allList-mini?sort=' + sort;
+    var sort = $(this).data('sort');
+    var ctx  = '${pageContext.request.contextPath}';
+    var url  = ctx + '/allList-mini?sort=' + sort;
 
-	 // 문구 다르게 세팅
-	    var headerMsg = "실시간 인기 콘텐츠";
-	    if(sort == 'newest')     headerMsg = "최신 등록 콘텐츠";
-	    if(sort == 'endingSoon') headerMsg = "마감 임박 콘텐츠";
-	    $('#miniModalHeader').text(headerMsg); // ← 바로 여기!
+    // 🟡 팝업 상단 문구 변경
+    var headerMsg = "실시간 인기 콘텐츠";
+    if(sort == 'newest')     headerMsg = "최신 등록 콘텐츠";
+    if(sort == 'endingSoon') headerMsg = "마감 임박 콘텐츠";
+    $('#miniModalHeader').text(headerMsg);
 
-	    // AJAX로 mini 데이터 가져와서 팝업에 삽입
-	    $.get(url, function(html){
-	      $('#miniModalContent').html(html);   // ← 여기!
-	      $('#miniModal').fadeIn(180);
-	    });
-	  });
+    // 🟡 AJAX로 리스트만 교체
+    $.get(url, function(html){
+      $('#miniModalContent').html(html);
+      $('#miniModal').fadeIn(180);
+    });
+  });
 
-	  // 팝업 닫기(버튼, 바깥 클릭, ESC)
-	  $('#closeModalBtn, #miniModal').on('click', function(e){
-	    if(e.target === this) $('#miniModal').fadeOut(180);
-	  });
-	  $(document).on('keyup', function(e){
-	    if(e.key === "Escape") $('#miniModal').fadeOut(180);
-	  });
-	});
+  // 팝업 닫기 (버튼, 바깥 클릭, ESC)
+  $('#closeModalBtn, #miniModal').on('click', function(e){
+    if(e.target === this) $('#miniModal').fadeOut(180);
+  });
+  $(document).on('keyup', function(e){
+    if(e.key === "Escape") $('#miniModal').fadeOut(180);
+  });
+});
 </script>
   
 </body>
