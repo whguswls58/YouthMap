@@ -14,6 +14,18 @@
         JOIN member m ON b.mem_no = m.mem_no
     </select>
 
+    <select id="countPostsExcludeNotices" resultType="int">
+        SELECT COUNT(*) FROM board b
+        JOIN member m ON b.mem_no = m.mem_no
+        WHERE b.board_category != '공지'
+    </select>
+
+    <select id="countNotices" resultType="int">
+        SELECT COUNT(*) FROM board b
+        JOIN member m ON b.mem_no = m.mem_no
+        WHERE b.board_category = '공지'
+    </select>
+
     <select id="countComments" resultType="int">
         SELECT COUNT(*) FROM COMMENTS
     </select>
@@ -43,5 +55,22 @@
         FROM member m
         ORDER BY m.mem_date DESC
     </select>	
+    
+    <!-- 관리자 로그인 검증 -->
+    <select id="validateAdminLogin" resultType="com.example.demo.model.MemberModel">
+        SELECT 
+            mem_no AS memNo,
+            mem_id AS memId,
+            mem_pass AS memPass,
+            mem_name AS memName,
+            mem_status AS memStatus,
+            mem_type AS memType,
+            mem_date AS memDate
+        FROM member 
+        WHERE mem_id = #{memId} 
+        AND mem_pass = #{memPass}
+        AND mem_type = 'ADMIN'
+        AND mem_status = 'ACTIVE'
+    </select>
     
 </mapper>

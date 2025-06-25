@@ -12,6 +12,7 @@ import com.example.demo.dao.CommentDao;
 import com.example.demo.model.AdminMemberModel;
 import com.example.demo.model.Board;
 import com.example.demo.model.Comment;
+import com.example.demo.model.MemberModel;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -56,8 +57,7 @@ public class AdminServiceImpl implements AdminService {
     }
     
     
-  
-
+ 
     @Override
     public List<AdminMemberModel> findAllMembers() {
         return adminMapper.findAllMembers();
@@ -79,8 +79,8 @@ public class AdminServiceImpl implements AdminService {
     }
     
     @Override
-    public List<Board> getTopNotices() {
-        return boardDao.getTopNotices();
+    public int getPostCountExcludeNotices() {
+        return adminMapper.countPostsExcludeNotices();
     }
     
     @Override
@@ -100,14 +100,49 @@ public class AdminServiceImpl implements AdminService {
     
     @Override
     public boolean validateAdminLogin(String adminId, String adminPass) {
-        // 하드코딩된 관리자 계정
-        if ("admin".equals(adminId) && "adminabc".equals(adminPass)) {
-            System.out.println("✅ 관리자 로그인 성공: " + adminId);
-            return true;
+        try {
+            MemberModel adminMember = adminMapper.validateAdminLogin(adminId, adminPass);
+            return adminMember != null;
+        } catch (Exception e) {
+            return false;
         }
-        
-        System.out.println("❌ 관리자 로그인 실패: " + adminId);
-        return false;
+    }
+    
+    @Override
+    public MemberModel getAdminInfo(String adminId, String adminPass) {
+        return adminMapper.validateAdminLogin(adminId, adminPass);
+    }
+    
+    // ===== 공지사항 관리 =====
+    
+    @Override
+    public int getNoticeCount() {
+        return adminMapper.countNotices();
+    }
+    
+    @Override
+    public void insertNotice(String boardSubject, String boardContent, Long memNo) {
+        Board notice = new Board();
+        notice.setBoardSubject(boardSubject);
+        notice.setBoardContent(boardContent);
+        notice.setBoardCategory("공지");
+        notice.setMemNo(memNo.intValue());
+        boardDao.insert(notice);
+    }
+    
+    @Override
+    public void updateNotice(int boardNo, String boardSubject, String boardContent) {
+        Board notice = new Board();
+        notice.setBoardNo(boardNo);
+        notice.setBoardSubject(boardSubject);
+        notice.setBoardContent(boardContent);
+        notice.setBoardCategory("공지");
+        boardDao.update(notice);
+    }
+    
+    @Override
+    public void deleteNotice(int boardNo) {
+        boardDao.delete(boardNo);
     }
 
 } 

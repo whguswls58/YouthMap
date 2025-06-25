@@ -23,7 +23,7 @@
 <!-- ✅ 카테고리 탭 메뉴 -->
 <div class="category-tabs">
   <a href="/boardlist" class="${empty category ? 'active' : ''}">전체</a>
-  <a href="/boardlist?category=공지사항" class="${category == '공지사항' ? 'active' : ''}">공지</a>
+  <a href="/boardlist?category=공지" class="${category == '공지' ? 'active' : ''}">공지</a>
   <a href="/boardlist?category=정책" class="${category == '정책' ? 'active' : ''}">정책</a>
   <a href="/boardlist?category=문화" class="${category == '문화' ? 'active' : ''}">문화</a>
   <a href="/boardlist?category=맛집" class="${category == '맛집' ? 'active' : ''}">맛집</a>
@@ -42,16 +42,18 @@
     </tr>
   </thead>
   <tbody>
-    <!-- 🔔 공지사항 -->
-    <c:forEach var="notice" items="${topNotices}">
-      <tr class="notice-row">
-        <td>📢</td>
-        <td>${notice.memName}</td>
-        <td><a href="boardview?no=${notice.boardNo}">[공지] ${notice.boardSubject}</a></td>
-        <td><fmt:formatDate value="${notice.boardDate}" pattern="yyyy.MM.dd"/></td>
-        <td>${notice.boardReadcount}</td>
-      </tr>
-    </c:forEach>
+    <!-- 🔔 공지사항 (전체카테고리에서만 표시) -->
+    <c:if test="${empty category}">
+      <c:forEach var="notice" items="${topNotices}">
+        <tr class="notice-row">
+          <td>📢</td>
+          <td>${notice.memName}</td>
+          <td><a href="boardview?no=${notice.boardNo}">[공지] ${notice.boardSubject}</a></td>
+          <td><fmt:formatDate value="${notice.boardDate}" pattern="yyyy.MM.dd"/></td>
+          <td>${notice.boardReadcount}</td>
+        </tr>
+      </c:forEach>
+    </c:if>
 
     <!-- 📄 일반 게시글 -->
     <c:forEach var="b" items="${boardlist}" varStatus="status">
@@ -134,6 +136,5 @@
   <p>&copy; 2025 YOUTHMAP. All Rights Reserved.<br>Hosting by YOUTHMAP Team</p>
 </div>
 
-<script src="/js/session.js"></script>
 </body>
 </html>
