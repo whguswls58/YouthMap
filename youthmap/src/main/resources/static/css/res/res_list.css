@@ -1,30 +1,4 @@
 @charset "UTF-8";
-body {
-	font-family: 'Playfair Display', serif;
-	margin: 0;
-	padding: 0;
-	background-color: #fff;
-	color: #333;
-}
-/* 상단 베이지 바 */
-.topbar {
-	background: #f5f0e6;
-	padding: 10px 40px;
-}
-
-.topbar .menu {
-	max-width: 1200px;
-	margin: 0 auto;
-	display: flex;
-	justify-content: flex-end;
-	gap: 20px;
-	font-size: 14px;
-}
-
-.topbar .menu a {
-	color: #444;
-	text-decoration: none;
-}
 /* Hero */
 .hero {
   display: flex;
@@ -73,48 +47,6 @@ body {
   /* 알파 값을 0.1~0.2 정도로 줄이면 거의 투명해집니다 */
   background: rgba(255,255,255,0.1);
   z-index: 0;
-}
-/* 네비게이션 */
-.navbar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 18px 40px;
-	background: #fff;
-	position: sticky;
-	top: 0;
-	z-index: 1000;
-	border-bottom: 1px solid #eee;
-}
-
-.navbar-left, .navbar-right {
-	display: flex;
-	gap: 18px;
-}
-
-.navbar-center {
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-}
-
-.nav-link {
-	font-size: 15px;
-	color: #222;
-	text-decoration: none;
-}
-
-.nav-link:hover, .nav-link.active {
-	border-bottom: 2px solid #222;
-	padding-bottom: 2px;
-}
-
-.logo {
-	font-size: 20px;
-	font-weight: bold;
-	letter-spacing: 1px;
-	color: #111;
-	font-family: 'Playfair Display', serif;
 }
 
 /* 검색 래퍼 */

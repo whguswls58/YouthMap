@@ -143,13 +143,13 @@ a.card-link {
     }
     
 </style>
-
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" />
 </head>
 <body>
 <!-- 헤더-->
 <%@ include file="/WEB-INF/views/header.jsp" %>
-  <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
-  <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
+<%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
+<%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
 
 <div id="card-container">
   <!-- 카드 그리드 -->

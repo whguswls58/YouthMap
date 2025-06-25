@@ -9,7 +9,7 @@
   
   <!-- Swiper CSS -->
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
-  
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 
  
 </head>

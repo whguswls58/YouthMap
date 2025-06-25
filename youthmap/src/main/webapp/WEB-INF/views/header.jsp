@@ -31,9 +31,9 @@
   <div class="nav-item">
     <a href="/policyMain" class="nav-link">Policy</a>
     <div class="dropdown">
-        <a href="/policyMain?mainCategory=일자리">일자리</a>
-        <a href="/policyMain?mainCategory=주거">주거</a>
-        <a href="/policyMain?mainCategory=교육">교육</a>
+        <a href="/policyMain?selectedCategory=일자리">일자리</a>
+        <a href="/policyMain?selectedCategory=주거">주거</a>
+        <a href="/policyMain?selectedCategory=교육">교육</a>
       </div>
       </div>
       <div class="nav-item">
