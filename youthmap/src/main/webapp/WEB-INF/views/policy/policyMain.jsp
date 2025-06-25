@@ -503,7 +503,7 @@ a:hover {
 <div class="navbar">
   	<div class="navbar-left">
 		<a href="#" class="nav-link">About</a>
-	    <a href="policyMain" class="nav-link">Facility</a>
+	    <a href="${pageContext.request.contextPath}/policyMain?selectedCategory=일자리" class="nav-link">Facility</a>
 	    <a href="#" class="nav-link active">Food</a>
 	    <a href="#" class="nav-link">Community</a>
 		<a href="#" class="nav-link">Contact</a>
@@ -548,7 +548,6 @@ a:hover {
 						  	<label class="btn btn-default btn-pill">
 						    	<input type="checkbox" name="${cat.name}" value="${sub}" />
 						        <span class="check-icon">✔</span> ${sub}
-						        <script>console.log("${sub}")</script>
 						     </label>
 						</c:forEach>
 					</div>
@@ -655,8 +654,6 @@ a:hover {
 	    master.addEventListener('change', () => {
 	      const category = master.dataset.target;
 	      const check = master.checked;
-		  console.log(category);
-		  console.log(check);
 	      const group = document.querySelector(`.subcategory-group[data-category="\${category}"]`);
 	      if (!group) return;
 	
@@ -960,21 +957,21 @@ a:hover {
 		      "${cat}"<c:if test="${!status.last}">, </c:if>
 		    </c:forEach>
 		  ];
-		console.log(selectedCategories);
 
+		// 유효한 카테고리 값이 있을 때만 수행
 		if (selectedCategories.length > 0 && selectedCategories[0] !== "") {
 			selectedCategories.forEach(cat => {
-			    const checkbox = document.querySelector(`input[type="checkbox"][value="${cat}"]`);
+			    const checkbox = document.querySelector(`input[type="checkbox"][value="\${cat}"]`);
 			    if (checkbox) {
 			      checkbox.checked = true;
-			      checkbox.closest("label").classList.add("active");
+			      checkbox.closest("label").classList.add("active");		// CSS에서 시각적으로 선택된 버튼 스타일을 적용
 	
-			      // 해당 카테고리의 전체 체크박스도 동기화 시도
+			      // 해당 카테고리의 전체 체크박스도 동기화
 			      const group = checkbox.closest(".subcategory-group");
 			      if (group) {
 			        const category = group.dataset.category;
-			        const allChecked = [...group.querySelectorAll(`input[type="checkbox"][name="${category}"]`)].every(box => box.checked);
-			        const master = document.querySelector(`.check-all[data-target="${category}"]`);
+			        const allChecked = [...group.querySelectorAll(`input[type="checkbox"][name="\${category}"]`)].every(box => box.checked);
+			        const master = document.querySelector(`.check-all[data-target="\${category}"]`);
 			        if (master) master.checked = allChecked;
 			      }
 			    }
@@ -990,14 +987,10 @@ a:hover {
 	
     // 검색어 및 카테고리 상태 저장
     function submitSearchForm(event) {
-//     	  event.preventDefault();	// 기본 이동 막기
-
     	  // 현재 검색어 상태 저장
     	  currentSearchInput = document.querySelector('input[name="searchInput"]').value;	// 현재 검색어
     	  currentMainCategory = document.querySelector('input[name="mainCategory"]').value;	// 대분류
     	  selectedCategories = collectSelectedCategories();		// 선택된 카테고리
-    	  
-    	  console.log("selectedCategories : " + selectedCategories);
     	  
     	  // 첫 페이지로 검색
     	  loadPage(1);
@@ -1013,8 +1006,6 @@ a:hover {
 			selectedValues.push(cb.value);
 		});
 		
-		console.log(selectedValues);
-
 		return selectedValues;
 	}
     
@@ -1056,12 +1047,8 @@ const swiper = new Swiper('.swiper-container', {
       delay: 0,
       disableOnInteraction: false
     },
-    freeMode: true,            // 자연스럽게 끊김 없이 흘러감
-    grabCursor: true,          // 마우스 커서 변경 (UX 개선)
-// 	pagination: {
-// 	  el: '.swiper-pagination',
-// 	  clickable: true
-// 	},
+    freeMode: true,            		// 자연스럽게 끊김 없이 흘러감
+    grabCursor: true,          		// 마우스 커서 변경 (UX 개선)
 	navigation: {
 	  nextEl: '.swiper-button-next',
 	  prevEl: '.swiper-button-prev',
@@ -1069,9 +1056,7 @@ const swiper = new Swiper('.swiper-container', {
 	breakpoints: {
 	  0:  { slidesPerView: 1 },
 	  640:  { slidesPerView: 2 },
-// 	  768:  { slidesPerView: 3 },
 	  1024: { slidesPerView: 3 },
-// 	  1440: { slidesPerView: 5 }
 	}
 });
 </script>
