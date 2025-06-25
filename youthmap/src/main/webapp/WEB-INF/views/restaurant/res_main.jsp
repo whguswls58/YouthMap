@@ -202,14 +202,18 @@
               ? r.photo
               : 'https://dummyimage.com/80x80/cccccc/fff&text=No+Image';
 
-              const infoHtml = 
-            	    '<div style="width:220px;padding:18px;border-radius:14px;background:#fff;">' +
-            	      '<a href="restaurantDetail?res_id=' + r.id + '" style="text-decoration:none;">' +
-            	        '<img src="' + photoUrl + '" style="width:100%;height:110px;object-fit:cover;border-radius:8px;">' +
-            	        '<div style="font-weight:bold;margin-top:10px;color:#222;">' + r.name + '</div>' +
-            	      '</a>' +
-            	    '</div>';
-                
+              const infoHtml =
+            	  '<div style="width:180px; padding:12px; border-radius:14px; background:#fff;">' +
+            	    '<a href="restaurantDetail?res_id=' + r.id + '"' +
+            	       ' style="text-decoration:none; color:inherit; outline:none;">' +
+            	      '<img src="' + photoUrl + '" ' +
+            	           'style="width:100%; height:90px; object-fit:cover; border-radius:8px;">' +
+            	      '<div style="font-weight:bold; margin-top:8px; color:#222;">' +
+            	        r.name +
+            	      '</div>' +
+            	    '</a>' +
+            	  '</div>';
+            	  
                 const infowindow = new google.maps.InfoWindow({content:infoHtml});
               marker.addListener('mouseover', ()=>infowindow.open(map,marker));
               marker.addListener('mouseout', ()=>infowindow.close());

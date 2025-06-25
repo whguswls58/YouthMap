@@ -114,7 +114,7 @@ body {
 .hero-banner {
 	width: 100vw; /* 화면 전체 */
 	height: 500px; /* 원하는 높이 조절 */
-	background-image: url('/images/c.jpeg'); /* 실제 이미지 경로 */
+	background-image: url('/images/food2.jpeg'); /* 실제 이미지 경로 */
 	background-size: cover;
 	background-position: center center;
 	background-repeat: no-repeat;
@@ -135,7 +135,7 @@ body {
 	width: 100%;
 	height: 100%;
 	/* 알파 값을 0.1~0.2 정도로 줄이면 거의 투명해집니다 */
-	/*   background: rgba(255,255,255,0.1); */
+	  background: rgba(255,255,255,0.1); 
 	z-index: 0;
 }
 
