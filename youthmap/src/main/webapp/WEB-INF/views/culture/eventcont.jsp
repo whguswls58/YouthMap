@@ -11,101 +11,11 @@
 
   <!-- ① 카카오 JS SDK: YOUR_APP_KEY 부분에 자바스크립트 키를 넣으세요 -->
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= KakaoKeyUtil.getApiKey() %>&libraries=services"></script>
- 
-  <style>
-    body { font-family:sans-serif; margin:0; padding:0 }
-    .containerer { max-width:960px; margin:20px auto; padding:0 16px }
-    h2 { text-align:center; margin-bottom:24px; }
-    .detail-flex { display:flex; gap:24px; margin-bottom:32px; }
-    .thumb { flex:0 0 300px; border:1px solid #ccc; border-radius:8px; overflow:hidden }
-    .thumb img { width:100%; display:block }
-    .detail-table { flex:1; border-collapse:collapse; width:100% }
-    .detail-table th {
-      width:120px; background:#f5f5f5;
-      text-align:center; padding:12px 8px; border:1px solid #ddd;
-    } 
-    .detail-table td {
-      padding:12px 8px; border:1px solid #ddd;
-    }
-    .detail-table tr+tr th,
-    .detail-table tr+tr td {
-      border-top:none;  /* 첫 행만 윗줄 */
-    }
-    #map {
-      width:100%; height:300px;
-      margin:20px auto;
-      border:10px solid #f5f0e6; border-radius:16px;
-    }
-    .back-link {
-  display: inline-block;
-  margin: 1px auto;
-  padding: 8px 16px;
-  background: #888;    /* 연한 회색 >>회색 */
-  color:   #fff;          /* 약간 진한 회색 텍스트 >> 흰색 */
-  text-decoration: none;
-  border-radius: 4px;
-}
-    .back-container { text-align:center }
-    
-    .visitor-review-container {
-    width:102%;
-    margin: 20px auto;
-    border: 3px solid #f5f0e6;	/* #ced4da; 연한회색*/
-    border-radius: 10px;
-    padding: 24px;
-    box-sizing: border-box;
-}
-    
-  </style>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/cont.css">
 </head>
 <body>
 <!-- 헤더-->
 <%@ include file="/WEB-INF/views/header.jsp" %>
-
-
-<div align="center" style="margin:20px 0;">
-	<button onclick="location.href='allList'" style=" width:100px; height:26px; line-height:26px; text-align:center; 
-            font-size:18px; margin:0 8px; cursor:pointer;">
-      전체 목록
-    </button>
-  <button type="button" onclick="location.href='exhibitionlist'"
-            style="
-            width:100px;
-            height:26px;
-            line-height:26px;			/* 버튼 높이랑 같게 */
-            text-align:center;
-            font-size:18px;
-            margin:0 8px;
-            cursor:pointer;">
-    전시/미술
-  </button>
-
-  <button type="button" onclick="location.href='performancelist'"
-	  style="
-          width:100px;
-          height:26px;
-          line-height:26px;
-          text-align:center;
-          font-size:18px;
-          margin:0 8px;
-          cursor:pointer; ">
-    공연
-  </button>
-
-  <button type="button" onclick="location.href='eventlist'"
-          style="
-            width:100px;
-            height:26px;
-            line-height:26px;
-            text-align:center;
-            font-size:18px;
-            margin:0 8px;
-            cursor:pointer; ">
-    축제/행사
-  </button>
-</div><br><hr>
-
-
 
 <c:set var="ctx" value="${pageContext.request.contextPath }"/>
 
@@ -145,12 +55,12 @@
       </table>
     </div>
 
-<!-- 뒤로가기 -->
-       <div class="back-container">
-      <a class="back-link" href="${ctx }eventlist?page=${page}">
-        ← 목록으로 돌아가기
-      </a>
-    </div>
+		<!-- 뒤로가기 -->
+     <div class="back-container">
+ 		 <a class="back-link" href="#" onclick="history.go(-1); return false;">
+ 		   ← 목록으로 돌아가기
+ 		 </a>
+	</div>
 
 
     <!-- ② 지도 표시 영역 -->

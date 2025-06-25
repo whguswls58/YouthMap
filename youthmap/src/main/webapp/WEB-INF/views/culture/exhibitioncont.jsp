@@ -2,7 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.example.demo.util.KakaoKeyUtil" %>
 
-<%-- <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %> --%>
+<%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
+  <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
+
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -14,100 +16,47 @@
 
   <!-- ① 카카오 JS SDK: YOUR_APP_KEY 부분에 자바스크립트 키를 넣으세요 -->
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= KakaoKeyUtil.getApiKey() %>&libraries=services"></script>
- 
-  <style>
-   body { font-family:sans-serif; margin:0; padding:0 }
-    .containerer { max-width:960px; margin:20px auto; padding:0 16px }
-    h2 { text-align:center; margin-bottom:24px; }
-    .detail-flex { display:flex; gap:24px; margin-bottom:32px; }
-    .thumb { flex:0 0 300px; border:1px solid #ccc; border-radius:8px; overflow:hidden }
-    .thumb img { width:100%; display:block }
-    .detail-table { flex:1; border-collapse:collapse; width:100% }
-    .detail-table th {
-      width:120px; background:#f5f5f5;
-      text-align:center; padding:12px 8px; border:1px solid #ddd;
-    } 
-    .detail-table td {
-      padding:12px 8px; border:1px solid #ddd;
-    }
-    .detail-table tr+tr th,
-    .detail-table tr+tr td {
-      border-top:none;  /* 첫 행만 윗줄 */
-    }
-    #map {
-      width:100%; height:300px;
-      margin:20px auto;
-      border:10px solid #f5f0e6; border-radius:16px;
-    }
-    .back-link {
-  display: inline-block;
-  margin: 1px auto;
-  padding: 8px 16px;
-  background: #888;    /* 연한 회색 >>회색 */
-  color:   #fff;          /* 약간 진한 회색 텍스트 >> 흰색 */
-  text-decoration: none;
-  border-radius: 4px;
-}
-    .back-container { text-align:center }
-    
-    .visitor-review-container {
-    width:102%;
-    margin: 20px auto;
-    border: 3px solid #f5f0e6;	/* #ced4da; 연한회색*/
-    border-radius: 10px;
-    padding: 24px;
-    box-sizing: border-box;
-}
-  </style>
-</head>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/cont.css">
 
+<style>
+
+.content-category {
+  margin-bottom: 14px;
+  text-align: center; /* or center, 위치에 따라 */
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.95em;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: 12px;
+  background: #eef6f2;        /* 카테고리에 따라 바꿔도 좋음 */
+  color: #008060;
+  letter-spacing: -0.4px;
+  border: none;
+  box-shadow: none;
+  vertical-align: middle;
+}
+}
+</style>
+</head>
 <body>
 <!-- 헤더-->
 <%@ include file="/WEB-INF/views/header.jsp" %>
 
-<div align="center" style="margin:20px 0;">
-  
-  <button onclick="location.href='allList'" style=" width:100px; height:26px; line-height:26px; text-align:center; 
-            font-size:18px; margin:0 8px; cursor:pointer;">
-      전체 목록
-    </button>
-  <button type="button" onclick="location.href='exhibitionlist'"
-            style=" width:100px; height:26px; line-height:26px; text-align:center; 
-            font-size:18px; margin:0 8px; cursor:pointer;">
-    전시/미술
-  </button>
-
-  <button type="button" onclick="location.href='performancelist'"
-	  style="
-          width:100px;
-          height:26px;
-          line-height:26px;
-          text-align:center;
-          font-size:18px;
-          margin:0 8px;
-          cursor:pointer; ">
-    공연
-  </button>
-
-  <button type="button" onclick="location.href='eventlist'"
-          style="
-            width:100px;
-            height:26px;
-            line-height:26px;
-            text-align:center;
-            font-size:18px;
-            margin:0 8px;
-            cursor:pointer; ">
-    축제/행사
-  </button>
-</div><br><hr>
-
-
-
+<hr>
   <!-- ② 모델로 넘어온 단일 객체를 cul 변수로 셋업 -->
   <c:set var="cul" value="${exhibitioncont}" />
 
   <div class="containerer">
+  
+   <div class="content-category">
+  <span class="badge exhibitionlist">전시/미술</span>
+</div>
+
+	
+	
     <!-- 제목 -->
     <h2>${cul.con_title}</h2>
 
@@ -167,10 +116,10 @@
 
     <!-- 뒤로가기 -->
     <div class="back-container">
-      <a class="back-link" href="${ctx }exhibitionlist?page=${page}">
-        ← 목록으로 돌아가기
-      </a>
-    </div>
+  		<a class="back-link" href="#" onclick="history.go(-1); return false;">
+  		  ← 목록으로 돌아가기
+ 		 </a>
+	</div>
 
   
   
