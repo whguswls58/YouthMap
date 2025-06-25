@@ -168,9 +168,9 @@ a.card-link {
 </head>
 <body>
 
+<%@ include file="/WEB-INF/views/header.jsp" %>
 <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
 <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
-<%@ include file="/WEB-INF/views/header.jsp" %>
 
 <div id="card-container">
   <!-- 카드 그리드 -->

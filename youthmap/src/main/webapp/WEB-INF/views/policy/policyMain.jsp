@@ -43,9 +43,9 @@
 					<div class="category-header">
 				    	<img src="${pageContext.request.contextPath}/policy/policyIcon/${cat.icon}" width="40" />
 				      	<p><strong>${cat.name}</strong></p>
-						<label>
-							<input type="checkbox" class="check-all" data-target="${cat.name}" /> 전체
-						</label>
+<!-- 						<label> -->
+<%-- 							<input type="checkbox" class="check-all" data-target="${cat.name}" /> 전체 --%>
+<!-- 						</label> -->
 					</div>
 					<div class="btn-group-vertical subcategory-group" data-category="${cat.name}" data-toggle="buttons">
 						<c:forEach var="sub" items="${cat.subcategories}">
@@ -114,10 +114,10 @@
 	            </div>
 	        </a>
 	         <!-- 자세히 보기 버튼 -->
-	        <a href="${pageContext.request.contextPath}/policyContent?page=${page}&plcy_no=${p.plcy_no}"
-	           class="detail-btn">
-	            자세히보기
-	        </a>
+<%-- 	        <a href="${pageContext.request.contextPath}/policyContent?page=${page}&plcy_no=${p.plcy_no}" --%>
+<!-- 	           class="detail-btn"> -->
+<!-- 	            자세히보기 -->
+<!-- 	        </a> -->
 
 	        <!-- 키워드 태그 -->
 	        <div class="policy-tags">
