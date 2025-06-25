@@ -1,14 +1,5 @@
 @charset "UTF-8";
 
-/* 메인 정책 상세 페이지 스타일 - 순수 CSS 기반 */
-body {
-  font-family: 'Playfair Display', serif;
-  margin: 0;
-  padding: 0;
-  background-color: #fff;
-  color: #333;
-}
-
 /* 전체 컨테이너 */
 .policy-container {
   display: flex;
@@ -171,68 +162,6 @@ footer {
   margin-top: 40px;
 }
 
-/* 상단 바 */
-.topbar2 {
-  background: #f5f0e6;
-  padding: 10px 40px;
-}
-.topbar2 .menu {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: flex-end;
-  gap: 20px;
-  font-size: 14px;
-}
-.topbar2 .menu a {
-  color: #444;
-  text-decoration: none;
-}
-
-.navbar2 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 40px;
-  background: #fff;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  border-bottom: 1px solid #eee;
-}
-
-.navbar2-left,
-.navbar2-right {
-  display: flex;
-  gap: 18px;
-}
-
-.navbar2-center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.nav-link {
-  font-size: 15px;
-  color: #222;
-  text-decoration: none;
-}
-
-.nav-link:hover,
-.nav-link.active {
-  border-bottom: 2px solid #222;
-  padding-bottom: 2px;
-}
-
-.logo {
-  font-size: 20px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  color: #111;
-  font-family: 'Playfair Display', serif;
-}
-
 /* 반응형 */
 @media (max-width: 768px) {
   .policy-container {
@@ -243,21 +172,6 @@ footer {
     position: static;
     transform: none;
     margin-bottom: 20px;
-  }
-  .navbar2 {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .navbar2-left,
-  .navbar2-right,
-  .navbar2-center {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .navbar2-center {
-    position: static;
-    transform: none;
-    margin-top: 10px;
   }
   .policy-table {
     width: 100%;
