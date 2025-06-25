@@ -179,6 +179,7 @@ a.card-link {
   </c:if>
 
   <c:if test="${!empty allList}">
+  
     <c:forEach var="item" items="${allList}">
 	<div class="card">
       <!-- 상세페이지 URL 설정 -->
@@ -232,6 +233,7 @@ a.card-link {
           <div class="location">${item.con_location}</div>
         </div>
     </div>
+    
     </c:forEach>
   </c:if>
 </div>

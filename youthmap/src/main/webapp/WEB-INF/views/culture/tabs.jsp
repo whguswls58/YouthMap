@@ -102,7 +102,8 @@
   background-color: black;
 }
 </style>
-
+</head>
+<body>
 <!-- ========================= -->
 <!-- Tabs with Sort Links     -->
 <!-- ========================= -->
@@ -147,32 +148,54 @@
       background:none; border:none; font-size:2.1rem; color:#b5b5b5; cursor:pointer;">
       &times;
     </button>
+    <!-- ★★ 팝업 상단 문구 header 추가! ★★ -->
+    <div id="miniModalHeader"
+         style="border-bottom:1.5px solid #ececec; padding:24px 18px 14px 28px; font-size:1.13em; font-weight:700; color:#333; background:rgba(245,240,230,0.94); border-radius:24px 24px 0 0; letter-spacing:-1px; text-align:left; box-shadow:0 2px 4px rgba(0,0,0,0.04);">
+      실시간 인기 콘텐츠
+    </div>
     <div id="miniModalContent" style="padding:38px 22px 16px 22px;"></div>
   </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- 직접 작성한 팝업/정렬 스크립트 -->
 <script>
 $(function() {
   $('.sort-nav a').click(function(e) {
     e.preventDefault();
-
     var sort = $(this).data('sort');
     var ctx  = '${pageContext.request.contextPath}';
     var url  = ctx + '/allList-mini?sort=' + sort;
 
+    // 동적 header 변경
+    var headerMsg = "실시간 인기 콘텐츠";
+    if(sort === "newest") headerMsg = "최신 등록 콘텐츠";
+    if(sort === "endingSoon") headerMsg = "마감 임박 콘텐츠";
+    $('#miniModalHeader').text(headerMsg);
+
+    // 탭 UI 동적 표시
+    $('.sort-nav a').removeClass('active');
+    $(this).addClass('active');
+
     $.get(url, function(html) {
       $('#miniModalContent').html(html);
       $('#miniModal').fadeIn(180);
+      $('body').css('overflow','hidden');
     });
   });
 
   $('#closeModalBtn, #miniModal').on('click', function(e){
-    if(e.target === this) $('#miniModal').fadeOut(180);
+    if(e.target === this) {
+      $('#miniModal').fadeOut(180);
+      $('body').css('overflow','auto');
+    }
   });
 
   $(document).on('keyup', function(e){
-    if(e.key === "Escape") $('#miniModal').fadeOut(180);
+    if(e.key === "Escape") {
+      $('#miniModal').fadeOut(180);
+      $('body').css('overflow','auto');
+    }
   });
 });
 </script>

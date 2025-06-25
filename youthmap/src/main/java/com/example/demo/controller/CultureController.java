@@ -105,16 +105,14 @@ public class CultureController {
 		List<CultureModel> exhibitionlist = service.getexhibitionlist(culMd);
 //		  System.out.println(">>> exhibition.size() = " + exhibition.size());
 
-		// 3) 새로 추가한 필드 세팅
+		// 3) 새로 추가한 필드 세팅   >>  팝업창 정렬조건
         culMd.setSort     (sort);      // mostViewed / newest / endingSoon
-        culMd.setStartRow (startRow);
-        culMd.setEndRow   (endRow);
 
 		// 총 페이지 수 (10개씩 묶는 건 페이지 번호 블록 크기이지, 한 페이지 아이템 수가 아님)
-		int pagecount = listcount / limit + (listcount % 10 == 0 ? 0 : 1);
+		int pagecount = (listcount + limit - 1) / limit;
 
 		// 페이지 번호 블록 계산 (한 블록에 10페이지)
-		int startpage = ((page - 1) / 10) * limit + 1;
+		int startpage = ((page - 1) / 10) * 10 + 1;
 		int endpage = startpage + 10 - 1;
 
 		if (endpage > pagecount)
@@ -122,7 +120,6 @@ public class CultureController {
 
 		model.addAttribute("exhibitionlist", exhibitionlist);
 		model.addAttribute("page", page);
-//		model.addAttribute("con_id", con_id);
 		model.addAttribute("listcount", listcount);
 		model.addAttribute("pagecount", pagecount);
 		model.addAttribute("startpage", startpage);
@@ -285,22 +282,20 @@ public class CultureController {
 		int limit = 12;
 		int startRow = (page - 1) * limit + 1;
 		int endRow = page * limit;
+		
 		culMd.setStartRow(startRow);
 		culMd.setEndRow(endRow);
-//		culMd.setCon_age("누구나");
 
 		service.addReadCount(culMd);
 		
 		// 3) 새로 추가한 필드 세팅
         culMd.setSort     (sort);      // mostViewed / newest / endingSoon
-        culMd.setStartRow (startRow);
-        culMd.setEndRow   (endRow);
 		
 		// 서비스에서 공연만 조회해 주는 메서드
 		List<CultureModel> performancelist = service.getperformancelist(culMd);
 
 		int listcount = service.count2(culMd);
-		int pagecount = listcount / limit + (listcount % limit == 0 ? 0 : 1);
+		int pagecount = (listcount + limit - 1) / limit;
 		int startpage = ((page - 1) / 10) * 10 + 1;
 		int endpage = Math.min(startpage + 9, pagecount);
 
@@ -493,7 +488,7 @@ public class CultureController {
 		List<CultureModel> eventlist = service.geteventlist(culMd);
 
 		int listcount = service.count3(culMd);
-		int pagecount = listcount / limit + (listcount % limit == 0 ? 0 : 1);
+		int pagecount = (listcount + limit - 1) / limit;
 		int startpage = ((page - 1) / 10) * 10 + 1;
 		int endpage = Math.min(startpage + 9, pagecount);
 
@@ -804,11 +799,24 @@ public class CultureController {
 		List<CultureModel> allList = service.getallList(culMd);
 //				  System.out.println(">>> exhibition.size() = " + exhibition.size());
 
+		System.out.println("=== 페이지네이션 체크 ===");
+		System.out.println("현재 page: " + page);
+		System.out.println("startRow: " + startRow);
+		System.out.println("endRow: " + endRow);
+		System.out.println("sort: " + sort);
+		System.out.println("allList.size(): " + allList.size());
+
+		for (CultureModel c : allList) {
+		    System.out.print(c.getCon_id() + ", ");
+		}
+		System.out.println("\n=====================");
+		
+		
 		// 총 페이지 수 (10개씩 묶는 건 페이지 번호 블록 크기이지, 한 페이지 아이템 수가 아님)
-		int pagecount = listcount / limit + (listcount % 10 == 0 ? 0 : 1);
-//		int pagecount = (listcount + limit - 1) / limit;
+//		int pagecount = listcount / limit + (listcount % 10 == 0 ? 0 : 1);
+		int pagecount = (listcount + limit - 1) / limit;
 		// 페이지 번호 블록 계산 (한 블록에 10페이지)
-		int startpage = ((page - 1) / 10) * limit + 1;
+		int startpage = ((page - 1) / 10) * 10 + 1;
 		int endpage = startpage + 10 - 1;
 
 		if (endpage > pagecount)
@@ -830,6 +838,10 @@ public class CultureController {
 //				// 검색
 //				model.addAttribute("search", culMd.getSearch());
 //				model.addAttribute("keyword", culMd.getKeyword());
+		
+		System.out.println("pagecount = " + pagecount);
+		System.out.println("startpage = " + startpage);
+		System.out.println("endpage = " + endpage);
 
 		return "culture/allList";
 	}

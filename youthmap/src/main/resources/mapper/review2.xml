@@ -14,7 +14,7 @@
     <result column="review_register2" property="review_register2"/>
     <result column="mem_no"          property="mem_no"/>
     <result column="con_id"          property="con_id"/>
-    <result column="review_writer" property="review_writer"/>
+    <result column="review_writer2" property="review_writer2"/>
     
   </resultMap>
 
@@ -30,7 +30,7 @@
           review_register2,
           mem_no,
           con_id,
-          review_writer
+          review_writer2
         FROM review2
         WHERE con_id = #{con_id}
         ORDER BY review_register2 DESC
@@ -50,7 +50,7 @@
       review_register2,
       mem_no,
       con_id,
-      review_writer
+      review_writer2
     ) VALUES (
       review2_seq.NEXTVAL,
       #{review_score2},
@@ -59,7 +59,7 @@
       SYSDATE,
       1,
       #{con_id},
-      #{review_writer, jdbcType=VARCHAR}
+      #{review_writer2, jdbcType=VARCHAR}
     )
   </insert>
 
@@ -69,7 +69,7 @@
        SET review_score2   = #{review_score2},
            review_content2 = #{review_content2},
            review_file2    = #{review_file2, jdbcType=VARCHAR},
-           review_writer	=  #{review_writer, jdbcType=VARCHAR}
+           review_writer2	=  #{review_writer2, jdbcType=VARCHAR}
      WHERE review_id2 = #{review_id2}
   </update>
 
@@ -89,7 +89,7 @@
       review_register2,
       mem_no,
       con_id,
-      review_writer
+      review_writer2
     FROM review2
     WHERE review_id2 = #{review_id2}
   </select>
