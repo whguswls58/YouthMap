@@ -135,7 +135,7 @@
   </where>
 </select>
 
-<!-- 전체 리스트 getallList -->
+<!-- 전체 리스트 페이징처리getallList -->
 <select id="getallList" parameterType="culture" resultType="culture">
   SELECT * FROM (
     SELECT a.*, ROWNUM rnum FROM (
@@ -168,7 +168,13 @@
           </choose>
         </if>
       </where>
-      ORDER BY con_start_date ASC
+      <!-- 정렬 분기 -->
+      <choose>
+        <when test="sort=='mostViewed'">ORDER BY con_readcount DESC</when>
+        <when test="sort=='newest'">    ORDER BY con_regdate   DESC</when>
+        <when test="sort=='endingSoon'">ORDER BY con_end_date  ASC</when>
+        <otherwise>                     ORDER BY con_start_date ASC</otherwise>
+      </choose>
     ) a
     WHERE ROWNUM &lt;= #{endRow}
   )
@@ -465,6 +471,63 @@
 	))
 
 </select>
+
+<update id="addReadCount" parameterType="int">
+	update culture
+	set con_readcount = con_readcount + 1
+	where con_id = #{con_id}
+</update>
+
+<!-- 공통 정렬 로직: 조회(인기)순/ 최신(등록)순/ 마감임박 -->
+  <sql id="sortOrder">
+    <choose>
+      <!-- 조회수가 많은 순 -->
+      <when test="sort == 'mostViewed'">
+        ORDER BY con_readcount DESC
+      </when>
+      <!-- 방금 등록된 순 -->
+      <when test="sort == 'newest'">
+        ORDER BY con_regdate DESC
+      </when>
+      <!-- 곧 마감되는 순 -->
+      <when test="sort == 'endingSoon'">
+        ORDER BY con_end_date ASC
+      </when>
+      <!-- 기본: 최신순 -->
+      <otherwise>
+        ORDER BY con_regdate DESC
+      </otherwise>
+    </choose>
+  </sql>
+
+<!-- 팝업창 - 전체용 -->
+<select id="getallListMini" parameterType="string" resultType="culture">
+    SELECT * FROM (
+      SELECT
+        category_name,
+        con_id,
+        con_img,
+        con_title,
+        con_start_date,
+        con_end_date,
+        con_location
+      FROM culture
+      <where>
+        category_name IN (
+          '전시/미술','콘서트','연극','뮤지컬/오페라','국악', '독주회', '클래식','무용',
+          '축제-기타','축제-시민화합','축제-자연/경관','축제-문화/예술'
+        )
+        AND con_end_date >= TRUNC(SYSDATE)
+      </where>
+      <choose>
+        <when test="_parameter == 'mostViewed'">ORDER BY con_readcount DESC</when>
+        <when test="_parameter == 'newest'">    ORDER BY con_regdate   DESC</when>
+        <when test="_parameter == 'endingSoon'">ORDER BY con_end_date  ASC</when>
+        <otherwise>                             ORDER BY con_start_date ASC</otherwise>
+      </choose>
+    )
+    WHERE ROWNUM &lt;= 7
+  </select>
 
 
 </mapper>

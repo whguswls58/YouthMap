@@ -12,36 +12,11 @@
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/policy/policy-main.css" />
+
 </head>
 <body>
-<!-- 상단 베이지 바 -->
-<div class="topbar">
-	<div class="menu">
-    	<a href="#">CART</a>
-	    <a href="#">MY PAGE</a>
-	    <a href="#">JOIN</a>
-  	</div>
-</div>
-
-<!--  네비게이션 구조 -->
-<div class="navbar">
-  	<div class="navbar-left">
-		<a href="#" class="nav-link">About</a>
-	    <a href="${pageContext.request.contextPath}/policyMain?selectedCategory=일자리" class="nav-link">Facility</a>
-	    <a href="#" class="nav-link active">Food</a>
-	    <a href="#" class="nav-link">Community</a>
-		<a href="#" class="nav-link">Contact</a>
-  	</div>
- 	<div class="navbar-center">
-  		<span class="logo">YOUTHMAP</span>
-  	</div>
-  	<div class="navbar-right">
-	    <a href="#" class="nav-link">CART</a>
-	    <a href="#" class="nav-link">MY PAGE</a>
-	    <a href="#" class="nav-link">JOIN</a>
-  	</div>
-</div>
-	<br>
+<!-- 헤더-->
+<%@ include file="/WEB-INF/views/header.jsp" %>
 
 <div class="search-wrapper">
 	<form onsubmit="return submitSearchForm(event);" class="search-bar" method="get" >
@@ -171,11 +146,6 @@
 <!-- 검색 결과 페이징 처리 -->
 <div id="pagination" class="pagination hidden" style="text-align:center; margin-top: 20px;"></div>
 
-
-
-<!-- Swiper JS -->
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
 <script>
 	<!-- 파일 경로 전역변수 -->
   	const contextPath = "${pageContext.request.contextPath}";
@@ -185,9 +155,16 @@
    	    "${cat}"<c:if test="${!status.last}">, </c:if>
    	  </c:forEach>
    	];
+   	console.log("main.jsp 출력 : " + selectedCategories);
 </script>
 <!-- 메인 script -->
 <script src="${pageContext.request.contextPath}/js/policy-main.js"></script>
+
+
+<!-- Swiper JS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+
 
 </body>
 </html>

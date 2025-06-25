@@ -3,7 +3,8 @@
 <html>
 <head>
 <title>${restaurant.res_subject}- 상세 정보</title>
- <script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+<script>
     // 모든 사진 배열 생성 (대표 + 여분)
     const photos = [
       '<c:out value="${restaurant.res_photo_url}" escapeXml="false"/>'
@@ -64,60 +65,37 @@
 
 </head>
 <body>
-	<!-- 상단 베이지 바 -->
-	<div class="topbar">
-		<div class="menu">
-			<a href="#">CART</a> <a href="#">MY PAGE</a> <a href="#">JOIN</a>
-		</div>
-	</div>
-
-	<!-- ✅ 네비게이션 구조 -->
-	<div class="navbar">
-		<div class="navbar-left">
-			<a href="#" class="nav-link">About</a> <a href="#" class="nav-link">Facility</a>
-			<a href="#" class="nav-link active">Food</a> <a href="#"
-				class="nav-link">Community</a> <a href="#" class="nav-link">Contact</a>
-		</div>
-		<div class="navbar-center">
-			<span class="logo">YOUTHMAP</span>
-		</div>
-		<div class="navbar-right">
-			<a href="#" class="nav-link">CART</a> <a href="#" class="nav-link">MY
-				PAGE</a> <a href="#" class="nav-link">JOIN</a>
-		</div>
-	</div>
-
+<!-- 헤더-->
+<%@ include file="/WEB-INF/views/header.jsp" %>
 
 
 
 
 	<div class="detail-container">
-
-	 <!-- 메인 사진 & 버튼 -->
+    <!-- 메인 사진 + 좌우 버튼 -->
     <div class="main-photo-container">
       <button id="mainPrev" class="photo-nav" onclick="prevMainPhoto()">‹</button>
-      <img id="mainPhoto"
-           src=""
-           alt="대표 사진"
-           style="width:100%; border-radius:8px; display:block; cursor:pointer;"
-           onclick="openModalAt(currentMainIndex)" />
+      <img
+        id="mainPhoto"
+        src=""
+        alt="대표 사진"
+        onclick="openModalAt(currentMainIndex)"
+      />
       <button id="mainNext" class="photo-nav" onclick="nextMainPhoto()">›</button>
     </div>
+    
 		<!-- 여분 사진(썸네일) -->
 		<c:if test="${not empty extraPhotoUrls}">
-			<div style="display: flex; gap: 8px; margin-top: 15px;">
+			<div class="photos-container" >
 				<c:forEach var="img" items="${extraPhotoUrls}">
-					<img src="${img}" class="thumb"
-						style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer;">
+					<img src="${img}" class="thumb">
 				</c:forEach>
 			</div>
 		</c:if>
 
 		<!-- 모달 (확대이미지) -->
-		<div id="imgModal"
-			style="display: none; position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.7); align-items: center; justify-content: center; z-index: 9999;">
-			<img id="modalImg" src=""
-				style="max-width: 80vw; max-height: 80vh; border-radius: 18px; box-shadow: 0 4px 20px #000;">
+		<div id="imgModal" calss="imgModal">
+			<img id="modalImg" calss="modalImg">
 		</div>
 
 		<script>
@@ -185,7 +163,7 @@
 			<a href="restaurants" class="btn"> 목록으로 </a>
 		</div>
 		<!-- 지도 & 리뷰 영역 전체를 감싸는 container -->
-		<div class="detail-container" style="margin-top: 40px;">
+		<div class="detail-container">
 			<!-- 지도 -->
 			<div class="section" style="text-align: center;">
 				<!-- 라벨을 block으로 위에 고정 -->

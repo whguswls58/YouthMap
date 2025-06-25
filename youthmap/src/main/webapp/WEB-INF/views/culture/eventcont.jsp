@@ -1,13 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.example.demo.util.KakaoKeyUtil" %>
-<%@ include file="/WEB-INF/views/culture/header.jsp" %>
 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>YouthMap</title>
+ <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 
   <!-- ① 카카오 JS SDK: YOUR_APP_KEY 부분에 자바스크립트 키를 넣으세요 -->
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= KakaoKeyUtil.getApiKey() %>&libraries=services"></script>
@@ -59,6 +59,8 @@
   </style>
 </head>
 <body>
+<!-- 헤더-->
+<%@ include file="/WEB-INF/views/header.jsp" %>
 
 
 <div align="center" style="margin:20px 0;">

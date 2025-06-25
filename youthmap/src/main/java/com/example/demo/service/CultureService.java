@@ -6,7 +6,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.json.simple.JSONArray;
@@ -210,7 +212,6 @@ public class CultureService {
 		return dao.count2(culMd);
 	}
 
-
 	public CultureModel getperformancecont(CultureModel culMd) {
 		return dao.getperformancecont(culMd);
 	}
@@ -245,17 +246,33 @@ public class CultureService {
 		return dao.countall(culMd);
 	}
 
-
-	public List<CultureModel> getallList(CultureModel culMd) {
-		return dao.getallList(culMd);
-	}
+//	public List<CultureModel> getallList(CultureModel culMd) {
+//	    return dao.getallList(culMd);
+//	} 아래로 변경
+	 /** 
+     * 전체 리스트를 페이지네이션(+정렬)하여 가져오는 메서드 
+     * → parameterType="culture" 로 정의된 MyBatis 쿼리와 맞춥니다.
+     */
+    public List<CultureModel> getallList(CultureModel culMd) {
+        // DAO 에 culMd 그대로 넘김
+        return dao.getallList(culMd);
+    }
 
 
 	public CultureModel getLatestData() {
 		return dao.getLatestData();
 	}
+	
+	public int addReadCount(CultureModel culMd) {
+		return dao.addReadCount(culMd);
+	}
+
+//	인기/최신/마감임박 추가하는 아래 코드
+	private static final int PAGE_SIZE = 12;  // 한 페이지당 아이템 수
 
 
-	
-	
+	public List<CultureModel> getallListMini(String sort) {
+		return dao.getallListMini(sort);
+	}
+
 }

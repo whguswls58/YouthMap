@@ -1,85 +1,6 @@
 @charset "UTF-8";
 
 /*─────────────────────────────────────────────────────────
-  1. 기본 스타일
-─────────────────────────────────────────────────────────*/
-body {
-	font-family: 'Playfair Display', serif;
-	margin: 0;
-	padding: 0;
-	background-color: #fff;
-	color: #333
-}
-
-/*─────────────────────────────────────────────────────────
-  2. 상단 베이지 바
-─────────────────────────────────────────────────────────*/
-.topbar {
-	background: #f5f0e6;
-	padding: 10px 40px;
-}
-
-.topbar .menu {
-	max-width: 1200px;
-	margin: 0 auto;
-	display: flex;
-	justify-content: flex-end;
-	gap: 20px;
-	font-size: 14px;
-}
-
-.topbar .menu a {
-	color: #444;
-	text-decoration: none;
-}
-/*─────────────────────────────────────────────────────────
-  3. 네비게이션
-─────────────────────────────────────────────────────────*/
-.navbar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 18px 40px;
-	background: #fff;
-	position: sticky;
-	top: 0;
-	z-index: 1000;
-	border-bottom: 1px solid #eee;
-}
-
-.navbar-left, .navbar-right {
-	display: flex;
-	gap: 18px;
-}
-
-.navbar-center {
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-}
-
-.nav-link {
-	font-size: 15px;
-	color: #222;
-	text-decoration: none;
-}
-
-.nav-link:hover, .nav-link.active {
-	border-bottom: 2px solid #222;
-	padding-bottom: 2px;
-}
-
-.logo {
-	font-size: 20px;
-	font-weight: bold;
-	letter-spacing: 1px;
-	color: #111;
-	font-family: 'Playfair Display', serif;
-}
-
-
-
-/*─────────────────────────────────────────────────────────
   4. Hero 이미지
 ─────────────────────────────────────────────────────────*/
 .hero {
@@ -114,7 +35,7 @@ body {
 .hero-banner {
 	width: 100vw; /* 화면 전체 */
 	height: 500px; /* 원하는 높이 조절 */
-	background-image: url('/images/c.jpeg'); /* 실제 이미지 경로 */
+	background-image: url('/images/food2.jpeg'); /* 실제 이미지 경로 */
 	background-size: cover;
 	background-position: center center;
 	background-repeat: no-repeat;
@@ -135,7 +56,7 @@ body {
 	width: 100%;
 	height: 100%;
 	/* 알파 값을 0.1~0.2 정도로 줄이면 거의 투명해집니다 */
-	/*   background: rgba(255,255,255,0.1); */
+	  background: rgba(255,255,255,0.1); 
 	z-index: 0;
 }
 
@@ -271,7 +192,7 @@ body {
 	margin-top: 50px;
 	margin-bottom: 50px;
 	display: flex;
-	width: 100vw;
+/* 	width: 100vw; */
 }
 
 /* swiper-container 를 화면 폭의 90%로 고정하고 최대 1200px 까지만 늘어나게 */
@@ -280,6 +201,7 @@ body {
 	max-width: 2000px; /* (원하는 최대값) */
 	margin: 0 auto; /* 좌우 자동 중앙정렬 */
 	margin-bottom: 0px; /* 슬라이더 하단 여백 */
+	overflow: hidden;
 	padding: 0px; /* 좌우 여백 */
 	box-sizing: border-box;
 }

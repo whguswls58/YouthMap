@@ -28,6 +28,7 @@ public class CultureModel {
 	private String con_cost;				// 입장료
 	private String con_link;				// 행사 상세 url  >> api컬럼명은 ORG_LINK
 	private Date con_regdate;				// 등록 일시(insert한 날짜 등록 됨. 나중에 api상에서 업데이트 되는 내용이랑 구분)
+	private int con_readcount;
 	
 	// page
 	private int startRow;
@@ -37,6 +38,8 @@ public class CultureModel {
 	private String search;
 	private String keyword;
 	 	
+	// 정렬
+    private String sort;                 // 정렬 기준 (mostViewed, newest, endingSoon)
 }
 	 	
 //	>>  DATE를 (~) 기준으로 split 해서 con_start_date  ,  con_end_date에 담고

@@ -12,33 +12,8 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/policy/policy-detail.css" />
 </head>
 <body>
-<!-- 상단 베이지 바 -->
-<div class="topbar">
-  <div class="menu">
-    <a href="#">CART</a>
-    <a href="#">MY PAGE</a>
-    <a href="#">JOIN</a>
-  </div>
-</div>
-
-<!-- 네비게이션 구조 -->
-<div class="navbar">
-  <div class="navbar-left">
-    <a href="#" class="nav-link">About</a>
-    <a href="#" class="nav-link">Facility</a>
-    <a href="#" class="nav-link active">Food</a>
-    <a href="#" class="nav-link">Community</a>
-    <a href="#" class="nav-link">Contact</a>
-  </div>
-  <div class="navbar-center">
-  	<span class="logo">YOUTHMAP</span>
-  </div>
-  <div class="navbar-right">
-    <a href="#" class="nav-link">CART</a>
-    <a href="#" class="nav-link">MY PAGE</a>
-    <a href="#" class="nav-link">JOIN</a>
-  </div>
-</div>
+<!-- 헤더-->
+<%@ include file="/WEB-INF/views/header.jsp" %>
 
 <div class="policy-container text-center">
 	<div class="policy-left-side sidenav">

@@ -21,8 +21,19 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void register(MemberModel member) {
-        // 비밀번호를 평문 그대로 저장 (암호화 제거)
-        memberMapper.insertMember(member);
+        System.out.println("=== MemberService.register 시작 ===");
+        System.out.println("저장할 member 데이터: " + member);
+        
+        try {
+            // 비밀번호를 평문 그대로 저장 (암호화 제거)
+            System.out.println("DB insert 시작...");
+            memberMapper.insertMember(member);
+            System.out.println("DB insert 완료");
+        } catch (Exception e) {
+            System.out.println("DB insert 중 오류 발생: " + e.getMessage());
+            e.printStackTrace();
+            throw e; // 예외를 다시 던져서 컨트롤러에서 처리하도록 함
+        }
     }
 
     @Override
@@ -65,5 +76,8 @@ public class MemberServiceImpl implements MemberService {
     public void updateOauthId(MemberModel member) {
         memberMapper.updateOauthId(member);
     }
+
+   
+
 
 }

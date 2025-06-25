@@ -4,12 +4,10 @@
 let currentSortOrder = "latest";			// 정렬 기준 기본값 : 최신순
 let currentSearchInput = "";
 let currentMainCategory = "youthPolicy";
-let selectedCategories = [];
-
-
 
 // 초기 로딩 이벤트
 window.addEventListener("DOMContentLoaded", () => {
+	console.log("현재 선택된 카테고리 : " + selectedCategories);
 	initializeCheckboxHandlers();
 	initializeResetButton();
 	restoreSelectedCategories();

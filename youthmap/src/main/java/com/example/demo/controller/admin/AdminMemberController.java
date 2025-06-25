@@ -20,13 +20,13 @@ public class AdminMemberController {
 
     private final AdminService adminService;
 
-    @GetMapping("/users")  // 🔥 여기 수정
+    @GetMapping("/users")
     public String memberList(HttpSession session, Model model) {
         if (session.getAttribute("adminLogin") == null) {
             return "redirect:/admin/login";
         }
 
-        List<AdminMemberModel> members = adminService.findAllMembers();
+        List<AdminMemberModel> members = adminService.getAllMemberSummary();
         model.addAttribute("members", members);
 
         return "admin/users";

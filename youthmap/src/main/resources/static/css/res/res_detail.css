@@ -1,72 +1,5 @@
 @charset "UTF-8";
-body {
-	font-family: 'Playfair Display', serif;
-	margin: 0;
-	padding: 0;
-	background-color: #fff;
-	color: #333
-}
-/* 상단 베이지 바 */
-.topbar {
-	background: #f5f0e6;
-	padding: 10px 40px;
-}
 
-.topbar .menu {
-	max-width: 1200px;
-	margin: 0 auto;
-	display: flex;
-	justify-content: flex-end;
-	gap: 20px;
-	font-size: 14px;
-}
-
-.topbar .menu a {
-	color: #444;
-	text-decoration: none;
-}
-/* 네비게이션 */
-.navbar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 18px 40px;
-	background: #fff;
-	position: sticky;
-	top: 0;
-	z-index: 1000;
-	border-bottom: 1px solid #eee;
-}
-
-.navbar-left, .navbar-right {
-	display: flex;
-	gap: 18px;
-}
-
-.navbar-center {
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-}
-
-.nav-link {
-	font-size: 15px;
-	color: #222;
-	text-decoration: none;
-}
-
-.nav-link:hover, .nav-link.active {
-	border-bottom: 2px solid #222;
-	padding-bottom: 2px;
-}
-
-.logo {
-	font-size: 20px;
-	font-weight: bold;
-	letter-spacing: 1px;
-	color: #111;
-	font-family: 'Playfair Display', serif;
-}
 /* 상세 내용 */
 .detail-container {
 	max-width: 850px;
@@ -75,6 +8,7 @@ body {
 	border-radius: 16px;
 	background: #fff;
 	box-shadow: 0 2px 18px #eee;
+	margin-top:40px;
 }
 #mainPhoto {
     width: 100%;              /* 가로 100%, max-width 이하로 제한 */
@@ -92,6 +26,7 @@ body {
     position: relative;
     max-width: 600px;
     margin: 20px auto;
+    
   }
 
   /* 이전/다음 버튼 공통 스타일 */
@@ -109,38 +44,48 @@ body {
     z-index: 1;                               /* 사진 위에 배치 */
   }
   /* 이전 버튼 위치 */
-  #mainPrev { left: -18px; }
+  #mainPrev { left: -40px; }
   /* 다음 버튼 위치 */
-  #mainNext { right: -18px; }
+  #mainNext { right: -40px; }
 
-  /* 썸네일 슬라이더: 가로 스크롤, 가운데 정렬 */
-  .thumb-slider {
-    display: flex;
-    gap: 8px;                 /* 썸네일 간 간격 */
-    justify-content: center;
-    margin: 15px auto;
-    max-width: 600px;
-    overflow-x: auto;         /* 가로 스크롤 */
-  }
-  /* 썸네일 이미지: 고정 크기, 비율 유지 */
-  .thumb-slider img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+/* 여분사진들 컨테이너*/
+.photos-container{
+	display: flex; 
+	gap: 8px;
+	margin-top: 15px;
+}
+
+/* 여분사진이미지 */
+.thumb{
+	width: 80px; 
+	height: 80px; 
+	object-fit: cover; 
+	border-radius: 8px; 
+	cursor: pointer;
+}
+ 
 
   /* 모달 전체 배경 */
   #imgModal {
-    display: none;            /* 초기 숨김 */
-    position: fixed;
-    left: 0; top: 0;
-    width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.8);
-    align-items: center; justify-content: center;
-    z-index: 9999;
+  display: none; 
+  position: fixed; 
+  left: 0; 
+  top: 0; 
+  width: 100vw; 
+  height: 100vh; 
+  background: rgba(0, 0, 0, 0.7); 
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
   }
+  /* 모달이미지크 */
+  .modalImg{
+  max-width: 80vw; 
+  max-height: 80vh; 
+  border-radius: 18px; 
+  box-shadow: 0 4px 20px #000;
+  }
+  
   /* 모달 내 이전/다음 버튼 */
   .modal-nav {
     position: absolute;
