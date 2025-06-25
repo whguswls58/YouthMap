@@ -56,13 +56,6 @@ public class AdminServiceImpl implements AdminService {
         return adminMapper.countCulture();
     }
     
-    
- 
-    @Override
-    public List<AdminMemberModel> findAllMembers() {
-        return adminMapper.findAllMembers();
-    }
-    
     @Override
     public List<AdminMemberModel> getAllMemberSummary() {
         return adminMapper.findAllMembers();
