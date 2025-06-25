@@ -386,7 +386,7 @@ function renderPagination(current, total, start, end, sortOrder) {
 	// 이전 블록
 	if (start > 6) {
 		pagination.innerHTML +=
-			`<button class="page-btn" onclick="loadPage(${start - 6}, '${sortOrder}')">[이전]</button> `;
+			`<button class="page-btn" onclick="loadPage(${start - 6}, '${sortOrder}')">이전</button> `;
 	} 	//end if
 
 	// 페이지 번호들
@@ -402,7 +402,7 @@ function renderPagination(current, total, start, end, sortOrder) {
 	// 다음 블록
 	if (end < total) {
 		pagination.innerHTML +=
-			`<button class="page-btn" onclick="loadPage(${start + 6}, '${sortOrder}')">[다음]</button> `;
+			`<button class="page-btn" onclick="loadPage(${start + 6}, '${sortOrder}')">다음</button> `;
 	}	// end if
 
 	// 마지막 페이지
