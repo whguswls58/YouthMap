@@ -160,7 +160,7 @@ a.card-link {
       <div class="badge exhibitionlist">${cul.category_name}</div>
 
       <!-- 2) 이미지에 링크 -->
-      <a class="card-link" href="${pageContext.request.contextPath}/exhibitioncont?con_id=${cul.con_id}">
+      <a class="card-link" href="${pageContext.request.contextPath}/exhibitioncont?page=${page}&con_id=${cul.con_id}">
         <div class="img-wrap">
           <img src="${cul.con_img}" alt="${cul.con_title}" />
         </div>
@@ -169,7 +169,7 @@ a.card-link {
       <div class="card-info">
         <!-- 제목에 링크 -->
         <div class="title">
-          <a class="card-link" href="${pageContext.request.contextPath}/exhibitioncont?con_id=${cul.con_id}">
+          <a class="card-link" href="${pageContext.request.contextPath}/exhibitioncont?page=${page}&con_id=${cul.con_id}">
             ${cul.con_title}
           </a>
         </div>
@@ -178,7 +178,7 @@ a.card-link {
     		${cul.con_start_date} ~ ${cul.con_end_date}
  		 </div>
   <div class="location">
-    <a class="card-link" href="${pageContext.request.contextPath}/exhibitioncont?con_id=${cul.con_id}">
+    <a class="card-link" href="${pageContext.request.contextPath}/exhibitioncont?page=${page}&con_id=${cul.con_id}">
       ${cul.con_location}
     </a>
   </div>
@@ -189,6 +189,9 @@ a.card-link {
 
   <!-- 페이징 UI -->
   <div class="pager">
+  
+   <!-- 전시/미술 페이징 처리 -->
+   <c:if test="${empty keyword }">
     <c:if test="${page > 1}">
       <a href="exhibitionlist?page=1">&laquo;</a>
     </c:if>
@@ -211,6 +214,33 @@ a.card-link {
     <c:if test="${page < pagecount}">
       <a href="exhibitionlist?page=${pagecount}">&raquo;</a>
     </c:if>
+    </c:if>
+    
+   <!-- 전시/미술 검색 페이징 처리 -->
+   <c:if test="${!empty keyword }">
+    <c:if test="${page > 1}">
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=exhibition&search=${search}&keyword=${keyword}&page=1">&laquo;</a>
+    </c:if>
+    <c:if test="${startpage > 10}">
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=exhibition&search=${search}&keyword=${keyword}&page=${startpage-10}">[이전]</a>
+    </c:if>
+    <c:forEach var="i" begin="${startpage}" end="${endpage}">
+      <c:choose>
+        <c:when test="${i == page}">
+          <span class="current">${i}</span>
+        </c:when>
+        <c:otherwise>
+          <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=exhibition&search=${search}&keyword=${keyword}&page=${i}">${i}</a>
+        </c:otherwise>
+      </c:choose>
+    </c:forEach>
+    <c:if test="${endpage < pagecount}">
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=exhibition&search=${search}&keyword=${keyword}&page=${startpage+10}">[다음]</a>
+    </c:if>
+    <c:if test="${page < pagecount}">
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=exhibition&search=${search}&keyword=${keyword}&page=${pagecount}">&raquo;</a>
+    </c:if>
+   </c:if>
   </div>
  </div>
    <!-- ❶ jQuery 라이브러리 (한 번만!) -->

@@ -813,8 +813,8 @@ public class CultureController {
 		
 		
 		// 총 페이지 수 (10개씩 묶는 건 페이지 번호 블록 크기이지, 한 페이지 아이템 수가 아님)
-//		int pagecount = listcount / limit + (listcount % 10 == 0 ? 0 : 1);
-		int pagecount = (listcount + limit - 1) / limit;
+		int pagecount = listcount / limit + (listcount % 10 == 0 ? 0 : 1);
+//		int pagecount = (listcount + limit - 1) / limit;
 		// 페이지 번호 블록 계산 (한 블록에 10페이지)
 		int startpage = ((page - 1) / 10) * 10 + 1;
 		int endpage = startpage + 10 - 1;
