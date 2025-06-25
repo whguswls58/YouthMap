@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>게시물 관리</title>
+    <title>공지사항 관리</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/dashboard.css">
 </head>
@@ -21,36 +21,43 @@
         <div class="admin-title">관리자 대시보드</div>
         <a href="${pageContext.request.contextPath}/admin/dashboard">대시보드</a>
         <a href="${pageContext.request.contextPath}/admin/users">회원 관리</a>
-        <a href="${pageContext.request.contextPath}/admin/posts" class="active">게시물 관리</a>
-        <a href="${pageContext.request.contextPath}/admin/list">공지 관리</a>
+        <a href="${pageContext.request.contextPath}/admin/posts">게시물 관리</a>
+        <a href="${pageContext.request.contextPath}/admin/list" class="active">공지 관리</a>
     </div>
 
     <!-- 메인 콘텐츠 -->
     <div class="admin-main-content">
-        <h2 class="admin-section-title">게시물 관리</h2>
+        <h2 class="admin-section-title">공지사항 관리</h2>
+        
+        <!-- 공지사항 작성 버튼 -->
+        <div style="margin-bottom: 20px;">
+            <a href="${pageContext.request.contextPath}/admin/list/write" class="action-btn btn-manage">공지사항 작성</a>
+        </div>
 
-        <!-- 게시판 테이블 -->
+        <!-- 공지사항 테이블 -->
         <table class="board-table">
             <thead>
             <tr>
                 <th>No</th>
                 <th>글쓴이</th>
-                <th>카테고리</th>
                 <th>제목</th>
                 <th>작성일</th>
                 <th>조회수</th>
+                <th>관리</th>
             </tr>
             </thead>
             <tbody>
-            <!-- 📄 일반 게시글 -->
-            <c:forEach var="b" items="${boardlist}" varStatus="status">
+            <c:forEach var="notice" items="${noticelist}" varStatus="status">
                 <tr>
                     <td>${listcount - ((page-1) * 10) - status.index}</td>
-                    <td>${b.memName}</td>
-                    <td>${b.boardCategory}</td>
-                    <td><a href="${pageContext.request.contextPath}/admin/posts/view?no=${b.boardNo}">${b.boardSubject}</a></td>
-                    <td><fmt:formatDate value="${b.boardDate}" pattern="yyyy.MM.dd"/></td>
-                    <td>${b.boardReadcount}</td>
+                    <td>${notice.memName}</td>
+                    <td><a href="${pageContext.request.contextPath}/admin/list/view?no=${notice.boardNo}">${notice.boardSubject}</a></td>
+                    <td><fmt:formatDate value="${notice.boardDate}" pattern="yyyy.MM.dd"/></td>
+                    <td>${notice.boardReadcount}</td>
+                    <td>
+                        <a href="${pageContext.request.contextPath}/admin/list/edit?no=${notice.boardNo}" class="action-btn btn-edit">수정</a>
+                        <a href="${pageContext.request.contextPath}/admin/list/delete?no=${notice.boardNo}" class="action-btn btn-delete">삭제</a>
+                    </td>
                 </tr>
             </c:forEach>
             </tbody>
@@ -60,7 +67,7 @@
         <c:if test="${totalPages > 1}">
             <div class="pagination">
                 <c:if test="${page > 1}">
-                    <a href="/admin/posts?page=${page-1}" class="page-link">&lt;</a>
+                    <a href="/admin/list?page=${page-1}" class="page-link">&lt;</a>
                 </c:if>
                 <c:forEach var="i" begin="${startPage}" end="${endPage}">
                     <c:choose>
@@ -68,12 +75,12 @@
                             <span class="page-link active">${i}</span>
                         </c:when>
                         <c:otherwise>
-                            <a href="/admin/posts?page=${i}" class="page-link">${i}</a>
+                            <a href="/admin/list?page=${i}" class="page-link">${i}</a>
                         </c:otherwise>
                     </c:choose>
                 </c:forEach>
                 <c:if test="${page < totalPages}">
-                    <a href="/admin/posts?page=${page+1}" class="page-link">&gt;</a>
+                    <a href="/admin/list?page=${page+1}" class="page-link">&gt;</a>
                 </c:if>
             </div>
         </c:if>
@@ -82,4 +89,4 @@
 </div>
 
 </body>
-</html>
+</html> 

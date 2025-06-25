@@ -28,10 +28,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     // 수정/삭제 버튼
                     let actions = "";
                     if (isLoggedIn() && (loginUserId === c.memId || loginUserRole === 'ADMIN')) {
+                        const deleteClass = loginUserRole === 'ADMIN' ? 'admin-delete' : '';
                         actions = `
                             <div class="comment-actions">
-                                <a href="javascript:void(0);" onclick="editComment(${c.commNo})">수정</a>
-                                <a href="javascript:void(0);" onclick="deleteComment(${c.commNo})">삭제</a>
+                                ${loginUserId === c.memId ? '<a href="javascript:void(0);" onclick="editComment(' + c.commNo + ')">수정</a>' : ''}
+                                <a href="javascript:void(0);" onclick="deleteComment(${c.commNo})" class="${deleteClass}">삭제</a>
                             </div>
                         `;
                     }

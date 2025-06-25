@@ -59,10 +59,10 @@
             관리자 대시보드
         </div>
         
-        <a href="${pageContext.request.contextPath}/admin/dashboard" class="active">대시보드</a>
-        <a href="${pageContext.request.contextPath}/admin/users">회원 관리</a>
+        <a href="${pageContext.request.contextPath}/admin/dashboard">대시보드</a>
+        <a href="${pageContext.request.contextPath}/admin/users" class="active">회원 관리</a>
         <a href="${pageContext.request.contextPath}/admin/posts">게시물 관리</a>
-        <a href="${pageContext.request.contextPath}/admin/comments">댓글 관리</a>
+        <a href="${pageContext.request.contextPath}/admin/list">공지 관리</a>
     </div>
 
 

@@ -62,10 +62,18 @@ public class BoardController {
 
         // 일반 글
         Map<String,Object> map = new HashMap<>();
-        if (category != null && !category.isEmpty()) map.put("category", category);
+        if (category != null && !category.isEmpty()) {
+            map.put("category", category);
+            // 공지카테고리가 아닌 경우에만 공지사항 제외
+            if (!"공지".equals(category)) {
+                map.put("excludeCategory", "공지");
+            }
+        } else {
+            // 전체카테고리인 경우 공지사항 제외
+            map.put("excludeCategory", "공지");
+        }
         map.put("searchType", searchType);
         map.put("keyword", keyword);
-        map.put("excludeCategory", "공지사항");
         map.put("startRow", startRow);
         map.put("endRow", endRow);
 
@@ -73,10 +81,18 @@ public class BoardController {
         
         // 일반 게시글만 카운트 (공지사항 제외)
         Map<String,Object> countMap = new HashMap<>();
-        if (category != null && !category.isEmpty()) countMap.put("category", category);
+        if (category != null && !category.isEmpty()) {
+            countMap.put("category", category);
+            // 공지카테고리가 아닌 경우에만 공지사항 제외
+            if (!"공지".equals(category)) {
+                countMap.put("excludeCategory", "공지");
+            }
+        } else {
+            // 전체카테고리인 경우 공지사항 제외
+            countMap.put("excludeCategory", "공지");
+        }
         countMap.put("searchType", searchType);
         countMap.put("keyword", keyword);
-        countMap.put("excludeCategory", "공지사항");
         int count = boardService.count(countMap);
 
         // 페이징 정보 계산

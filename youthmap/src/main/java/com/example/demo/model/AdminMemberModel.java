@@ -19,5 +19,4 @@ public class AdminMemberModel {
 
     private int postCount;      // 작성한 게시물 수
     private int commentCount;   // 작성한 댓글 수
-    private String banReason;   // 정지 사유
 }
