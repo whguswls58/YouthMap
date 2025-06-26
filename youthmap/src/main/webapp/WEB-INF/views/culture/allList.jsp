@@ -9,8 +9,13 @@
   <meta charset="UTF-8">
   <title>전체 콘텐츠 목록</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/list.css">
+  
 </head>
 <body>
+<%-- 관리자 모드에서 수동 업데이트 버튼 추가하기
+<form action="${pageContext.request.contextPath}/datainput" method="get" style="display:inline;">
+  <button type="submit">수동 업데이트 실행</button>
+</form> --%>
 
 <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
 <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
@@ -120,56 +125,6 @@
     </c:if>
   </c:if>
 </div>
-
-<!-- 팝업 레이어(고유 기능) -->
-<div id="miniModal" style="
-  display:none; position:fixed; left:0; top:0; width:100vw; height:100vh;
-  z-index:1000; background:rgba(30,40,50,0.11); backdrop-filter: blur(2.5px);">
-  <div style="
-    position:absolute; left:50%; top:52%; transform:translate(-50%,-50%);
-    background:#fff; border-radius:28px;
-    box-shadow:0 10px 38px 0 rgba(30,60,90,0.20), 0 2px 8px 0 rgba(0,0,0,0.07);
-    min-width:390px; max-width:540px; max-height:80vh; overflow-y:auto;
-    border:none; padding:0 0 18px 0;">
-    <button id="closeModalBtn" style="
-      position:absolute; top:15px; right:16px; z-index:10;
-      background:none; border:none; font-size:2.1rem; color:#b5b5b5; cursor:pointer;">
-      &times;
-    </button>
-    <div id="miniModalHeader">실시간 인기 콘텐츠</div>
-    <div id="miniModalContent" style="padding:28px 22px 16px 22px;">
-      <!-- AJAX로 콘텐츠 미니리스트 들어옴 -->
-    </div>
-  </div>
-</div>
-
-<!-- jQuery 및 팝업/정렬 스크립트(고유 기능) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(function(){
-  $('.sort-nav a').click(function(e){
-    e.preventDefault();
-    var sort = $(this).data('sort');
-    var ctx  = '${pageContext.request.contextPath}';
-    var url  = ctx + '/allList-mini?sort=' + sort;
-    var headerMsg = "실시간 인기 콘텐츠";
-    if(sort == 'newest')     headerMsg = "최신 등록 콘텐츠";
-    if(sort == 'endingSoon') headerMsg = "마감 임박 콘텐츠";
-    $('#miniModalHeader').text(headerMsg);
-    $.get(url, function(html){
-      $('#miniModalContent').html(html);
-      $('#miniModal').fadeIn(180);
-    });
-  });
-
-  $('#closeModalBtn, #miniModal').on('click', function(e){
-    if(e.target === this) $('#miniModal').fadeOut(180);
-  });
-  $(document).on('keyup', function(e){
-    if(e.key === "Escape") $('#miniModal').fadeOut(180);
-  });
-});
-</script>
 
 </body>
 </html>

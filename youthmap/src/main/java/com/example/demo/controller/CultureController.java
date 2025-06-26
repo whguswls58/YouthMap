@@ -1,16 +1,10 @@
 package com.example.demo.controller;
 
 import java.io.File;
-
-
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.demo.dao.CultureDao;
 import com.example.demo.model.CultureModel;
 import com.example.demo.model.Review2Model;
 import com.example.demo.service.CultureService;
@@ -109,7 +102,7 @@ public class CultureController {
         culMd.setSort     (sort);      // mostViewed / newest / endingSoon
 
 		// 총 페이지 수 (10개씩 묶는 건 페이지 번호 블록 크기이지, 한 페이지 아이템 수가 아님)
-		int pagecount = listcount / limit + (listcount % 10 == 0 ? 0 : 1);
+		int pagecount = listcount / limit + (listcount % 12 == 0 ? 0 : 1);
 
 		// 페이지 번호 블록 계산 (한 블록에 10페이지)
 		int startpage = ((page - 1) / 10) * 10 + 1;
@@ -293,12 +286,26 @@ public class CultureController {
 		
 		// 서비스에서 공연만 조회해 주는 메서드
 		List<CultureModel> performancelist = service.getperformancelist(culMd);
+		
+		for (CultureModel c : performancelist) {
+		    System.out.println("공연 con_id: " + c.getCon_id());
+		}
 
-		int listcount = service.count2(culMd);
-		int pagecount = listcount / limit + (listcount % 10 == 0 ? 0 : 1);
+		int listcount = service.count2(culMd);		// 총 데이터 갯수
+		int pagecount = listcount / limit + (listcount % 12 == 0 ? 0 : 1);		// 총 페이지 수
 		int startpage = ((page - 1) / 10) * 10 + 1;
-		int endpage = Math.min(startpage + 9, pagecount);
+		int endpage = startpage + 10 - 1;
+		
+		if (endpage > pagecount)
+			endpage = pagecount;
 
+		System.out.println("listcount : " + listcount);
+		System.out.println("pagecount : " + pagecount);
+		System.out.println("startRow: " + startRow);
+		System.out.println("endRow: " + endRow);
+		System.out.println("startpage : " + startpage);
+		System.out.println("endpage : " + endpage);
+		
 		model.addAttribute("performancelist", performancelist);
 		model.addAttribute("page", page);
 		model.addAttribute("listcount", listcount);
@@ -488,9 +495,12 @@ public class CultureController {
 		List<CultureModel> eventlist = service.geteventlist(culMd);
 
 		int listcount = service.count3(culMd);
-		int pagecount = listcount / limit + (listcount % 10 == 0 ? 0 : 1);
+		int pagecount = listcount / limit + (listcount % 12 == 0 ? 0 : 1);
 		int startpage = ((page - 1) / 10) * 10 + 1;
-		int endpage = Math.min(startpage + 9, pagecount);
+		int endpage = startpage + 10 - 1;
+		
+		if (endpage > pagecount)
+			endpage = pagecount;
 
 		model.addAttribute("eventlist", eventlist);
 		model.addAttribute("page", page);
@@ -728,8 +738,11 @@ public class CultureController {
 		// --- 3) 페이징 계산 & 공통 모델에 담기 ---
 		int pagecount = totalCount / limit + (totalCount % limit == 0 ? 0 : 1);
 		int startpage = ((page - 1) / 10) * 10 + 1;
-		int endpage = Math.min(startpage + 9, pagecount);
+		int endpage = startpage + 10 - 1;
 
+		if (endpage > pagecount)
+			endpage = pagecount;
+		
 		model.addAttribute("page", page);
 		model.addAttribute("listcount", totalCount);
 		model.addAttribute("pagecount", pagecount);
@@ -757,91 +770,68 @@ public class CultureController {
 	// 전체 리스트 페이지
 	@RequestMapping("/allList")
 	public String allList(
-			@RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(value = "mainCategory", defaultValue = "all") String mainCategory, 
-			@RequestParam(value="sort", required=false)  String sort,
-			CultureModel culMd,
-			Model model) {
+	    @RequestParam(value = "page", defaultValue = "1") int page,
+	    @RequestParam(value = "mainCategory", defaultValue = "all") String mainCategory, 
+	    @RequestParam(value="sort", required=false)  String sort,
+	    CultureModel culMd,
+	    Model model) {
 
-		int limit = 12; // 한 페이지 출력할 데이터 갯수 12개. 두번째 기본변수.
-		int listcount = service.count(culMd); // 세번째 기본변수. 총 데이터 갯수 구함. db에서 구해옴
+	    int limit = 12;
+	    int startRow = (page - 1) * limit + 1;
+	    int endRow   = page * limit;
 
-		System.out.println("전체 listcount" + listcount);
-		
-		service.addReadCount(culMd);
+	    // 정렬, 페이징 세팅
+	    culMd.setSort(sort);
+	    culMd.setStartRow(startRow);
+	    culMd.setEndRow(endRow);
 
-		// 1) 페이징용 startRow/endRow 계산
-		// 한 페이지 범위 계산 파생변수 만들기(startRow, endRow)
-		int startRow = (page - 1) * limit + 1;
-		int endRow = page * limit;
+	    // 검색/키워드 기본값 세팅
+	    if (culMd.getSearch() == null)   culMd.setSearch("all");
+	    if (culMd.getKeyword() == null)  culMd.setKeyword("");
 
-		// 2) 검색·카테고리 세팅
-		// culMd.getSearch(), getKeyword(), getMainCategory() 에 요청값 또는 null
-		// "all" 이면 전체, 아니면 해당 카테고리
-		culMd.setCategory_name("all".equals(mainCategory) ? null : mainCategory);
-		// search/keyword 기본값
-		if (culMd.getSearch() == null)
-			culMd.setSearch("all");
-		if (culMd.getKeyword() == null)
-			culMd.setKeyword("");
+	    // 💡 쿼리 분기 (mainCategory에 따라)
+	    int listcount = 0;
+	    List<CultureModel> list = null;
 
-		// --- 1) DTO 세팅 ---
-		// 전체 모드: category_name = null
-//		culMd.setCon_age("누구나");
-		
-		// 3) 새로 추가한 필드 세팅
-        culMd.setSort     (sort);      // mostViewed / newest / endingSoon
-        culMd.setStartRow (startRow);
-        culMd.setEndRow   (endRow);
-		// 해당 페이지 데이터 조회
-		List<CultureModel> allList = service.getallList(culMd);
-//				  System.out.println(">>> exhibition.size() = " + exhibition.size());
+	    if ("all".equals(mainCategory)) {
+	        listcount = service.countall(culMd);
+	        list = service.getallList(culMd);
+	    } else if ("전시/미술".equals(mainCategory)) {
+	        culMd.setCategory_name("전시/미술");
+	        listcount = service.count(culMd);
+	        list = service.getexhibitionlist(culMd);
+	    } else if ("공연".equals(mainCategory)) {
+	        // 공연: 여러 카테고리를 IN 조건으로
+	        culMd.setCategory_names(Arrays.asList("콘서트","연극","뮤지컬/오페라","국악", "독주회", "클래식","무용"));
+	        listcount = service.count2(culMd);
+	        list = service.getperformancelist(culMd);
+	    } else if ("축제/행사".equals(mainCategory)) {
+	        culMd.setCategory_names(Arrays.asList("축제-기타","축제-시민화합","축제-자연/경관","축제-문화/예술"));
+	        listcount = service.count3(culMd);
+	        list = service.geteventlist(culMd);
+	    } else {
+	    	// 혹시 모를 기타 분기
+	        listcount = service.countall(culMd);
+	        list = service.getallList(culMd);
+	    }
 
-		System.out.println("=== 페이지네이션 체크 ===");
-		System.out.println("현재 page: " + page);
-		System.out.println("startRow: " + startRow);
-		System.out.println("endRow: " + endRow);
-		System.out.println("sort: " + sort);
-		System.out.println("allList.size(): " + allList.size());
+	    int pagecount = (listcount + limit - 1) / limit;
+	    int startpage = ((page - 1) / 10) * 10 + 1;
+	    int endpage = startpage + 10 - 1;
 
-		for (CultureModel c : allList) {
-		    System.out.print(c.getCon_id() + ", ");
-		}
-		System.out.println("\n=====================");
-		
-		
-		// 총 페이지 수 (10개씩 묶는 건 페이지 번호 블록 크기이지, 한 페이지 아이템 수가 아님)
-		int pagecount = listcount / limit + (listcount % limit == 0 ? 0 : 1);
-//		int pagecount = (listcount + limit - 1) / limit;
-		// 페이지 번호 블록 계산 (한 블록에 10페이지)
-		int startpage = ((page - 1) / 10) * 10 + 1;
-		int endpage = startpage + 10 - 1;
-
-		if (endpage > pagecount)
+	    if (endpage > pagecount)
 			endpage = pagecount;
+	    
+	    model.addAttribute("allList", list);
+	    model.addAttribute("page", page);
+	    model.addAttribute("listcount", listcount);
+	    model.addAttribute("pagecount", pagecount);
+	    model.addAttribute("startpage", startpage);
+	    model.addAttribute("endpage", endpage);
+	    model.addAttribute("mainCategory", mainCategory);
+	    model.addAttribute("sort", sort);
 
-		List<CultureModel> list;
-		list = service.getallList(culMd);
-
-		// --- 4) 모델 바인딩 ---
-		model.addAttribute("allList", list);
-		model.addAttribute("page", page);
-		model.addAttribute("listcount", listcount);
-		model.addAttribute("pagecount", pagecount);
-		model.addAttribute("startpage", startpage);
-		model.addAttribute("endpage", endpage);
-		model.addAttribute("mainCategory", "all");
-		model.addAttribute("sort",         sort);
-
-//				// 검색
-//				model.addAttribute("search", culMd.getSearch());
-//				model.addAttribute("keyword", culMd.getKeyword());
-		
-		System.out.println("pagecount = " + pagecount);
-		System.out.println("startpage = " + startpage);
-		System.out.println("endpage = " + endpage);
-
-		return "culture/allList";
+	    return "culture/allList";
 	}
 
 	@RequestMapping("/allList-mini")
