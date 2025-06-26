@@ -157,7 +157,7 @@
 .btn-group-vertical {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 /* 버튼 선택시 css */
@@ -236,7 +236,7 @@ a:hover {
 }
 
 /* 카드 자체는 원래 스타일 유지 (흰 배경, 그림자 등 그대로) */
-.slider-section .restaurant-card {
+.slider-section .policy-card {
   background: #fff;             /* 백그라운드 흰색 유지 */
 }
 

@@ -8,12 +8,16 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.model.MemberModel;
 import com.example.demo.model.PolicyModel;
 import com.example.demo.service.PolicyService;
 
@@ -227,4 +231,33 @@ public class PolicyController {
 		return "policy/policyContent";
 	}
 
+//	// 즐겨찾기 등록
+//	@PostMapping("/policyFavorite")
+//	@ResponseBody
+//	public String addFavorite(@RequestBody Map<String, String> payload, HttpSession session) {
+//		String plcy_no = payload.get("plcy_no");
+//	    MemberModel member = (MemberModel) session.getAttribute("loginMember");
+//	    
+//	    System.out.println("즐겨찾기한 정책 번호 : " + plcy_no);
+//	    System.out.println("현재 로그인 중인 회원ID : " + member.getMemId());
+//	    
+//	    if (member == null) return "로그인 필요";
+//
+////	    favoriteService.addFavorite(member.getMemId(), plcyNo);
+//	    return "찜 등록 완료";
+//	}
+//
+//	// 즐겨찾기 해제
+//	@DeleteMapping("/policyFavorite")
+//	@ResponseBody
+//	public String removeFavorite(@RequestBody Map<String, String> payload, HttpSession session) {
+//	    String plcy_no = payload.get("plcy_no");
+//	    MemberModel member = (MemberModel) session.getAttribute("loginMember");
+//
+//	    if (member == null) return "로그인 필요";
+//
+////	    favoriteService.removeFavorite(member.getMemId(), plcyNo);
+//	    return "찜 해제 완료";
+//	}
+	
 }
