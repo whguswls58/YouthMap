@@ -2,9 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.example.demo.util.KakaoKeyUtil" %>
 <%@ include file="/WEB-INF/views/culture/header.jsp" %>
-
 <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
-  <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
+<%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
 
 
 <!DOCTYPE html>
@@ -17,28 +16,6 @@
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= KakaoKeyUtil.getApiKey() %>&libraries=services"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/cont.css">
 
-<style>
-
-.content-category {
-  margin-bottom: 14px;
-  text-align: center; /* or center, 위치에 따라 */
-}
-
-.badge {
-  display: inline-block;
-  font-size: 0.95em;
-  font-weight: 600;
-  padding: 4px 14px;
-  border-radius: 12px;
-  background: #eef6f2;        /* 카테고리에 따라 바꿔도 좋음 */
-  color: #008060;
-  letter-spacing: -0.4px;
-  border: none;
-  box-shadow: none;
-  vertical-align: middle;
-}
-}
-</style>
 </head>
 <body>
 <hr>
@@ -47,14 +24,8 @@
 
   <div class="containerer">
   
-   <div class="content-category">
-  <span class="badge exhibitionlist">전시/미술</span>
-</div>
-
-	
-	
     <!-- 제목 -->
-    <h2>${cul.con_title}</h2>
+    <h2 >${cul.con_title}</h2>
 
     <!-- 이미지 + 상세 정보 표 -->
     <div class="detail-flex">
@@ -77,13 +48,15 @@
         <tr><th>요금</th>
             <td>${cul.con_cost}</td>
         </tr>
-        <tr><th>문의</th>
-            <td>
-              <a href="${cul.con_link}" target="_blank">홈페이지 바로가기</a>
-            </td>
-        </tr>
       </table>
     </div>
+	
+	<div class="detail-link-row">
+  <a href="${cul.con_link}" class="black-action-btn" target="_blank">홈페이지 바로가기</a>
+  <a class="back-link" href="#" onclick="history.go(-1); return false;">← 목록으로 돌아가기</a>
+</div>
+
+	
 	
 
     <!-- ② 지도 표시 영역 -->
@@ -110,13 +83,7 @@
       });
     </script>
 
-    <!-- 뒤로가기 -->
-    <div class="back-container">
-  		<a class="back-link" href="#" onclick="history.go(-1); return false;">
-  		  ← 목록으로 돌아가기
- 		 </a>
-	</div>
-
+    
   
   
  <!-- 리뷰작성 버튼 -->

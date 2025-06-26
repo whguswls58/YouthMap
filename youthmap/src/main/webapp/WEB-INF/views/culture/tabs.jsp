@@ -22,7 +22,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 850px;
+  max-width: 1150px;
   margin: 20px auto;
   padding: 3px 0;
   font-size: 1.1rem;
@@ -78,7 +78,7 @@
   text-decoration: none;
   color: #555;
   font-size: 16px;
-  padding: 10px 15px;
+  padding: 5px;
   position: relative;
   transition: 0.3s;
 }

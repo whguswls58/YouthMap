@@ -109,7 +109,7 @@ public class CultureController {
         culMd.setSort     (sort);      // mostViewed / newest / endingSoon
 
 		// 총 페이지 수 (10개씩 묶는 건 페이지 번호 블록 크기이지, 한 페이지 아이템 수가 아님)
-		int pagecount = (listcount + limit - 1) / limit;
+		int pagecount = listcount / limit + (listcount % 10 == 0 ? 0 : 1);
 
 		// 페이지 번호 블록 계산 (한 블록에 10페이지)
 		int startpage = ((page - 1) / 10) * 10 + 1;
@@ -295,7 +295,7 @@ public class CultureController {
 		List<CultureModel> performancelist = service.getperformancelist(culMd);
 
 		int listcount = service.count2(culMd);
-		int pagecount = (listcount + limit - 1) / limit;
+		int pagecount = listcount / limit + (listcount % 10 == 0 ? 0 : 1);
 		int startpage = ((page - 1) / 10) * 10 + 1;
 		int endpage = Math.min(startpage + 9, pagecount);
 
@@ -488,7 +488,7 @@ public class CultureController {
 		List<CultureModel> eventlist = service.geteventlist(culMd);
 
 		int listcount = service.count3(culMd);
-		int pagecount = (listcount + limit - 1) / limit;
+		int pagecount = listcount / limit + (listcount % 10 == 0 ? 0 : 1);
 		int startpage = ((page - 1) / 10) * 10 + 1;
 		int endpage = Math.min(startpage + 9, pagecount);
 
@@ -766,7 +766,7 @@ public class CultureController {
 		int limit = 12; // 한 페이지 출력할 데이터 갯수 12개. 두번째 기본변수.
 		int listcount = service.count(culMd); // 세번째 기본변수. 총 데이터 갯수 구함. db에서 구해옴
 
-		System.out.println("listcount" + listcount);
+		System.out.println("전체 listcount" + listcount);
 		
 		service.addReadCount(culMd);
 
@@ -788,8 +788,6 @@ public class CultureController {
 		// --- 1) DTO 세팅 ---
 		// 전체 모드: category_name = null
 //		culMd.setCon_age("누구나");
-		culMd.setStartRow((page - 1) * limit + 1);
-		culMd.setEndRow(page * limit);
 		
 		// 3) 새로 추가한 필드 세팅
         culMd.setSort     (sort);      // mostViewed / newest / endingSoon
@@ -813,7 +811,7 @@ public class CultureController {
 		
 		
 		// 총 페이지 수 (10개씩 묶는 건 페이지 번호 블록 크기이지, 한 페이지 아이템 수가 아님)
-		int pagecount = listcount / limit + (listcount % 10 == 0 ? 0 : 1);
+		int pagecount = listcount / limit + (listcount % limit == 0 ? 0 : 1);
 //		int pagecount = (listcount + limit - 1) / limit;
 		// 페이지 번호 블록 계산 (한 블록에 10페이지)
 		int startpage = ((page - 1) / 10) * 10 + 1;

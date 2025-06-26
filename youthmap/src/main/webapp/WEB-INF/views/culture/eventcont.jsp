@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.example.demo.util.KakaoKeyUtil" %>
 <%@ include file="/WEB-INF/views/culture/header.jsp" %>
+<%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
+<%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -14,6 +16,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/cont.css">
 </head>
 <body>
+<hr>
 
 <c:set var="ctx" value="${pageContext.request.contextPath }"/>
 
@@ -22,7 +25,7 @@
 
   <div class="containerer">
     <!-- 제목 -->
-    <h2>${cul.con_title}</h2>
+    <h2 >${cul.con_title}</h2>
 
     <!-- 이미지 + 상세 정보 표 -->
     <div class="detail-flex">
@@ -45,21 +48,19 @@
         <tr><th>요금</th>
             <td>${cul.con_cost}</td>
         </tr>
-        <tr><th>문의</th>
-            <td>
+       <%--  <tr>
+  			<td colspan="2" style="text-align:center;">
+   			 <a href="${cul.con_link}" class="btn-link" target="_blank">홈페이지 바로가기</a>
+  			</td>
+		</tr> --%>
+        
+        
+            <%-- <td>
               <a href="${cul.con_link}" target="_blank">홈페이지 바로가기</a>
-            </td>
+            </td> --%>
         </tr>
       </table>
     </div>
-
-		<!-- 뒤로가기 -->
-     <div class="back-container">
- 		 <a class="back-link" href="#" onclick="history.go(-1); return false;">
- 		   ← 목록으로 돌아가기
- 		 </a>
-	</div>
-
 
     <!-- ② 지도 표시 영역 -->
     <div id="map" style="width:100%;height:400px;"></div>
@@ -84,6 +85,16 @@
         });
       });
     </script>
+    
+    
+    	<!-- 뒤로가기 -->
+     <div class="back-container">
+ 		 <a class="back-link" href="#" onclick="history.go(-1); return false;">
+ 		   ← 목록으로 돌아가기
+ 		 </a>
+	</div>
+    
+    
 <!-- 				여기서부터 리뷰 기능 추가한 코드 				-->  
 
 <!-- 숨겨진 리뷰작성 폼 -->
