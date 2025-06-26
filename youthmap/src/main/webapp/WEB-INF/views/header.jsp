@@ -5,15 +5,15 @@
 <div class="topbar">
   <div class="menu">
     <c:choose>
-      <c:when test="${empty sessionScope.loginMember and empty sessionScope.adminLogin}">
+      <c:when test="${empty sessionScope.loginMember}">
         <a href="/login">로그인</a>
         <a href="/register">회원가입</a>
       </c:when>
       <c:otherwise>
         <c:choose>
-          <c:when test="${sessionScope.adminLogin eq true}">
+          <c:when test="${sessionScope.loginMember.memType eq 'ADMIN'}">
             <a href="/admin/dashboard">관리자 보드</a>
-            <a href="/admin/logout">로그아웃</a>
+            <a href="/logout">로그아웃</a>
           </c:when>
           <c:otherwise>
             <a href="/mypage">마이페이지</a>
@@ -55,22 +55,15 @@
    
   </div>
  <div class="navbar-center">
-    <a href="${pageContext.request.contextPath}/home" class="logo">YOUTHMAP</a>
+    <a href="${pageContext.request.contextPath}/home" class="logo">VIVAMAP</a>
   </div>
   
   <div class="navbar-right">
-    <c:choose>
-      <c:when test="${sessionScope.adminLogin eq true}">
-        <input type="hidden" id="session-start-time" value="${sessionScope.loginStartTime}" />
-        <span style="color: #333; font-size: 12px;">환영합니다 <b>관리자</b>님</span>
-        <span id="login-timer" style="font-weight: bold; color: #d33; font-size: 14px;"></span>
-      </c:when>
-      <c:when test="${not empty sessionScope.loginMember}">
-        <input type="hidden" id="session-start-time" value="${sessionScope.loginStartTime}" />
-        <span style="color: #333; font-size: 12px;">환영합니다 <b>${sessionScope.loginMember.memName}</b>님</span>
-        <span id="login-timer" style="font-weight: bold; color: #d33; font-size: 14px;"></span>
-      </c:when>
-    </c:choose>
+    <c:if test="${not empty sessionScope.loginMember}">
+      <input type="hidden" id="session-start-time" value="${sessionScope.loginStartTime}" />
+      <span style="color: #333; font-size: 12px;">환영합니다 <b>${sessionScope.loginMember.memName}</b>님</span>
+      <span id="login-timer" style="font-weight: bold; color: #d33; font-size: 14px;"></span>
+    </c:if>
   </div>
 </div>
 

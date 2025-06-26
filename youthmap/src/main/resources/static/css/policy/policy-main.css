@@ -25,10 +25,10 @@
 .search-bar {
 	display: flex;
   	align-items: center;
-  	background: #f2f2f2;
+  	background: #fff;
   	padding: 20px 40px;
   	border-radius: 12px;
-  	box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+/*   	box-shadow: 0 4px 8px rgba(0,0,0,0.05); */
   	gap: 12px;
   	width: fit-content; 		/* 내부 크기에 맞춤 */
     max-width: 100%;     		/* 모바일 대응 */
@@ -121,6 +121,7 @@
 /* 카테고리 전체 영역 div */
 .category-container {
   display: flex;
+  background:#fff;
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
@@ -137,7 +138,7 @@
 .category-header {
   text-align: center;
   margin-bottom: 10px;
-  background-color: #f2f2f2;
+  background-color: #fff;
   justify-content: center;
   align-items: center;
   
@@ -162,6 +163,7 @@
 /* 버튼 선택시 css */
 .btn-pill {
   border: 1.5px solid #ccc;
+  background: #fff;
   border-radius: 30px;
   min-width: 160px;
   text-align: center;
@@ -243,6 +245,8 @@ a:hover {
    margin-bottom: 0px;
    overflow: hidden;  	/* 중요: 넘침 방지 */
 }
+
+
 
 /* 슬라이더 카드 크기 키우기 */
 .swiper-slide {

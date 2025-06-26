@@ -83,7 +83,11 @@ public class MemberController {
 
 	// 로그인 페이지
 	@GetMapping("/login")
-	public String showLoginForm() {
+	public String showLoginForm(@RequestParam(value = "error", required = false) String error,
+	                           Model model) {
+		if (error != null) {
+			model.addAttribute("error", "로그인이 필요합니다.");
+		}
 		return "member/login";
 	}
 

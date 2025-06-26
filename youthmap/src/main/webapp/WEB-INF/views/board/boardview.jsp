@@ -76,13 +76,15 @@
     <c:if test="${sessionScope.loginMember.memId == board.memId 
                or sessionScope.loginMember.memType == 'ADMIN'}">
         <div style="text-align: right; margin: 20px 0;">
-            <!-- 수정 -->
-            <a href="/boardupdateform?no=${board.boardNo}" class="board-action-btn">수정</a>
-            <!-- 삭제 -->
+            <!-- 수정 (본인만) -->
+            <c:if test="${sessionScope.loginMember.memId == board.memId}">
+                <a href="/boardupdateform?no=${board.boardNo}" class="board-action-btn">수정</a>
+            </c:if>
+            <!-- 삭제 (본인 또는 관리자) -->
             <a href="javascript:void(0);"
                onclick="if(confirm('정말 삭제하시겠습니까?'))
                           location.href='/boarddelete?boardNo=${board.boardNo}';"
-               class="board-action-btn">
+               class="board-action-btn ${sessionScope.loginMember.memType == 'ADMIN' ? 'admin-delete-btn' : 'delete-btn'}">
                 삭제
             </a>
         </div>
@@ -118,8 +120,12 @@
       </c:when>
       <c:otherwise>
         <div class="comment-login-prompt">
-          로그인 후 댓글 작성이 가능합니다.
+          <a href="${pageContext.request.contextPath}/login" style="color:#3498db; font-weight:bold; text-decoration:underline;">
+            로그인
+          </a>
+          후 댓글 작성이 가능합니다.
         </div>
+        
       </c:otherwise>
     </c:choose>
   </form>
