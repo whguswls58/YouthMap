@@ -59,12 +59,19 @@ dependencies {
 tasks.named('test') {
    useJUnitPlatform()
    
-	// JSP 작동을 위한 설정
-/*	sourceSets {
-	   main {
-	      resources {
-	         srcDirs = ['src/main/resources']
-	      }
-	   }
-	} */
 }
+
+//// JSP 작동을 위한 설정
+//sourceSets {
+//   main {
+//      resources {
+//         srcDirs = ['src/main/resources', 'src/main/webapp']
+//      }
+//   }
+//} 
+//
+//// bootJar 설정 (JAR 파일명 지정 + 중복 제거)
+//bootJar {
+//    archiveFileName = 'yourapp.jar'
+//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+//}
