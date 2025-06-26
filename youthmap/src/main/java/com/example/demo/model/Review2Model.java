@@ -20,4 +20,8 @@ public class Review2Model {
     
     //임시
     private String review_writer2; 
+
+    // JOIN으로 가져올 필드들
+    private String mem_id;
+    private String mem_name;
 }

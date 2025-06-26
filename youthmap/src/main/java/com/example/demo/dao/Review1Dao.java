@@ -16,6 +16,7 @@ public interface Review1Dao {
 	
 
     int updatereview(Review1 review);
+    
     int deletereview(int review_id1);
 
 	Review1 selectreview(int review_id1);
@@ -24,4 +25,5 @@ public interface Review1Dao {
 
 	String reviewfile(int review_id1);
 
+	int checkReviewAuthor(Review1 review);
 }

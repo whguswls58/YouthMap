@@ -62,6 +62,16 @@ public class AdminServiceImpl implements AdminService {
     }
     
     @Override
+    public List<AdminMemberModel> getMembersWithPaging(Map<String, Object> params) {
+        return adminMapper.findMembersWithPaging(params);
+    }
+    
+    @Override
+    public int getMemberCountWithSearch(String search) {
+        return adminMapper.countMembersWithSearch(search);
+    }
+    
+    @Override
     public List<Board> getAllPosts() {
         return boardDao.getAllPosts();
     }
@@ -74,6 +84,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public int getPostCountExcludeNotices() {
         return adminMapper.countPostsExcludeNotices();
+    }
+    
+    @Override
+    public int getPostCountExcludeNoticesWithSearch(String search) {
+        return adminMapper.countPostsExcludeNoticesWithSearch(search);
     }
     
     @Override

@@ -12,10 +12,13 @@ public interface AdminService {
     
     // 회원 관리
     List<AdminMemberModel> getAllMemberSummary();
+    List<AdminMemberModel> getMembersWithPaging(Map<String, Object> params);
+    int getMemberCountWithSearch(String search);
     
     // 게시물 관리
     List<Board> getAllPosts();
     List<Board> getPostsWithPaging(Map<String, Object> params);
+    int getPostCountExcludeNoticesWithSearch(String search);
     
     // 통계
     int getUserCount();

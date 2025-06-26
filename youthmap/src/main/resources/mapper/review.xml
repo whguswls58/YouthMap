@@ -13,17 +13,15 @@
             review_file1,
             review_register1,
             mem_no,
-            res_id,
-            review_writer
+            res_id
         ) VALUES (
             review1_seq.NEXTVAL,
             #{review_score1},
             #{review_content1},
             #{review_file1, jdbcType=VARCHAR},
             SYSDATE,
-            1,
-			#{res_id},
-			#{review_writer}
+            #{mem_no},
+			#{res_id}
         )
     </insert>
 
@@ -33,31 +31,57 @@
         UPDATE review1 SET review_score1 = #{review_score1},
          	review_content1 = #{review_content1},
             review_file1 = #{review_file1, jdbcType=VARCHAR}
-        WHERE review_id1 = #{review_id1}
+        WHERE review_id1 = #{review_id1} AND mem_no = #{mem_no}
     </update>
 
     <!-- 리뷰 삭제 -->
-    <delete id="deletereview" parameterType="int">
-        DELETE FROM review1 WHERE review_id1 = #{review_id1}
+    <delete id="deletereview" parameterType="review1">
+        DELETE FROM review1 WHERE review_id1 = #{review_id1} AND mem_no = #{mem_no}
     </delete>
 
     <!-- 리뷰 한 건 조회 -->
     <select id="selectreview" parameterType="int" resultType="review1">
-        SELECT * FROM review1 WHERE review_id1 = #{review_id1}
+        SELECT r.review_id1,
+               r.review_score1,
+               r.review_content1,
+               r.review_file1,
+               r.review_register1,
+               r.mem_no,
+               r.res_id,
+               m.mem_id,
+               m.mem_name
+        FROM review1 r
+        LEFT JOIN member m ON r.mem_no = m.mem_no
+        WHERE r.review_id1 = #{review_id1}
+    </select>
+
+    <!-- 작성자 확인 -->
+    <select id="checkReviewAuthor" parameterType="review1" resultType="int">
+        SELECT COUNT(*) FROM review1 WHERE review_id1 = #{review_id1} AND mem_no = #{mem_no}
     </select>
 
     <!-- 식당별 리뷰 리스트 -->
-  <select id="reviewlist" resultType="review1">
-    SELECT * FROM (
-        SELECT a.*, ROWNUM rnum FROM (
-            SELECT * FROM review1
-            WHERE res_id = #{res_id}
-            ORDER BY review_register1 DESC
-        ) a
-        WHERE ROWNUM &lt;= #{endRow}
-    )
-    WHERE rnum &gt;= #{startRow}
-</select>
+    <select id="reviewlist" resultType="review1">
+        SELECT * FROM (
+            SELECT a.*, ROWNUM rnum FROM (
+                SELECT r.review_id1,
+                       r.review_score1,
+                       r.review_content1,
+                       r.review_file1,
+                       r.review_register1,
+                       r.mem_no,
+                       r.res_id,
+                       m.mem_id,
+                       m.mem_name
+                FROM review1 r
+                LEFT JOIN member m ON r.mem_no = m.mem_no
+                WHERE r.res_id = #{res_id}
+                ORDER BY r.review_register1 DESC
+            ) a
+            WHERE ROWNUM &lt;= #{endRow}
+        )
+        WHERE rnum &gt;= #{startRow}
+    </select>
 
 	
 	<!--전체리뷰구하기 -->
@@ -66,10 +90,12 @@
 	</select>
 	
 	<!-- 리뷰파일 -->
-	<select id="reivewfile" parameterType="int" resultType="String">
-    SELECT review_file1 FROM review1 WHERE review_id1 = #{review_id1}
-</select>
+	<select id="reviewfile" parameterType="int" resultType="String">
+        SELECT review_file1 FROM review1 WHERE review_id1 = #{review_id1}
+    </select>
 </mapper>
+
+
 
 
 

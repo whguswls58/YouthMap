@@ -245,12 +245,15 @@ a.card-link {
   
    <!-- 전체 목록 페이징 처리 -->
    <c:if test="${empty keyword }">
+    <!-- 첫 페이지로 이동 -->
     <c:if test="${page > 1}">
-      <a href="${pageContext.request.contextPath}/allList?page=1">&laquo;</a>
+      <a href="${pageContext.request.contextPath}/allList?page=1"><<</a>
     </c:if>
-    <c:if test="${startpage > 10}">
-      <a href="${pageContext.request.contextPath}/allList?page=${startpage-10}">[이전]</a>
+    <!-- 이전 페이지 -->
+    <c:if test="${page > 1}">
+      <a href="${pageContext.request.contextPath}/allList?page=${page-1}"><</a>
     </c:if>
+    <!-- 페이지 번호 -->
     <c:forEach var="i" begin="${startpage}" end="${endpage}">
       <c:choose>
         <c:when test="${i == page}">
@@ -261,22 +264,27 @@ a.card-link {
         </c:otherwise>
       </c:choose>
     </c:forEach>
-    <c:if test="${endpage < pagecount}">
-      <a href="${pageContext.request.contextPath}/allList?page=${startpage+10}">[다음]</a>
-    </c:if>
+    <!-- 다음 페이지 -->
     <c:if test="${page < pagecount}">
-      <a href="${pageContext.request.contextPath}/allList?page=${pagecount}">&raquo;</a>
+      <a href="${pageContext.request.contextPath}/allList?page=${page+1}">></a>
+    </c:if>
+    <!-- 마지막 페이지로 이동 -->
+    <c:if test="${page < pagecount}">
+      <a href="${pageContext.request.contextPath}/allList?page=${pagecount}">>></a>
     </c:if>
    </c:if>
    
    <!-- 전체 검색 페이징 처리 -->
    <c:if test="${!empty keyword }">
+    <!-- 첫 페이지로 이동 -->
     <c:if test="${page > 1}">
-      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=all&search=${search}&keyword=${keyword}&page=1">&laquo;</a>
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=all&search=${search}&keyword=${keyword}&page=1"><<</a>
     </c:if>
-    <c:if test="${startpage > 10}">
-      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=all&search=${search}&keyword=${keyword}&page=${startpage-10}">[이전]</a>
+    <!-- 이전 페이지 -->
+    <c:if test="${page > 1}">
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=all&search=${search}&keyword=${keyword}&page=${page-1}"><</a>
     </c:if>
+    <!-- 페이지 번호 -->
     <c:forEach var="i" begin="${startpage}" end="${endpage}">
       <c:choose>
         <c:when test="${i == page}">
@@ -287,11 +295,13 @@ a.card-link {
         </c:otherwise>
       </c:choose>
     </c:forEach>
-    <c:if test="${endpage < pagecount}">
-      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=all&search=${search}&keyword=${keyword}&page=${startpage+10}">[다음]</a>
-    </c:if>
+    <!-- 다음 페이지 -->
     <c:if test="${page < pagecount}">
-      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=all&search=${search}&keyword=${keyword}&page=${pagecount}">&raquo;</a>
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=all&search=${search}&keyword=${keyword}&page=${page+1}">></a>
+    </c:if>
+    <!-- 마지막 페이지로 이동 -->
+    <c:if test="${page < pagecount}">
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=all&search=${search}&keyword=${keyword}&page=${pagecount}">>></a>
     </c:if>
    </c:if>
    

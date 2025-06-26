@@ -35,4 +35,7 @@ public interface Review2Dao {
 
     /** 첨부파일명 조회 */
     String selectFile2(int review_id2);
+
+    /** 작성자 확인 */
+    int checkReview2Author(Review2Model review);
 }

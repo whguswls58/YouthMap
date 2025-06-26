@@ -88,3 +88,141 @@ h2 {
 	padding: 24px;
 	box-sizing: border-box;
 }
+
+/* 리뷰 영역 (board.css에서 comment- 계열을 review-로 복사) */
+.review-section {
+  max-width: 950px;
+  margin: 40px auto;
+  border-top: 2px solid #eee;
+  padding-top: 20px;
+}
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.review-header h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+.review-form {
+  margin-bottom: 30px;
+}
+.review-form-wrapper {
+  display: flex;
+  gap: 8px;
+}
+.review-form-wrapper textarea {
+  flex-grow: 1;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 60px;
+}
+.review-form-wrapper button {
+  padding: 12px 24px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.review-form-wrapper button:hover {
+  background: #0056b3;
+}
+.review-login-prompt {
+  text-align: center;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  color: #666;
+}
+.review-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.review-item {
+  border-bottom: 1px solid #eee;
+  padding: 20px 0;
+}
+.review-item:last-child {
+  border-bottom: none;
+}
+.review-body {
+  position: relative;
+}
+.review-author-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.review-author {
+  font-weight: bold;
+  color: #333;
+}
+.review-info {
+  color: #666;
+  font-size: 14px;
+}
+.review-text {
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 8px;
+}
+.review-actions {
+  text-align: right;
+  margin-top: 8px;
+}
+.review-actions button {
+  padding: 4px 12px;
+  margin-left: 8px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.review-actions button:hover {
+  background: #545b62;
+}
+.review-actions .delete-btn {
+  padding: 4px 12px;
+  background: #dc3545;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.review-actions .delete-btn:hover {
+  background: #c82333;
+}
+.review-edit-form {
+  margin-top: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+.review-edit-form label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+.review-edit-form select,
+.review-edit-form textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+.review-edit-form textarea {
+  min-height: 80px;
+  resize: vertical;
+}

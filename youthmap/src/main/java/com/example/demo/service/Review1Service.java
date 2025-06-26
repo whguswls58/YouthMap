@@ -29,10 +29,14 @@ public class Review1Service {
 		
 	}
 
-	public int deletereview(int review_id1) {
-		return dao.deletereview(review_id1);
+	public int deletereview(Review1 review) {
+		return dao.deletereview(review.getReview_id1());
 	}
 
+	// 작성자 확인
+	public int checkReviewAuthor(Review1 review) {
+		return dao.checkReviewAuthor(review);
+	}
 
 	public Review1 selectreview(int review_id1) {
 
@@ -45,7 +49,7 @@ public class Review1Service {
 	}
 
 
-	public String reviwfile(int review_id1) {
+	public String reviewfile(int review_id1) {
 		return dao.reviewfile(review_id1);
 	}
 	
@@ -54,9 +58,6 @@ public class Review1Service {
 	
 
 }
-
-
-
 
    
 

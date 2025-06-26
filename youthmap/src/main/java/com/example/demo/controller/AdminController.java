@@ -45,7 +45,8 @@ public class AdminController {
     // 게시물 관리 목록
     @GetMapping("/posts")
     public String adminPosts(HttpSession session, Model model,
-                           @RequestParam(value = "page", defaultValue = "1") int page) {
+                           @RequestParam(value = "page", defaultValue = "1") int page,
+                           @RequestParam(value = "search", required = false) String search) {
         // 일반 로그인 세션에서 관리자 권한 확인
         MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
         if (loginMember == null || !"ADMIN".equals(loginMember.getMemType())) {
@@ -61,12 +62,13 @@ public class AdminController {
         params.put("startRow", startRow);
         params.put("endRow", endRow);
         params.put("excludeCategory", "공지"); // 공지사항 제외
+        params.put("search", search); // 검색 조건 추가
         
         // 게시물 목록 조회 (공지사항 제외)
         List<Board> boardlist = adminService.getPostsWithPaging(params);
         
         // 전체 게시물 수 조회 (공지사항 제외, 페이징 계산용)
-        int totalPosts = adminService.getPostCountExcludeNotices();
+        int totalPosts = adminService.getPostCountExcludeNoticesWithSearch(search);
         int totalPages = (int) Math.ceil((double) totalPosts / limit);
         
         // 페이징 범위 계산
@@ -79,6 +81,7 @@ public class AdminController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("listcount", totalPosts);
+        model.addAttribute("search", search);
         
         return "admin/posts";
     }

@@ -48,4 +48,9 @@ public class Review2Service {
     public String selectFile2(int review_id2) {
         return dao.selectFile2(review_id2);
     }
+
+    /** 작성자 확인 */
+    public int checkReview2Author(Review2Model review2) {
+        return dao.checkReview2Author(review2);
+    }
 }

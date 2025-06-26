@@ -7,45 +7,6 @@
     <title>회원관리</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin/dashboard.css">
-    <style>
-        .admin-section-title {
-            margin-bottom: 30px;
-            color: #2c3e50;
-            font-size: 24px;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-        }
-        
-        .member-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .member-table th,
-        .member-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ecf0f1;
-        }
-        
-        .member-table th {
-            background-color: #3498db;
-            color: white;
-            font-weight: bold;
-        }
-        
-        .member-table tr:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .member-table tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-    </style>
 </head>
 <body>
 <!-- 헤더-->
@@ -65,38 +26,83 @@
         <a href="${pageContext.request.contextPath}/admin/list">공지 관리</a>
     </div>
 
+    <!-- 메인 콘텐츠 -->
+    <div class="admin-main-content">
+        <div class="section-header">
+            <h2 class="admin-section-title">회원관리</h2>
+            <!-- 검색 기능 -->
+            <div class="search-container">
+                <form action="${pageContext.request.contextPath}/admin/users" method="get" style="display: inline-block;">
+                    <input type="text" name="search" value="${param.search}" placeholder="회원 ID 또는 이름 검색" 
+                           style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; width: 200px; margin-right: 10px;">
+                    <button type="submit" style="padding: 8px 16px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">검색</button>
+                </form>
+            </div>
+        </div>
 
-  <!-- 메인 콘텐츠 -->
-  <div class="admin-main-content">
+        <!-- 회원 테이블 -->
+        <table class="board-table member-management-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>이름</th>
+                    <th>게시물 수</th>
+                    <th>댓글 수</th>
+                    <th>가입일</th>
+                    <th>상태</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach items="${members}" var="member">
+                    <tr>
+                        <td>${member.memId}</td>
+                        <td>${member.memName}</td>
+                        <td>${member.postCount}</td>
+                        <td>${member.commentCount}</td>
+                        <td><fmt:formatDate value="${member.memDate}" pattern="yyyy-MM-dd" /></td>
+                        <td>${member.memStatus}</td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
 
-    <h2 class="admin-section-title">회원관리</h2>
-
-    <table class="member-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>이름</th>
-          <th>게시물 수</th>
-          <th>댓글 수</th>
-          <th>가입일</th>
-          <th>상태</th>
-        </tr>
-      </thead>
-      <tbody>
-        <c:forEach items="${members}" var="member">
-          <tr>
-            <td>${member.memId}</td>
-            <td>${member.memName}</td>
-            <td>${member.postCount}</td>
-            <td>${member.commentCount}</td>
-            <td><fmt:formatDate value="${member.memDate}" pattern="yyyy-MM-dd" /></td>
-            <td>${member.memStatus}</td>
-          </tr>
-        </c:forEach>
-      </tbody>
-    </table>
-
-  </div>
+        <!-- 페이징 -->
+        <c:if test="${totalPages > 1}">
+            <div class="pagination">
+                <!-- 첫 페이지로 이동 -->
+                <c:if test="${page > 1}">
+                    <a href="/admin/users?page=1&search=${param.search}" class="page-link"><<</a>
+                </c:if>
+                
+                <!-- 이전 페이지 -->
+                <c:if test="${page > 1}">
+                    <a href="/admin/users?page=${page-1}&search=${param.search}" class="page-link"><</a>
+                </c:if>
+                
+                <!-- 페이지 번호들 -->
+                <c:forEach var="i" begin="${startPage}" end="${endPage}">
+                    <c:choose>
+                        <c:when test="${i == page}">
+                            <span class="page-link active">${i}</span>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="/admin/users?page=${i}&search=${param.search}" class="page-link">${i}</a>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+                
+                <!-- 다음 페이지 -->
+                <c:if test="${page < totalPages}">
+                    <a href="/admin/users?page=${page+1}&search=${param.search}" class="page-link">></a>
+                </c:if>
+                
+                <!-- 마지막 페이지로 이동 -->
+                <c:if test="${page < totalPages}">
+                    <a href="/admin/users?page=${totalPages}&search=${param.search}" class="page-link">>></a>
+                </c:if>
+            </div>
+        </c:if>
+    </div>
 </div>
 
 </body>

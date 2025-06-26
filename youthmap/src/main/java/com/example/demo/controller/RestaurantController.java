@@ -1,19 +1,29 @@
 package com.example.demo.controller;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.example.demo.model.MemberModel;
 import com.example.demo.model.Restaurant;
 import com.example.demo.model.Review1;
 import com.example.demo.service.RestaurantService;
 import com.example.demo.service.Review1Service;
+
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import java.io.File;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller
@@ -184,71 +194,138 @@ public class RestaurantController {
         return "restaurant/restaurantDetail";
     }
     
-    // 리뷰 작성
+ // 리뷰 작성
     @PostMapping("/reviewwrite")
     public String writeReview(@ModelAttribute Review1 review,
-    						  @RequestParam("review_file11") MultipartFile file,
-    						  Model model,
-    						  HttpSession session) throws Exception {
-      
-        String uploadPath = session.getServletContext().getRealPath("images");
+                              @RequestParam("review_file11") MultipartFile file,
+                              Model model,
+                              HttpSession session) throws Exception {
+
+        // 로그인 체크
+        MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
+        if (loginMember == null) {
+            return "redirect:/login";
+        }
+
+        // 세션에서 로그인한 사용자 정보 설정
+        review.setMem_no(loginMember.getMemNo().intValue());
+
+        String uploadPath = session.getServletContext().getRealPath("/upload/review/");
+        // 경로가 null이면 기본 경로 사용
+        if (uploadPath == null) {
+            uploadPath = System.getProperty("user.home") + "/upload/review/";
+        }
         String filename = file.getOriginalFilename();
         int size = (int) file.getSize();
         String newfilename = "";
-		
+
         if (size > 0) {
             String extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
-            if (!extension.equals(".jpg") && !extension.equals(".jpeg") &&
-                !extension.equals(".png") && !extension.equals(".gif")) {
-                model.addAttribute("result2", 2);
+            if (!extension.matches("\\.(jpg|jpeg|png|gif)")) {
+                model.addAttribute("result2", 2); // 확장자 오류
+                return "redirect:/restaurantDetail?res_id=" + review.getRes_id();
             }
             if (size > 1024 * 1000) {
-                model.addAttribute("result1", 1);
+                model.addAttribute("result1", 1); // 용량 초과
+                return "redirect:/restaurantDetail?res_id=" + review.getRes_id();
             }
+
             newfilename = java.util.UUID.randomUUID().toString() + extension;
             File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) uploadDir.mkdirs();
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
 
             file.transferTo(new File(uploadPath, newfilename));
             review.setReview_file1(newfilename);
         }
-        
+
         reviewservice.insertreview(review);
-        return "redirect:restaurant/restaurantDetail?res_id=" + review.getRes_id();
+        return "redirect:/restaurantDetail?res_id=" + review.getRes_id();
     }
-    
+
     // 리뷰 수정
     @PostMapping("/reviewedit")
     public String reviewEdit(@ModelAttribute Review1 review,
-            				 @RequestParam("review_file11") MultipartFile file,
-            				 @RequestParam("old_file") String oldFile,
-            				 HttpSession session, @RequestParam("res_id") String resId
-    ) throws Exception {
+                             @RequestParam("review_file11") MultipartFile file,
+                             @RequestParam("old_file") String oldFile,
+                             HttpSession session,
+                             @RequestParam("res_id") String resId) throws Exception {
+
+        // 로그인 체크
+        MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
+        if (loginMember == null) {
+            return "redirect:/login";
+        }
+
+        // 작성자 정보 설정
+        review.setMem_no(loginMember.getMemNo().intValue());
+
+        // 작성자 확인
+        if (reviewservice.checkReviewAuthor(review) == 0) {
+            return "redirect:/restaurantDetail?res_id=" + resId;
+        }
+
         if (!file.isEmpty()) {
             String filename = file.getOriginalFilename();
-            String path = session.getServletContext().getRealPath("images");
-            file.transferTo(new java.io.File(path + "/" + filename));
-            review.setReview_file1(filename);
+            String extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+            if (!extension.matches("\\.(jpg|jpeg|png|gif)")) {
+                return "redirect:/restaurantDetail?res_id=" + resId;
+            }
+            String newfilename = java.util.UUID.randomUUID().toString() + extension;
+            String path = session.getServletContext().getRealPath("/upload/review/");
+            // 경로가 null이면 기본 경로 사용
+            if (path == null) {
+                path = System.getProperty("user.home") + "/upload/review/";
+            }
+            File uploadDir = new File(path);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+
+            file.transferTo(new File(path, newfilename));
+            review.setReview_file1(newfilename);
         } else {
             review.setReview_file1(oldFile);
         }
 
         reviewservice.updatereview(review);
-        return "redirect:restaurant/restaurantDetail?res_id=" + review.getRes_id();
+        return "redirect:/restaurantDetail?res_id=" + review.getRes_id();
     }
 
     // 리뷰 삭제
     @GetMapping("/reviewdelete")
     public String reviewDelete(@RequestParam("review_id1") int review_id1,
-            				   @RequestParam("res_id") String resId,
-            				   HttpSession session) {
-        String fileName = reviewservice.reviwfile(review_id1);
+                               @RequestParam("res_id") String resId,
+                               HttpSession session) {
+        
+        // 로그인 체크
+        MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
+        if (loginMember == null) {
+            return "redirect:/login";
+        }
+
+        // Review1 객체 생성하여 작성자 정보 설정
+        Review1 review = new Review1();
+        review.setReview_id1(review_id1);
+        review.setMem_no(loginMember.getMemNo().intValue());
+
+        // 작성자 확인
+        if (reviewservice.checkReviewAuthor(review) == 0) {
+            return "redirect:/restaurantDetail?res_id=" + resId;
+        }
+
+        String fileName = reviewservice.reviewfile(review_id1);
         if (fileName != null && !fileName.trim().isEmpty()) {
-            String path = session.getServletContext().getRealPath("/upload/");
-            java.io.File file = new java.io.File(path, fileName);
+            String path = session.getServletContext().getRealPath("/upload/review/");
+            // 경로가 null이면 기본 경로 사용
+            if (path == null) {
+                path = System.getProperty("user.home") + "/upload/review/";
+            }
+            File file = new File(path, fileName);
             if (file.exists()) file.delete();
         }
-        reviewservice.deletereview(review_id1);
-        return "redirect:restaurant/restaurantDetail?res_id=" + resId;
+        reviewservice.deletereview(review);
+        return "redirect:/restaurantDetail?res_id=" + resId;
     }
 }

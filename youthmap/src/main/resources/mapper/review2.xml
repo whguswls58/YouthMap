@@ -14,26 +14,28 @@
     <result column="review_register2" property="review_register2"/>
     <result column="mem_no"          property="mem_no"/>
     <result column="con_id"          property="con_id"/>
-    <result column="review_writer2" property="review_writer2"/>
-    
+    <result column="mem_id"          property="mem_id"/>
+    <result column="mem_name"        property="mem_name"/>
   </resultMap>
 
   <!-- 페이징된 리뷰 목록 조회 -->
-  <select id="review2List" parameterType="Review2" resultMap="review2Map">
+  <select id="review2List" resultType="Review2">
     SELECT * FROM (
       SELECT a.*, ROWNUM rn FROM (
         SELECT
-          review_id2,
-          review_score2,
-          review_content2,
-          review_file2,
-          review_register2,
-          mem_no,
-          con_id,
-          review_writer2
-        FROM review2
-        WHERE con_id = #{con_id}
-        ORDER BY review_register2 DESC
+          r.review_id2,
+          r.review_score2,
+          r.review_content2,
+          r.review_file2,
+          r.review_register2,
+          r.mem_no,
+          r.con_id,
+          m.mem_id,
+          m.mem_name
+        FROM review2 r
+        LEFT JOIN member m ON r.mem_no = m.mem_no
+        WHERE r.con_id = #{con_id}
+        ORDER BY r.review_register2 DESC
       ) a
       WHERE ROWNUM &lt;= #{endRow}
     )
@@ -49,17 +51,15 @@
       review_file2,
       review_register2,
       mem_no,
-      con_id,
-      review_writer2
+      con_id
     ) VALUES (
       review2_seq.NEXTVAL,
       #{review_score2},
       #{review_content2},
       #{review_file2, jdbcType=VARCHAR},
       SYSDATE,
-      1,
-      #{con_id},
-      #{review_writer2, jdbcType=VARCHAR}
+      #{mem_no},
+      #{con_id}
     )
   </insert>
 
@@ -68,9 +68,8 @@
     UPDATE review2
        SET review_score2   = #{review_score2},
            review_content2 = #{review_content2},
-           review_file2    = #{review_file2, jdbcType=VARCHAR},
-           review_writer2	=  #{review_writer2, jdbcType=VARCHAR}
-     WHERE review_id2 = #{review_id2}
+           review_file2    = #{review_file2, jdbcType=VARCHAR}
+     WHERE review_id2 = #{review_id2} AND mem_no = #{mem_no}
   </update>
 
   <!-- 리뷰 삭제 -->
@@ -80,18 +79,20 @@
   </delete>
 
   <!-- 단일 리뷰 조회 (수정 폼용) -->
-  <select id="selectReview2" parameterType="int" resultMap="review2Map">
+  <select id="selectReview2" parameterType="int" resultType="Review2">
     SELECT
-      review_id2,
-      review_score2,
-      review_content2,
-      review_file2,
-      review_register2,
-      mem_no,
-      con_id,
-      review_writer2
-    FROM review2
-    WHERE review_id2 = #{review_id2}
+      r.review_id2,
+      r.review_score2,
+      r.review_content2,
+      r.review_file2,
+      r.review_register2,
+      r.mem_no,
+      r.con_id,
+      m.mem_id,
+      m.mem_name
+    FROM review2 r
+    LEFT JOIN member m ON r.mem_no = m.mem_no
+    WHERE r.review_id2 = #{review_id2}
   </select>
 
   <!-- 리뷰 개수 조회 (페이징 계산용) -->
@@ -106,6 +107,11 @@
     SELECT review_file2
       FROM review2
      WHERE review_id2 = #{review_id2}
+  </select>
+
+  <!-- 작성자 확인 -->
+  <select id="checkReview2Author" parameterType="Review2" resultType="int">
+    SELECT COUNT(*) FROM review2 WHERE review_id2 = #{review_id2} AND mem_no = #{mem_no}
   </select>
 
 </mapper>
