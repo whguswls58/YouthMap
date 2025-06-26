@@ -7,19 +7,21 @@
 
 
 <title>맛집 리스트</title>
- <!-- CSS 파일 로드 -->
-  <link rel="stylesheet" href="<c:url value='/css/res/res_list.css'/>" />
+<!-- CSS 파일 로드 -->
+<link rel="stylesheet" href="<c:url value='/css/res/res_list.css'/>" />
 
-  <!-- Swiper CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+<!-- Swiper CSS -->
+<link rel="stylesheet"
+	href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/common.css">
 </head>
 <body>
-<!-- 헤더-->
-<%@ include file="/WEB-INF/views/header.jsp" %>
+	<!-- 헤더-->
+	<%@ include file="/WEB-INF/views/header.jsp"%>
 
- <!-- Hero 배너 -->
-  <section class="hero-banner"></section>
+	<!-- Hero 배너 -->
+	<section class="hero-banner"></section>
 	<!-- 검색 -->
 
 	<div class="search-wrapper">
@@ -36,13 +38,30 @@
 					value="<c:out value='${keyword}'/>" />
 			</div>
 			<input type="submit" value="검색" />
-			
-			
+
+
 		</form>
 	</div>
+	
+	<form id="sortForm" action="restaurants" method="get">
+		<!-- 기존 파라미터 -->
+		<input type="hidden" name="res_gu" value="${res_gu}" /> <input
+			type="hidden" name="searchType" value="${searchType}" /> <input
+			type="hidden" name="keyword" value="${keyword}" />
+		<!-- 반드시 있어야 함 -->
+		<input type="hidden" name="sort" id="sortInput" value="${sort}" />
+
+		<div class="sort-bar">
+			<button type="button" data-value="res_score"
+				class="sort-btn ${sort=='res_score'?'active':''}">별점순</button>
+			<button type="button" data-value="res_subject"
+				class="sort-btn ${sort=='res_subject'?'active':''}">가나다순</button>
+		</div>
+	</form>
 
 	<!-- ✅ 구 버튼 -->
-	<div class="gu-list <c:if test='${searchType eq \"res_gu\"}'>active</c:if>'">
+	<div
+		class="gu-list <c:if test='${searchType eq \"res_gu\"}'>active</c:if>'">
 		<form method="get" action="restaurants">
 			<button type="submit" name="res_gu" value=""
 				class="gu-btn <c:if test='${empty res_gu}'>active</c:if>">전체</button>
@@ -70,7 +89,7 @@
 		<c:forEach var="r" items="${restaurants}">
 
 			<div class="restaurant-card">
-				 <!-- 사진이 있을 때 -->
+				<!-- 사진이 있을 때 -->
 				<c:if test="${not empty r.res_photo_url}">
 					<a href="restaurantDetail?res_id=${r.res_id}"> <img
 						src="${r.res_photo_url}" alt="대표 사진" />
@@ -89,13 +108,12 @@
 			</div>
 		</c:forEach>
 	</div>
+	
 	<div class="pagination">
 		<c:if test="${listcount > 0}">
-			<a
-				href="restaurants?page=1&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}">◀</a>
+			<a href="restaurants?page=1&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}">◀</a>
 			<c:if test="${startpage > 10}">
-				<a
-					href="restaurants?page=${startpage-10}&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}">이전</a>
+				<a href="restaurants?page=${startpage-10}&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}">이전</a>
 			</c:if>
 			<c:forEach var="i" begin="${startpage}" end="${endpage}">
 				<c:choose>
@@ -103,8 +121,7 @@
 						<b>${i}</b>
 					</c:when>
 					<c:otherwise>
-						<a
-							href="restaurants?page=${i}&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}">${i}</a>
+						<a href="restaurants?page=${i}&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}&sort=${sort}"> ${i} </a>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
@@ -142,5 +159,14 @@
 			toggleGuList();
 		});
 	</script>
+	<!--별점,가나다 -->
+	<script>
+  document.querySelectorAll('.sort-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('sortInput').value = btn.dataset.value;
+      document.getElementById('sortForm').submit();
+    });
+  });
+</script>
 </body>
 </html>

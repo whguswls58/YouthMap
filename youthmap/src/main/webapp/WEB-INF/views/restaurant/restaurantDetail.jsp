@@ -2,8 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-<title>${restaurant.res_subject}- 상세 정보</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+<title>${restaurant.res_subject}-상세 정보</title>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/common.css">
 <script>
     // 모든 사진 배열 생성 (대표 + 여분)
     const photos = [
@@ -51,11 +52,12 @@
       updateMainPhoto(0);
     });
   </script>
- <!-- CSS 파일 로드 -->
-  <link rel="stylesheet" href="<c:url value='/css/res/res_detail.css'/>" />
+<!-- CSS 파일 로드 -->
+<link rel="stylesheet" href="<c:url value='/css/res/res_detail.css'/>" />
 
-  <!-- Swiper CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+<!-- Swiper CSS -->
+<link rel="stylesheet"
+	href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 
 <script>
 	function showMainPhoto(url) {
@@ -65,28 +67,24 @@
 
 </head>
 <body>
-<!-- 헤더-->
-<%@ include file="/WEB-INF/views/header.jsp" %>
+	<!-- 헤더-->
+	<%@ include file="/WEB-INF/views/header.jsp"%>
 
 
 
 
 	<div class="detail-container">
-    <!-- 메인 사진 + 좌우 버튼 -->
-    <div class="main-photo-container">
-      <button id="mainPrev" class="photo-nav" onclick="prevMainPhoto()">‹</button>
-      <img
-        id="mainPhoto"
-        src=""
-        alt="대표 사진"
-        onclick="openModalAt(currentMainIndex)"
-      />
-      <button id="mainNext" class="photo-nav" onclick="nextMainPhoto()">›</button>
-    </div>
-    
+		<!-- 메인 사진 + 좌우 버튼 -->
+		<div class="main-photo-container">
+			<button id="mainPrev" class="photo-nav" onclick="prevMainPhoto()">‹</button>
+			<img id="mainPhoto" src="" alt="대표 사진"
+				onclick="openModalAt(currentMainIndex)" />
+			<button id="mainNext" class="photo-nav" onclick="nextMainPhoto()">›</button>
+		</div>
+
 		<!-- 여분 사진(썸네일) -->
 		<c:if test="${not empty extraPhotoUrls}">
-			<div class="photos-container" >
+			<div class="photos-container">
 				<c:forEach var="img" items="${extraPhotoUrls}">
 					<img src="${img}" class="thumb">
 				</c:forEach>
@@ -112,7 +110,7 @@
 						};
 				});
 		</script>
-		
+
 
 
 		<!-- 음식점명 & 별점 -->
@@ -143,7 +141,7 @@
 			</tr>
 			<tr>
 				<th>영업상태</th>
-				<td>${restaurant.res_status} (<c:choose>
+				<td>${restaurant.res_status}(<c:choose>
 						<c:when test="${restaurant.res_open=='true'}">영업중</c:when>
 						<c:otherwise>휴업</c:otherwise>
 					</c:choose>)
@@ -190,43 +188,50 @@
 					enctype="multipart/form-data">
 					<input type="hidden" name="res_id" value="${restaurant.res_id}" />
 
-					<div class="review-form-row" style="margin-bottom: 16px;">
+					 <div class="review-form-row" style="margin-bottom: 16px;">
 						<label for="review_writer">아이디</label> <input type="text"
 							name="review_writer" id="review_writer" maxlength="30" required
 							placeholder="작성자 닉네임 또는 아이디" style="width: 100%; padding: 8px;">
-					</div>
+					</div> 
 
-					<div class="review-form-row" style="margin-bottom: 16px;">
-						<label for="review_score1">별점</label> <select name="review_score1"
-							id="review_score1" required style="width: 100%; padding: 8px;">
-							<option value="">선택</option>
-							<option value="5">★★★★★ (5점)</option>
-							<option value="4">★★★★ (4점)</option>
-							<option value="3">★★★ (3점)</option>
-							<option value="2">★★ (2점)</option>
-							<option value="1">★ (1점)</option>
-						</select>
-					</div>
+					<%-- <form action="reviewwrite" method="post" enctype="multipart/form-data">
+						<!-- 로그인 세션에서 mem_no 를 직접 넣어줌 -->
+						<input type="hidden" name="review_writer"
+							value="${sessionScope.mem_no}" /> <input type="hidden"
+							name="res_id" value="${restaurant.res_id}" />
 
-					<div class="review-form-row" style="margin-bottom: 16px;">
-						<label for="review_content1">내용</label>
-						<textarea name="review_content1" id="review_content1"
-							maxlength="500" required placeholder="리뷰 내용을 입력해주세요."
-							style="width: 100%; padding: 8px;"></textarea>
-					</div>
+						<div class="review-form-row" style="margin-bottom: 16px;">
+							<label for="review_score1">별점</label> <select
+								name="review_score1" id="review_score1" required
+								style="width: 100%; padding: 8px;">
+								<option value="">선택</option>
+								<option value="5">★★★★★ (5점)</option>
+								<option value="4">★★★★ (4점)</option>
+								<option value="3">★★★ (3점)</option>
+								<option value="2">★★ (2점)</option>
+								<option value="1">★ (1점)</option>
+							</select>
+						</div> --%>
 
-					<div class="review-form-row" style="margin-bottom: 16px;">
-						<label for="review_file1">사진 첨부</label> <input type="file"
-							name="review_file11" id="review_file1" accept="image/*" />
-					</div>
+						<div class="review-form-row" style="margin-bottom: 16px;">
+							<label for="review_content1">내용</label>
+							<textarea name="review_content1" id="review_content1"
+								maxlength="500" required placeholder="리뷰 내용을 입력해주세요."
+								style="width: 100%; padding: 8px;"></textarea>
+						</div>
 
-					<div class="review-form-btns" style="text-align: center;">
-						<input type="submit" value="작성완료"
-							style="padding: 8px 28px; border-radius: 6px; border: none; background: #888; color: #fff; font-size: 16px; cursor: pointer;">
-						<button type="button" onclick="closeReviewForm()"
-							style="padding: 8px 28px; border-radius: 6px; border: none; background: #888; color: #fff; font-size: 16px; cursor: pointer;">취소</button>
-					</div>
-				</form>
+						<div class="review-form-row" style="margin-bottom: 16px;">
+							<label for="review_file1">사진 첨부</label> <input type="file"
+								name="review_file11" id="review_file1" accept="image/*" />
+						</div>
+
+						<div class="review-form-btns" style="text-align: center;">
+							<input type="submit" value="작성완료"
+								style="padding: 8px 28px; border-radius: 6px; border: none; background: #888; color: #fff; font-size: 16px; cursor: pointer;">
+							<button type="button" onclick="closeReviewForm()"
+								style="padding: 8px 28px; border-radius: 6px; border: none; background: #888; color: #fff; font-size: 16px; cursor: pointer;">취소</button>
+						</div>
+					</form>
 			</div>
 		</div>
 
