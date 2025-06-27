@@ -18,9 +18,6 @@ public class Review2Model {
     private int mem_no;
     private int con_id;  //(컨텐츠 PK 맞추기)
     
-    //임시
-    private String review_writer2; 
-
     // JOIN으로 가져올 필드들
     private String mem_id;
     private String mem_name;

@@ -32,14 +32,14 @@ import com.example.demo.model.Comment;
 			return memberMapper.selectMemberInfo(memNo);
 		}
 		
-		// 회원이 작성한 게시글 수 조
+		// 회원이 작성한 게시글 수 조회
 		@Override
 		public int getPostCount(Long memNo) {
 			return memberMapper.countPostsByMember(memNo);
 			
 		}
 		
-		// 회원이 작성 댓굴 수 조
+		// 회원이 작성 댓굴 수 조회
 		@Override
 		public int getCommentCount(Long memNo) {
 			return memberMapper.countCommentsByMember(memNo);
