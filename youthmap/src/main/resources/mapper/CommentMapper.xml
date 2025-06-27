@@ -38,6 +38,14 @@
         DELETE FROM comments WHERE comm_no = #{commNo}
     </delete>
     
+    <!-- 댓글 수정 -->
+    <update id="update" parameterType="com.example.demo.model.Comment">
+        UPDATE comments 
+        SET comm_content = #{commContent},
+            comm_update = SYSDATE
+        WHERE comm_no = #{commNo}
+    </update>
+    
    <select id="getCommentByNo" resultType="com.example.demo.model.Comment">
     SELECT c.comm_no AS commNo,
            c.board_no AS boardNo,

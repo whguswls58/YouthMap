@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -144,6 +145,60 @@ public class CommentRestController {
             
         } catch (Exception e) {
             System.out.println("댓글 삭제 중 예외 발생: " + e.getMessage());
+            e.printStackTrace();
+            return "fail";
+        }
+    }
+
+    // ✅ 4. 댓글 수정
+    @PutMapping("/{commNo}")
+    public String updateComment(@PathVariable("commNo") int commNo, 
+                               @RequestBody Comment comment, 
+                               HttpSession session) {
+        try {
+            System.out.println("=== 댓글 수정 시작 ===");
+            System.out.println("댓글 번호: " + commNo);
+            System.out.println("수정할 내용: " + comment.getCommContent());
+            
+            // Spring Security에서 설정한 세션 정보 사용
+            MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
+            
+            if (loginMember == null) {
+                System.out.println("댓글 수정 실패: 로그인 정보 없음");
+                return "fail";
+            }
+            
+            String memId = loginMember.getMemId();
+            String memType = loginMember.getMemType();
+            
+            if (memId == null || memId.trim().isEmpty()) {
+                System.out.println("댓글 수정 실패: memId 정보 없음");
+                return "fail";
+            }
+
+            // 🔍 댓글 정보 조회
+            Comment existingComment = commentService.getCommentByNo(commNo);
+
+            if (existingComment == null) {
+                System.out.println("❌ 댓글 조회 실패 (null 반환)");
+                return "fail";
+            }
+
+            // 🔐 본인이거나 관리자면 수정 허용
+            if (!memId.equals(existingComment.getMemId()) && !"ADMIN".equals(memType)) {
+                System.out.println("❌ 댓글 수정 권한 없음 - 본인: " + memId + ", 댓글작성자: " + existingComment.getMemId());
+                return "fail";
+            }
+
+            // 수정할 내용 설정
+            existingComment.setCommContent(comment.getCommContent());
+            
+            int result = commentService.update(existingComment);
+            System.out.println("댓글 수정 결과: " + result);
+            return result == 1 ? "success" : "fail";
+            
+        } catch (Exception e) {
+            System.out.println("댓글 수정 중 예외 발생: " + e.getMessage());
             e.printStackTrace();
             return "fail";
         }

@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 data.forEach(c => {
                     const item = document.createElement("li");
                     item.className = "comment-item";
+                    item.setAttribute("data-comm-no", c.commNo);
 
                     // 수정/삭제 버튼
                     let actions = "";
@@ -133,6 +134,92 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("댓글 삭제 실패:", error);
             alert("댓글 삭제 중 오류가 발생했습니다.");
         });
+    };
+
+    // ✅ 4. 댓글 수정
+    window.editComment = function (commNo) {
+        // 기존 수정 폼이 있다면 제거
+        const existingForm = document.querySelector('.comment-edit-form');
+        if (existingForm) {
+            existingForm.remove();
+        }
+
+        // 해당 댓글 요소 찾기
+        const commentItem = document.querySelector(`[data-comm-no="${commNo}"]`);
+        if (!commentItem) {
+            console.error("댓글 요소를 찾을 수 없습니다:", commNo);
+            return;
+        }
+
+        // 현재 댓글 내용 가져오기
+        const commentText = commentItem.querySelector('.comment-text').textContent;
+
+        // 수정 폼 생성
+        const editForm = document.createElement('div');
+        editForm.className = 'comment-edit-form';
+        editForm.innerHTML = `
+            <div class="edit-form-wrapper">
+                <textarea class="edit-textarea" placeholder="댓글을 수정하세요...">${commentText}</textarea>
+                <div class="edit-buttons">
+                    <button type="button" onclick="updateComment(${commNo})">수정완료</button>
+                    <button type="button" onclick="cancelEdit()">취소</button>
+                </div>
+            </div>
+        `;
+
+        // 수정 폼을 댓글 내용 아래에 삽입
+        const commentBody = commentItem.querySelector('.comment-body');
+        commentBody.appendChild(editForm);
+
+        // 기존 댓글 내용 숨기기
+        commentItem.querySelector('.comment-text').style.display = 'none';
+        commentItem.querySelector('.comment-actions').style.display = 'none';
+    };
+
+    // ✅ 5. 댓글 수정 완료
+    window.updateComment = function (commNo) {
+        const editForm = document.querySelector('.comment-edit-form');
+        const newContent = editForm.querySelector('.edit-textarea').value.trim();
+
+        if (!newContent) {
+            alert("댓글 내용을 입력하세요!");
+            return;
+        }
+
+        fetch(`/api/comments/${commNo}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                commContent: newContent
+            }),
+            credentials: "include"
+        })
+        .then(res => res.text())
+        .then(result => {
+            if (result === "success") {
+                loadComments(); // 댓글 목록 새로고침
+            } else {
+                alert("댓글 수정 실패");
+            }
+        })
+        .catch(error => {
+            console.error("댓글 수정 실패:", error);
+            alert("댓글 수정 중 오류가 발생했습니다.");
+        });
+    };
+
+    // ✅ 6. 댓글 수정 취소
+    window.cancelEdit = function () {
+        const editForm = document.querySelector('.comment-edit-form');
+        if (editForm) {
+            editForm.remove();
+        }
+
+        // 기존 댓글 내용과 버튼 다시 표시
+        const commentText = document.querySelector('.comment-text');
+        const commentActions = document.querySelector('.comment-actions');
+        if (commentText) commentText.style.display = 'block';
+        if (commentActions) commentActions.style.display = 'block';
     };
 
     // ✅ 날짜 포맷

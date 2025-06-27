@@ -68,4 +68,18 @@ public class CommentService {
             throw e;
         }
     }
+
+    // 댓글 수정
+    public int update(Comment comment) {
+        try {
+            System.out.println("CommentService.update 호출 - comment: " + comment);
+            int result = commentDao.update(comment);
+            System.out.println("CommentService.update 결과: " + result);
+            return result;
+        } catch (Exception e) {
+            System.out.println("CommentService.update 예외 발생: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

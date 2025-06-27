@@ -18,6 +18,8 @@ public interface CommentDao {
     
     public Comment getCommentByNo(int commNo);
     
+    int update(Comment comment);            // 댓글 수정
+    
     // 내 댓글 조회
     List<Comment> getMyComments(Map<String, Object> params);
 }

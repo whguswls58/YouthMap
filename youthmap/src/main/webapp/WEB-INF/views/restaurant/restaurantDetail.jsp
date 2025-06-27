@@ -237,7 +237,7 @@
 							</div>
 							<c:if test="${not empty rev.review_file1}">
 								<div style="margin: 8px 0 0 0;">
-									<img src="/images/${rev.review_file1}" alt="첨부이미지" style="max-width: 120px; border-radius: 8px; box-shadow: 0 1px 8px #eee;">
+									<img src="/reviewfileview?filename=${rev.review_file1}&origin=${rev.review_file1}" alt="첨부이미지" style="max-width: 120px; border-radius: 8px; box-shadow: 0 1px 8px #eee;">
 								</div>
 							</c:if>
 							<c:if test="${not empty sessionScope.loginMember and sessionScope.loginMember.memNo == rev.mem_no}">
@@ -269,7 +269,7 @@
 										<label>사진 첨부</label>
 										<input type="file" name="review_file11" accept="image/*" />
 										<c:if test="${not empty rev.review_file1}">
-											<div>기존: <img src="/images/${rev.review_file1}" style="max-width: 70px; vertical-align: middle;"></div>
+											<div>기존: <img src="/reviewfileview?filename=${rev.review_file1}&origin=${rev.review_file1}" style="max-width: 70px; vertical-align: middle;"></div>
 										</c:if>
 									</div>
 									<div style="margin-top: 10px;">
