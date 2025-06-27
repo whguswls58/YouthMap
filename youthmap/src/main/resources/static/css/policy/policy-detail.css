@@ -52,7 +52,6 @@
   background-color: #f5f0e6;
   color: #333;
   font-size: 14px;
-  font-family: 'Playfair Display', serif;
   padding: 10px 15px;
   border-bottom: 1px solid #ccc;
   border-top-left-radius: 6px;
@@ -73,7 +72,6 @@
   color: #337ab7;
   text-decoration: none;
   font-size: 14px;
-  font-family: 'Playfair Display', serif;
   transition: background-color 0.2s;
   border-radius: 6px;
 }
@@ -114,7 +112,6 @@
   width: 100%;
   max-width: 700px;
   border-collapse: collapse;
-  font-family: 'Playfair Display', serif;
   font-size: 14px;
   border-top: 2px solid #000;
 }
@@ -127,14 +124,24 @@
 }
 
 .policy-table th {
+  background-color: #f9f9f9;
+  font-weight: bold;
   width: 150px;
   white-space: nowrap;
   vertical-align: top;
 }
 
+.policy-table a{
+  display: block;
+  color: #337ab7;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.2s;
+  border-radius: 6px;
+}
+
 /* 정책 설명 */
 .policy-explane {
-  font-family: 'Playfair Display', serif;
   font-size: 15px;
   line-height: 1.8;
   color: #333;

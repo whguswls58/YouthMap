@@ -381,33 +381,32 @@ function renderPagination(current, total, start, end, sortOrder) {
 
 	// 처음 페이지
 	pagination.innerHTML +=
-		`<button class="page-btn" onclick="loadPage(1, '${sortOrder}')">◀</button> `;
-
+		`<a href="javascript:loadPage(1, '${sortOrder}')">&laquo;</a>`;
 	// 이전 블록
 	if (start > 6) {
 		pagination.innerHTML +=
-			`<button class="page-btn" onclick="loadPage(${start - 6}, '${sortOrder}')">이전</button> `;
-	} 	//end if
+			`<a href="javascript:loadPage(${start - 6}, '${sortOrder}')">[이전]</a>`;
+		} 	//end if
 
 	// 페이지 번호들
 	for (let i = start; i <= end; i++) {
 		if (i === current) {
-			pagination.innerHTML += `<b>${i}</b>`;
+			pagination.innerHTML += `<span class="current">${i}</span>`;
 		} else {
 			pagination.innerHTML +=
-				`<button class="page-btn" onclick="loadPage(${i}, '${sortOrder}')">${i}</button>`;
+				`<a href="javascript:loadPage(${i}, '${sortOrder}')">${i}</a>`;
 		}	// end if
 	}	// end for
 
 	// 다음 블록
 	if (end < total) {
 		pagination.innerHTML +=
-			`<button class="page-btn" onclick="loadPage(${start + 6}, '${sortOrder}')">다음</button> `;
+			`<a href="javascript:loadPage(${start + 6}, '${sortOrder}')">[다음]</a>`;
 	}	// end if
 
 	// 마지막 페이지
 	pagination.innerHTML +=
-		`<button class="page-btn" onclick="loadPage(${total}, '${sortOrder}')">▶</button>`;
+		`<a href="javascript:loadPage(${total}, '${sortOrder}')">&raquo;</a>`;
 }		// end function
 
 

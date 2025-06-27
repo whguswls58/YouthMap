@@ -37,10 +37,10 @@
 				    <!-- 신청 시작일이 null이면 -->
 		    <c:choose>
 		        <c:when test="${empty plcy.aply_ymd_strt}">
-		            <span class="policy-label">상시</span><br>
+		            <br><span class="policy-label">상시</span>
 		        </c:when>
 		        <c:otherwise>
-		            <span class="policy-label dday-text"></span><br>
+		            <br><span class="policy-label dday-text"></span>
 		        </c:otherwise>
 		    </c:choose>
 		    <c:forEach var="lc" items="${lclsf}">
@@ -48,11 +48,10 @@
 		    </c:forEach>
 		</div>
 		<table class="policy-table policy-nm">
+			
 			<tr>
-				
-			</tr>
-			<tr>
-				<th colspan=4>${plcy.plcy_nm}</th>
+				<th>제목</th>
+				<td colspan=3>${plcy.plcy_nm}</td>
 			</tr>
 			<tr>
 				<th>최종 수정일</th>
@@ -61,7 +60,8 @@
 				<td align=right>${plcy.inq_cnt }</td>
 			</tr>
 			<tr>
-				<td colspan=4>
+				<th>분류</th>
+				<td colspan=3>
 					<c:forEach var="keyword" items="${keywords}">
 					    <span class="policy-tag">${keyword}</span>
 					</c:forEach>
@@ -79,7 +79,12 @@
 			</tr>
 			<tr>
 				<th>정책분야</th>
-				<td>${plcy.lclsf_nm}</td>
+				<td>
+					<c:forEach var="lc" items="${lclsf}">
+					    <span>${lc}</span>		    
+				    </c:forEach>
+				
+				</td>
 			</tr>
 			<tr>
 				<th>지원내용</th>
