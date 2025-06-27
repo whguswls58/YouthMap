@@ -338,7 +338,7 @@
 /* 페이징 스타일 */
 .pagination {
   display: flex;
-    justify-content: center;
+  justify-content: center;
   align-items: center;
   gap: 8px;
   margin: 30px 0;
@@ -346,26 +346,24 @@
 
 .page-link {
   padding: 8px 12px;
-  border: 1px solid #ddd;
   text-decoration: none;
   color: #333;
-  border-radius: 4px;
   transition: all 0.3s ease;
+  border: none;
+  background: none;
 }
 
 .page-link:hover {
-  background-color: #f8f9fa;
-  border-color: #007bff;
+  color: #007bff;
 }
 
 .page-link.active {
-  background-color: #007bff;
-  color: white;
-  border-color: #007bff;
+  color: #007bff;
+  font-weight: bold;
 }
 
 .page-link.active:hover {
-  background-color: #0056b3;
+  color: #0056b3;
 }
 
 /* ─── boardview(상세) 전용 스타일 ─── */

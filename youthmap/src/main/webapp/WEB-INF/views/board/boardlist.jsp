@@ -71,9 +71,14 @@
 <!-- 페이징 네비게이션 -->
 <c:if test="${totalPages > 1}">
   <div class="pagination">
+    <!-- 첫 페이지로 이동 -->
+    <c:if test="${page > 1}">
+      <a href="/boardlist?page=1&category=${category}&searchType=${searchType}&keyword=${keyword}" class="page-link"><<</a>
+    </c:if>
+    
     <!-- 이전 페이지 -->
     <c:if test="${page > 1}">
-      <a href="/boardlist?page=${page-1}&category=${category}&searchType=${searchType}&keyword=${keyword}" class="page-link">&lt;</a>
+      <a href="/boardlist?page=${page-1}&category=${category}&searchType=${searchType}&keyword=${keyword}" class="page-link"><</a>
     </c:if>
     
     <!-- 페이지 번호 -->
@@ -90,7 +95,12 @@
     
     <!-- 다음 페이지 -->
     <c:if test="${page < totalPages}">
-      <a href="/boardlist?page=${page+1}&category=${category}&searchType=${searchType}&keyword=${keyword}" class="page-link">&gt;</a>
+      <a href="/boardlist?page=${page+1}&category=${category}&searchType=${searchType}&keyword=${keyword}" class="page-link">></a>
+    </c:if>
+    
+    <!-- 마지막 페이지로 이동 -->
+    <c:if test="${page < totalPages}">
+      <a href="/boardlist?page=${totalPages}&category=${category}&searchType=${searchType}&keyword=${keyword}" class="page-link">>></a>
     </c:if>
   </div>
 </c:if>

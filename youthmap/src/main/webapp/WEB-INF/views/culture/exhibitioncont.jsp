@@ -257,43 +257,44 @@
 <!-- //////////////////////////////////////////////////////////////////////////////// -->
 
 
-<!-- 리뷰 작성/수정 폼 toggle JS -->
-<script>
-    // 리뷰작성 폼
-    document.addEventListener('DOMContentLoaded', function() {
-        var btn = document.getElementById('reviewWriteBtn');
-        var formDiv = document.getElementById('reviewFormWrap');
-        if (btn && formDiv) {
-            btn.onclick = function() {
-                formDiv.style.display = 'block';
-                btn.style.display = 'none';
-            }
-        }
 
-        // 리뷰수정 폼 (여러 개, 버튼 클릭 시)
-        document.querySelectorAll('.reviewEditBtn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.review-edit-form').forEach(function(div) {
-                    div.style.display = 'none';
-                });
-                var id = btn.getAttribute('data-reviewid');
-                document.getElementById('reviewEditForm'+id).style.display = 'block';
-            });
-        });
-    });
+	<!-- 페이지네이션 -->
+	<c:if test="${totalpage > 1}">
+		<div style="text-align: center; margin: 30px 0;">
+			<c:forEach var="i" begin="1" end="${totalpage}">
+				<c:choose>
+					<c:when test="${page == i}">
+						<span style="color: #222; font-weight: bold; padding: 0 10px;">${i}</span>
+					</c:when>
+					<c:otherwise>
+						<a href="exhibitioncont?con_id=${exhibitioncont.con_id}&page=${i}"
+							style="color: #666; text-decoration: none; padding: 0 10px;">${i}</a>
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
+		</div>
+	</c:if>
 
-    function closeReviewEditForm(id) {
-        document.getElementById('reviewEditForm'+id).style.display = 'none';
-    }
-    function closeReviewForm() {
-        document.getElementById('reviewFormWrap').style.display = 'none';
-        document.getElementById('reviewWriteBtn').style.display = 'inline-block';
-    }
-</script>			<!-- 리뷰댓글 끝 -->
+	<!-- 리뷰 작성/수정 폼 toggle JS -->
+	<script>
+		// 리뷰수정 폼 (여러 개, 버튼 클릭 시)
+		document.addEventListener('DOMContentLoaded', function() {
+			document.querySelectorAll('.reviewEditBtn').forEach(
+					function(btn) {btn.addEventListener('click',
+					function() {document.querySelectorAll('.review-edit-form').forEach(
+					function(div) {div.style.display = 'none';
+								});
+						var id = btn.getAttribute('data-reviewid');
+						document.getElementById('reviewEditForm'
+						+ id).style.display = 'block';
+							});
+					});
+		});
 
+		function closeReviewEditForm(id) {
+			document.getElementById('reviewEditForm' + id).style.display = 'none';
+		}
+	</script>
 
-    
-   </div>
-  
 </body>
 </html>

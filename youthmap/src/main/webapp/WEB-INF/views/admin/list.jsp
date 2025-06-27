@@ -27,10 +27,8 @@
 
     <!-- 메인 콘텐츠 -->
     <div class="admin-main-content">
-        <h2 class="admin-section-title">공지사항 관리</h2>
-        
-        <!-- 공지사항 작성 버튼 -->
-        <div style="margin-bottom: 20px;">
+        <div class="section-header">
+            <h2 class="admin-section-title">공지사항 관리</h2>
             <a href="${pageContext.request.contextPath}/admin/list/write" class="action-btn btn-manage">공지사항 작성</a>
         </div>
 
@@ -43,7 +41,7 @@
                 <th>제목</th>
                 <th>작성일</th>
                 <th>조회수</th>
-                <th>관리</th>
+                <th style="width:300px;">관리</th>
             </tr>
             </thead>
             <tbody>
@@ -55,8 +53,8 @@
                     <td><fmt:formatDate value="${notice.boardDate}" pattern="yyyy.MM.dd"/></td>
                     <td>${notice.boardReadcount}</td>
                     <td>
-                        <a href="${pageContext.request.contextPath}/admin/list/edit?no=${notice.boardNo}" class="action-btn btn-edit">수정</a>
-                        <a href="${pageContext.request.contextPath}/admin/list/delete?no=${notice.boardNo}" class="action-btn btn-delete">삭제</a>
+                        <a href="${pageContext.request.contextPath}/admin/list/edit?no=${notice.boardNo}" class="action-btn btn-edit" style="min-width:50px; margin-right:5px;">수정</a>
+                        <a href="${pageContext.request.contextPath}/admin/list/delete?no=${notice.boardNo}" class="action-btn btn-delete" style="min-width:50px;">삭제</a>
                     </td>
                 </tr>
             </c:forEach>
@@ -66,9 +64,17 @@
         <!-- 페이징 -->
         <c:if test="${totalPages > 1}">
             <div class="pagination">
+                <!-- 첫 페이지로 이동 -->
                 <c:if test="${page > 1}">
-                    <a href="/admin/list?page=${page-1}" class="page-link">&lt;</a>
+                    <a href="/admin/list?page=1" class="page-link"><<</a>
                 </c:if>
+                
+                <!-- 이전 페이지 -->
+                <c:if test="${page > 1}">
+                    <a href="/admin/list?page=${page-1}" class="page-link"><</a>
+                </c:if>
+                
+                <!-- 페이지 번호들 -->
                 <c:forEach var="i" begin="${startPage}" end="${endPage}">
                     <c:choose>
                         <c:when test="${i == page}">
@@ -79,8 +85,15 @@
                         </c:otherwise>
                     </c:choose>
                 </c:forEach>
+                
+                <!-- 다음 페이지 -->
                 <c:if test="${page < totalPages}">
-                    <a href="/admin/list?page=${page+1}" class="page-link">&gt;</a>
+                    <a href="/admin/list?page=${page+1}" class="page-link">></a>
+                </c:if>
+                
+                <!-- 마지막 페이지로 이동 -->
+                <c:if test="${page < totalPages}">
+                    <a href="/admin/list?page=${totalPages}" class="page-link">>></a>
                 </c:if>
             </div>
         </c:if>

@@ -91,29 +91,37 @@
 	</div>
 	<div class="pagination">
 		<c:if test="${listcount > 0}">
-			<a
-				href="restaurants?page=1&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}">◀</a>
-			<c:if test="${startpage > 10}">
-				<a
-					href="restaurants?page=${startpage-10}&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}">이전</a>
+			<!-- 첫 페이지로 이동 -->
+			<c:if test="${page > 1}">
+				<a href="restaurants?page=1&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}"><<</a>
 			</c:if>
+			
+			<!-- 이전 페이지 -->
+			<c:if test="${page > 1}">
+				<a href="restaurants?page=${page-1}&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}"><</a>
+			</c:if>
+			
+			<!-- 페이지 번호 -->
 			<c:forEach var="i" begin="${startpage}" end="${endpage}">
 				<c:choose>
 					<c:when test="${i == page}">
 						<b>${i}</b>
 					</c:when>
 					<c:otherwise>
-						<a
-							href="restaurants?page=${i}&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}">${i}</a>
+						<a href="restaurants?page=${i}&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}">${i}</a>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
-			<c:if test="${endpage < pagecount}">
-				<a
-					href="restaurants?page=${startpage+10}&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}">다음</a>
+			
+			<!-- 다음 페이지 -->
+			<c:if test="${page < pagecount}">
+				<a href="restaurants?page=${page+1}&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}">></a>
 			</c:if>
-			<a
-				href="restaurants?page=${pagecount}&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}">▶</a>
+			
+			<!-- 마지막 페이지로 이동 -->
+			<c:if test="${page < pagecount}">
+				<a href="restaurants?page=${pagecount}&res_gu=${res_gu}&searchType=${searchType}&keyword=${keyword}">>></a>
+			</c:if>
 		</c:if>
 	</div>
 	<!-- ✅ 스크립트 -->

@@ -398,8 +398,8 @@ function renderPagination(current, total, start, end, sortOrder) {
 		}	// end if
 	}	// end for
 
-	// 다음 블록
-	if (end < total) {
+	// 다음 페이지
+	if (current < total) {
 		pagination.innerHTML +=
 			`<a href="javascript:loadPage(${start + 6}, '${sortOrder}')">[다음]</a>`;
 	}	// end if

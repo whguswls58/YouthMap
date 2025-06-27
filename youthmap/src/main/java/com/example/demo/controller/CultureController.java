@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.model.CultureModel;
+import com.example.demo.model.MemberModel;
 import com.example.demo.model.Review2Model;
 import com.example.demo.service.CultureService;
 import com.example.demo.service.Review2Service;
@@ -163,21 +164,26 @@ public class CultureController {
 	}
 
 	// ─── 전시/미술 리뷰 작성 (POST) ───
-	// ─── 전시/미술 리뷰 작성 (POST) ───
 	@PostMapping("/exhibitioncont/reviewwrite")
 	public String exhbtWriteReview2(@RequestParam("review_file22") MultipartFile file2,
 			@RequestParam(value = "page", defaultValue = "1") int page, @ModelAttribute Review2Model review2,
 			Model model, HttpSession session) throws Exception {
-		// 1) DTO에 직접 세팅
-//    	Review2Model review2 = new Review2Model();
-//        review2.setCon_id(con_id);
-//        review2.setReview_score2(review_score2);
-//        review2.setReview_content2(review_content2);
+		
+		// 로그인 체크
+		MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			return "redirect:/login";
+		}
 
-		System.out.println("▶▶ review_writer2 = " + review2.getReview_writer2());
+		// 작성자 정보 설정
+		review2.setMem_no(loginMember.getMemNo().intValue());
 
 		// ★ 실제 경로 찾기 (static/images)
 		String uploadPath = session.getServletContext().getRealPath("images");
+		// 경로가 null이면 기본 경로 사용
+		if (uploadPath == null) {
+			uploadPath = System.getProperty("user.home") + "/images";
+		}
 		String filename = file2.getOriginalFilename();
 		int size = (int) file2.getSize();
 		String newfilename = "";
@@ -190,14 +196,12 @@ public class CultureController {
 		if (size > 0) {
 			String extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
 			// 확장자 체크
-			if (!extension.equals(".jpg") && !extension.equals(".jpeg") && !extension.equals(".png")
-					&& !extension.equals(".gif")) {
-				model.addAttribute("result2", 2); // 잘못된 확장자
-
+			if (!extension.matches("\\.(jpg|jpeg|png|gif)")) {
+				return "redirect:/exhibitioncont?con_id=" + review2.getCon_id();
 			}
 			// 1MB 제한 (필요시 조정)
-			if (size > 10240 * 1000) {
-				model.addAttribute("result1", 1); // 용량 초과
+			if (size > 1024 * 1024) {
+				return "redirect:/exhibitioncont?con_id=" + review2.getCon_id();
 			}
 			// 실제 저장 파일명
 			newfilename = UUID.randomUUID().toString() + extension;
@@ -207,7 +211,6 @@ public class CultureController {
 
 			file2.transferTo(new File(uploadPath, newfilename));
 			review2.setReview_file2(newfilename);
-
 		}
 
 		// 리뷰 등록
@@ -220,24 +223,41 @@ public class CultureController {
 	@PostMapping("/exhibitioncont/reviewedit")
 	public String exhbtEditReview2(@RequestParam("review_file22") MultipartFile file2,
 			@RequestParam("old_file2") String old_file2, @RequestParam(value = "page", defaultValue = "1") int page,
-//    		@RequestParam("review_id2") int review_id2,
-//    		@RequestParam("con_id") int con_id,
-//    		@RequestParam("review_score2") int review_score2,
-//    		@RequestParam("review_content2") String review_content2,
 			@ModelAttribute Review2Model review2, Model model, HttpSession session) throws Exception {
-		// DTO 직접생성
-//    	Review2Model review2 = new Review2Model();
-//    	review2.setReview_id2(review_id2);
-//    	review2.setCon_id(con_id);
-//        review2.setReview_score2(review_score2);
-//        review2.setReview_content2(review_content2);
+		
+		// 로그인 체크
+		MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			return "redirect:/login";
+		}
+
+		// 작성자 정보 설정
+		review2.setMem_no(loginMember.getMemNo().intValue());
+
+		// 작성자 확인
+		if (reservice.checkReview2Author(review2) == 0) {
+			return "redirect:/exhibitioncont?con_id=" + review2.getCon_id();
+		}
 
 		// 파일 교체 또는 유지
 		if (!file2.isEmpty()) {
 			String filename = file2.getOriginalFilename();
+			String extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+			if (!extension.matches("\\.(jpg|jpeg|png|gif)")) {
+				return "redirect:/exhibitioncont?con_id=" + review2.getCon_id();
+			}
+			String newfilename = UUID.randomUUID().toString() + extension;
 			String path = session.getServletContext().getRealPath("images");
-			file2.transferTo(new File(path, filename));
-			review2.setReview_file2(filename);
+			// 경로가 null이면 기본 경로 사용
+			if (path == null) {
+				path = System.getProperty("user.home") + "/images";
+			}
+			File uploadDir = new File(path);
+			if (!uploadDir.exists()) {
+				uploadDir.mkdirs();
+			}
+			file2.transferTo(new File(path, newfilename));
+			review2.setReview_file2(newfilename);
 		} else {
 			review2.setReview_file2(old_file2);
 		}
@@ -251,13 +271,33 @@ public class CultureController {
 	@GetMapping("/exhibitioncont/reviewdelete")
 	public String exhbtDeleteReview2(@RequestParam("review_id2") int review_id2, @RequestParam("con_id") int con_id,
 			@RequestParam(value = "page", defaultValue = "1") int page, HttpSession session) {
+		
+		// 로그인 체크
+		MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			return "redirect:/login";
+		}
+
+		// Review2Model 객체 생성하여 작성자 정보 설정
+		Review2Model review2 = new Review2Model();
+		review2.setReview_id2(review_id2);
+		review2.setMem_no(loginMember.getMemNo().intValue());
+
+		// 작성자 확인
+		if (reservice.checkReview2Author(review2) == 0) {
+			return "redirect:/exhibitioncont?con_id=" + con_id;
+		}
+
 		// 첨부파일 삭제
 		String fileName = reservice.selectFile2(review_id2);
-		if (fileName != null && !fileName.isBlank()) {
+		if (fileName != null && !fileName.trim().isEmpty()) {
 			String path = session.getServletContext().getRealPath("images");
-			File f = new File(path, fileName);
-			if (f.exists())
-				f.delete();
+			// 경로가 null이면 기본 경로 사용
+			if (path == null) {
+				path = System.getProperty("user.home") + "/images";
+			}
+			File file = new File(path, fileName);
+			if (file.exists()) file.delete();
 		}
 		// 리뷰 삭제
 		reservice.deleteReview2(review_id2);
@@ -359,21 +399,26 @@ public class CultureController {
 	}
 
 	// ─── 공연 리뷰 작성 (POST) ───
-	// ─── 공연 리뷰 작성 (POST) ───
 	@PostMapping("/performancecont/reviewwrite")
 	public String performwriteReview2(@RequestParam("review_file22") MultipartFile file2,
 			@RequestParam(value = "page", defaultValue = "1") int page, @ModelAttribute Review2Model review2,
 			Model model, HttpSession session) throws Exception {
-		// 1) DTO에 직접 세팅
-//    	Review2Model review2 = new Review2Model();
-//        review2.setCon_id(con_id);
-//        review2.setReview_score2(review_score2);
-//        review2.setReview_content2(review_content2);
+		
+		// 로그인 체크
+		MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			return "redirect:/login";
+		}
 
-		System.out.println("▶▶ review_writer2 = " + review2.getReview_writer2());
+		// 작성자 정보 설정
+		review2.setMem_no(loginMember.getMemNo().intValue());
 
 		// ★ 실제 경로 찾기 (static/images)
 		String uploadPath = session.getServletContext().getRealPath("images");
+		// 경로가 null이면 기본 경로 사용
+		if (uploadPath == null) {
+			uploadPath = System.getProperty("user.home") + "/images";
+		}
 		String filename = file2.getOriginalFilename();
 		int size = (int) file2.getSize();
 		String newfilename = "";
@@ -386,14 +431,12 @@ public class CultureController {
 		if (size > 0) {
 			String extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
 			// 확장자 체크
-			if (!extension.equals(".jpg") && !extension.equals(".jpeg") && !extension.equals(".png")
-					&& !extension.equals(".gif")) {
-				model.addAttribute("result2", 2); // 잘못된 확장자
-
+			if (!extension.matches("\\.(jpg|jpeg|png|gif)")) {
+				return "redirect:/performancecont?con_id=" + review2.getCon_id();
 			}
 			// 1MB 제한 (필요시 조정)
-			if (size > 10240 * 1000) {
-				model.addAttribute("result1", 1); // 용량 초과
+			if (size > 1024 * 1024) {
+				return "redirect:/performancecont?con_id=" + review2.getCon_id();
 			}
 			// 실제 저장 파일명
 			newfilename = UUID.randomUUID().toString() + extension;
@@ -403,7 +446,6 @@ public class CultureController {
 
 			file2.transferTo(new File(uploadPath, newfilename));
 			review2.setReview_file2(newfilename);
-
 		}
 
 		// 리뷰 등록
@@ -416,24 +458,41 @@ public class CultureController {
 	@PostMapping("/performancecont/reviewedit")
 	public String perfomEditReview2(@RequestParam("review_file22") MultipartFile file2,
 			@RequestParam("old_file2") String old_file2, @RequestParam(value = "page", defaultValue = "1") int page,
-//    		@RequestParam("review_id2") int review_id2,
-//    		@RequestParam("con_id") int con_id,
-//    		@RequestParam("review_score2") int review_score2,
-//    		@RequestParam("review_content2") String review_content2,
 			@ModelAttribute Review2Model review2, Model model, HttpSession session) throws Exception {
-		// DTO 직접생성
-//    	Review2Model review2 = new Review2Model();
-//    	review2.setReview_id2(review_id2);
-//    	review2.setCon_id(con_id);
-//        review2.setReview_score2(review_score2);
-//        review2.setReview_content2(review_content2);
+		
+		// 로그인 체크
+		MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			return "redirect:/login";
+		}
+
+		// 작성자 정보 설정
+		review2.setMem_no(loginMember.getMemNo().intValue());
+
+		// 작성자 확인
+		if (reservice.checkReview2Author(review2) == 0) {
+			return "redirect:/performancecont?con_id=" + review2.getCon_id();
+		}
 
 		// 파일 교체 또는 유지
 		if (!file2.isEmpty()) {
 			String filename = file2.getOriginalFilename();
+			String extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+			if (!extension.matches("\\.(jpg|jpeg|png|gif)")) {
+				return "redirect:/performancecont?con_id=" + review2.getCon_id();
+			}
+			String newfilename = UUID.randomUUID().toString() + extension;
 			String path = session.getServletContext().getRealPath("images");
-			file2.transferTo(new File(path, filename));
-			review2.setReview_file2(filename);
+			// 경로가 null이면 기본 경로 사용
+			if (path == null) {
+				path = System.getProperty("user.home") + "/images";
+			}
+			File uploadDir = new File(path);
+			if (!uploadDir.exists()) {
+				uploadDir.mkdirs();
+			}
+			file2.transferTo(new File(path, newfilename));
+			review2.setReview_file2(newfilename);
 		} else {
 			review2.setReview_file2(old_file2);
 		}
@@ -447,13 +506,33 @@ public class CultureController {
 	@GetMapping("/performancecont/reviewdelete")
 	public String performDeleteReview2(@RequestParam("review_id2") int review_id2, @RequestParam("con_id") int con_id,
 			@RequestParam(value = "page", defaultValue = "1") int page, HttpSession session) {
+		
+		// 로그인 체크
+		MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			return "redirect:/login";
+		}
+
+		// Review2Model 객체 생성하여 작성자 정보 설정
+		Review2Model review2 = new Review2Model();
+		review2.setReview_id2(review_id2);
+		review2.setMem_no(loginMember.getMemNo().intValue());
+
+		// 작성자 확인
+		if (reservice.checkReview2Author(review2) == 0) {
+			return "redirect:/performancecont?con_id=" + con_id;
+		}
+
 		// 첨부파일 삭제
 		String fileName = reservice.selectFile2(review_id2);
-		if (fileName != null && !fileName.isBlank()) {
+		if (fileName != null && !fileName.trim().isEmpty()) {
 			String path = session.getServletContext().getRealPath("images");
-			File f = new File(path, fileName);
-			if (f.exists())
-				f.delete();
+			// 경로가 null이면 기본 경로 사용
+			if (path == null) {
+				path = System.getProperty("user.home") + "/images";
+			}
+			File file = new File(path, fileName);
+			if (file.exists()) file.delete();
 		}
 		// 리뷰 삭제
 		reservice.deleteReview2(review_id2);
@@ -560,21 +639,26 @@ public class CultureController {
 	}
 
 	// ─── 축제/행사 리뷰 작성 (POST) ───
-	// ─── 축제/행사 리뷰 작성 (POST) ───
 	@PostMapping("/eventcont/reviewwrite")
 	public String eventcontWriteReview2(@RequestParam("review_file22") MultipartFile file2,
 			@RequestParam(value = "page", defaultValue = "1") int page, @ModelAttribute Review2Model review2,
 			Model model, HttpSession session) throws Exception {
-		// 1) DTO에 직접 세팅
-//	    	Review2Model review2 = new Review2Model();
-//	        review2.setCon_id(con_id);
-//	        review2.setReview_score2(review_score2);
-//	        review2.setReview_content2(review_content2);
+		
+		// 로그인 체크
+		MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			return "redirect:/login";
+		}
 
-		System.out.println("▶▶ review_writer2 = " + review2.getReview_writer2());
+		// 작성자 정보 설정
+		review2.setMem_no(loginMember.getMemNo().intValue());
 
 		// ★ 실제 경로 찾기 (static/images)
 		String uploadPath = session.getServletContext().getRealPath("images");
+		// 경로가 null이면 기본 경로 사용
+		if (uploadPath == null) {
+			uploadPath = System.getProperty("user.home") + "/images";
+		}
 		String filename = file2.getOriginalFilename();
 		int size = (int) file2.getSize();
 		String newfilename = "";
@@ -587,14 +671,12 @@ public class CultureController {
 		if (size > 0) {
 			String extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
 			// 확장자 체크
-			if (!extension.equals(".jpg") && !extension.equals(".jpeg") && !extension.equals(".png")
-					&& !extension.equals(".gif")) {
-				model.addAttribute("result2", 2); // 잘못된 확장자
-
+			if (!extension.matches("\\.(jpg|jpeg|png|gif)")) {
+				return "redirect:/eventcont?con_id=" + review2.getCon_id();
 			}
 			// 1MB 제한 (필요시 조정)
-			if (size > 10240 * 1000) {
-				model.addAttribute("result1", 1); // 용량 초과
+			if (size > 1024 * 1024) {
+				return "redirect:/eventcont?con_id=" + review2.getCon_id();
 			}
 			// 실제 저장 파일명
 			newfilename = UUID.randomUUID().toString() + extension;
@@ -604,7 +686,6 @@ public class CultureController {
 
 			file2.transferTo(new File(uploadPath, newfilename));
 			review2.setReview_file2(newfilename);
-
 		}
 
 		// 리뷰 등록

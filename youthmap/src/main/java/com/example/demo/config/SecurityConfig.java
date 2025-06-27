@@ -48,17 +48,18 @@ public class SecurityConfig {
                 "/policy/**", "/policyMain", "/policyContent", "/policyListJson",
                 // 문화 관련 - 인증 없이 접근 가능
                 "/culture/**", "/culturemain", "/exhibitionlist", "/exhibitioncont", 
-                "/performancelist", "/performancecont", "/eventlist", "/eventcont", "/allList",
+                "/performancelist", "/performancecont", "/eventlist", "/eventcont", "/allList", "/miniList",
                 // 맛집 관련 - 인증 없이 접근 가능
-                "/res_main", "/restaurants", "/restaurantDetail", "/restaurantsearch", "/collectAll",
-                // 마이페이지 관련 - 인증 필요하지만 경로는 허용
-                "/mypage", "/mypage/posts", "/mypage/comments",
-                // 관리자 관련 - 인증 없이 접근 가능
-                "/admin/**"
+                "/res_main", "/restaurants", "/restaurantDetail", "/restaurantsearch", "/collectAll"
             ).permitAll()
+            // 마이페이지 관련 - 인증 필요
+            .requestMatchers("/mypage/**").authenticated()
+            // 관리자 관련 - 인증 필요
+            .requestMatchers("/admin/**").authenticated()
             // 글쓰기, 수정, 삭제, 댓글 등록/삭제 관련 - 인증 필요
             .requestMatchers("/boardwrite", "/boardupdateform", "/boardupdate", "/boarddelete", "/boarddeleteform", "/api/comments").authenticated()
-            .anyRequest().authenticated()
+            // 나머지 모든 요청은 인증 없이 접근 가능
+            .anyRequest().permitAll()
         );
 
         // 2) 폼 로그인: 페이지와 처리 URL 모두 열어두기

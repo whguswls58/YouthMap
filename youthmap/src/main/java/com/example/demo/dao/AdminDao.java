@@ -27,10 +27,19 @@ public interface AdminDao {
     // 공지사항 제외한 게시물 수 조회
     int countPostsExcludeNotices();
     
+    // 검색 조건에 따른 공지사항 제외한 게시물 수 조회
+    int countPostsExcludeNoticesWithSearch(@Param("search") String search);
+    
     // 공지사항 수 조회
     int countNotices();
     
     List<AdminMemberModel> findAllMembers();
+    
+    // 검색 조건에 따른 회원 수 조회
+    int countMembersWithSearch(@Param("search") String search);
+    
+    // 검색 조건과 페이징을 적용한 회원 목록 조회
+    List<AdminMemberModel> findMembersWithPaging(Map<String, Object> params);
     
     //String getMemberStatus(Long memNo);
     //void updateMemberStatus(@Param("memNo") Long memNo, @Param("status") String status);

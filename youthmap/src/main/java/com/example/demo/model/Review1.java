@@ -15,6 +15,7 @@ public class Review1 {
     private int mem_no;
     private String res_id;  //(식당PK 맞추기)
     
-    //임시
-    private String review_writer; 
+ // 작성자 정보 (member 테이블에서 JOIN으로 가져옴)
+    private String mem_id;
+    private String mem_name;
 }
