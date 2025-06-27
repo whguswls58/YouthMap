@@ -21,5 +21,4 @@
         <property name="java-output-path" value="/youthmap/bin/default"/>
             
     </wb-module>
-    
 </project-modules>
