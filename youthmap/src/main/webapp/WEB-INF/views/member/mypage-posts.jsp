@@ -106,5 +106,7 @@
   }
 </script>
 <script src="/js/session.js"></script>
+<!-- 푸터 -->
+    <%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html> 

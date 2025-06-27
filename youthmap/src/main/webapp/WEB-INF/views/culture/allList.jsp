@@ -11,14 +11,10 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/list.css">
 </head>
 <body>
-<%-- 관리자 모드에서 수동 업데이트 버튼 추가하기
-<form action="${pageContext.request.contextPath}/datainput" method="get" style="display:inline;">
-  <button type="submit">수동 업데이트 실행</button>
-</form> --%>
-
 <%@ include file="/WEB-INF/views/header.jsp" %>
 <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
 <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
+
 
 <div id="card-container">
   <div class="cards">
@@ -134,6 +130,7 @@
     </c:if>
   </c:if>
 </div>
-
+<!-- 푸터 -->
+    <%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

@@ -35,7 +35,7 @@
 .hero-banner {
 	width: 100vw; /* 화면 전체 */
 	height: 500px; /* 원하는 높이 조절 */
-	background-image: url('/images/food2.jpeg'); /* 실제 이미지 경로 */
+	background-image: url('/img/banner/food.jpeg'); /* 실제 이미지 경로 */
 	background-size: cover;
 	background-position: center center;
 	background-repeat: no-repeat;

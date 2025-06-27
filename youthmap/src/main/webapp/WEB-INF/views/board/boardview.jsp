@@ -15,10 +15,9 @@
 <!-- 헤더-->
 <%@ include file="/WEB-INF/views/header.jsp" %>
 
-<!-- Hero 이미지 영역 -->
-<div class="hero-section">
-  <img src="${pageContext.request.contextPath}/img/123.jpg" alt="Hero Image" class="hero-img" />
-</div>
+<!-- Hero 배너 -->
+<section class="hero-banner"></section>
+
 <div class ="container">
 <div class="container">
 <div class="content-container">
@@ -168,22 +167,10 @@
             location.href = "/login";
         }
     </script>
-    <!-- ✅ 푸터 -->
-<div class="footer">
-  <div class="footer-icons">
-    <a href="#"><img src="${pageContext.request.contextPath}/img/face.png" alt="facebook"></a>
-    <a href="#"><img src="${pageContext.request.contextPath}/img/insta.png" alt="instagram"></a>
-    <a href="#"><img src="${pageContext.request.contextPath}/img/twit.svg" alt="twitter"></a>
-  </div>
-
-  <p>
-    Tel. 000-0000-0000 | Fax. 00-0000-0000 | vivade@vivade.com<br>
-    Addr. Seoul, Korea | Biz License 000-00-00000
-  </p>
-
-  <p>&copy; 2025 YOUTHMAP. All Rights Reserved.<br>Hosting by YOUTHMAP Team</p>
-</div>
-    	<script src="/js/session.js"></script>
+    <script src="/js/session.js"></script>
+    
+    <!-- 푸터 -->
+    <%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>
 

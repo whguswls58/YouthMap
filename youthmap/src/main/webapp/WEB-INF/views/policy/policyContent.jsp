@@ -254,11 +254,9 @@
 		</div>
 	</div>
 </div>
-<footer class="policy-container text-center">
-	<p>Footer Text</p>
-</footer>
 
 <script src="${pageContext.request.contextPath}/js/policy-detail.js"></script>
-
+<!-- 푸터 -->
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

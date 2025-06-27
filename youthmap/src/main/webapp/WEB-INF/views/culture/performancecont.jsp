@@ -228,6 +228,7 @@
 			document.getElementById('reviewEditForm' + id).style.display = 'none';
 		}
 	</script>
-
+<!-- 푸터 -->
+    <%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

@@ -18,10 +18,9 @@
 <!-- 헤더-->
 <%@ include file="/WEB-INF/views/header.jsp" %>
 
-<!-- Hero 이미지 영역 -->
-<div class="hero-section">
-	<img src="${pageContext.request.contextPath}/img/123.jpg" alt="Hero Image" class="hero-img" />
-</div>
+<!-- Hero 배너 -->
+<section class="hero-banner"></section>
+
 
 <div class="search-wrapper">
 	<form onsubmit="return submitSearchForm(event);" class="search-bar" method="get" >
@@ -208,6 +207,7 @@
 //     });
 //   });
 </script>
-
+<!-- 푸터 -->
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

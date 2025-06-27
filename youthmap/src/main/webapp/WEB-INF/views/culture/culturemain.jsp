@@ -8,7 +8,7 @@
   <meta charset="UTF-8">
   <title>문화생활 메인</title>
    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
-
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/culture_main.css">
   <!-- Slick CSS -->
   <link
     rel="stylesheet"
@@ -24,161 +24,17 @@
 
   <style>
 
-/* ───────────────────────────────────────────────────────────────
-       슬라이더 섹션
-    ─────────────────────────────────────────────────────────────── */
-  /* 슬라이더(전시·공연·축제) 영역 위아래 여백을 60px씩 줍니다. */
-.slider-section {
-	margin: 5px 0;
-} 
-
-/*───────────────────────────────────────────────────────────────
- 슬라이더 내부 컨테이너 최대 너비 2000px, 상하 100px·좌우 자동 중앙 정렬.
-  배경색·패딩·box-sizing을 지정합니다. 
-  ───────────────────────────────────────────────────────────────*/
-.slider-inner {
-	max-width: 80%;
-	margin: 50px auto;       /* ← top/bottom 100px, left/right auto 로 바꿔서 가로 중앙 정렬 */
-	background-color: #f5f0e6;
-	box-sizing: border-box;
-	height: auto;              /* 카드 높이에 맞춰 늘어나게 */
-  	padding: 40px;             /* 패딩도 비율에 맞게 줄이기 */
-}
-
-/* 제목(“전시/미술” 등)과 “+more” 버튼을 좌우 끝에 배치합니다. */
-.slider-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin: 0;
-	padding: 0 20px;
-}
-/* 헤더 텍스트·버튼 스타일, 그리고 가로 구분선을 세팅합니다. */
-.slider-header h3 {
-	font-weight: bold;
-	font-size: 1.1em;
-	margin: 0;
-}
-
-.slider-header button {
-	background: none;
-	border: none;
-	font-size: 1rem;
-	cursor: pointer;
-	color: #333;
-}
-
-.slider-divider {
-	border: 0;
-	border-bottom: 1px solid #ccc;
-	margin: 8px 20px 16px;
-}
-
-/* ───────────────────────────────────────────────────────────────
-       Polaroid 카드 + 뱃지
-    ─────────────────────────────────────────────────────────────── */
-.card-slider {
-	width: 100%;
-	margin: 0 auto;
-}
-
-.card-slider .slick-track {
-	display: flex !important;
-}
-
-.slick-prev, .slick-next {
-	top: 40%;
-}
-
-/* 뱃지 공통 */
-/* commonList.css 또는 <style> 내 badge 스타일 수정 */
-.card-slider .badge {
-	position: absolute;
-	top: 15px;
-	right: 15px; /* 기존 8px → 20px 로 변경 */
-	padding: 4px 10px;
-	border-radius: 12px;
-	font-size: 0.85rem;
-	font-weight: bold;
-	color: #fff;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	z-index: 10;
-}
-/* 카테고리별 색상 */
-.card-slider .badge.exhibition {
-	background: #008060;
-}
-
-.card-slider .badge.performance {
-	background: #a83279;
-}
-
-.card-slider .badge.event {
-	background: #0066cc;
-}
-
-/* .card-slider .slick-slide {
-  width: 180px !important;
-} */
-
-/* 3) 폴라로이드 카드 스타일 (이전 restaurant-card) */
-.card-slider .polaroid-item {
-	width: 100% /* 이전 220px → 240px */
-	height: 250px;
-	padding: 16px; /* 안쪽 여백 */
-	border: 1px solid #ccc;
-	border-radius: 12px;
-	background: #fff;
-	text-align: center;
-	transition: all 0.3s ease-in-out;
-	margin: 0 13px; /* 카드 사이 간격 */
-	position: relative;
-	text-decoration: none !important;
-}
-
-/* 4) 이미지 영역 (이전 restaurant-card img) */
-.card-slider .polaroid-img {
-	width: 100%; /* 카드 폭에 꽉 채우기 */
-	height: 180px; /* 이전 150px → 180px */
-	object-fit: cover;
-	border-radius: 8px;
-	margin-bottom: 12px;
-}
-
-/* 5) 카드 타이틀 (이전 restaurant-name) */
-.card-slider .polaroid-caption {
-	font-weight: bold;
-	margin-top: 8px;
-	color: #222;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-
-.card-slider .polaroid-date {
-	margin-top: 4px;
-	font-size: 0.85rem;
-	color: #777;
-	text-align: center;
-}
-
-.card-slider .polaroid-item:hover .polaroid-caption {
-	text-decoration: underline;
-}
-
-.card-slider .polaroid-item:hover {
-	transform: translateY(-4px);
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
 </style>
 </head>
 
 <body>
-<!-- 헤더-->
+
 <%@ include file="/WEB-INF/views/header.jsp" %>
-  <!-- 검색 바 -->
-  <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
+<!-- Hero 배너 -->
+<section class="hero-banner"></section>
+
+<%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
+
 
   <!-- 전시/미술 섹션 -->
   <section class="slider-section">
@@ -293,7 +149,8 @@
       });
     });
   </script>
-
   <br><hr><br><br>
+<!-- 푸터 -->
+    <%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

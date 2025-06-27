@@ -18,8 +18,6 @@
 <!-- 헤더-->
 <%@ include file="/WEB-INF/views/header.jsp" %>
 
- <!-- Hero 배너 -->
-  <section class="hero-banner"></section>
 	<!-- 검색 -->
 
 	<div class="search-wrapper">
@@ -150,5 +148,7 @@
 			toggleGuList();
 		});
 	</script>
+	<!-- 푸터 -->
+	<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>
