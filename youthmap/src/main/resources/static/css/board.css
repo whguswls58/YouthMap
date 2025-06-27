@@ -366,6 +366,52 @@
   color: #0056b3;
 }
 
+/* 이미지 갤러리 스타일 */
+.image-files {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.image-files h4 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.image-item {
+  text-align: center;
+}
+
+.image-item img {
+  max-width: 300px;
+  max-height: 300px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.image-item img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.image-caption {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #666;
+  word-break: break-all;
+}
+
 /* ─── boardview(상세) 전용 스타일 ─── */
 .content-container {
     max-width: 800px; /* 전체 컨테이너 폭 지정 */
@@ -647,5 +693,64 @@
 }
 
 .comment-actions .admin-delete:hover {
-    background-color: #fff5f5;
+    background-color: #e74c3c;
+}
+
+/* 댓글 수정 폼 스타일 */
+.comment-edit-form {
+    margin-top: 10px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+}
+
+.edit-form-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.edit-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+}
+
+.edit-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.edit-buttons button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.edit-buttons button:first-child {
+    background-color: #007bff;
+    color: white;
+}
+
+.edit-buttons button:first-child:hover {
+    background-color: #0056b3;
+}
+
+.edit-buttons button:last-child {
+    background-color: #6c757d;
+    color: white;
+}
+
+.edit-buttons button:last-child:hover {
+    background-color: #545b62;
 }

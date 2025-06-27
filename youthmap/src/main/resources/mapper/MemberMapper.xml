@@ -114,12 +114,18 @@
 		parameterType="com.example.demo.model.MemberModel">
 		UPDATE MEMBER
 		SET
-		MEM_PASS = #{memPass},
-		MEM_MAIL =
-		#{memMail},
+		MEM_MAIL = #{memMail},
 		MEM_ADDRESS = #{memAddress},
 		MEM_ADDDETAIL = #{memAddDetail},
 		MEM_NUM = #{memNum}
+		WHERE MEM_NO = #{memNo}
+	</update>
+
+	<!-- 비밀번호 변경 -->
+	<update id="updatePassword"
+		parameterType="com.example.demo.model.MemberModel">
+		UPDATE MEMBER
+		SET MEM_PASS = #{memPass}
 		WHERE MEM_NO = #{memNo}
 	</update>
 

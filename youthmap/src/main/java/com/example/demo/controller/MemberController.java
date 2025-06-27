@@ -136,11 +136,9 @@ public class MemberController {
 
 	// 회원정보 수정 처리
 	@PostMapping("/edit")
-	public String updateMemberInfo(@RequestParam("currentPass") String currentPass,
-			@RequestParam(value = "newPass", required = false) String newPass, @RequestParam("memMail") String memMail,
+	public String updateMemberInfo(@RequestParam("memMail") String memMail,
 			@RequestParam("memAddress") String memAddress, @RequestParam("memAddDetail") String memAddDetail,
-			@RequestParam("phonePrefix") String phonePrefix, @RequestParam("phoneMiddle") String phoneMiddle, 
-			@RequestParam("phoneLast") String phoneLast, HttpSession session, Model model) {
+			@RequestParam("memPhone") String memPhone, HttpSession session, Model model) {
 
 		MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
 
@@ -153,32 +151,25 @@ public class MemberController {
 			return "redirect:/mypage?error=socialUserCannotEdit";
 		}
 
-		// 비밀번호 검증
-		if (!currentPass.equals(loginMember.getMemPass())) {
-			model.addAttribute("error", "비밀번호가 틀립니다.");
-			model.addAttribute("member", loginMember);
-			return "member/edit";
-		}
-
 		// 변경된 값 설정
-		if (newPass != null && !newPass.isEmpty()) {
-			loginMember.setMemPass(newPass);
-		}
 		loginMember.setMemMail(memMail);
 		loginMember.setMemAddress(memAddress);
 		loginMember.setMemAddDetail(memAddDetail);
+		loginMember.setMemNum(memPhone);
 
-		// 핸드폰번호 조합해서 저장
-		String fullPhone = phonePrefix + "-" + phoneMiddle + "-" + phoneLast;
-		loginMember.setMemNum(fullPhone);
+		try {
+			// DB 업데이트
+			memberService.updateMember(loginMember);
 
-		// DB 업데이트
-		memberService.updateMember(loginMember);
+			// 세션 갱신
+			session.setAttribute("loginMember", loginMember);
 
-		// 세션 갱신
-		session.setAttribute("loginMember", loginMember);
-
-		return "redirect:/mypage";
+			return "redirect:/mypage?success=updated";
+		} catch (Exception e) {
+			model.addAttribute("error", "회원정보 수정 중 오류가 발생했습니다.");
+			model.addAttribute("member", loginMember);
+			return "member/edit";
+		}
 	}
 
 	// 회원 탈퇴
@@ -262,7 +253,7 @@ public class MemberController {
 	    
 	    // 비밀번호 변경
 	    loginMember.setMemPass(newPass);
-	    memberService.updateMember(loginMember);
+	    memberService.updatePassword(loginMember);
 	    
 	    // 세션 갱신
 	    session.setAttribute("loginMember", loginMember);

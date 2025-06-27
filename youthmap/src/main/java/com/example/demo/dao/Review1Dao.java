@@ -17,7 +17,7 @@ public interface Review1Dao {
 
     int updatereview(Review1 review);
     
-    int deletereview(int review_id1);
+    int deletereview(Review1 review);
 
 	Review1 selectreview(int review_id1);
 

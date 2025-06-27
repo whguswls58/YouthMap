@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,6 +25,7 @@ import com.example.demo.service.RestaurantService;
 import com.example.demo.service.Review1Service;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -305,17 +308,29 @@ public class RestaurantController {
             return "redirect:/login";
         }
 
+        System.out.println("리뷰 삭제 요청:");
+        System.out.println("  리뷰 ID: " + review_id1);
+        System.out.println("  식당 ID: " + resId);
+        System.out.println("  로그인 사용자: " + loginMember.getMemId() + " (mem_no: " + loginMember.getMemNo() + ")");
+
         // Review1 객체 생성하여 작성자 정보 설정
         Review1 review = new Review1();
         review.setReview_id1(review_id1);
         review.setMem_no(loginMember.getMemNo().intValue());
 
         // 작성자 확인
-        if (reviewservice.checkReviewAuthor(review) == 0) {
+        int authorCheck = reviewservice.checkReviewAuthor(review);
+        System.out.println("  작성자 확인 결과: " + authorCheck);
+        
+        if (authorCheck == 0) {
+            System.out.println("  작성자가 아니므로 삭제 불가");
             return "redirect:/restaurantDetail?res_id=" + resId;
         }
 
+        // 첨부파일 삭제
         String fileName = reviewservice.reviewfile(review_id1);
+        System.out.println("  첨부파일명: " + fileName);
+        
         if (fileName != null && !fileName.trim().isEmpty()) {
             String path = session.getServletContext().getRealPath("/upload/review/");
             // 경로가 null이면 기본 경로 사용
@@ -323,9 +338,78 @@ public class RestaurantController {
                 path = System.getProperty("user.home") + "/upload/review/";
             }
             File file = new File(path, fileName);
-            if (file.exists()) file.delete();
+            if (file.exists()) {
+                file.delete();
+                System.out.println("  첨부파일 삭제 완료: " + file.getAbsolutePath());
+            } else {
+                System.out.println("  첨부파일이 존재하지 않음: " + file.getAbsolutePath());
+            }
         }
-        reviewservice.deletereview(review);
+
+        // 리뷰 삭제
+        int deleteResult = reviewservice.deletereview(review);
+        System.out.println("  리뷰 삭제 결과: " + deleteResult);
+        
         return "redirect:/restaurantDetail?res_id=" + resId;
+    }
+
+    // 리뷰 이미지 표시
+    @GetMapping("/reviewfileview")
+    public void reviewFileView(@RequestParam("filename") String filename,
+                               @RequestParam("origin") String origin,
+                               HttpServletResponse response,
+                               HttpSession session) throws Exception {
+
+        // 저장된 파일 경로
+        String uploadPath = session.getServletContext().getRealPath("/upload/review/");
+        // 경로가 null이면 기본 경로 사용
+        if (uploadPath == null) {
+            uploadPath = System.getProperty("user.home") + "/upload/review/";
+        }
+        String savePath = uploadPath + "/" + filename;
+        File file = new File(savePath);
+
+        System.out.println("리뷰 이미지 파일 경로: " + savePath);
+        System.out.println("파일 존재: " + file.exists());
+
+        if (file.exists()) {
+            // 파일 확장자에 따른 Content-Type 설정
+            String contentType = getContentType(origin);
+            response.setContentType(contentType);
+            response.setContentLength((int) file.length());
+
+            FileInputStream in = new FileInputStream(file);
+            OutputStream out = response.getOutputStream();
+
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = in.read(buffer)) > 0) {
+                out.write(buffer, 0, len);
+            }
+
+            in.close();
+            out.close();
+        } else {
+            System.err.println("리뷰 이미지 파일을 찾을 수 없습니다: " + savePath);
+        }
+    }
+
+    // Content-Type 결정 메서드
+    private String getContentType(String fileName) {
+        if (fileName == null) return "application/octet-stream";
+        String lowerFileName = fileName.toLowerCase();
+        if (lowerFileName.endsWith(".jpg") || lowerFileName.endsWith(".jpeg")) {
+            return "image/jpeg";
+        } else if (lowerFileName.endsWith(".png")) {
+            return "image/png";
+        } else if (lowerFileName.endsWith(".gif")) {
+            return "image/gif";
+        } else if (lowerFileName.endsWith(".bmp")) {
+            return "image/bmp";
+        } else if (lowerFileName.endsWith(".webp")) {
+            return "image/webp";
+        } else {
+            return "application/octet-stream";
+        }
     }
 }
