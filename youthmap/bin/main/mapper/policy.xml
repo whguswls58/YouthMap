@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.PolicyDao">
+
+	<!-- 데이터 갯수 -->
+	<select id="cntData" parameterType="policy" resultType="int">
+		select count(*) from plcy
+		<where>
+			(
+			<!-- 상시 혹은 정책 신청기간이 남은 경우 -->
+			aply_ymd_end IS NULL
+			OR (
+			aply_ymd_end IS NOT NULL
+			AND REGEXP_LIKE(aply_ymd_end, '^[0-9]{8}$')
+			AND TO_DATE(aply_ymd_end, 'YYYYMMDD') > TRUNC(SYSDATE)
+			)
+			)
+
+			<!-- 검색어가 있는 경우 -->
+			<if test="searchInput != null and searchInput != ''">
+				AND
+				plcy_nm like '%'||#{searchInput}||'%' or
+				plcy_expln_cn like '%'||#{searchInput}||'%'
+			</if>
+
+			<!-- 카테고리 선택했을 경우 -->
+			<if test="categories != null and categories.size() > 0">
+				AND
+				(
+				<foreach collection="categories" item="category"
+					separator="OR">
+					mclsf_nm LIKE '%' || #{category} || '%'
+				</foreach>
+				)
+			</if>
+		</where>
+		
+		
+	</select>
+	<!-- 마지막 업데이트일 -->
+	<select id="lastUpdate" resultType="java.util.Date">
+		SELECT MAX(reg_date) FROM plcy
+	</select>
+
+	<!-- 현재 DB에 저장된 plcy_no 컬럼 list -->
+	<select id="plcyNoList" resultType="java.lang.String">
+		SELECT plcy_no FROM plcy
+	</select>
+
+	<!-- 데이터 insert -->
+	<insert id="plcyInsert" parameterType="policy">
+		INSERT INTO plcy (
+		PLCY_NO, PLCY_NM, PLCY_EXPLN_CN, PLCY_KYWD_NM, LCLSF_NM, MCLSF_NM,
+		PLCY_SPRT_CN, BIZ_PRD_BGNG_YMD, BIZ_PRD_END_YMD, PLCY_APLY_MTHD_CN,
+		SRNG_MTHD_CN, APLY_URL_ADDR, SBMSN_DCMNT_CN, ETC_MTTR_CN,
+		REF_URL_ADDR1,
+		REF_URL_ADDR2, SPRT_SCL_LMT_YN, SPRT_SCL_CNT, SPRT_TRGT_AGE_LMT_YN,
+		SPRT_TRGT_MIN_AGE, SPRT_TRGT_MAX_AGE, RGTR_HGHRK_INST_CD_NM,
+		RGTR_UP_INST_CD_NM, RGTR_INST_CD_NM, MRG_STTS_CD, EARN_CND_SE_CD,
+		EARN_MIN_AMT, EARN_MAX_AMT, EARN_ETC_CN, ADD_APLY_QLFC_CND_CN,
+		INQ_CNT, APLY_YMD_STRT, APLY_YMD_END, FRST_REG_DT, LAST_MDFCN_DT,
+		PTCP_PRP_TRGT_CN, SCHOOL_CD, PLCY_MAJOR_CD, JOB_CD, S_BIZ_CD,
+		REG_DATE
+		) VALUES (
+		#{plcy_no}, #{plcy_nm}, #{plcy_expln_cn}, #{plcy_kywd_nm}, #{lclsf_nm},
+		#{mclsf_nm},
+		#{plcy_sprt_cn}, #{biz_prd_bgng_ymd}, #{biz_prd_end_ymd}, #{plcy_aply_mthd_cn},
+		#{srng_mthd_cn}, #{aply_url_addr}, #{sbmsn_dcmnt_cn}, #{etc_mttr_cn},
+		#{ref_url_addr1},
+		#{ref_url_addr2}, #{sprt_scl_lmt_yn}, #{sprt_scl_cnt}, #{sprt_trgt_age_lmt_yn},
+		#{sprt_trgt_min_age}, #{sprt_trgt_max_age}, #{rgtr_hghrk_inst_cd_nm},
+		#{rgtr_up_inst_cd_nm}, #{rgtr_inst_cd_nm}, #{mrg_stts_cd},
+		#{earn_cnd_se_cd},
+		#{earn_min_amt}, #{earn_max_amt}, #{earn_etc_cn}, #{add_aply_qlfc_cnd_cn},
+		#{inq_cnt}, #{aply_ymd_strt, jdbcType=VARCHAR}, #{aply_ymd_end,
+		jdbcType=VARCHAR}, #{frst_reg_dt}, #{last_mdfcn_dt}, 
+		#{ptcp_prp_trgt_cn}, #{school_cd}, #{plcy_major_cd}, #{job_cd}, #{s_biz_cd},
+		sysdate
+		)
+	</insert>
+
+	<!-- 전체 데이터 검색 -->
+	<select id="plcyList" resultType="policy">
+		select * from plcy
+	</select>
+
+	<!-- 데이터 업데이트 -->
+	<update id="plcyUpdate" parameterType="policy">
+		UPDATE plcy SET
+		PLCY_NM = #{plcy_nm}, PLCY_EXPLN_CN = #{plcy_expln_cn},
+		PLCY_KYWD_NM =
+		#{plcy_kywd_nm}, LCLSF_NM = #{lclsf_nm}, MCLSF_NM = #{mclsf_nm},
+		PLCY_SPRT_CN = #{plcy_sprt_cn}, BIZ_PRD_BGNG_YMD =
+		#{biz_prd_bgng_ymd},
+		BIZ_PRD_END_YMD = #{biz_prd_end_ymd}, PLCY_APLY_MTHD_CN = #{plcy_aply_mthd_cn},
+		SRNG_MTHD_CN = #{srng_mthd_cn}, APLY_URL_ADDR = #{aply_url_addr},
+		SBMSN_DCMNT_CN = #{sbmsn_dcmnt_cn}, ETC_MTTR_CN = #{etc_mttr_cn},
+		REF_URL_ADDR1 = #{ref_url_addr1}, REF_URL_ADDR2 = #{ref_url_addr2},
+		SPRT_SCL_LMT_YN = #{sprt_scl_lmt_yn}, SPRT_SCL_CNT = #{sprt_scl_cnt},
+		SPRT_TRGT_AGE_LMT_YN = #{sprt_trgt_age_lmt_yn},
+		SPRT_TRGT_MIN_AGE = #{sprt_trgt_min_age}, SPRT_TRGT_MAX_AGE = #{sprt_trgt_max_age},
+		RGTR_HGHRK_INST_CD_NM = #{rgtr_hghrk_inst_cd_nm},
+		RGTR_UP_INST_CD_NM = #{rgtr_up_inst_cd_nm}, RGTR_INST_CD_NM = #{rgtr_inst_cd_nm},
+		MRG_STTS_CD = #{mrg_stts_cd}, EARN_CND_SE_CD = #{earn_cnd_se_cd},
+		EARN_MIN_AMT = #{earn_min_amt}, EARN_MAX_AMT = #{earn_max_amt},
+		EARN_ETC_CN = #{earn_etc_cn}, ADD_APLY_QLFC_CND_CN =
+		#{add_aply_qlfc_cnd_cn},
+		INQ_CNT = #{inq_cnt}, APLY_YMD_STRT = #{aply_ymd_strt, jdbcType=VARCHAR},
+		APLY_YMD_END = #{aply_ymd_end, jdbcType=VARCHAR},
+		FRST_REG_DT = #{frst_reg_dt}, LAST_MDFCN_DT = #{last_mdfcn_dt}, 
+		PTCP_PRP_TRGT_CN = #{ptcp_prp_trgt_cn}, SCHOOL_CD = #{school_cd},
+		PLCY_MAJOR_CD = #{plcy_major_cd}, JOB_CD = #{job_cd}, S_BIZ_CD = #{s_biz_cd},
+		REG_DATE = sysdate
+		WHERE plcy_no = #{plcy_no}
+	</update>
+
+	<!-- 정책 상세 데이터 검색 -->
+	<select id="plcyContent" parameterType="java.lang.String" resultType="policy">
+		SELECT * FROM plcy WHERE plcy_no = #{plcy_no}
+	</select>
+
+	<!-- 데이터 검색 -->
+	<select id="plcyListByPage" parameterType="policy"
+		resultType="policy">
+		SELECT *
+		FROM (
+		SELECT ROWNUM rn, a.*
+		FROM (
+		SELECT * FROM plcy
+		<where>
+			(
+			<!-- 상시 혹은 정책 신청기간이 남은 경우 -->
+			aply_ymd_end IS NULL
+			OR (
+			aply_ymd_end IS NOT NULL
+			AND REGEXP_LIKE(aply_ymd_end, '^[0-9]{8}$')
+			AND TO_DATE(aply_ymd_end, 'YYYYMMDD') > TRUNC(SYSDATE)
+			)
+			)
+
+			<!-- 검색어가 있는 경우 -->
+			<if test="searchInput != null and searchInput != ''">
+				AND
+				plcy_nm like '%'||#{searchInput}||'%' or
+				plcy_expln_cn like '%'||#{searchInput}||'%'
+			</if>
+
+			<!-- 카테고리 선택했을 경우 -->
+			<if test="categories != null and categories.size() > 0">
+				AND
+				(
+				<foreach collection="categories" item="category"
+					separator="OR">
+					mclsf_nm LIKE '%' || #{category} || '%'
+				</foreach>
+				)
+			</if>
+		</where>
+		<choose>
+			<when test="sortOrder == 'views'">
+				ORDER BY inq_cnt DESC, last_mdfcn_dt DESC
+			</when>
+			<otherwise>
+				ORDER BY last_mdfcn_dt DESC
+			</otherwise>
+		</choose>
+		) a
+		)
+		WHERE rn BETWEEN #{startRow} and #{endRow}
+	</select>
+
+
+</mapper>
+
+
+

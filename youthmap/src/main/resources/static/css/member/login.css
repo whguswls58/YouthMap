@@ -1,0 +1,181 @@
+/* =================== 로그인 =================== */
+body {
+  margin: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #f5f5f5;
+}
+
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 80px 0;
+}
+
+.login-box {
+  background: #fff;
+  width: 360px;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.login-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #111;
+}
+
+.login-error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #0072ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.login-button:hover {
+  background-color: #005bcc;
+}
+
+.login-divider {
+  margin: 24px 0;
+  color: #777;
+  font-size: 13px;
+}
+
+.social-login a {
+  display: block;
+  margin: 8px 0;
+}
+
+.social-login img {
+  height: 40px;
+  object-fit: contain;
+}
+
+.login-register {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.login-register a {
+  color: #0072ff;
+  text-decoration: none;
+}
+
+/* =================== 회원가 입 =================== */
+.register-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #111;
+}
+
+.register-form .form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.register-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.register-form input[type="text"],
+.register-form input[type="password"],
+.register-form input[type="date"],
+.register-form select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.input-with-button {
+  display: flex;
+  gap: 10px;
+}
+
+.input-with-button input {
+  flex: 1;
+}
+
+.input-with-button button {
+  white-space: nowrap;
+  padding: 10px 14px;
+  font-size: 14px;
+  background-color: #0072ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.radio-group {
+  display: flex;
+  gap: 20px;
+}
+
+.email-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.phone-group {
+  display: flex;
+  gap: 10px;
+}
+
+.login-error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+#idCheckResult,
+#passCheckResult {
+  font-size: 13px;
+  display: block;
+  margin-top: 6px;
+}
+
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #0072ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background-color: #005bcc;
+}

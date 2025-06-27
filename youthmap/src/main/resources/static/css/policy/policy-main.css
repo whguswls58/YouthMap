@@ -1,0 +1,417 @@
+@charset "UTF-8";
+
+/* ===== Hero Background ===== */
+.hero-section {
+  width: 100%;
+  overflow: hidden;
+}
+
+.hero-img {
+  width: 100%;
+  height: 300px; /* 필요에 따라 조정 */
+  object-fit: cover;
+}
+
+/* 검색컨테이너 */
+.search-wrapper {
+  	display: flex;
+  	justify-content: center;
+  	margin: 50px 0;
+  	position: relative;
+  	z-index: 1;
+}
+
+/* 검색바 form */
+.search-bar {
+	display: flex;
+  	align-items: center;
+  	background: #fff;
+  	padding: 20px 40px;
+  	border-radius: 12px;
+/*   	box-shadow: 0 4px 8px rgba(0,0,0,0.05); */
+  	gap: 12px;
+  	width: fit-content; 		/* 내부 크기에 맞춤 */
+    max-width: 100%;     		/* 모바일 대응 */
+    flex-direction: column; 	/* 내부 항목 세로 정렬 */
+    align-items: center;
+  	justify-content: center;
+  	position: relative;
+  	z-index: 1;
+}
+
+/* 검색바 div */
+.search-combined {
+  display: flex;
+  background-color: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  flex-grow: 1;
+  max-width: 760px;
+  position: relative;
+  z-index: 2;
+}
+
+/* 검색바 select */
+.search-combined select {
+  border: none;
+  padding: 12px 20px;
+  font-size: 14px;
+  background-color: #fff;
+  border-right: 1px solid #ccc;
+  position: relative;
+  z-index: 2;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  appearance: none;
+  width: 160px;
+}
+.search-combined select:focus {
+  outline: none;
+  z-index: 9999;
+} 
+
+/* 검색창 텍스트 */
+.search-combined input[type="text"] {
+  border: none;
+  padding: 12px 16px;
+  font-size: 14px;
+  width: 100%;
+  outline: none;
+}
+
+/* 검색 버튼 */
+.search-bar input[type="submit"] {
+  padding: 12px 20px;
+  background-color: #888;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 초기화 버튼 */
+.search-bar input[type="reset"] {
+  padding: 12px 20px;
+  background-color: #888;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 검색, 초기화 버튼 hover*/
+.search-bar input[type="submit"]:hover,
+.search-bar input[type="reset"]:hover {
+  background-color: #666;
+}
+
+/* 카테고리 셀렉트 박스 */
+.category-select {
+	padding: 8px;
+	border: none;
+	background: transparent;
+	font-size: 1em;
+}
+
+/* 카테고리 전체 영역 div */
+.category-container {
+  display: flex;
+  background:#fff;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* 카테고리 분류 */
+.category-group {
+  display: inline-block;
+  margin: 20px;
+  vertical-align: top;
+}
+
+/* 카테고리 헤더 */
+.category-header {
+  text-align: center;
+  margin-bottom: 10px;
+  background-color: #fff;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.category-header img {
+  margin-bottom: 5px;
+}
+
+/* 하위 카테고리 체크박스 css 숨김처리 */
+.subcategory-group input[type="checkbox"] {
+  display: none;
+}
+
+/* 하위 카테고리 체크박스 대체용 버튼 */
+.btn-group-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 버튼 선택시 css */
+.btn-pill {
+  border: 1.5px solid #ccc;
+  background: #fff;
+  border-radius: 30px;
+  min-width: 160px;
+  text-align: center;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+/* 버튼 실행 css */
+.btn.active {
+  background-color: #eaf1ff;
+  border-color: #0066ff;
+  color: #0066ff;
+  font-weight: bold;
+}
+
+/* 체크 이미지 아이콘 */
+.check-icon {
+  margin-right: 5px;
+  display: none;
+}
+
+.btn.active .check-icon {
+  display: inline;
+}
+
+/* a 태그 */
+a {
+	text-decoration: none;
+	color: #888;
+	margin: 0 5px;
+}
+
+a:hover {
+	text-decoration: underline;
+	color: #666;
+}
+
+/* 이미지 슬라이더 */
+/* 인기 정책 */
+.popular-policy {
+  max-width: 1170px;
+  margin: 0 auto;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+/* 베이지 배경을 살짝만 크게 */
+.slider-section {
+  background-color: #f5f0e6;
+  height:400px;
+  padding: 10px 0;              /* 위아래 여백만 줘서 카드보다 살짝 크게 */
+  margin-top:50px;
+  margin-bottom:50px;
+}
+
+/* 섹션 내부 컨텐츠 가운데 정렬 및 최대 너비 제한 */
+.slider-section h2 {
+  text-align: center;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.slider-section .swiper-container {
+  width: 100%;
+  max-width: 1020px;            /* 필요에 따라 조절 */
+  margin: 0 auto;               /* 가운데 정렬 */
+  overflow: hidden;
+  padding: 0 10px;              /* 좌우 여백 */
+  box-sizing: border-box;
+}
+
+/* 카드 자체는 원래 스타일 유지 (흰 배경, 그림자 등 그대로) */
+.slider-section .policy-card {
+  background: #fff;             /* 백그라운드 흰색 유지 */
+}
+
+/* 1) 슬라이더 하단 여백 */
+.swiper-container {
+   margin-bottom: 0px;
+   overflow: hidden;  	/* 중요: 넘침 방지 */
+}
+
+
+
+/* 슬라이더 카드 크기 키우기 */
+.swiper-slide {
+ /* slide 자체 너비를 늘려서 사진을 크게 보여줍니다 */
+  width: 300px !important;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.slider-section .slider-title {
+  text-align: center;
+  margin-bottom: 12px;
+  color: #333;
+}
+  
+/* 슬라이더 카드 사이즈 */
+.swiper-slide .policy-card {
+  width: 240px;       /* 기존 200px → 240px */
+  padding: 16px;      /* 안쪽 여백도 살짝 늘려줍니다 */
+}
+
+/* 슬라이드 각각의 고정 폭 */
+.swiper-slide {
+  width: 240px;        /* 카드+여백 포함 너비 */
+}
+
+/* swiper-container */
+.swiper-container {
+  width: 90vw;        /* 화면 너비의 90% */
+  max-width: 1200px;  /* (원하는 최대값) */
+  margin: 0 auto;     /* 좌우 자동 중앙정렬 */
+}
+
+/* 검색 결과 출력 컨테이너 */
+.policy-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 가로 3개 */
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* 검색 결과 갯수 */
+.policy-search-count{
+  display: flex;
+  justify-content: space-between; /* 좌우 정렬 */
+  align-items: center;            /* 수직 가운데 정렬 */
+  padding: 10px 0;
+  width:100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* 정렬 방식 선택 select css */
+.policy-search-count select{
+  border: none;
+  padding: 12px 20px;
+  font-size: 14px;
+  background-color: #fff;
+  border-right: 1px solid #ccc;
+  position: relative;
+  z-index: 2;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  appearance: none;
+  width: 100px;
+
+}
+
+/* 검색 결과 정책 card */
+.policy-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  width: 300px;
+  background-color: #fff;
+  vertical-align: top;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.policy-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* card 내 정책제목 */
+.policy-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin: 10px 0 5px;
+}
+
+/* card 내 정책정보 */
+.policy-desc {
+  font-size: 14px;
+  color: #555;
+  height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;		 /* 한줄 제한 */
+}
+
+/* card 내 정책 라벨 */
+.policy-label {
+  font-size: 12px;
+  color: #777;
+  margin-right: 5px;
+  display: inline-block;
+  padding: 3px 8px;
+  background: #eee;
+  border-radius: 12px;
+  
+}
+
+/* D-Day 10일 이하 css */
+.dday-red {
+  color: red;
+  font-weight: bold;
+}
+
+/* card 내 자세히보기 버튼 */
+.detail-btn {
+  display: block;
+  margin-top: 15px;
+  border:none; 
+  border-radius: 5px;
+  padding: 10px 28px;
+  background-color: #888;
+  color: #fff;
+  font-size:17px; 
+  cursor:pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.detail-btn:hover {
+  background-color: #666;
+  color: white;
+}
+
+/* card 내 정책 태그 */
+.policy-tag {
+  display: inline-block;
+  padding: 3px 8px;
+  background: #eee;
+  border-radius: 12px;
+  font-size: 12px;
+  margin: 3px 3px 0 0;
+}
+
+/* 페이징 스타일 */
+.pagination {
+  text-align: center;
+  margin: 20px auto;
+}
+.pagination a, .pagination span {
+  display: inline-block;
+  margin: 0 6px;
+  padding: 4px 8px;
+  text-decoration: none;
+  color: #000;
+}
+
+.pagination .current {
+  font-weight: bold;
+}

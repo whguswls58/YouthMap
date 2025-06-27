@@ -9,7 +9,7 @@
   <meta charset="UTF-8">
   <title>전체 콘텐츠 목록</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/list.css">
-  
+
 </head>
 <body>
 <%-- 관리자 모드에서 수동 업데이트 버튼 추가하기
@@ -17,6 +17,7 @@
   <button type="submit">수동 업데이트 실행</button>
 </form> --%>
 
+<%@ include file="/WEB-INF/views/header.jsp" %>
 <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
 <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
 

@@ -1,26 +1,26 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.3.12'
-	id 'io.spring.dependency-management' version '1.1.7'
+   id 'java'
+   id 'org.springframework.boot' version '3.3.12'
+   id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+   toolchain {
+      languageVersion = JavaLanguageVersion.of(17)
+   }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+   compileOnly {
+      extendsFrom annotationProcessor
+   }
 }
 
 repositories {
-	mavenCentral()
+   mavenCentral()
 }
 
 dependencies {
@@ -32,9 +32,15 @@ dependencies {
 	implementation 'commons-fileupload:commons-fileupload:1.5'
 	// jackson
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-	
-	// json-simple
-	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+	// JSON 파싱용 Gson
+	implementation 'com.google.code.gson:gson:2.8.9'
+	// HTTP 요청용 OkHttp
+	implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+	// JSON‐Simple
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+	// OAuth2
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' 
+
 
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -47,8 +53,25 @@ dependencies {
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+   useJUnitPlatform()
+   
 }
+
+//// JSP 작동을 위한 설정
+//sourceSets {
+//   main {
+//      resources {
+//         srcDirs = ['src/main/resources', 'src/main/webapp']
+//      }
+//   }
+//} 
+//
+//// bootJar 설정 (JAR 파일명 지정 + 중복 제거)
+//bootJar {
+//    archiveFileName = 'yourapp.jar'
+//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+//}
