@@ -1,7 +1,7 @@
 package com.example.demo.model;
 
 import java.util.Date;
-
+import java.util.List;
 
 import org.apache.ibatis.type.Alias;
 
@@ -40,6 +40,9 @@ public class CultureModel {
 	 	
 	// 정렬
     private String sort;                 // 정렬 기준 (mostViewed, newest, endingSoon)
+
+ // [추가] 공연/축제 IN절에 사용할 카테고리명 리스트
+    private List<String> category_names;
 }
 	 	
 //	>>  DATE를 (~) 기준으로 split 해서 con_start_date  ,  con_end_date에 담고
