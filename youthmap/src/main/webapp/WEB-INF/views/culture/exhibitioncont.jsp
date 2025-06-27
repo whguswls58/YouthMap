@@ -1,8 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.example.demo.util.KakaoKeyUtil" %>
-<!-- 헤더-->
-<%@ include file="/WEB-INF/views/header.jsp" %>
+
+<%@ include file="/WEB-INF/views/culture/header.jsp" %>
 <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
 <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
 
@@ -19,28 +19,9 @@
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= KakaoKeyUtil.getApiKey() %>&libraries=services"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/cont.css">
 
-<style>
+<!-- ② map.js 파일만 import (내부에 SDK 자동로딩 있음) -->
+<script src="${pageContext.request.contextPath}/js/culture/map.js"></script>
 
-.content-category {
-  margin-bottom: 14px;
-  text-align: center; /* or center, 위치에 따라 */
-}
-
-.badge {
-  display: inline-block;
-  font-size: 0.95em;
-  font-weight: 600;
-  padding: 4px 14px;
-  border-radius: 12px;
-  background: #eef6f2;        /* 카테고리에 따라 바꿔도 좋음 */
-  color: #008060;
-  letter-spacing: -0.4px;
-  border: none;
-  box-shadow: none;
-  vertical-align: middle;
-}
-}
-</style>
 </head>
 <body>
 
@@ -50,12 +31,8 @@
 
   <div class="containerer">
   
-   <div class="content-category">
-  <span class="badge exhibitionlist">전시/미술</span>
-</div>
-	
     <!-- 제목 -->
-    <h2>${cul.con_title}</h2>
+    <h2 >${cul.con_title}</h2>
 
     <!-- 이미지 + 상세 정보 표 -->
     <div class="detail-flex">
@@ -90,36 +67,22 @@
     <!-- ② 지도 표시 영역 -->
     <div id="map"></div>
 
-    <!-- ③ SDK 로드 후 안전하게 호출 -->
-    <script>
-      kakao.maps.load(function() {
-        // EL 값은 문자열로 감싸서 parseFloat
-        var lng = parseFloat("${cul.con_lat}"),
-            lat = parseFloat("${cul.con_lot}");
-
-        var map = new kakao.maps.Map(
-          document.getElementById('map'),
-          {
-            center: new kakao.maps.LatLng(lat, lng),
-            level: 3
-          }
-        );
-        new kakao.maps.Marker({
-          position: new kakao.maps.LatLng(lat, lng),
-          map: map
-        });
-      });
-    </script>
-
+<!-- ① 동적 데이터 전달: 위도, 경도, API 키만 전역 변수로 선언 (★ EL/JSTL 값만!) -->
+<script>
+	// api 제공 데이터가 위도 경도 값이 반대로 되어 있어서 추가함!
+  var mapLat = "${cul.con_lot}";     // 위도(lot), 꼭 서버 값!
+  var mapLng = "${cul.con_lat}";     // 경도(lat)
+  var mapApiKey = "<%= KakaoKeyUtil.getApiKey() %>";
+  
+</script>
+    
     <!-- 뒤로가기 -->
-    <div class="back-container">
-  		<a class="back-link" href="#" onclick="history.go(-1); return false;">
-  		  ← 목록으로 돌아가기
+     <div class="back-container">
+ 		 <a class="back-link" href="#" onclick="history.go(-1); return false;">
+ 		   ← 목록으로 돌아가기
  		 </a>
 	</div>
 
-  
-  
  <!-- 리뷰작성 버튼 -->
 <!-- 				여기서부터 리뷰 기능 추가한 코드 				-->  
 <!-- 숨겨진 리뷰작성 폼 -->
