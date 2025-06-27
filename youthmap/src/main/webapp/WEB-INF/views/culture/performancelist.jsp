@@ -77,10 +77,10 @@
   <!-- 공연 검색 페이징 처리 -->
    <c:if test="${!empty keyword }">
     <c:if test="${page > 1}">
-      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=performance&search=${search}&keyword=${keyword}&page=1">&laquo;</a>
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=performance&search=${search}&keyword=${keyword}&page=1">«</a>
     </c:if>
     <c:if test="${startpage > 10}">
-      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=performance&search=${search}&keyword=${keyword}&page=${startpage-10}">[이전]</a>
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=performance&search=${search}&keyword=${keyword}&page=${startpage-10}">‹</a>
     </c:if>
     <c:forEach var="i" begin="${startpage}" end="${endpage}">
       <c:choose>
@@ -93,10 +93,10 @@
       </c:choose>
     </c:forEach>
     <c:if test="${endpage < pagecount}">
-      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=performance&search=${search}&keyword=${keyword}&page=${startpage+10}">[다음]</a>
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=performance&search=${search}&keyword=${keyword}&page=${startpage+10}">›</a>
     </c:if>
     <c:if test="${page < pagecount}">
-      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=performance&search=${search}&keyword=${keyword}&page=${pagecount}">&raquo;</a>
+      <a href="${pageContext.request.contextPath}/culturesearch?mainCategory=performance&search=${search}&keyword=${keyword}&page=${pagecount}">»</a>
     </c:if>
    </c:if>
   </div>

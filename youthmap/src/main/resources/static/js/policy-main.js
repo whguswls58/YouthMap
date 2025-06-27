@@ -381,11 +381,11 @@ function renderPagination(current, total, start, end, sortOrder) {
 
 	// 처음 페이지
 	pagination.innerHTML +=
-		`<a href="javascript:loadPage(1, '${sortOrder}')">&laquo;</a>`;
+		`<a href="javascript:loadPage(1, '${sortOrder}')">«</a>`;
 	// 이전 블록
 	if (start > 6) {
 		pagination.innerHTML +=
-			`<a href="javascript:loadPage(${start - 6}, '${sortOrder}')">[이전]</a>`;
+			`<a href="javascript:loadPage(${start - 6}, '${sortOrder}')">‹</a>`;
 		} 	//end if
 
 	// 페이지 번호들
@@ -401,12 +401,12 @@ function renderPagination(current, total, start, end, sortOrder) {
 	// 다음 페이지
 	if (current < total) {
 		pagination.innerHTML +=
-			`<a href="javascript:loadPage(${start + 6}, '${sortOrder}')">[다음]</a>`;
+			`<a href="javascript:loadPage(${start + 6}, '${sortOrder}')">›</a>`;
 	}	// end if
 
 	// 마지막 페이지
 	pagination.innerHTML +=
-		`<a href="javascript:loadPage(${total}, '${sortOrder}')">&raquo;</a>`;
+		`<a href="javascript:loadPage(${total}, '${sortOrder}')">»</a>`;
 }		// end function
 
 

@@ -39,7 +39,7 @@
         <img src="/img/banner/culture4.png" alt="문화 이미지">
       </div>
       <h3>문화</h3>
-      <p>뮤지컬, 전시회, 축제 등 서울의 문화 소식을 소개합니다.</p>
+      <p>전시회, 공연, 축제 등 서울의 문화 소식을 소개합니다.</p>
     </a>
 
     <a href="/res_main" class="info-box">
@@ -47,7 +47,7 @@
         <img src="/img/banner/food4.jpg" alt="맛집 이미지">
       </div>
       <h3>맛집</h3>
-      <p>서울 청년이 직접 추천하는 구별 숨은 맛집 모음입니다.</p>
+      <p>서울 청년에게 추천하는 구별 숨은 맛집 모음입니다.</p>
     </a>
 
     <a href="/boardlist" class="info-box">
