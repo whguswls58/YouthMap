@@ -31,8 +31,11 @@
 
   <div class="containerer">
   
+   <div class="content-category">
+</div>
+	
     <!-- 제목 -->
-    <h2 >${cul.con_title}</h2>
+    <h2>${cul.con_title}</h2>
 
     <!-- 이미지 + 상세 정보 표 -->
     <div class="detail-flex">
@@ -67,196 +70,141 @@
     <!-- ② 지도 표시 영역 -->
     <div id="map"></div>
 
-<!-- ① 동적 데이터 전달: 위도, 경도, API 키만 전역 변수로 선언 (★ EL/JSTL 값만!) -->
-<script>
-	// api 제공 데이터가 위도 경도 값이 반대로 되어 있어서 추가함!
-  var mapLat = "${cul.con_lot}";     // 위도(lot), 꼭 서버 값!
-  var mapLng = "${cul.con_lat}";     // 경도(lat)
-  var mapApiKey = "<%= KakaoKeyUtil.getApiKey() %>";
-  
-</script>
-    
+    <!-- ③ SDK 로드 후 안전하게 호출 -->
+    <script>
+      kakao.maps.load(function() {
+        // EL 값은 문자열로 감싸서 parseFloat
+        var lng = parseFloat("${cul.con_lat}"),
+            lat = parseFloat("${cul.con_lot}");
+
+        var map = new kakao.maps.Map(
+          document.getElementById('map'),
+          {
+            center: new kakao.maps.LatLng(lat, lng),
+            level: 3
+          }
+        );
+        new kakao.maps.Marker({
+          position: new kakao.maps.LatLng(lat, lng),
+          map: map
+        });
+      });
+    </script>
+
     <!-- 뒤로가기 -->
-     <div class="back-container">
- 		 <a class="back-link" href="#" onclick="history.go(-1); return false;">
- 		   ← 목록으로 돌아가기
+    <div class="back-container">
+  		<a class="back-link" href="#" onclick="history.go(-1); return false;">
+  		  ← 목록으로 돌아가기
  		 </a>
 	</div>
 
- <!-- 리뷰작성 버튼 -->
-<!-- 				여기서부터 리뷰 기능 추가한 코드 				-->  
-<!-- 숨겨진 리뷰작성 폼 -->
-<div class="visitor-review-container">
-<div id="reviewFormWrap" style="display:none;">
-    <div class="review-form-container" style="max-width: 400px; margin: 20px auto;">
-        <h2 style="text-align:center; margin-bottom: 20px;">리뷰 작성</h2>
-        <form action="${pageContext.request.contextPath}/exhibitioncont/reviewwrite" 
-			 method="post" enctype="multipart/form-data">
-            <input type="hidden" name="con_id" value="${exhibitioncont.con_id}" />
-            <input type="hidden" name="page" value="${page }">
-            <div class="review-form-row" style="margin-bottom:16px;">
-                <label for="review_writer2">작성자</label>
-                <input type="text" name="review_writer2" id="review_writer2" maxlength="30" required placeholder="작성자 닉네임 또는 아이디" style="width:100%;padding:8px;">
-            </div>
-
-            <div class="review-form-row" style="margin-bottom:16px;">
-                <label for="review_score2">별점</label>
-                <select name="review_score2" id="review_score2" required style="width:100%;padding:8px;">
-                    <option value="">선택</option>
-                    <option value="5">★★★★★ (5점)</option>
-                    <option value="4">★★★★ (4점)</option>
-                    <option value="3">★★★ (3점)</option>
-                    <option value="2">★★ (2점)</option>
-                    <option value="1">★ (1점)</option>
-                </select>
-            </div>
-
-            <div class="review-form-row" style="margin-bottom:16px;">
-                <label for="review_content2">내용</label>
-                <textarea name="review_content2" id="review_content2" maxlength="500" required placeholder="리뷰 내용을 입력해주세요." style="width:100%;padding:8px;"></textarea>
-            </div>
-
-            <div class="review-form-row" style="margin-bottom:16px;">
-                <label for="review_file2">사진 첨부</label>
-                <input type="file" name="review_file22" id="review_file2" accept="image/*" />
-            </div>
-
-            <div class="review-form-btns" style="text-align:center;">
-                <input type="submit" value="작성완료" style="padding:8px 28px; border-radius:6px; border:none; background:#888; color:#fff; font-size:16px; cursor:pointer;">
-                <button type="button" onclick="closeReviewForm()" style="padding:8px 28px; border-radius:6px; border:none; background: #888; color:#fff; font-size:16px; cursor:pointer;">취소</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<script>
-    // "리뷰 작성" 버튼 클릭 시 폼 보이기
-    document.addEventListener('DOMContentLoaded', function() {
-        var btn = document.getElementById('reviewWriteBtn');
-        var formDiv = document.getElementById('reviewFormWrap');
-        if (btn && formDiv) {
-            btn.onclick = function() {
-                formDiv.style.display = 'block';
-                btn.style.display = 'none';
-            }
-        }
-    });
-    // 취소 누르면 폼 닫기
-    function closeReviewForm() {
-        document.getElementById('reviewFormWrap').style.display = 'none';
-        document.getElementById('reviewWriteBtn').style.display = 'inline-block';
-    }
-</script>
-
-  
-  <!-- ★ 리뷰 리스트와 수정 폼 반복 -->
-<div class="detail-container">
-<!-- 리뷰작성 버튼 -->
-<div style="text-align:right; margin: 18px 0;">
-    <button id="reviewWriteBtn" style="padding:7px 20px; border-radius:7px; background:#888; color:#fff; border:none; font-size:16px; cursor:pointer;">
-        리뷰 작성
-    </button>
-</div>
-  <h2 style="font-size:2em; margin-bottom:16px;">방문자 평가</h2>
-  <c:forEach var="rev" items="${reviewlist}">
-        <div style="border-bottom:1px solid #eee;padding:16px 0 10px 0;margin-bottom:0;">
-            <!-- 작성자 & 별점 -->
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-                <span style="font-weight:bold;font-size:17px;"><c:out value="${rev.review_writer2}" /></span>
-                <span style="color:#555; font-size:14px;">
-            <c:out value="${rev.review_register2}" />
-          </span>
-                <span style="color:#ffa500;letter-spacing:1px;">
-                    <c:forEach var="i" begin="1" end="${rev.review_score2}">★</c:forEach>
-                    <c:forEach var="i" begin="${rev.review_score2+1}" end="5">☆</c:forEach>
-                </span>
-            </div>
-            
-            <!-- 리뷰 내용 -->
-            <div style="margin:10px 0 6px 0;line-height:1.7;font-size:16px;color:#333;">
-                <c:out value="${rev.review_content2}" />
-            </div>
-            <!-- 첨부 이미지 -->
-            <c:if test="${not empty rev.review_file2}">
-                <div style="margin:8px 0 0 0;">
-                    <img src="/images/${rev.review_file2}" alt="첨부이미지"
-                         style="max-width:120px;border-radius:8px;box-shadow:0 1px 8px #eee;">
-                </div>
-            </c:if>
-            <!-- ★ 버튼 영역 (수정/삭제/수정폼 토글) -->
-            <div style="text-align:right;margin-top:7px;">
-                <button type="button" class="reviewEditBtn" data-reviewid="${rev.review_id2}" style="padding:3px 13px 4px 13px;border-radius:5px;background:#7f8c8d;color:#fff;border:none;cursor:pointer;font-size:14px;">
-                    수정
-                </button>
-                <a href="reviewdelete?review_id2=${rev.review_id2}&res_id=${rev.con_id}" onclick="return confirm('정말 삭제하시겠습니까?');">
-                    <button style="padding:3px 13px 4px 13px;border-radius:5px;background:#c0392b;color:#fff;border:none;cursor:pointer;font-size:14px;">
-                        삭제
-                    </button>
-                </a>
-            </div>
-            <!-- ★ 리뷰 수정 폼 (리스트 내, 처음엔 숨김) -->
-            <div id="reviewEditForm${rev.review_id2}" class="review-edit-form" style="display:none; background:#f8f9fa; border:1px solid #ccc; border-radius:9px; padding:20px; margin-top:10px;">
-                <form action="reviewedit" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="review_id2" value="${rev.review_id2}" />
-                    <input type="hidden" name="con_id" value="${rev.con_id}" />
-                    <input type="hidden" name="old_file2" value="${rev.review_file2}" />
-                    <div>
-                        <label>별점</label>
-                        <select name="review_score2" required>
-                            <option value="5" <c:if test="${rev.review_score2 == 5}">selected</c:if>>★★★★★ (5점)</option>
-                            <option value="4" <c:if test="${rev.review_score2 == 4}">selected</c:if>>★★★★ (4점)</option>
-                            <option value="3" <c:if test="${rev.review_score2 == 3}">selected</c:if>>★★★ (3점)</option>
-                            <option value="2" <c:if test="${rev.review_score2 == 2}">selected</c:if>>★★ (2점)</option>
-                            <option value="1" <c:if test="${rev.review_score2 == 1}">selected</c:if>>★ (1점)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>내용</label>
-                        <textarea name="review_content2" required>${rev.review_content2}</textarea>
-                    </div>
-                    <div>
-                        <label>사진 첨부</label>
-                        <input type="file2" name="review_file22" accept="image/*" />
-                        <c:if test="${not empty rev.review_file2}">
-                            <div>기존: <img src="/images/${rev.review_file2}" style="max-width:70px;vertical-align:middle;"></div>
-                        </c:if>
-                    </div>
-                    <div style="margin-top:10px;">
-                        <input type="submit" value="수정완료" style="padding:7px 22px;">
-                        <button type="button" onclick="closeReviewEditForm('${rev.review_id2}')" style="padding:7px 22px;">취소</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </c:forEach>
-    <c:if test="${empty reviewlist}">
-        <div style="text-align:center;color:#aaa;">등록된 리뷰가 없습니다.</div>
-    </c:if>
-  </div>
- </div>
-  
- 
-
-<!-- 페이지네이션 -->
-<c:if test="${totalpage > 1}">
-  <div style="text-align:center; margin:30px 0;">
-    <c:forEach var="i" begin="1" end="${totalpage}">
-      <c:choose>
-        <c:when test="${page == i}">
-          <span style="color:#222;font-weight:bold;padding:0 10px;">${i}</span>
-        </c:when>
-        <c:otherwise>
-          <a href="${pageContext.request.contextPath}/exhibitioncont?con_id=${exhibitioncont.con_id}&page=${i}" 
-             style="color:#666;text-decoration:none;padding:0 10px;">${i}</a>
-        </c:otherwise>
-      </c:choose>
-    </c:forEach>
-  </div>
-</c:if>
-
-<!-- //////////////////////////////////////////////////////////////////////////////// -->
-
-
+		<!-- 리뷰 영역 전체 -->
+		<div class="review-section">
+			<div class="review-header">
+				<h3>리뷰</h3>
+				<!-- 필요시 리뷰 개수, 글자수 카운트 등 추가 가능 -->
+			</div>
+			<!-- 리뷰 입력 폼 -->
+			<div class="review-form">
+				<c:choose>
+					<c:when test="${not empty sessionScope.loginMember}">
+						<form action="${pageContext.request.contextPath}/exhibitioncont/reviewwrite" method="post" enctype="multipart/form-data">
+							<input type="hidden" name="con_id" value="${exhibitioncont.con_id}" />
+							<select name="review_score2" id="review_score2" required style="width: 90px; min-width: 70px; padding: 10px 6px; font-size: 15px; border: 1px solid #ddd; border-radius: 4px; margin-right: 8px;">
+									<option value="">별점</option>
+									<option value="5">★★★★★</option>
+									<option value="4">★★★★</option>
+									<option value="3">★★★</option>
+									<option value="2">★★</option>
+									<option value="1">★</option>
+								</select>
+							<div class="review-form-wrapper">
+								
+								<textarea name="review_content2" id="review_content2" maxlength="500" required placeholder="리뷰를 입력하세요..." style="flex-grow:1;"></textarea>
+								<button type="submit">작성</button>
+							</div>
+							<div style="margin-top: 8px;">
+								<label for="review_file2" style="font-weight: normal; color: #666; margin-right: 8px;">첨부파일</label>
+								<input type="file" name="review_file22" id="review_file2" accept="image/*">
+							</div>
+						</form>
+					</c:when>
+					<c:otherwise>
+						<div class="review-login-prompt">
+							<a href="${pageContext.request.contextPath}/login" style="color:#3498db; font-weight:bold; text-decoration:underline;">로그인</a> 후 리뷰 작성이 가능합니다.
+						</div>
+					</c:otherwise>
+				</c:choose>
+			</div>
+			<!-- 리뷰 리스트 -->
+			<ul class="review-list">
+				<c:forEach var="rev" items="${reviewlist}">
+					<li class="review-item">
+						<div class="review-body">
+							<div class="review-author-line">
+								<span class="review-author"><c:out value="${rev.mem_name}" /></span>
+								<span class="review-info">${rev.review_register2}</span>
+								<span style="color: #ffa500; letter-spacing: 1px;">
+									<c:forEach var="i" begin="1" end="${rev.review_score2}">★</c:forEach>
+									<c:forEach var="i" begin="${rev.review_score2+1}" end="5">☆</c:forEach>
+								</span>
+							</div>
+							<div class="review-text">
+								<c:out value="${rev.review_content2}" />
+							</div>
+							<c:if test="${not empty rev.review_file2}">
+								<div style="margin: 8px 0 0 0;">
+									<img src="/images/${rev.review_file2}" alt="첨부이미지" style="max-width: 120px; border-radius: 8px; box-shadow: 0 1px 8px #eee;">
+								</div>
+							</c:if>
+							<c:if test="${not empty sessionScope.loginMember and sessionScope.loginMember.memNo == rev.mem_no}">
+								<div class="review-actions">
+									<button type="button" class="reviewEditBtn" data-reviewid="${rev.review_id2}">수정</button>
+									<a href="${pageContext.request.contextPath}/exhibitioncont/reviewdelete?review_id2=${rev.review_id2}&con_id=${rev.con_id}" onclick="return confirm('정말 삭제하시겠습니까?');" class="delete-btn">삭제</a>
+								</div>
+							</c:if>
+							<div id="reviewEditForm${rev.review_id2}" class="review-edit-form" style="display: none; background: #f8f9fa; border: 1px solid #ccc; border-radius: 9px; padding: 20px; margin-top: 10px;">
+								<form action="${pageContext.request.contextPath}/exhibitioncont/reviewedit" method="post" enctype="multipart/form-data">
+									<input type="hidden" name="review_id2" value="${rev.review_id2}" />
+									<input type="hidden" name="con_id" value="${rev.con_id}" />
+									<input type="hidden" name="old_file2" value="${rev.review_file2}" />
+									<div>
+										<label>별점</label>
+										<select name="review_score2" required>
+											<option value="5" <c:if test="${rev.review_score2 == 5}">selected</c:if>>★★★★★</option>
+											<option value="4" <c:if test="${rev.review_score2 == 4}">selected</c:if>>★★★★</option>
+											<option value="3" <c:if test="${rev.review_score2 == 3}">selected</c:if>>★★★</option>
+											<option value="2" <c:if test="${rev.review_score2 == 2}">selected</c:if>>★★</option>
+											<option value="1" <c:if test="${rev.review_score2 == 1}">selected</c:if>>★</option>
+										</select>
+									</div>
+									<div>
+										<label>내용</label>
+										<textarea name="review_content2" required>${rev.review_content2}</textarea>
+									</div>
+									<div>
+										<label>사진 첨부</label>
+										<input type="file" name="review_file22" accept="image/*" />
+										<c:if test="${not empty rev.review_file2}">
+											<div>기존: <img src="/images/${rev.review_file2}" style="max-width: 70px; vertical-align: middle;"></div>
+										</c:if>
+									</div>
+									<div style="margin-top: 10px;">
+										<input type="submit" value="수정완료" style="padding: 7px 22px;">
+										<button type="button" onclick="closeReviewEditForm('${rev.review_id2}')" style="padding: 7px 22px;">취소</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</li>
+				</c:forEach>
+				<c:if test="${empty reviewlist}">
+					<li style="text-align: center; color: #aaa; padding: 30px 0;">등록된 리뷰가 없습니다.</li>
+				</c:if>
+			</ul>
+		</div>
+	</div>
+	<!-- map & review detail-container 닫는 태그 -->
 
 	<!-- 페이지네이션 -->
 	<c:if test="${totalpage > 1}">

@@ -169,6 +169,8 @@ public class CultureController {
 			@RequestParam(value = "page", defaultValue = "1") int page, @ModelAttribute Review2Model review2,
 			Model model, HttpSession session) throws Exception {
 		
+		System.out.println("현재 상세글 ID : " + review2.getCon_id());
+		
 		// 로그인 체크
 		MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
 		if (loginMember == null) {
