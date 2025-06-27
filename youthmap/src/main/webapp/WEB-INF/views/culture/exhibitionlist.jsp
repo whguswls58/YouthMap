@@ -7,14 +7,14 @@
 <head>
   <meta charset="UTF-8">
   <title>전시/미술 리스트</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" />
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/culture/list.css">
 
 </head>
 <body>
-
+  <%@ include file="/WEB-INF/views/header.jsp" %>
   <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
   <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/culture/list.css">
-
 <div id="card-container">
   <div class="cards">
     <c:if test="${empty exhibitionlist}">

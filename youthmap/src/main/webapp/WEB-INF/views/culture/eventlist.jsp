@@ -6,13 +6,14 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-
   <title>축제/행사 리스트</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/list.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" />
 </head>
 <body>
+ <%@ include file="/WEB-INF/views/header.jsp" %>
  <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
  <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/list.css">
 
 <div id="card-container">
   <div class="cards">

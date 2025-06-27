@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.example.demo.util.KakaoKeyUtil" %>
-<%@ include file="/WEB-INF/views/culture/header.jsp" %>
+<%@ include file="/WEB-INF/views/header.jsp" %>
 <%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
 <%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
 
@@ -11,11 +11,11 @@
 <head>
   <meta charset="UTF-8">
   <title>YouthMap</title>
- <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 
   <!-- ① 카카오 JS SDK: YOUR_APP_KEY 부분에 자바스크립트 키를 넣으세요 -->
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= KakaoKeyUtil.getApiKey() %>&libraries=services"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/cont.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/cont.css" />
 
 <!-- ② map.js 파일만 import (내부에 SDK 자동로딩 있음) -->
 <script src="${pageContext.request.contextPath}/js/culture/map.js"></script>
