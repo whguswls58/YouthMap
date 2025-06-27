@@ -84,7 +84,7 @@
 <c:set var="keyword"       value="${keyword}" />
 
 <div class="search-wrapper">
-  <form class="search-bar" action="${ctx}/allList" method="get">
+  <form class="search-bar" action="${ctx}/culturesearch" method="get">
     <div class="search-combined">
       <!-- 1) 메인 카테고리 -->
       <select name="mainCategory">

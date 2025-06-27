@@ -2,6 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.example.demo.util.KakaoKeyUtil" %>
 
+<%@ include file="/WEB-INF/views/header.jsp" %>
+<%@ include file="/WEB-INF/views/culture/searchBar.jsp" %>
+<%@ include file="/WEB-INF/views/culture/tabs.jsp" %>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" />
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -14,10 +18,13 @@
   <!-- ① 카카오 JS SDK: YOUR_APP_KEY 부분에 자바스크립트 키를 넣으세요 -->
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=<%= KakaoKeyUtil.getApiKey() %>&libraries=services"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/cont.css"> 
+<!-- ② map.js 파일만 import (내부에 SDK 자동로딩 있음) -->
+<script src="${pageContext.request.contextPath}/js/culture/map.js"></script>
 </head>
 <body>
-<!-- 헤더-->
-<%@ include file="/WEB-INF/views/header.jsp" %>
+
+<hr>
+
 
 <c:set var="ctx" value="${pageContext.request.contextPath }"/>
 
@@ -57,29 +64,17 @@
       </table>
     </div>
 
-    <!-- ② 지도 표시 영역 -->
-    <div id="map" style="width:100%;height:400px;"></div>
+     <!-- ② 지도 표시 영역 -->
+    <div id="map"></div>
 
-    <!-- ③ SDK 로드 후 안전하게 호출 -->
-    <script>
-      kakao.maps.load(function() {
-        // EL 값은 문자열로 감싸서 parseFloat
-        var lng = parseFloat("${cul.con_lat}");
-        var lat = parseFloat("${cul.con_lot}");
-
-        var map = new kakao.maps.Map(
-          document.getElementById('map'),
-          {
-            center: new kakao.maps.LatLng(lat, lng),
-            level: 3
-          }
-        );
-        new kakao.maps.Marker({
-          position: new kakao.maps.LatLng(lat, lng),
-          map: map
-        });
-      });
-    </script>
+<!-- ① 동적 데이터 전달: 위도, 경도, API 키만 전역 변수로 선언 (★ EL/JSTL 값만!) -->
+<script>
+	// api 제공 데이터가 위도 경도 값이 반대로 되어 있어서 추가함!
+  var mapLat = "${cul.con_lot}";     // 위도(lot), 꼭 서버 값!
+  var mapLng = "${cul.con_lat}";     // 경도(lat)
+  var mapApiKey = "<%= KakaoKeyUtil.getApiKey() %>";
+  
+</script>
     
     	<!-- 뒤로가기 -->
     <div class="back-container">

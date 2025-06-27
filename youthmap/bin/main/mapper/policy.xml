@@ -160,7 +160,7 @@
 		</where>
 		<choose>
 			<when test="sortOrder == 'views'">
-				ORDER BY inq_cnt ASC, last_mdfcn_dt DESC
+				ORDER BY inq_cnt DESC, last_mdfcn_dt DESC
 			</when>
 			<otherwise>
 				ORDER BY last_mdfcn_dt DESC

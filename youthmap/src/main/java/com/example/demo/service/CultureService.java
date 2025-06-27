@@ -139,7 +139,7 @@ public class CultureService {
     }
 
     /** 매일 16:30 자동 업데이트 */
-    @Scheduled(cron = "0 30 17 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 00 10 * * *", zone = "Asia/Seoul")
     public void scheduledCultureUpdate() {
         System.out.println("===== 문화 자동 업데이트 시작 ===== " + new Date());
         try {

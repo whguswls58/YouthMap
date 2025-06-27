@@ -75,7 +75,7 @@
       <div class="swiper-slide">
         <div class="policy-card">
           <!-- 라벨 -->
-	      <div>
+	      <div style="position: relative;">
 	          <c:choose>
 	              <c:when test="${empty p.aply_ymd_strt}">
 	                  <span class="policy-label">상시</span><br />
@@ -92,6 +92,16 @@
 	          <c:forEach var="lclsf" items="${p.lclsf_nms}">
 		          <span class="policy-label">${lclsf}</span>
 	          </c:forEach>
+	          
+<!-- 			  <span class="star-wrapper" style="position: absolute; right: 0;"> -->
+<%-- 			  	<svg class="star-icon" data-filled="false" data-plcy-no=${p.plcy_no } --%>
+<!-- 				     xmlns="http://www.w3.org/2000/svg" fill="none" stroke="gold" stroke-width="2" -->
+<!-- 				     width="20" height="20" viewBox="0 0 24 24" style="cursor: pointer;"> -->
+<!-- 				    <path d="M12 17.27L18.18 21 16.54 13.97 22 9.24l-7.19-.61L12 2 -->
+<!-- 				             9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /> -->
+<!-- 				</svg> -->
+<!-- 			  </span> -->
+				
 	      </div>
 	      <!-- 링크 및 내용 -->
 	        <a href="${pageContext.request.contextPath}/policyContent?page=${page}&plcy_no=${p.plcy_no}">
@@ -162,14 +172,45 @@
    	];
    	console.log("main.jsp 출력 : " + selectedCategories);
 </script>
+
 <!-- 메인 script -->
 <script src="${pageContext.request.contextPath}/js/policy-main.js"></script>
-
 
 <!-- Swiper JS -->
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
+<script>
+//   document.addEventListener('DOMContentLoaded', function () {
+//     document.querySelectorAll('.star-icon').forEach(star => {
+//       star.addEventListener('click', function () {
+//         const isFilled = this.getAttribute('data-filled') === 'true';
+//         const plcyNo = this.getAttribute('data-plcy-no');
 
+//         // UI 토글
+//         this.setAttribute('fill', isFilled ? 'none' : 'gold');
+//         this.setAttribute('data-filled', isFilled ? 'false' : 'true');
+
+//         // 서버 호출
+//         const url = '/policyFavorite';
+//         const method = isFilled ? 'DELETE' : 'POST';
+
+//         fetch(url, {
+//           method: method,
+//           headers: {
+//             'Content-Type': 'application/json'
+//           },
+//           body: JSON.stringify({ plcy_no: plcyNo })
+//         })
+//         .then(res => {
+//           if (!res.ok) throw new Error("서버 오류");
+//           return res.text();
+//         })
+//         .then(msg => console.log(`서버 응답: \${msg}`))
+//         .catch(err => console.error("요청 실패", err));
+//       });
+//     });
+//   });
+</script>
 
 </body>
 </html>
