@@ -41,11 +41,8 @@
 			<c:forEach var="cat" items="${categoryList}">
 				<div class="category-group">
 					<div class="category-header">
-				    	<img src="${pageContext.request.contextPath}/policy/policyIcon/${cat.icon}" width="40" />
+				    	<img src="${pageContext.request.contextPath}/img/policy/policyIcon/${cat.icon}" width="40" />
 				      	<p><strong>${cat.name}</strong></p>
-<!-- 						<label> -->
-<%-- 							<input type="checkbox" class="check-all" data-target="${cat.name}" /> 전체 --%>
-<!-- 						</label> -->
 					</div>
 					<div class="btn-group-vertical subcategory-group" data-category="${cat.name}" data-toggle="buttons">
 						<c:forEach var="sub" items="${cat.subcategories}">
