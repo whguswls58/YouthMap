@@ -35,19 +35,13 @@ public class RestaurantController {
     
     // --------------------- [구글 API 동기화용] ----------------------
 
-    // 1. 폼(GET) - 버튼만 있는 페이지
-    @GetMapping("/updateapi")
-    public String updateapiForm() {
-        return "restaurant/updateapiform"; // 버튼만 있는 페이지(JSP)
-    }
-
-    // 2. 실제 동기화(POST) - 버튼 눌렀을 때만 DB 동기화 진행
-    @PostMapping("/updateapi")
+    // 실제 동기화(POST) - 버튼 눌렀을 때만 DB 동기화 진행
+    @RequestMapping("/updateapi")
     public String updateapi(Model model) throws Exception {
         int[] result = service.syncFromGoogleApi();
         model.addAttribute("insertCnt", result[0]);
         model.addAttribute("updateCnt", result[1]);
-        return "restaurant/updateapi";
+        return "redirect:/admin/dashboard";
     }
 
     // --------------------- [메인/리스트/상세 등 기존 코드] ----------------------

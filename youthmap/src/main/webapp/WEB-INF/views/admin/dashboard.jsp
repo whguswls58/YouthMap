@@ -67,9 +67,12 @@
             <h3>API 수동 갱신</h3>
             <div class="api-buttons">
                 <form action="${pageContext.request.contextPath}/admin/updateApi" method="post" style="display:inline;">
-                    <button type="submit" name="apiType" value="policy" class="action-btn success">정책 API 갱신</button>
-                    <button type="submit" name="apiType" value="restaurant" class="action-btn success">맛집 API 갱신</button>
-                    <button type="submit" name="apiType" value="culture" class="action-btn success">문화 API 갱신</button>
+	                 <button type="button" name="apiType" value="policy" class="action-btn success"
+	                   onclick="location.href='/policyUpdate'">정책 API 갱신</button>
+	                 <button type="button" name="apiType" value="restaurant" class="action-btn success"
+	                   onclick="location.href='/updateapi'">맛집 API 갱신</button>
+	                 <button type="button" name="apiType" value="culture" class="action-btn success"
+	                   onclick="location.href='/datainput'">문화 API 갱신</button>
                 </form>
             </div>
         </div>

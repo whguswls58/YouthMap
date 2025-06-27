@@ -38,7 +38,7 @@ public class PolicyController {
 	public String policyUpdate() throws Exception {
 		service.executePolicyUpdate();
 		// 추후 관리자 페이지에서 요청 -> 관리자 페이지로 리턴할 예정
-		return "policy/test3";
+		return "redirect:/admin/dashboard";
 	}
 	  
 	// 정책 메인 페이지

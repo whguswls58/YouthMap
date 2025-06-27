@@ -46,7 +46,7 @@ public class CultureController {
             model.addAttribute("message", "업데이트 중 오류: " + e.getMessage());
         }
         // /WEB-INF/views/updateResult.jsp
-        return "culture/updateResult";   
+        return "redirect:/admin/dashboard";   
     }
 				
 	// 메인 페이지
