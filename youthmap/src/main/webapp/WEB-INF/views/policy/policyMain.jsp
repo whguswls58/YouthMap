@@ -20,7 +20,7 @@
 
 <!-- Hero 이미지 영역 -->
 <div class="hero-section">
-	<img src="${pageContext.request.contextPath}/img/123.jpg" alt="Hero Image" class="hero-img" />
+	<img src="${pageContext.request.contextPath}/images/p1.jpg" alt="Hero Image" class="hero-img" />
 </div>
 
 <div class="search-wrapper">

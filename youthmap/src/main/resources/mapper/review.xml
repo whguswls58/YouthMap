@@ -14,16 +14,14 @@
             review_register1,
             mem_no,
             res_id,
-            review_writer
         ) VALUES (
             review1_seq.NEXTVAL,
             #{review_score1},
             #{review_content1},
             #{review_file1, jdbcType=VARCHAR},
             SYSDATE,
-            1,
+            #{mem_no},
 			#{res_id},
-			#{review_writer}
         )
     </insert>
 

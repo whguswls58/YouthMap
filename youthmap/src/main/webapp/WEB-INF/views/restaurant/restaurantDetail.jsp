@@ -194,11 +194,7 @@
 							placeholder="작성자 닉네임 또는 아이디" style="width: 100%; padding: 8px;">
 					</div> 
 
-					<%-- <form action="reviewwrite" method="post" enctype="multipart/form-data">
-						<!-- 로그인 세션에서 mem_no 를 직접 넣어줌 -->
-						<input type="hidden" name="review_writer"
-							value="${sessionScope.mem_no}" /> <input type="hidden"
-							name="res_id" value="${restaurant.res_id}" />
+					
 
 						<div class="review-form-row" style="margin-bottom: 16px;">
 							<label for="review_score1">별점</label> <select
@@ -211,7 +207,7 @@
 								<option value="2">★★ (2점)</option>
 								<option value="1">★ (1점)</option>
 							</select>
-						</div> --%>
+						</div>
 
 						<div class="review-form-row" style="margin-bottom: 16px;">
 							<label for="review_content1">내용</label>
