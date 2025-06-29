@@ -5,9 +5,9 @@
         <!-- ✅ 푸터 -->
 <div class="footer">
   <div class="footer-icons">
-    <a href="#"><img src="${pageContext.request.contextPath}/img/face.png" alt="facebook"></a>
-    <a href="#"><img src="${pageContext.request.contextPath}/img/insta.png" alt="instagram"></a>
-    <a href="#"><img src="${pageContext.request.contextPath}/img/twit.svg" alt="twitter"></a>
+    <a href="https://www.facebook.com"><img src="${pageContext.request.contextPath}/img/face.png" alt="facebook"></a>
+    <a href="https://www.instagram.com"><img src="${pageContext.request.contextPath}/img/insta.png" alt="instagram"></a>
+    <a href="https://x.com"><img src="${pageContext.request.contextPath}/img/twit.svg" alt="twitter"></a>
   </div>
 
   <p>
