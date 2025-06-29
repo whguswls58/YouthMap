@@ -4,11 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입 완료</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 </head>
 <body>
 
-<h2>회원가입이 완료되었습니다 🎉</h2>
-<p>이제 <a href="${pageContext.request.contextPath}/login">로그인</a>하여 서비스를 이용하실 수 있습니다.</p>
+<script>
+    alert("회원가입이 완료되었습니다 🎉\n로그인 페이지로 이동합니다.");
+    window.location.href = "${pageContext.request.contextPath}/login";
+</script>
 
 </body>
 </html> 
