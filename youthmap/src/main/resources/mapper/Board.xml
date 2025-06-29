@@ -31,19 +31,25 @@
             <if test="excludeCategory != null and excludeCategory != ''">
                 AND b.board_category != #{excludeCategory}
             </if>
-            <if test="searchType != null and keyword != null and keyword != ''">
-                <choose>
-                    <when test="searchType == 'subject'">
-                        AND b.board_subject LIKE '%' || #{keyword} || '%'
-                    </when>
-                    <when test="searchType == 'content'">
-                        AND b.board_content LIKE '%' || #{keyword} || '%'
-                    </when>
-                    <when test="searchType == 'writer'">
-                        AND m.mem_id LIKE '%' || #{keyword} || '%'
-                    </when>
-                </choose>
-            </if>
+			<if test="keyword != null and keyword != ''">
+			  <choose>
+			    <when test="searchType == 'subject'">
+			      AND b.board_subject LIKE '%' || #{keyword} || '%'
+			    </when>
+			    <when test="searchType == 'content'">
+			      AND b.board_content LIKE '%' || #{keyword} || '%'
+			    </when>
+			    <when test="searchType == 'writer'">
+			      AND m.mem_id LIKE '%' || #{keyword} || '%'
+			    </when>
+			    <otherwise>
+			      AND (
+			        b.board_subject LIKE '%' || #{keyword} || '%'
+			        OR b.board_content LIKE '%' || #{keyword} || '%'
+			      )
+			    </otherwise>
+			  </choose>
+			</if>
         </where>
     </select>
 
@@ -71,25 +77,25 @@
         <if test="excludeCategory != null and excludeCategory != ''">
           AND b.board_category != #{excludeCategory}
         </if>
-        <if test="searchType != null and keyword != null and keyword != ''">
-          <choose>
-            <when test="searchType == 'subject'">
-              AND b.board_subject LIKE '%' || #{keyword} || '%'
-            </when>
-            <when test="searchType == 'content'">
-              AND b.board_content LIKE '%' || #{keyword} || '%'
-            </when>
-            <when test="searchType == 'writer'">
-              AND m.mem_id LIKE '%' || #{keyword} || '%'
-            </when>
-            <otherwise>
-              AND (
-                b.board_subject LIKE '%' || #{keyword} || '%'
-                OR b.board_content LIKE '%' || #{keyword} || '%'
-              )
-            </otherwise>
-          </choose>
-        </if>
+			<if test="keyword != null and keyword != ''">
+			  <choose>
+			    <when test="searchType == 'subject'">
+			      AND b.board_subject LIKE '%' || #{keyword} || '%'
+			    </when>
+			    <when test="searchType == 'content'">
+			      AND b.board_content LIKE '%' || #{keyword} || '%'
+			    </when>
+			    <when test="searchType == 'writer'">
+			      AND m.mem_id LIKE '%' || #{keyword} || '%'
+			    </when>
+			    <otherwise>
+			      AND (
+			        b.board_subject LIKE '%' || #{keyword} || '%'
+			        OR b.board_content LIKE '%' || #{keyword} || '%'
+			      )
+			    </otherwise>
+			  </choose>
+			</if>
       </where>
       ORDER BY b.board_no DESC
     ) inner_q
