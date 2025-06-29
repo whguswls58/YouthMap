@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dao.BoardDao;
 import com.example.demo.dao.UserFileDao;
@@ -70,6 +71,17 @@ public class BoardService {
     public List<UserFile> getFilesByBoardNo(int boardNo) {
         return userFileDao.listByBoardNo(boardNo);
     }
+    
+    @Transactional
+    public void writeBoardWithFile(Board board, UserFile file) {
+    	boardDao.insert(board);
+    	System.out.println("현재 작성된 글 번호 : " + board.getBoardNo());
+        if (file != null) {
+            file.setBoardNo(board.getBoardNo());
+            userFileDao.insertFile(file);
+        }
+    }
+    
     
     public int deleteFileByPath(String filePath) {
         return userFileDao.deleteByPath(filePath);

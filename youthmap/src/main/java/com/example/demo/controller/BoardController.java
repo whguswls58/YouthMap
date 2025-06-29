@@ -158,39 +158,39 @@ public class BoardController {
 
         int newNo = boardService.getNextBoardNo();
         board.setBoardNo(newNo);
-        boardService.insert(board);
 
+        UserFile uf = null;
+        
         // 첨부파일이 있을 때만 처리
         if (uploadFile != null && !uploadFile.isEmpty()) {
-            try {
-                String orig = uploadFile.getOriginalFilename();
-                String saved = UUID.randomUUID() + "_" + orig;
-                File dir = new File(uploadDir);
-                if (!dir.exists()) dir.mkdirs();
-                File f = new File(dir, saved);
-                uploadFile.transferTo(f);
+            
+        	String orig = uploadFile.getOriginalFilename();
+            String saved = UUID.randomUUID() + "_" + orig;
+            File dir = new File(uploadDir);
+            if (!dir.exists()) dir.mkdirs();
+            File f = new File(dir, saved);
+            uploadFile.transferTo(f);
 
-                System.out.println("파일 업로드 성공:");
-                System.out.println("  원본 파일명: " + orig);
-                System.out.println("  저장 파일명: " + saved);
-                System.out.println("  저장 경로: " + f.getAbsolutePath());
-                System.out.println("  파일 크기: " + f.length() + " bytes");
+            System.out.println("파일 업로드 성공:");
+            System.out.println("  원본 파일명: " + orig);
+            System.out.println("  저장 파일명: " + saved);
+            System.out.println("  저장 경로: " + f.getAbsolutePath());
+            System.out.println("  파일 크기: " + f.length() + " bytes");
 
-                UserFile uf = new UserFile();
-                uf.setBoardNo(newNo);
-                uf.setUserFileName(orig);
-                uf.setUserFilPath(saved);
-                boardService.saveFile(uf);
-                
-                System.out.println("DB에 파일 정보 저장 완료");
-            } catch (Exception e) {
-                // 파일 업로드 실패 시에도 게시글은 저장되도록 함
-                System.err.println("파일 업로드 실패: " + e.getMessage());
-                e.printStackTrace();
-            }
+            uf = new UserFile();
+            uf.setBoardNo(newNo);
+            uf.setUserFileName(orig);
+            uf.setUserFilPath(saved);
+
+            System.out.println("현재 게시판 글번호 : " + board.getBoardNo());
+            System.out.println("현재 게시판 글번호(업로드파일) : " + uf.getBoardNo());
+            
         } else {
             System.out.println("첨부파일이 없습니다.");
         }
+        
+        // 게시글 + 파일 등록 트랜잭션으로 처리
+        boardService.writeBoardWithFile(board, uf);
 
         return "redirect:/boardlist";
     }

@@ -10,7 +10,7 @@
             board_no, board_category, board_subject,
             board_content, board_readcount, board_date, mem_no
         ) VALUES (
-            (SELECT NVL(MAX(board_no), 0) + 1 FROM board),
+            #{boardNo},
             #{boardCategory},
             #{boardSubject},
             #{boardContent},
