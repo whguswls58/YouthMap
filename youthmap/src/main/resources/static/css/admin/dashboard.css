@@ -298,6 +298,7 @@
 .admin-main-content .board-table td:nth-child(3) {
   width: 10%;
   text-align: center;
+  white-space: nowrap;
 }
 
 .admin-main-content .board-table th:nth-child(4), /* 제목 */
@@ -316,6 +317,7 @@
 .admin-main-content .board-table td:nth-child(6) {
   width: 10%;
   text-align: center;
+  white-space: nowrap;
 }
 
 .admin-main-content .board-table tbody td {
