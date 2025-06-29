@@ -29,6 +29,9 @@ public interface MemberDao {
     //회원 정보 수정 
     void updateMember(MemberModel member);
     
+    //비밀번호 변경
+    void updatePassword(MemberModel member);
+    
     //회원 탈퇴 
     void updateMemberStatus(MemberModel member);
     

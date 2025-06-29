@@ -1,11 +1,16 @@
 package com.example.demo.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +41,18 @@ public class BoardController {
     @Value("${file.upload.directory}")
     private String uploadDir;
 
+    // 업로드 디렉토리 초기화
+    @PostConstruct
+    public void init() {
+        File uploadDirectory = new File(uploadDir);
+        if (!uploadDirectory.exists()) {
+            uploadDirectory.mkdirs();
+            System.out.println("업로드 디렉토리 생성: " + uploadDir);
+        } else {
+            System.out.println("업로드 디렉토리 확인: " + uploadDir);
+        }
+    }
+    
     /** 1) `/board` 요청이 들어오면 `boardlist` 로 리다이렉트 */
     @GetMapping("/board")
     public String redirectToList() {
@@ -116,7 +133,10 @@ public class BoardController {
 
     /** 3) 글쓰기 폼 */
     @GetMapping("/boardwrite")
-    public String writeForm(HttpSession session) {
+    public String writeForm( @ModelAttribute Board board,
+            @RequestParam(value = "uploadFile", required = false) 
+    			MultipartFile uploadFile,
+    		HttpSession session) {
         if (session.getAttribute("loginMember") == null) {
             return "redirect:/login";
         }
@@ -140,19 +160,36 @@ public class BoardController {
         board.setBoardNo(newNo);
         boardService.insert(board);
 
-        if (!uploadFile.isEmpty()) {
-            String orig = uploadFile.getOriginalFilename();
-            String saved = UUID.randomUUID() + "_" + orig;
-            File dir = new File(uploadDir);
-            if (!dir.exists()) dir.mkdirs();
-            File f = new File(dir, saved);
-            uploadFile.transferTo(f);
+        // 첨부파일이 있을 때만 처리
+        if (uploadFile != null && !uploadFile.isEmpty()) {
+            try {
+                String orig = uploadFile.getOriginalFilename();
+                String saved = UUID.randomUUID() + "_" + orig;
+                File dir = new File(uploadDir);
+                if (!dir.exists()) dir.mkdirs();
+                File f = new File(dir, saved);
+                uploadFile.transferTo(f);
 
-            UserFile uf = new UserFile();
-            uf.setBoardNo(newNo);
-            uf.setUserFileName(orig);
-            uf.setUserFilPath(saved);
-            boardService.saveFile(uf);
+                System.out.println("파일 업로드 성공:");
+                System.out.println("  원본 파일명: " + orig);
+                System.out.println("  저장 파일명: " + saved);
+                System.out.println("  저장 경로: " + f.getAbsolutePath());
+                System.out.println("  파일 크기: " + f.length() + " bytes");
+
+                UserFile uf = new UserFile();
+                uf.setBoardNo(newNo);
+                uf.setUserFileName(orig);
+                uf.setUserFilPath(saved);
+                boardService.saveFile(uf);
+                
+                System.out.println("DB에 파일 정보 저장 완료");
+            } catch (Exception e) {
+                // 파일 업로드 실패 시에도 게시글은 저장되도록 함
+                System.err.println("파일 업로드 실패: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("첨부파일이 없습니다.");
         }
 
         return "redirect:/boardlist";
@@ -166,12 +203,40 @@ public class BoardController {
         b.setBoardContent(b.getBoardContent().replace("\n","<br>"));
         List<UserFile> files = boardService.getFilesByBoardNo(no);
 
+     // 디버깅 로그
+        System.out.println("게시글 번호: " + no);
+        System.out.println("전체 파일 수: " + files.size());
+        files.forEach(file -> System.out.println("파일: " + file.getUserFileName() + " (이미지: " + isImageFile(file.getUserFileName()) + ")"));
+
+        // 이미지 파일과 일반 파일 분리
+        List<UserFile> imageFiles = files.stream()
+            .filter(file -> isImageFile(file.getUserFileName()))
+            .collect(java.util.stream.Collectors.toList());
+        
+        List<UserFile> otherFiles = files.stream()
+            .filter(file -> !isImageFile(file.getUserFileName()))
+            .collect(java.util.stream.Collectors.toList());
+        System.out.println("이미지 파일 수: " + imageFiles.size());
+        System.out.println("일반 파일 수: " + otherFiles.size());
+
+        
         model.addAttribute("board", b);
         model.addAttribute("fileList", files);
+        model.addAttribute("imageFiles", imageFiles);
+        model.addAttribute("otherFiles", otherFiles);
         // JSP: /WEB-INF/views/board/boardview.jsp
         return "board/boardview";
     }
 
+	// 이미지 파일인지 확인하는 메서드
+    private boolean isImageFile(String fileName) {
+        if (fileName == null) return false;
+        String lowerFileName = fileName.toLowerCase();
+        return lowerFileName.endsWith(".jpg") || lowerFileName.endsWith(".jpeg") 
+            || lowerFileName.endsWith(".png") || lowerFileName.endsWith(".gif") 
+            || lowerFileName.endsWith(".bmp") || lowerFileName.endsWith(".webp");
+    }
+    
     /** 6) 수정폼 */
     @GetMapping("/boardupdateform")
     public String updateForm(@RequestParam("no") int no,
@@ -187,6 +252,7 @@ public class BoardController {
         return "board/updateform";
     }
 
+    
     /** 7) 수정 처리 */
     @PostMapping("/boardupdate")
     public String update(Board board,
@@ -195,24 +261,34 @@ public class BoardController {
 
         boardService.update(board);
 
-        if (deleteFiles != null) {
+        if (deleteFiles != null && !deleteFiles.isEmpty()) {
             for (String path : deleteFiles) {
-                new File(uploadDir, path).delete();
-                userFileDao.deleteByPath(path);
+            	 try {
+                     new File(uploadDir, path).delete();
+                     userFileDao.deleteByPath(path);
+                 } catch (Exception e) {
+                     System.err.println("파일 삭제 실패: " + e.getMessage());
+                 }
             }
         }
+        
+        // 새 파일 업로드 처리
         if (uploadFile != null && !uploadFile.isEmpty()) {
-            String orig = uploadFile.getOriginalFilename();
-            String saved = UUID.randomUUID()+"_"+orig;
-            File dir = new File(uploadDir);
-            if (!dir.exists()) dir.mkdirs();
-            uploadFile.transferTo(new File(dir, saved));
+        	 try {
+                 String orig = uploadFile.getOriginalFilename();
+                 String saved = UUID.randomUUID()+"_"+orig;
+                 File dir = new File(uploadDir);
+                 if (!dir.exists()) dir.mkdirs();
+                 uploadFile.transferTo(new File(dir, saved));
 
-            UserFile uf = new UserFile();
-            uf.setBoardNo(board.getBoardNo());
-            uf.setUserFileName(orig);
-            uf.setUserFilPath(saved);
-            boardService.saveFile(uf);
+                 UserFile uf = new UserFile();
+                 uf.setBoardNo(board.getBoardNo());
+                 uf.setUserFileName(orig);
+                 uf.setUserFilPath(saved);
+                 boardService.saveFile(uf);
+             } catch (Exception e) {
+                 System.err.println("파일 업로드 실패: " + e.getMessage());
+             }
         }
 
         return "redirect:/boardlist";
@@ -244,7 +320,111 @@ public class BoardController {
         model.addAttribute("board", boardService.content(no));
         return "board/deleteconfirm";
     }
+    
+    @GetMapping("/download")
+    public void download(@RequestParam("file") String fileName, HttpServletResponse response) throws Exception {
+        File file = new File(uploadDir, fileName);
+        if (file.exists()) {
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            try (FileInputStream fis = new FileInputStream(file);
+                 OutputStream os = response.getOutputStream()) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = fis.read(buffer)) != -1) {
+                    os.write(buffer, 0, bytesRead);
+                }
+            }
+        }
+    }
+
+    @GetMapping("/filedownload")
+    public void fileDownload(@RequestParam("filename") String filename,
+                             @RequestParam("origin") String origin,
+                             HttpServletResponse response) throws Exception {
+
+        // 저장된 파일 경로
+        String savePath = uploadDir + "/" + filename;
+        File file = new File(savePath);
+
+        if (file.exists()) {
+            response.setContentType("application/octet-stream");
+            String encoded = URLEncoder.encode(origin, "UTF-8").replaceAll("\\+", "%20");
+            response.setHeader("Content-Disposition", "attachment;filename=" + encoded);
+            response.setContentLength((int) file.length());
+
+            FileInputStream in = new FileInputStream(file);
+            OutputStream out = response.getOutputStream();
+
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = in.read(buffer)) > 0) {
+                out.write(buffer, 0, len);
+            }
+
+            in.close();
+            out.close();
+        }
+    }
+
+    @GetMapping("/fileview")
+    public void fileView(@RequestParam("filename") String filename,
+                         @RequestParam("origin") String origin,
+                         HttpServletResponse response) throws Exception {
+
+        // 저장된 파일 경로
+        String savePath = uploadDir + "/" + filename;
+        File file = new File(savePath);
+
+        System.out.println("파일 경로: " + savePath);
+        System.out.println("파일 존재: " + file.exists());
+
+        if (file.exists()) {
+            // 파일 확장자에 따른 Content-Type 설정
+            String contentType = getContentType(origin);
+            response.setContentType(contentType);
+            response.setContentLength((int) file.length());
+
+            FileInputStream in = new FileInputStream(file);
+            OutputStream out = response.getOutputStream();
+
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = in.read(buffer)) > 0) {
+                out.write(buffer, 0, len);
+            }
+
+            in.close();
+            out.close();
+        } else {
+            System.err.println("파일을 찾을 수 없습니다: " + savePath);
+        }
+    }
+
+    private String getContentType(String fileName) {
+        if (fileName == null) return "application/octet-stream";
+        
+        String lowerFileName = fileName.toLowerCase();
+        if (lowerFileName.endsWith(".jpg") || lowerFileName.endsWith(".jpeg")) {
+            return "image/jpeg";
+        } else if (lowerFileName.endsWith(".png")) {
+            return "image/png";
+        } else if (lowerFileName.endsWith(".gif")) {
+            return "image/gif";
+        } else if (lowerFileName.endsWith(".bmp")) {
+            return "image/bmp";
+        } else if (lowerFileName.endsWith(".webp")) {
+            return "image/webp";
+        } else if (lowerFileName.endsWith(".pdf")) {
+            return "application/pdf";
+        } else if (lowerFileName.endsWith(".txt")) {
+            return "text/plain";
+        } else {
+            return "application/octet-stream";
+        }
+    }
 }
+
 
 
 

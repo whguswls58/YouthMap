@@ -53,8 +53,9 @@
 					</div>
 
 					<div class="file-wrap">
-						<label for="uploadFile">첨부파일</label> <input type="file"
-							name="uploadFile" id="uploadFile">
+						<label for="uploadFile">첨부파일 (선택사항, 최대 10MB)</label>
+						<input type="file" name="uploadFile" id="uploadFile" accept="image/*,.pdf,.doc,.docx,.txt">
+						<small style="color: #666;">지원 형식: 이미지, PDF, Word, 텍스트 파일</small>
 					</div>
 
 					<div class="btn-group">

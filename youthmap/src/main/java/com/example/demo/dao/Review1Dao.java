@@ -13,12 +13,11 @@ public interface Review1Dao {
 	void insertreview(Review1 review);
 
 	List<Review1> reviewlist(@Param("res_id") String resId, @Param("startRow") int startRow, @Param("endRow") int endRow);
-	
 
     int updatereview(Review1 review);
     
-    int deletereview(int review_id1);
-
+    int deletereview(Review1 review);
+    
 	Review1 selectreview(int review_id1);
 
 	int countreview(String resId);

@@ -30,7 +30,7 @@ public class Review1Service {
 	}
 
 	public int deletereview(Review1 review) {
-		return dao.deletereview(review.getReview_id1());
+		return dao.deletereview(review);
 	}
 
 	// 작성자 확인

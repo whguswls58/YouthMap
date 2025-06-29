@@ -63,6 +63,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public void updatePassword(MemberModel member) {
+        memberMapper.updatePassword(member);
+    }
+    
+    @Override
     public void updateMemberStatus(MemberModel member) {
         memberMapper.updateMemberStatus(member);
     }

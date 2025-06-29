@@ -51,17 +51,34 @@
             <th>내용</th>
             <td style="height: 200px;">
                 ${board.boardContent}
+                
+                 <!-- 이미지 파일 표시 -->
+                <c:if test="${not empty imageFiles}">
+                    <div class="image-files">
+                        <h4>첨부된 이미지</h4>
+                        <div class="image-gallery">
+                            <c:forEach var="imageFile" items="${imageFiles}">
+                                <div class="image-item">
+                                    <img src="/fileview?filename=${imageFile.userFilPath}&origin=${imageFile.userFileName}" 
+                                         alt="${imageFile.userFileName}" 
+                                         onclick="openImageModal(this.src, '${imageFile.userFileName}')">
+                                    <div class="image-caption">${imageFile.userFileName}</div>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </c:if>
             </td>
         </tr>
-        <c:if test="${not empty fileList}">
+        <c:if test="${not empty otherFiles}">
             <tr>
                 <th>첨부파일</th>
                 <td>
                     <ul>
-                        <c:forEach var="file" items="${fileList}">
+                         <c:forEach var="file" items="${otherFiles}">
                             <li>
                                 <a href="/filedownload?filename=${file.userFilPath}&origin=${file.userFileName}">
-                                    ${file.userFileName}
+                                    📎 ${file.userFileName}
                                 </a>
                             </li>
                         </c:forEach>
@@ -159,6 +176,62 @@
 
     <!-- 댓글 기능 JS -->
     <script src="/js/JYjs/comment.js"></script>
+
+  	<!-- 이미지 모달 기능 -->
+    <script>
+        function openImageModal(imageSrc, fileName) {
+            // 모달 생성
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+                cursor: pointer;
+            `;
+            
+            // 이미지 생성
+            const img = document.createElement('img');
+            img.src = imageSrc;
+            img.alt = fileName;
+            img.style.cssText = `
+                max-width: 90%;
+                max-height: 90%;
+                object-fit: contain;
+                border-radius: 5px;
+            `;
+            
+            // 파일명 표시
+            const caption = document.createElement('div');
+            caption.textContent = fileName;
+            caption.style.cssText = `
+                position: absolute;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                color: white;
+                background-color: rgba(0, 0, 0, 0.7);
+                padding: 10px 20px;
+                border-radius: 5px;
+                font-size: 14px;
+            `;
+            
+            modal.appendChild(img);
+            modal.appendChild(caption);
+            document.body.appendChild(modal);
+            
+            // 클릭 시 모달 닫기
+            modal.onclick = function() {
+                document.body.removeChild(modal);
+            };
+        }
+    </script>
 
     <!-- 로그인 유도 JS -->
     <script>

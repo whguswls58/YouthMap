@@ -48,6 +48,12 @@
       </div>
     </c:if>
 
+	<c:if test="${param.success == 'updated'}">
+      <div class="success-message" style="color: green; margin-bottom: 15px; padding: 10px; background-color: #e6ffe6; border: 1px solid #99ff99; border-radius: 5px;">
+        회원정보가 성공적으로 수정되었습니다.
+      </div>
+    </c:if>
+
     <div class="info-stats-row">
       <div class="mypage-info">
         <h3>회원 정보</h3>

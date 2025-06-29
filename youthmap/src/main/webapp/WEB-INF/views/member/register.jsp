@@ -183,6 +183,15 @@
         $(this).blur();
       }
     });
+    
+    // 이메일 입력 시 영어, 숫자, 특수문자만 허용
+    $("#emailId").on("input", function(){
+      $(this).val($(this).val().replace(/[^a-zA-Z0-9._-]/g, ''));
+    });
+
+    $("#emailDomain").on("input", function(){
+      $(this).val($(this).val().replace(/[^a-zA-Z0-9.-]/g, ''));
+    });
   });
 </script>
 <!-- 푸터 -->
