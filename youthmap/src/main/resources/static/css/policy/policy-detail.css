@@ -36,6 +36,7 @@
 
 /* 좌측 사이드바 위치 조정 */
 .sidebar-fixed.left {
+  margin-top : 21px;
   left: 30px;
   right: auto;
 }
