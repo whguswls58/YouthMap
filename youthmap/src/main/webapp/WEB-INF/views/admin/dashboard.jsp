@@ -79,8 +79,7 @@
     </div>
 </div>
 
-<footer>
-    ⓒ 2025 YOUTHMAP. All Rights Reserved.
-</footer>
+<!-- 푸터 -->
+	<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html> 
