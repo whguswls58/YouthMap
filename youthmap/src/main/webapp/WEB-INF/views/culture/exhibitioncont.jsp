@@ -93,7 +93,7 @@
 
     <!-- 뒤로가기 -->
     <div class="back-container">
-  		<a class="back-link" href="#" onclick="history.go(-1); return false;">
+  		<a class="back-link" href="#" onclick="href='/exhibitionlist'">
   		  ← 목록으로 돌아가기
  		 </a>
 	</div>
