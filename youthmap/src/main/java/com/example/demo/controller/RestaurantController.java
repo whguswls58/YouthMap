@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.MemberModel;
 import com.example.demo.model.Restaurant;
@@ -95,13 +96,13 @@ public class RestaurantController {
     
     // 목록 리스트 
     @RequestMapping("/restaurants")
-    public String restaurantList(
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "res_gu", required = false) String resGu,
+    public String restaurantList(@RequestParam(value = "page", defaultValue = "1") int page,
+            					 @RequestParam(value = "res_gu", required = false) String resGu,
             					 @RequestParam(value = "searchType", required = false, defaultValue = "res_subject") String searchType,
-            @RequestParam(value = "keyword", required = false) String keyword,
+            					 @RequestParam(value = "keyword", required = false) String keyword,
             					 @RequestParam(value="lat", required=false) Double lat,
             				     @RequestParam(value="lng", required=false) Double lng,
+            				     @RequestParam(value = "sort",required=false)String sort,
             					 Model model) {
 
         int limit = 9;
@@ -138,6 +139,21 @@ public class RestaurantController {
             restaurants = service.findNearby(param);
         }
 
+        // 1) sort를 model에 담아 JSP에서 active 처리용으로 노출Add commentMore actions
+
+        // 2) sort 분기: 별점순 / 가나다순 / 기본
+        List<Restaurant> reslist;
+        if ("res_score".equals(sort)) {
+            restaurants = service.listByScore(cond);
+        }
+        else if ("res_subject".equals(sort)) {
+            restaurants = service.listByName(cond);
+        }
+        else {
+            restaurants = service.list(cond);
+        }
+
+        model.addAttribute("sort", sort);
         model.addAttribute("searchType", searchType);
         model.addAttribute("page", page);
         model.addAttribute("restaurants", restaurants);
@@ -196,7 +212,8 @@ public class RestaurantController {
     public String writeReview(@ModelAttribute Review1 review,
                               @RequestParam("review_file11") MultipartFile file,
                               Model model,
-                              HttpSession session) throws Exception {
+                              HttpSession session,
+    						  RedirectAttributes ra) throws Exception {
 
         // 로그인 체크
         MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");

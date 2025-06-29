@@ -124,6 +124,65 @@
 	font-weight: bold;
 }
 
+/* 별점 가나다순, */
+/* 기본 sticky + 우측 정렬 */
+.sort-bar {
+  position: sticky;
+  top: 120px;                 /* 필요에 따라 조정 */
+  z-index: 100;
+  width: 1000px;
+  max-width: 1200px;          /* 컨텐츠 최대 너비 */
+  margin: 0 auto;             /* 중앙 정렬 */
+  background: #fff;
+  display: flex;
+  justify-content: flex-end;
+  gap: 24px;
+  padding: 8px 32px;
+  border-bottom: 1px solid #eee;
+  box-sizing: border-box;
+}
+
+/* 버튼 기본 스타일 */
+.sort-bar .sort-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 16px;
+  padding: 8px 12px;
+  color: #333;
+}
+.sort-bar .sort-btn.active {
+  font-weight: bold;
+  border-bottom: 2px solid #333;
+}
+
+/* 반응형: 태블릿 이하 */
+@media (max-width: 1024px) {
+  .sort-bar {
+    padding: 8px 24px;
+    gap: 16px;
+  }
+  .sort-bar .sort-btn {
+    font-size: 15px;
+    padding: 6px 10px;
+  }
+}
+
+/* 반응형: 모바일 */
+@media (max-width: 768px) {
+  .sort-bar {
+    top: 100px;               /* 모바일 레이아웃에 맞춰 조정 */
+    padding: 8px 16px;
+    gap: 12px;
+    justify-content: center;  /* 중앙 정렬로 전환 */
+  }
+  .sort-bar .sort-btn {
+    font-size: 14px;
+    padding: 6px 8px;
+  }
+}
+
 .restaurant-grid {
 	display: flex;
 	flex-wrap: wrap;

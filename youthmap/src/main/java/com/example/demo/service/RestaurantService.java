@@ -183,6 +183,16 @@ public class RestaurantService {
         }
     }
 
+    /** 별점 내림차순 조회 */
+    public List<Restaurant> listByScore(Restaurant cond) {
+        return dao.listByScore(cond);
+    }
+
+    /** 가나다(이름) 오름차순 조회 */
+    public List<Restaurant> listByName(Restaurant cond) {
+        return dao.listByName(cond);
+    }
+    
     // ---------------- [동기화 핵심] ----------------
 
     /**

@@ -65,11 +65,8 @@
 
 </head>
 <body>
-<!-- 헤더-->
-<%@ include file="/WEB-INF/views/header.jsp" %>
-
-
-
+	<!-- 헤더-->
+	<%@ include file="/WEB-INF/views/header.jsp" %>
 
 	<div class="detail-container">
     <!-- 메인 사진 + 좌우 버튼 -->

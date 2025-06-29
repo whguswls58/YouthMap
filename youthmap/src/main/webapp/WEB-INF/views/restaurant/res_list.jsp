@@ -12,14 +12,16 @@
 
   <!-- Swiper CSS -->
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 </head>
 <body>
-<!-- 헤더-->
-<%@ include file="/WEB-INF/views/header.jsp" %>
+	<!-- 헤더-->
+	<%@ include file="/WEB-INF/views/header.jsp" %>
+
+	<!-- Hero 배너 -->
+	<section class="hero-banner"></section>
 
 	<!-- 검색 -->
-
 	<div class="search-wrapper">
 		<form class="search-bar" action="restaurants" method="get">
 			<div class="search-combined">
@@ -38,6 +40,22 @@
 			
 		</form>
 	</div>
+
+	<form id="sortForm" action="restaurants" method="get">
+		<!-- 기존 파라미터 -->
+		<input type="hidden" name="res_gu" value="${res_gu}" /> <input
+			type="hidden" name="searchType" value="${searchType}" /> <input
+			type="hidden" name="keyword" value="${keyword}" />
+		<!-- 반드시 있어야 함 -->
+		<input type="hidden" name="sort" id="sortInput" value="${sort}" />
+
+		<div class="sort-bar">
+			<button type="button" data-value="res_score"
+				class="sort-btn ${sort=='res_score'?'active':''}">별점순</button>
+			<button type="button" data-value="res_subject"
+				class="sort-btn ${sort=='res_subject'?'active':''}">가나다순</button>
+		</div>
+	</form>
 
 	<!-- ✅ 구 버튼 -->
 	<div class="gu-list <c:if test='${searchType eq \"res_gu\"}'>active</c:if>'">
@@ -148,6 +166,18 @@
 			toggleGuList();
 		});
 	</script>
+	
+	<!--별점,가나다 -->
+	<script>
+	  document.querySelectorAll('.sort-btn').forEach(btn => {
+	    btn.addEventListener('click', () => {
+	      document.getElementById('sortInput').value = btn.dataset.value;
+	      document.getElementById('sortForm').submit();
+	    });
+	  });
+	</script>
+	
+	
 	<!-- 푸터 -->
 	<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
