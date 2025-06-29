@@ -5,7 +5,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>회원가입</title>
+  <title>VIVAMAP</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/member/login.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>

@@ -6,7 +6,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>문화생활 메인</title>
+  <title>VIVAMAP</title>
    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/culture_main.css">
   <!-- Slick CSS -->

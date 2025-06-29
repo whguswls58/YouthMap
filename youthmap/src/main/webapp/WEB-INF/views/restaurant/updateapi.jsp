@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <html>
 <head>
-    <title>API 동기화 결과</title>
+    <title>VIVAMAP</title>
     <style>
         body { background:#f7fafc; font-family:'Pretendard',sans-serif;}
         .box { margin: 80px auto; max-width: 420px; background: #fff; border-radius: 18px; box-shadow:0 2px 14px #ddd; padding:38px; text-align:center;}

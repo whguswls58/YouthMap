@@ -9,7 +9,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>YouthMap</title>
+  <title>VIVAMAP</title>
  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 
   <!-- ① 카카오 JS SDK: YOUR_APP_KEY 부분에 자바스크립트 키를 넣으세요 -->

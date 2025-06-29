@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-  <title>서울 인기 맛집</title>
+  <title>VIVAMAP</title>
   <!-- CSS 파일 로드 -->
   <link rel="stylesheet" href="<c:url value='/css/res/res_main.css'/>" />
   

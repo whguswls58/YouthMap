@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>VIVAMAP</title>
 <style>
 #miniModalHeader {
   border-bottom:1.5px solid #ececec;

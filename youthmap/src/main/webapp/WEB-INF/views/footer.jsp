@@ -15,6 +15,6 @@
     Addr. Seoul, Korea | Biz License 000-00-00000
   </p>
 
-  <p>&copy; 2025 YOUTHMAP. All Rights Reserved.<br>Hosting by YOUTHMAP Team</p>
+  <p>&copy; 2025 VIVAMAP. All Rights Reserved.<br>Hosting by VIVAMAP Team</p>
 </div>
     	

@@ -4,7 +4,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>내 댓글 - 마이페이지</title>
+  <title>VIVAMAP</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/member/mypage.css">
 </head>

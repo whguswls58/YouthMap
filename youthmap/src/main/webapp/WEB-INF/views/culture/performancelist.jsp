@@ -6,7 +6,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>전시/미술 리스트</title>
+  <title>VIVAMAP</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" />
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/culture/list.css">
 </head>

@@ -4,7 +4,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>구글 로그인 성공</title>
+  <title>VIVAMAP</title>
 </head>
 <body>
   <h2>환영합니다, ${name}님!</h2>

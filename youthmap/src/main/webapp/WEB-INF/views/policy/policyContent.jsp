@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>정책 상세 페이지</title>
+<title>VIVAMAP</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

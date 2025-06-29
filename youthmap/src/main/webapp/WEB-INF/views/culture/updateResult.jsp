@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>데이터 업데이트 결과</title>
+    <title>VIVAMAP</title>
 </head>
 <body>
     <h2>데이터 업데이트 결과</h2>

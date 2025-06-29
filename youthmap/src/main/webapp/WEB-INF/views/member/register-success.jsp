@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>회원가입 완료</title>
+    <title>VIVAMAP</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 </head>
 <body>

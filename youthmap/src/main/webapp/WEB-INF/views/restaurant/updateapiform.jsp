@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>API 동기화</title>
+<title>VIVAMAP</title>
 </head>
 <body>
 <form action="updateapi" method="post">

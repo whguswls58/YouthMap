@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
-    <title>여분 사진 일괄 업데이트 결과</title>
+    <title>VIVAMAP</title>
     <style>
         body { font-family: 'Noto Sans KR', sans-serif; background: #f9f9fa; margin:0; padding:40px;}
         .update-result-box {

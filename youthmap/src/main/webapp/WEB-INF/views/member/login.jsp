@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>로그인</title>
+    <title>VIVAMAP</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/member/login.css">
    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 </head>

@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>게시글 삭제 확인</title>
+    <title>VIVAMAP</title>
 </head>
 <body>
 

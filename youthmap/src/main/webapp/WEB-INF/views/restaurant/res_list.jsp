@@ -6,7 +6,7 @@
 <head>
 
 
-<title>맛집 리스트</title>
+<title>VIVAMAP</title>
  <!-- CSS 파일 로드 -->
   <link rel="stylesheet" href="<c:url value='/css/res/res_list.css'/>" />
 

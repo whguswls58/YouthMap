@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>정책 통합 검색 페이지</title>
+<title>VIVAMAP</title>
 
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" />

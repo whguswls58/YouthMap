@@ -6,7 +6,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>검색바</title>
+  <title>VIVAMAP</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>

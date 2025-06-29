@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-<title>${restaurant.res_subject}- 상세 정보</title>
+<title>VIVAMAP</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 <script>
     // 모든 사진 배열 생성 (대표 + 여분)
