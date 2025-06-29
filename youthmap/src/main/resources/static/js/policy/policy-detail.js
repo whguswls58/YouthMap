@@ -20,7 +20,7 @@ function getDday(dateStr) {
 	} else if (diffDays === 0) {
 		return "D-Day";
 	} else {
-		return `D+${Math.abs(diffDays || 0)}`;
+		return `D+${Math.abs(diffDays)}`;
 	}
 }
 

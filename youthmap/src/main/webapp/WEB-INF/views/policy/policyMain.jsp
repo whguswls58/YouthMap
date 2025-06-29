@@ -78,10 +78,7 @@
 	              </c:when>
 	              <c:otherwise>
 	                  <c:set var="dday" value="p.aply_ymd_end" />
-<%-- 	                  <c:set var="ddayVal" value="${fn:replace(dday, '-', '')}" /> --%>
-	                  <%-- 실제 D-day 계산은 서버에서 하거나 커스텀 태그로 처리 필요 --%>
 	                  <span class="policy-label dday-red">
-	                      D-10
 	                  </span><br />
 	              </c:otherwise>
 	          </c:choose>
@@ -170,7 +167,7 @@
 </script>
 
 <!-- 메인 script -->
-<script src="${pageContext.request.contextPath}/js/policy-main.js"></script>
+<script src="${pageContext.request.contextPath}/js/policy/policy-main.js"></script>
 
 <!-- Swiper JS -->
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>

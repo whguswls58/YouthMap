@@ -287,11 +287,11 @@ window.loadPage = function(page, sortOrder) {
 				} else if (parseInt(dday) === 0) {
 					ddayText = "D-Day";
 				} else {
-					ddayText = `D+${dday}`;
+					ddayText = `D+${Math.abs(dday)}`;
 				}
 
 				let ddayColorClass = '';
-				if (parseInt(dday) <= 10) {
+				if (parseInt(dday) <= 10 && parseInt(dday) > 0) {
 					ddayColorClass = 'dday-red';
 				}
 

@@ -54,8 +54,8 @@
 				<td colspan=3>${plcy.plcy_nm}</td>
 			</tr>
 			<tr>
-				<th>최종 수정일</th>
-				<td>${plcy.last_mdfcn_dt}</td>
+				<th>신청 마감일</th>
+				<td>${plcy.aply_ymd_end}</td>
 				<td align=right>조회수</td>
 				<td align=right>${plcy.inq_cnt }</td>
 			</tr>
@@ -134,10 +134,6 @@
 		            </c:otherwise>
 		        </c:choose>
 				</td>
-			</tr>
-			<tr>
-				<th>거주구역</th>
-				<td>${plcy.lclsf_nm}</td>
 			</tr>
 			<tr>
 				<th>소득</th>
@@ -255,7 +251,7 @@
 	</div>
 </div>
 
-<script src="${pageContext.request.contextPath}/js/policy-detail.js"></script>
+<script src="${pageContext.request.contextPath}/js/policy/policy-detail.js"></script>
 <!-- 푸터 -->
 <%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
