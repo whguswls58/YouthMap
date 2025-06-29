@@ -138,7 +138,7 @@
 	                	</c:forEach>
 	                </c:when>
 	                <c:otherwise>
-	                    <span class="policy-tag">키워드 없음</span>
+	                    <span class="policy-tag">키워드 없음 테스트</span>
 	                </c:otherwise>
 	            </c:choose>
 	        </div>
