@@ -35,7 +35,7 @@
 							<option value="정책">정책</option>
 							<option value="문화">문화</option>
 							<option value="맛집">맛집</option>
-							<option value="자유게시판">유저게시판</option>
+							<option value="유저게시판">유저게시판</option>
 						</select>
 
 						<div class="title-input-wrap">

@@ -39,7 +39,7 @@
 	                        <option value="정책" ${board.boardCategory == '정책' ? 'selected' : ''}>정책</option>
 	                        <option value="문화" ${board.boardCategory == '문화' ? 'selected' : ''}>문화</option>
 	                        <option value="맛집" ${board.boardCategory == '맛집' ? 'selected' : ''}>맛집</option>
-	                        <option value="공지" ${board.boardCategory == '공지' ? 'selected' : ''}>공지</option>
+	                        <option value="유저게시판" ${board.boardCategory == '유저게시판' ? 'selected' : ''}>유저게시판</option>
 	                    </select>
 	                </div>
                 </td>
