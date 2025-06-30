@@ -161,6 +161,18 @@ public class BoardController {
 
         UserFile uf = null;
         
+     // 운영체제에 따라 업로드 경로 설정
+        String os = System.getProperty("os.name").toLowerCase();
+        String uploadDir;
+
+        if (os.contains("win")) {
+            uploadDir = "C:/upload/";
+        } else {
+            // macOS, Linux
+            uploadDir = System.getProperty("user.home") + "/upload/";
+        }
+
+        
         // 첨부파일이 있을 때만 처리
         if (uploadFile != null && !uploadFile.isEmpty()) {
             
