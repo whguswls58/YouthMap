@@ -1,0 +1,185 @@
+@charset "UTF-8";
+
+/* ===== Hero Background ===== */
+.hero {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 60px 0 40px 0;
+}
+
+.hero-text {
+	background: #888;
+	color: white;
+	padding: 20px 36px;
+	border-radius: 10px;
+	text-align: center;
+	max-width: 360px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.hero-banner::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	/* 알파 값을 0.1~0.2 정도로 줄이면 거의 투명해집니다 */
+	background: rgba(255, 255, 255, 0.1);
+	z-index: 0;
+}
+
+.hero-banner {
+	width: 100vw; /* 화면 전체 */
+	height: 500px; /* 원하는 높이 조절 */
+	background-image: url('/images/food2.jpeg'); /* 실제 이미지 경로 */
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+	position: relative;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	filter: contrast(1.2) brightness(1.1);
+}
+
+.hero-banner::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	/* 알파 값을 0.1~0.2 정도로 줄이면 거의 투명해집니다 */
+	  background: rgba(255,255,255,0.1); 
+	z-index: 0;
+}
+
+/* 카드 그리드 */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  justify-items: center;
+}
+.card {
+  position: relative;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  text-align: center;
+  width: 250px;
+}
+.img-wrap {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  text-align: center;
+}
+.img-wrap img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+}
+.card-info {
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
+}
+/* 제목(한 줄 말줄임) */
+.card-info .title {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  font-weight: bold;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-info .period {
+  width: 100%;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
+  margin-bottom: 2px;
+}
+.card-info .location {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  margin-top: 2px;
+  color: #555;
+}
+/* 카드 전체 클릭 가능하게 */
+a.card-link {
+  text-decoration: none !important;
+  color: inherit !important;
+  display: block;
+}
+/* 뱃지 */
+.badge {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+.badge.exhibitionlist    { background: #008060; }
+.badge.performancelist   { background: #a83279; }
+.badge.eventlist         { background: #0066cc; }
+/* 페이징 */
+.pager {
+  text-align: center;
+  margin: 20px auto;
+}
+.pager a, .pager span {
+  display: inline-block;
+  margin: 0 6px;
+  padding: 4px 8px;
+  text-decoration: none;
+  color: #000;
+}
+.pager .current {
+  font-weight: bold;
+}
+/* 카드 호버 */
+.cards .card {
+  transition: all 0.3s ease-in-out;
+}
+.cards .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+/* 팝업 */
+#miniModalHeader {
+  border-bottom:1.5px solid #ececec;
+  padding: 20px 14px 13px 14px;
+  font-size: 1.11em;
+  font-weight: 700;
+  color: #262626;
+  background:rgba(245,240,230,0.95);
+  border-radius: 24px 24px 0 0;
+  letter-spacing: -0.5px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}

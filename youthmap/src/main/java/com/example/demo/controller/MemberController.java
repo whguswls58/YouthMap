@@ -46,44 +46,48 @@ public class MemberController {
 
 	@PostMapping("/register")
 	public String register(@RequestParam("emailId") String emailId, @RequestParam("emailDomain") String emailDomain,
-			@RequestParam("phonePrefix") String phonePrefix, @RequestParam("phoneMiddle") String phoneMiddle, 
-			@RequestParam("phoneLast") String phoneLast, @ModelAttribute MemberModel member, Model model) {
-
-		// 아이디 중복 체크
-		if (memberService.isIdDuplicate(member.getMemId())) {
-			model.addAttribute("error", "이미 존재하는 아이디입니다.");
-			return "member/register";
-		}
-
-		// 이메일 조합해서 저장
-		String fullEmail = emailId + "@" + emailDomain;
-		member.setMemMail(fullEmail);
-
-		// 핸드폰번호 조합해서 저장
-		String fullPhone = phonePrefix + "-" + phoneMiddle + "-" + phoneLast;
-		member.setMemNum(fullPhone);
-
-		// 일반 회원가입이므로 memType을 LOCAL로 설정
-		member.setMemType("LOCAL");
-		
-		// 디버깅: memType 설정 확인
-		System.out.println("회원가입 - 설정된 memType: " + member.getMemType());
-
-		// 회원가입 처리
-		memberService.register(member);
-
-		// 가입 성공 메시지 전달
-		return "redirect:/register-success";
+		  @RequestParam("phonePrefix") String phonePrefix, @RequestParam("phoneMiddle") String phoneMiddle, 
+		  @RequestParam("phoneLast") String phoneLast, @ModelAttribute MemberModel member, Model model) {
+ 
+	   // 아이디 중복 체크
+	   if (memberService.isIdDuplicate(member.getMemId())) {
+		  model.addAttribute("error", "이미 존재하는 아이디입니다.");
+		  return "member/register";
+	   }
+ 
+	   // 이메일 조합해서 저장
+	   String fullEmail = emailId + "@" + emailDomain;
+	   member.setMemMail(fullEmail);
+ 
+	   // 핸드폰번호 조합해서 저장
+	   String fullPhone = phonePrefix + "-" + phoneMiddle + "-" + phoneLast;
+	   member.setMemNum(fullPhone);
+ 
+	   // 일반 회원가입이므로 memType을 LOCAL로 설정
+	   member.setMemType("LOCAL");
+	   
+	   // 디버깅: memType 설정 확인
+	   System.out.println("회원가입 - 설정된 memType: " + member.getMemType());
+ 
+	   // 회원가입 처리
+	   memberService.register(member);
+ 
+	   // 가입 성공 메시지 전달
+	   return "redirect:/register-success";
 	}
-
+ 
 	@GetMapping("/register-success")
 	public String registerSuccess() {
-		return "member/register-success";
+	   return "member/register-success";
 	}
 
 	// 로그인 페이지
 	@GetMapping("/login")
-	public String showLoginForm() {
+	public String showLoginForm(@RequestParam(value = "error", required = false) String error,
+	                           Model model) {
+		if (error != null) {
+			model.addAttribute("error", "로그인이 필요합니다.");
+		}
 		return "member/login";
 	}
 
@@ -132,11 +136,11 @@ public class MemberController {
 
 	// 회원정보 수정 처리
 	@PostMapping("/edit")
-	public String updateMemberInfo(@RequestParam("currentPass") String currentPass,
-			@RequestParam(value = "newPass", required = false) String newPass, @RequestParam("memMail") String memMail,
-			@RequestParam("memAddress") String memAddress, @RequestParam("memAddDetail") String memAddDetail,
-			@RequestParam("phonePrefix") String phonePrefix, @RequestParam("phoneMiddle") String phoneMiddle, 
-			@RequestParam("phoneLast") String phoneLast, HttpSession session, Model model) {
+	public String updateMemberInfo(@RequestParam("memMail") String memMail,
+									@RequestParam("memAddress") String memAddress, 
+									@RequestParam("memAddDetail") String memAddDetail,
+									@RequestParam("memPhone") String memPhone,
+									HttpSession session, Model model) {
 
 		MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
 
@@ -150,31 +154,29 @@ public class MemberController {
 		}
 
 		// 비밀번호 검증
-		if (!currentPass.equals(loginMember.getMemPass())) {
-			model.addAttribute("error", "비밀번호가 틀립니다.");
-			model.addAttribute("member", loginMember);
-			return "member/edit";
-		}
+		
 
 		// 변경된 값 설정
-		if (newPass != null && !newPass.isEmpty()) {
-			loginMember.setMemPass(newPass);
-		}
+		
 		loginMember.setMemMail(memMail);
 		loginMember.setMemAddress(memAddress);
 		loginMember.setMemAddDetail(memAddDetail);
+		loginMember.setMemNum(memPhone);
 
 		// 핸드폰번호 조합해서 저장
-		String fullPhone = phonePrefix + "-" + phoneMiddle + "-" + phoneLast;
-		loginMember.setMemNum(fullPhone);
+		try {
+			// DB 업데이트
+			memberService.updateMember(loginMember);
 
-		// DB 업데이트
-		memberService.updateMember(loginMember);
-
-		// 세션 갱신
-		session.setAttribute("loginMember", loginMember);
-
-		return "redirect:/mypage";
+			// 세션 갱신
+			session.setAttribute("loginMember", loginMember);
+			return "redirect:/mypage?success=updated";
+		} catch (Exception e) {
+			model.addAttribute("error", "회원정보 수정 중 오류가 발생했습니다.");
+			model.addAttribute("member", loginMember);
+			return "member/edit";
+		}
+		
 	}
 
 	// 회원 탈퇴
@@ -196,6 +198,75 @@ public class MemberController {
 		session.invalidate();
 
 		return "redirect:/home?withdrawSuccess=true"; // 메인 페이지로 이동
+	}
+	
+	@GetMapping("/edit_pass")
+	public String showChangePasswordPage(Model model, HttpSession session) {
+	    MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
+	    
+	    // 로그인 체크
+	    if (loginMember == null) {
+	        return "redirect:/login";
+	    }
+	    
+	    // 소셜 로그인 회원이면 수정 차단
+	    if (loginMember.getMemType() != null && !"LOCAL".equals(loginMember.getMemType())) {
+	        return "redirect:/mypage?error=socialUserCannotEdit";
+	    }
+	    
+	    model.addAttribute("member", loginMember);
+	    return "member/edit_pass";
+	}
+
+	// 비밀번호 변경 처리
+	@PostMapping("/edit_pass")
+	public String changePassword(@RequestParam("currentPassword") String currentPass,
+	                            @RequestParam("newPassword") String newPass,
+	                            @RequestParam("confirmPassword") String confirmPass,
+	                            HttpSession session, Model model) {
+	    
+	    MemberModel loginMember = (MemberModel) session.getAttribute("loginMember");
+	    
+	    // 로그인 체크
+	    if (loginMember == null) {
+	        return "redirect:/login";
+	    }
+	    
+	    // 소셜 로그인 회원이면 수정 차단
+	    if (loginMember.getMemType() != null && !"LOCAL".equals(loginMember.getMemType())) {
+	        return "redirect:/mypage?error=socialUserCannotEdit";
+	    }
+	    
+	    // 현재 비밀번호 검증
+	    if (!currentPass.equals(loginMember.getMemPass())) {
+	        model.addAttribute("error", "현재 비밀번호가 틀렸습니다.");
+	        model.addAttribute("member", loginMember);
+	        return "member/edit_pass";
+	    }
+	    
+	    // 새 비밀번호와 확인 비밀번호 일치 검증
+	    if (!newPass.equals(confirmPass)) {
+	        model.addAttribute("error", "새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+	        model.addAttribute("member", loginMember);
+	        return "member/edit_pass";
+	    }
+	    
+	    // 새 비밀번호가 현재 비밀번호와 같은지 검증
+	    if (currentPass.equals(newPass)) {
+	        model.addAttribute("error", "새 비밀번호는 현재 비밀번호와 달라야 합니다.");
+	        model.addAttribute("member", loginMember);
+	        return "member/edit_pass";
+	    }
+	    
+	    // 비밀번호 변경
+	    loginMember.setMemPass(newPass);
+	    memberService.updatePassword(loginMember);
+	    
+	    // 세션 갱신
+	    session.setAttribute("loginMember", loginMember);
+	    
+	    // 성공 메시지와 함께 edit_pass 페이지로 리다이렉트
+	    return "redirect:/edit_pass?success=passwordChanged";
 	}
 
 }

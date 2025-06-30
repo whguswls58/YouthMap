@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.mapper.MemberMapper;
+import com.example.demo.dao.MemberDao;
 import com.example.demo.model.MemberModel;
 
 import lombok.RequiredArgsConstructor;
@@ -14,22 +14,26 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-    private final MemberMapper memberMapper;
+    private final MemberDao memberMapper;
     
     @Autowired
     private ApplicationContext applicationContext;
 
     @Override
     public void register(MemberModel member) {
-        // 비밀번호 암호화
-        PasswordEncoder passwordEncoder = applicationContext.getBean(PasswordEncoder.class);
-        String encodedPassword = passwordEncoder.encode(member.getMemPass());
-        member.setMemPass(encodedPassword);
+        System.out.println("=== MemberService.register 시작 ===");
+        System.out.println("저장할 member 데이터: " + member);
         
-        System.out.println("회원가입 - 원본 비밀번호 길이: " + member.getMemPass().length());
-        System.out.println("회원가입 - 암호화된 비밀번호 길이: " + encodedPassword.length());
-        
-        memberMapper.insertMember(member);
+        try {
+            // 비밀번호를 평문 그대로 저장 (암호화 제거)
+            System.out.println("DB insert 시작...");
+            memberMapper.insertMember(member);
+            System.out.println("DB insert 완료");
+        } catch (Exception e) {
+            System.out.println("DB insert 중 오류 발생: " + e.getMessage());
+            e.printStackTrace();
+            throw e; // 예외를 다시 던져서 컨트롤러에서 처리하도록 함
+        }
     }
 
     @Override
@@ -59,6 +63,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public void updatePassword(MemberModel member) {
+        memberMapper.updatePassword(member);
+    }
+    
+    @Override
     public void updateMemberStatus(MemberModel member) {
         memberMapper.updateMemberStatus(member);
     }
@@ -72,5 +81,8 @@ public class MemberServiceImpl implements MemberService {
     public void updateOauthId(MemberModel member) {
         memberMapper.updateOauthId(member);
     }
+
+   
+
 
 }

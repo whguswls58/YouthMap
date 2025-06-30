@@ -4,96 +4,99 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>회원정보 수정</title>
+  <title>VIVAMAP</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common.css">
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/member/mypage.css">
 </head>
 <body>
 
-  <h2>회원정보 수정</h2>
-  <form action="${pageContext.request.contextPath}/edit" method="post">
-    <div>
-      <label>아이디:</label>
-      <input type="text" value="${member.memId}" readonly />
-    </div>
+<!-- 헤더-->
+<%@ include file="/WEB-INF/views/header.jsp" %>
 
-    <div>
-      <label>이름:</label>
-      <input type="text" value="${member.memName}" readonly />
+<!-- 마이페이지 레이아웃 -->
+<div class="mypage-container">
+	<!-- 사이드바 -->
+    <div class="sidebar">
+    <div style="margin-bottom: 30px; font-weight: bold;">
+      ${member.memName}님의 마이페이지
     </div>
+    <a href="${pageContext.request.contextPath}/mypage">내 정보</a>
+    <c:if test="${sessionScope.loginMember.memType == 'LOCAL'}">
+      <a href="${pageContext.request.contextPath}/edit">정보 수정</a>
+    </c:if>
+    <a href="${pageContext.request.contextPath}/edit_pass">비밀번호 변경</a>
+    <a href="${pageContext.request.contextPath}/mypage-posts">내 게시물</a>
+    <a href="${pageContext.request.contextPath}/mypage-comments">내 댓글</a>
+    <a href="javascript:void(0);" onclick="confirmWithdraw()" style="color: red;">회원 탈퇴</a>
+  </div>
+      <!-- 메인 컨텐츠 -->
+  <div class="main-content">
+    <div class="edit-profile-wrapper">
+      <h2>회원 정보 수정</h2>
 
-    <div>
-      <label>기존 비밀번호:</label>
-      <input type="password" name="currentPass" required />
-    </div>
+      <form action="${pageContext.request.contextPath}/edit" method="post" class="edit-form">
 
-    <div>
-      <label>변경할 비밀번호:</label>
-      <input type="password" name="newPass" />
-    </div>
+        <!-- 이름 (수정 불가) -->
+        <div class="edit-row">
+          <label>이름</label>
+          <input type="text" value="${member.memName}" readonly>
+        </div>
 
-    <div>
-      <label>이메일:</label>
-      <input type="email" name="memMail" value="${member.memMail}" required />
-    </div>
+        <!-- 아이디 (수정 불가) -->
+        <div class="edit-row">
+          <label>아이디</label>
+          <input type="text" value="${member.memId}" readonly>
+        </div>
 
-    <div>
-      <label>핸드폰번호:</label>
-      <select name="phonePrefix" id="phonePrefix" required>
-        <option value="010" ${member.memNum != null && member.memNum.startsWith('010') ? 'selected' : ''}>010</option>
-        <option value="011" ${member.memNum != null && member.memNum.startsWith('011') ? 'selected' : ''}>011</option>
-        <option value="017" ${member.memNum != null && member.memNum.startsWith('017') ? 'selected' : ''}>017</option>
-        <option value="070" ${member.memNum != null && member.memNum.startsWith('070') ? 'selected' : ''}>070</option>
-      </select>
-      - <input type="text" name="phoneMiddle" id="phoneMiddle" maxlength="4" placeholder="0000" value="${member.memNum != null ? member.memNum.split('-')[1] : ''}" required>
-      - <input type="text" name="phoneLast" id="phoneLast" maxlength="4" placeholder="0000" value="${member.memNum != null ? member.memNum.split('-')[2] : ''}" required>
-    </div>
+        <!-- 이메일 -->
+        <div class="edit-row">
+          <label>이메일</label>
+          <input type="email" name="memMail" value="${member.memMail}" required>
+        </div>
 
-    <div>
-      <label>주소:</label>
-      <input type="text" name="memAddress" value="${member.memAddress}" required />
-    </div>
+        <!-- 휴대폰번호 -->
+        <div class="edit-row">
+          <label>휴대전화번호</label>
+          <input type="text" name="memPhone" value="${member.memNum}" placeholder="010-1234-5678" required>
+        </div>
 
-    <div>
-      <label>상세주소:</label>
-      <input type="text" name="memAddDetail" value="${member.memAddDetail}" required />
-    </div>
+        <!-- 주소 -->
+        <div class="edit-row">
+          <label>주소</label>
+          <input type="text" name="memAddress" value="${member.memAddress}" required>
+        </div>
 
-    <div>
-      <button type="submit">수정하기</button>
+        <!-- 상세주소 -->
+        <div class="edit-row">
+          <label>상세 주소</label>
+          <input type="text" name="memAddDetail" value="${member.memAddDetail}">
+        </div>
+
+        <!-- 버튼 -->
+        <div class="edit-row">
+          <button type="submit">수정 완료</button>
+        </div>
+      </form>
     </div>
-  </form>
-  
+  </div>
+</div>
+
   <c:if test="${not empty error}">
-    <script>
-      alert('${error}');
-    </script>
+    <script>alert('${error}');</script>
   </c:if>
 
-  <script>
-    $(function(){
-      // 핸드폰번호 입력 처리
-      // 숫자만 입력 가능
-      $("#phoneMiddle, #phoneLast").on("input", function(){
-        $(this).val($(this).val().replace(/[^0-9]/g, ''));
-      });
-
-      // 중간번호 4자리 입력 시 마지막 번호로 자동 이동
-      $("#phoneMiddle").on("input", function(){
-        const value = $(this).val();
-        if(value.length === 4){
-          $("#phoneLast").focus();
-        }
-      });
-
-      // 마지막 번호 4자리 입력 시 포커스 해제
-      $("#phoneLast").on("input", function(){
-        const value = $(this).val();
-        if(value.length === 4){
-          $(this).blur();
-        }
-      });
+<script>
+  // 전화번호 입력 시 숫자만 허용
+  $(function(){
+    $("input[name='memPhone']").on("input", function(){
+      $(this).val($(this).val().replace(/[^0-9-]/g, ''));
     });
-  </script>
-  
+  });
+</script>  
+<script src="/js/session.js"></script>
+
+<!-- 푸터 -->
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
-</html> 
+</html>

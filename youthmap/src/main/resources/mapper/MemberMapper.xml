@@ -5,32 +5,26 @@
 
 <mapper namespace="com.example.demo.dao.MemberDao">
 
-
 	<!-- 회원가입 -->
 	<insert id="insertMember" parameterType="MemberModel">
 		INSERT INTO member (
 		mem_no, mem_id, mem_pass, mem_name,
 		birth_date, mem_gen, mem_mail,
-		mem_address, mem_addDetail, mem_date, mem_type, oauth_id, mem_num
+		mem_address, mem_adddetail, mem_date, mem_type, oauth_id, mem_num
 		)
 		VALUES (
 		member_seq.NEXTVAL,
 		#{memId, jdbcType=VARCHAR},
-		#{memPass,
-		jdbcType=VARCHAR},
+		#{memPass, jdbcType=VARCHAR},
 		#{memName, jdbcType=VARCHAR},
-		#{birthDate,
-		jdbcType=DATE},
+		#{birthDate, jdbcType=DATE},
 		#{memGen, jdbcType=VARCHAR},
-		#{memMail,
-		jdbcType=VARCHAR},
+		#{memMail, jdbcType=VARCHAR},
 		#{memAddress, jdbcType=VARCHAR},
-		#{memAddDetail,
-		jdbcType=VARCHAR},
+		#{memAddDetail, jdbcType=VARCHAR},
 		SYSDATE,
 		#{memType, jdbcType=VARCHAR},
-		#{oauthId,
-		jdbcType=VARCHAR},
+		#{oauthId, jdbcType=VARCHAR},
 		#{memNum, jdbcType=VARCHAR}
 		)
 	</insert>
@@ -120,16 +114,22 @@
 		parameterType="com.example.demo.model.MemberModel">
 		UPDATE MEMBER
 		SET
-		MEM_PASS = #{memPass},
-		MEM_MAIL =
-		#{memMail},
+		MEM_MAIL = #{memMail},
 		MEM_ADDRESS = #{memAddress},
 		MEM_ADDDETAIL = #{memAddDetail},
 		MEM_NUM = #{memNum}
 		WHERE MEM_NO = #{memNo}
 	</update>
 
-	<!-- 회원탈 -->
+	<!-- 비밀번호 변경 -->
+	<update id="updatePassword"
+		parameterType="com.example.demo.model.MemberModel">
+		UPDATE MEMBER
+		SET MEM_PASS = #{memPass}
+		WHERE MEM_NO = #{memNo}
+	</update>
+
+	<!-- 회원탈퇴 -->
 	<update id="updateMemberStatus"
 		parameterType="com.example.demo.model.MemberModel">
 		UPDATE Member
@@ -137,6 +137,5 @@
 		WHERE mem_no =
 		#{memNo}
 	</update>
-
 
 </mapper>

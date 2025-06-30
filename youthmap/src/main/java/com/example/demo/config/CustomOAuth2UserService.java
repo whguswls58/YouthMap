@@ -109,7 +109,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // 세션에 로그인 정보 저장
         session.setAttribute("loginMember", member);
         session.setAttribute("memberNo", member.getMemNo());
+        
+        // ✅ OAuth2 로그인 시에도 세션 시간 설정
+        session.setMaxInactiveInterval(30 * 60); // 30분 (1800초)
+        session.setAttribute("loginStartTime", System.currentTimeMillis());
+        
+        System.out.println("=== OAuth2 로그인 성공 ===");
+        System.out.println("세션에 loginStartTime: " + session.getAttribute("loginStartTime"));
 
         return oAuth2User;
     }
 }
+

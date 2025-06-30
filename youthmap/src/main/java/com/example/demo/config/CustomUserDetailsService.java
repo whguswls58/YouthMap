@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.model.MemberModel;
 import com.example.demo.service.MemberService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class CustomUserDetailsService implements UserDetailsService {
     
     private final MemberService memberService;
+    private final HttpSession session;
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -30,6 +32,17 @@ public class CustomUserDetailsService implements UserDetailsService {
         
         System.out.println("찾은 회원: " + m.getMemId() + ", 상태: " + m.getMemStatus());
         System.out.println("비밀번호 길이: " + m.getMemPass().length());
+        
+        // 세션에 로그인 정보 저장
+        session.setAttribute("loginMember", m);
+        session.setAttribute("memberNo", m.getMemNo());
+        
+        // ✅ 폼 로그인 시에도 세션 시간 설정
+        session.setMaxInactiveInterval(30 * 60); // 30분 (1800초)
+        session.setAttribute("loginStartTime", System.currentTimeMillis());
+        
+        System.out.println("세션에 로그인 정보 저장 완료");
+        System.out.println("세션에 loginStartTime: " + session.getAttribute("loginStartTime"));
         System.out.println("=== CustomUserDetailsService 완료 ===");
         
         return User.builder()
