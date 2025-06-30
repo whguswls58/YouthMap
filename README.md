@@ -2,8 +2,6 @@
 
 **2030 서울 청년들을 위한 통합 정보 플랫폼**
 
-![vivamap-banner](https://user-images.githubusercontent.com/your-image-url/banner.png)
-
 ---
 
 ## 📌 프로젝트 소개
